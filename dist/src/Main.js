@@ -3,6 +3,9 @@ var Main = /** @class */ (function () {
     }
     Main.prototype.lexicalAnalysis = function (bufferStream) {
         console.log("Analizando ".concat(bufferStream));
+        // @ts-ignore
+        return grammar.parse(bufferStream);
+        // console.log(res);
     };
     return Main;
 }());

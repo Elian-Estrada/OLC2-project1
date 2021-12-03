@@ -7,32 +7,40 @@ let bufferStream: string;
 let myCodeMirror = CodeMirror.fromTextArea(
     document.getElementById("code"),
     {
-      lineNumbers: true,
-      styleActivateLine: true,
-      matchBrackets: true,
-      theme: "moxer",
-      mode: "text/x-csrc",
+        lineNumbers: true,
+        styleActivateLine: true,
+        matchBrackets: true,
+        theme: "moxer",
+        mode: "text/x-java",
     }
-  );
+);
 
 // @ts-ignore
 let myCodeMirror2 = CodeMirror.fromTextArea(
     document.getElementById("pythonConsole"),
     {
-      lineNumbers: false,
-      theme: "moxer",
-      readOnly: false,
-      mode: "text",
+        lineNumbers: false,
+        theme: "moxer",
+        readOnly: true,
     }
-  );
+);
+
+function updateCodeMirror(data: string){
+    let doc = myCodeMirror2.getDoc();
+    let cursor = doc.getCursor(); // gets the line number in the cursor position
+    let line = doc.getLine(cursor.line); // get the line contents
+    let pos = { // create a new object to avoid mutation of the original selection
+        line: cursor.line,
+        ch: line.length - 1 // set the character position to the end of the line
+    }
+    doc.replaceRange('\n'+data+'\n', pos); // adds a new line
+}
 
 // @ts-ignore
 btnAnalyze.addEventListener('click', () => {
     bufferStream = myCodeMirror.getValue();
     // console.log(bufferStream);
     let main = new Main();
-    main.lexicalAnalysis(bufferStream);
-
-    console.log("Que pex :v");
-    
+    let res: string = main.lexicalAnalysis(bufferStream);
+    updateCodeMirror(res);
 });
