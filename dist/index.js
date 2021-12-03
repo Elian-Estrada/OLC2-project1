@@ -7,13 +7,14 @@ var myCodeMirror = CodeMirror.fromTextArea(document.getElementById("code"), {
     styleActivateLine: true,
     matchBrackets: true,
     theme: "moxer",
-    mode: "text/x-java",
+    mode: "text/x-csrc",
 });
 // @ts-ignore
 var myCodeMirror2 = CodeMirror.fromTextArea(document.getElementById("pythonConsole"), {
     lineNumbers: false,
     theme: "moxer",
-    readOnly: true,
+    readOnly: false,
+    mode: "text",
 });
 // @ts-ignore
 btnAnalyze.addEventListener('click', function () {
@@ -21,4 +22,5 @@ btnAnalyze.addEventListener('click', function () {
     // console.log(bufferStream);
     var main = new Main();
     main.lexicalAnalysis(bufferStream);
+    console.log("Que pex :v");
 });
