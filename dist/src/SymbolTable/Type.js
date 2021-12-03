@@ -1,10 +1,10 @@
 export var type;
 (function (type) {
     type["INT"] = "int";
-    type["FLOAT"] = "float";
+    type["DOUBLE"] = "double";
     type["STRING"] = "string";
     type["CHAR"] = "char";
-    type["BOOL"] = "bool";
+    type["BOOL"] = "boolean";
     type["ARRAY"] = "array";
     type["STRUCT"] = "struct";
 })(type || (type = {}));
@@ -14,7 +14,6 @@ export var Arithmetic_operator;
     Arithmetic_operator["SUBSTRACTION"] = "-";
     Arithmetic_operator["MULTIPLICATION"] = "*";
     Arithmetic_operator["DIVISION"] = "/";
-    Arithmetic_operator["POWER"] = "**";
     Arithmetic_operator["MODULS"] = "%";
     Arithmetic_operator["INC"] = "++";
     Arithmetic_operator["DEC"] = "--";

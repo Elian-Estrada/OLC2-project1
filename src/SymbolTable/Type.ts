@@ -1,9 +1,9 @@
 export enum type {
     INT         = "int",
-    FLOAT       = "float",
+    DOUBLE      = "double",
     STRING      = "string",
     CHAR        = "char",
-    BOOL        = "bool",
+    BOOL        = "boolean",
     ARRAY       = "array",
     STRUCT      = "struct"
 }
@@ -13,7 +13,6 @@ export enum Arithmetic_operator {
     SUBSTRACTION        = "-",
     MULTIPLICATION      = "*",
     DIVISION            = "/",
-    POWER               = "**",
     MODULS              = "%",
     INC                 = "++",
     DEC                 = "--",
