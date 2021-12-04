@@ -1,3 +1,5 @@
+"use strict";
+exports.__esModule = true;
 var Tree = /** @class */ (function () {
     function Tree(instructions) {
         this.instructions = instructions;
@@ -28,4 +30,4 @@ var Tree = /** @class */ (function () {
     };
     return Tree;
 }());
-export default Tree;
+exports["default"] = Tree;

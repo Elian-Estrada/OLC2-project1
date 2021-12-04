@@ -33,7 +33,7 @@ function updateCodeMirror(data: string){
         line: cursor.line,
         ch: line.length - 1 // set the character position to the end of the line
     }
-    doc.replaceRange('\n'+data+'\n', pos); // adds a new line
+    doc.replaceRange(data+'\n', pos); // adds a new line
 }
 
 // @ts-ignore

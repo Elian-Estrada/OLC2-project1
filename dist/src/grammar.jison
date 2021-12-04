@@ -79,6 +79,10 @@
 "{"                 return 'CURLYLEFT';
 "}"                 return 'CURLYRIGHT';
 
+/* Increment and Decrement */
+"++"                return "INCSIGN";
+"--"                return "DECSIGN";
+
 /* Arithmetic Operators */
 "+"                 return 'PLUSSIGN';
 "-"                 return 'SUBSIGN';
@@ -102,57 +106,66 @@
 /* Declaration and Assignment */
 "="                 return "EQUALSIGN";
 
-/* Increment and Decrement */
-"++"                return "INCSIGN";
-"--"                return "DECSIGN";
-
-/* Espacios en blanco */
+/* White Spaces */
 [ \r\t]+            {}
 \n                  {}
 
 \"[^\"]*\"				{ yytext = yytext.substr(1,yyleng-2); return 'CADENA'; }
-[0-9]+("."[0-9]+)?\b    return 'DECIMAL';
-[0-9]+\b                return 'ENTERO';
-([a-zA-Z])[a-zA-Z0-9_]*	return 'IDENTIFICADOR';
+[0-9]+("."[0-9]+)?\b                                          return 'DECIMAL';
+[0-9]+\b                                                      return 'ENTERO';
+([a-zA-Z])[a-zA-Z0-9_]*	                                      return 'IDENTIFICADOR';
 
 <<EOF>>                 return 'EOF';
 
 .                       { console.error('Este es un error léxico: ' + yytext + ', en la linea: ' + yylloc.first_line + ', en la columna: ' + yylloc.first_column); }
 /lex
 
-/* Asociación de operadores y precedencia */
+%{
+    const Arithmetic            = require('./Expression/Arithmetic');
+%}
 
+/* Operators Precedence */
 %left 'PLUSSIGN' 'SUBSIGN'
 %left 'MULTSIGN' 'DIVSIGN'
 %left UMENOS
 
 %start ini
 
-%% /* Definición de la gramática */
+%% /* Grammar Definition */
 
 ini
-	: instrucciones EOF
+	: instructions EOF {
+	    return $1;
+	}
 ;
 
-instrucciones
-	: instruccion instrucciones
-	| instruccion
+instructions
+	: instructions instruction          { $1.push($2); $$ = $1; }
+	| instruction                       { $$ = [$1]; }
 	| error { console.error('Este es un error sintáctico: ' + yytext + ', en la linea: ' + this._$.first_line + ', en la columna: ' + this._$.first_column); }
 ;
 
-instruccion
-	: REVALUAR BRACKETLEFT expresion BRACKETRIGHT SEMICOLON {
+instruction
+	: REVALUAR BRACKETLEFT expression BRACKETRIGHT SEMICOLON {
 		return 'El valor de la expresión es: ' + $3;
 	}
 ;
 
-expresion
-	: SUBSIGN expresion %prec UMENOS  { $$ = $2 *-1; }
-	| expresion PLUSSIGN expresion       { $$ = $1 + $3; }
-	| expresion SUBSIGN expresion     { $$ = $1 - $3; }
-	| expresion MULTSIGN expresion       { $$ = $1 * $3; }
-	| expresion DIVSIGN expresion  { $$ = $1 / $3; }
+type
+    : RINT 	{ $$ = 'entero'; }
+    | RDOUBLE 	{ $$ = 'decimal'; }
+    | RBOOLEAN 	{ $$ = 'booleano'; }
+    | RCHAR 	{ $$ = 'caracter'; }
+    | RSTRING 	{ $$ = 'cadena'; }
+;
+
+expression
+	: SUBSIGN expression %prec UMENOS  { $$ = $2 *-1; }
+	| expression PLUSSIGN expression       { $$ = new Arithmetic($1, $3, '+', @1.first_line, @1.first_column) }
+	| expression SUBSIGN expression     { $$ = $1 - $3; }
+	| expression MULTSIGN expression       { $$ = $1 * $3; }
+	| expression DIVSIGN expression  { $$ = $1 / $3; }
 	| INTEGER                        { $$ = Number($1); }
 	| DECIMAL                       { $$ = Number($1); }
-	| PARLEFT expresion PARRIGHT       { $$ = $2; }
+	| PARLEFT expression PARRIGHT       { $$ = $2; }
 ;
