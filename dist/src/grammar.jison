@@ -63,6 +63,7 @@
 /* ---------------------------------------- Tokens ---------------------------------------- */
 /* Special Characters */
 ":"                 return 'TWOPOINTS';
+"^"                 return 'REPETITIONSIGN';
 
 /* Grouping Signs  */
 "("                 return 'PARLEFT';
@@ -109,8 +110,10 @@
 [ \r\t]+            {}
 \n                  {}
 
+\"[^\"]*\"				{ yytext = yytext.substr(1,yyleng-2); return 'CADENA'; }
 [0-9]+("."[0-9]+)?\b    return 'DECIMAL';
 [0-9]+\b                return 'ENTERO';
+([a-zA-Z])[a-zA-Z0-9_]*	return 'IDENTIFICADOR';
 
 <<EOF>>                 return 'EOF';
 

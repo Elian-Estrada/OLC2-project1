@@ -16,6 +16,7 @@ export enum Arithmetic_operator {
     MODULS              = "%",
     INC                 = "++",
     DEC                 = "--",
+    REPETITION          = "^",
 }
 
 export enum Relational_operator {
