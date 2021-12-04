@@ -31,8 +31,8 @@ export default class Tree {
         return this.console;
     }
 
-    public update_console(input: String){
-        this.console += `${input}\n`
+    public update_console(input: String, flag: Boolean = true){
+        flag ? this.console += `${input}\n`: this.console += `${input}`;
     }
 
     public set_global_table(table: SymbolTable){
