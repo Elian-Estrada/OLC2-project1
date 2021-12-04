@@ -1,8 +1,8 @@
-import {Instruction} from "../Abstract/Instruction";
-import {Arithmetic_operator, type} from "../SymbolTable/Type";
-import SymbolTable from "../SymbolTable/SymbolTable";
-import Tree from "../SymbolTable/Tree";
-import Exception from "../SymbolTable/Exception";
+import {Instruction} from "../Abstract/Instruction.js";
+import {Arithmetic_operator, type} from "../SymbolTable/Type.js";
+import SymbolTable from "../SymbolTable/SymbolTable.js";
+import Tree from "../SymbolTable/Tree.js";
+import Exception from "../SymbolTable/Exception.js";
 
 export class Arithmetic {
 

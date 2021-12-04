@@ -7,6 +7,7 @@ export var type;
     type["BOOL"] = "boolean";
     type["ARRAY"] = "array";
     type["STRUCT"] = "struct";
+    type["NULL"] = "null";
 })(type || (type = {}));
 export var Arithmetic_operator;
 (function (Arithmetic_operator) {

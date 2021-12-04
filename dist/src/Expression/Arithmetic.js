@@ -1,5 +1,5 @@
-import { Arithmetic_operator, type } from "../SymbolTable/Type";
-import Exception from "../SymbolTable/Exception";
+import { Arithmetic_operator, type } from "../SymbolTable/Type.js";
+import Exception from "../SymbolTable/Exception.js";
 var Arithmetic = /** @class */ (function () {
     function Arithmetic(exp1, exp2, operator, row, col) {
         this.operator = operator;

@@ -121,7 +121,7 @@
 /lex
 
 %{
-    const Arithmetic            = require('./Expression/Arithmetic');
+    import {Arithmetic} from "./Expression/Arithmetic.js";
 %}
 
 /* Operators Precedence */
@@ -146,8 +146,11 @@ instructions
 ;
 
 instruction
-	: REVALUAR BRACKETLEFT expression BRACKETRIGHT SEMICOLON {
-		return 'El valor de la expresión es: ' + $3;
+    : RPRINT PARLEFT expression PARRIGHT SEMICOLON {
+        return 'El valor de la expresión con print es: ' + $3;
+    }
+	| REVALUAR BRACKETLEFT expression BRACKETRIGHT SEMICOLON {
+		return 'El valor de la expresión con print es: ' + $3;
 	}
 ;
 
@@ -161,7 +164,7 @@ type
 
 expression
 	: SUBSIGN expression %prec UMENOS  { $$ = $2 *-1; }
-	| expression PLUSSIGN expression       { $$ = new Arithmetic($1, $3, '+', @1.first_line, @1.first_column) }
+	| expression PLUSSIGN expression       { $$ = $1 + $3; }
 	| expression SUBSIGN expression     { $$ = $1 - $3; }
 	| expression MULTSIGN expression       { $$ = $1 * $3; }
 	| expression DIVSIGN expression  { $$ = $1 / $3; }
