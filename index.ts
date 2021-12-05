@@ -33,7 +33,7 @@ function updateCodeMirror(data: string){
         line: cursor.line,
         ch: line.length - 1 // set the character position to the end of the line
     }
-    doc.replaceRange('\n'+data+'\n', pos); // adds a new line
+    doc.replaceRange(data+'\n', pos); // adds a new line
 }
 
 // @ts-ignore
@@ -41,6 +41,7 @@ btnAnalyze.addEventListener('click', () => {
     bufferStream = myCodeMirror.getValue();
     // console.log(bufferStream);
     let main = new Main();
+    // @ts-ignore
     let res: string = main.lexicalAnalysis(bufferStream);
     updateCodeMirror(res);
 });

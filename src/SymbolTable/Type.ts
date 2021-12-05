@@ -5,7 +5,8 @@ export enum type {
     CHAR        = "char",
     BOOL        = "boolean",
     ARRAY       = "array",
-    STRUCT      = "struct"
+    STRUCT      = "struct",
+    NULL        = "null"
 }
 
 export enum Arithmetic_operator {
