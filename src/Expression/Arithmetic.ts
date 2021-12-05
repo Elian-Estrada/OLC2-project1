@@ -179,6 +179,7 @@ export class Arithmetic extends Instruction {
             }
 
             if ( this.exp2.value == null ) {
+                let symbol: Symbol | null = null;
                 switch ( this.operator ) {
                     case Arithmetic_operator.SUBSTRACTION:
                         switch ( this.exp1.get_type() ) {
@@ -193,6 +194,11 @@ export class Arithmetic extends Instruction {
                             default:
                                 return new Exception("Semantic", `The type ${this.exp2.get_type().toString()} cannot be operated with operator -`, this.row, this.column);
                         }
+                        break;
+                    case Arithmetic_operator.INC:
+                        symbol = new Symbol(this.exp1._id, this.exp1.get_type(), this.row, this.column, left + 1);
+                    case Arithmetic_operator.DEC:
+                        symbol = new Symbol(this.exp1._id, this.exp1.get_type(), this.row, this.column, left - 1);
                         break;
                     default:
                         return new Exception("Semantic", `Invalid operator: ${this.operator.toString()}`, this.row, this.column);

@@ -142,6 +142,7 @@
 %left 'PLUSSIGN' 'SUBSIGN'
 %left 'MULTSIGN' 'DIVSIGN'
 %left UMENOS
+%left 'RINCSIGN' 'RDECSIGN'
 
 %start ini
 
