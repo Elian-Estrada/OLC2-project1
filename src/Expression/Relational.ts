@@ -12,7 +12,6 @@ export class Relational extends Instruction{
     private operator: Relational_operator;
     private type: type;
     private value: String;
-    private isBool: {};
 
 
     constructor(exp1: any, exp2: any, operator: Relational_operator, row: Number, column: Number) {
@@ -22,7 +21,6 @@ export class Relational extends Instruction{
         this.operator = operator;
         this.type = type.BOOL;
         this.value = "";
-        this.isBool = {"true": true, "false": false};
     }
 
     interpret(tree: Tree, table: SymbolTable) {
