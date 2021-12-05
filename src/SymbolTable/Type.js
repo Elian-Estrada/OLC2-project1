@@ -10,6 +10,7 @@ var type;
     type["BOOL"] = "boolean";
     type["ARRAY"] = "array";
     type["STRUCT"] = "struct";
+    type["NULL"] = "null";
 })(type = exports.type || (exports.type = {}));
 var Arithmetic_operator;
 (function (Arithmetic_operator) {

@@ -1,19 +1,16 @@
-import {Instruction} from "../Abstract/Instruction";
+import {Instruction} from "../Abstract/Instruction.js";
 import Tree from "../SymbolTable/Tree.js";
 import SymbolTable from "../SymbolTable/SymbolTable.js";
 import {type} from "../SymbolTable/Type.js";
 import Exception from "../SymbolTable/Exception.js";
 
-export class Print {
+export class Print extends Instruction {
 
     private expression: any;
-    private readonly row: number;
-    private readonly col: number;
 
     constructor(expression: any, row: number, col: number) {
+        super(row, col);
         this.expression = expression;
-        this.row = row;
-        this.col = col;
     }
 
     public interpret(tree: Tree, table: SymbolTable) {
@@ -23,10 +20,10 @@ export class Print {
             return value;
 
         if ( this.expression.getType() == type.ARRAY ) {
-            return new Exception("Semantic", "Don't print array", this.row, this.col);
+            return new Exception("Semantic", "Don't print array", this.row, this.column);
         }
         else if ( this.expression.getType() == type.NULL ) {
-            return new Exception("Semantic", "Null Pointer Exception", this.row, this.col);
+            return new Exception("Semantic", "Null Pointer Exception", this.row, this.column);
         }
 
         tree.update_console(`> ${ value.toString() }`);

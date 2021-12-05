@@ -1,5 +1,5 @@
-import SymbolTable from "../SymbolTable/SymbolTable";
-import Tree from "../SymbolTable/Tree";
+import SymbolTable from "../SymbolTable/SymbolTable.js";
+import Tree from "../SymbolTable/Tree.js";
 
 export abstract class Instruction {
 

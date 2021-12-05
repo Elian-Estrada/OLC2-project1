@@ -1,3 +1,4 @@
+"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -13,9 +14,11 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-import { Instruction } from "../Abstract/Instruction.js";
-import { type } from "../SymbolTable/Type.js";
-import Exception from "../SymbolTable/Exception.js";
+exports.__esModule = true;
+exports.Print = void 0;
+var Instruction_1 = require("../Abstract/Instruction");
+var Type_js_1 = require("../SymbolTable/Type.js");
+var Exception_js_1 = require("../SymbolTable/Exception.js");
 var Print = /** @class */ (function (_super) {
     __extends(Print, _super);
     function Print(expression, row, col) {
@@ -27,14 +30,14 @@ var Print = /** @class */ (function (_super) {
         var value = this.expression.interpret(tree, table);
         if (value instanceof Error)
             return value;
-        if (this.expression.getType() == type.ARRAY) {
-            return new Exception("Semantic", "Don't print array", this.row, this.column);
+        if (this.expression.getType() == Type_js_1.type.ARRAY) {
+            return new Exception_js_1["default"]("Semantic", "Don't print array", this.row, this.column);
         }
-        else if (this.expression.getType() == type.NULL) {
-            return new Exception("Semantic", "Null Pointer Exception", this.row, this.column);
+        else if (this.expression.getType() == Type_js_1.type.NULL) {
+            return new Exception_js_1["default"]("Semantic", "Null Pointer Exception", this.row, this.column);
         }
         tree.update_console("> ".concat(value.toString()));
     };
     return Print;
-}(Instruction));
-export { Print };
+}(Instruction_1.Instruction));
+exports.Print = Print;
