@@ -4,8 +4,8 @@ import SymbolTable from "../SymbolTable/SymbolTable.js";
 import {type} from "../SymbolTable/Type.js";
 import Exception from "../SymbolTable/Exception.js";
 import {Continue} from "./Continue.js";
-import {Break} from "./Break";
-import {Return} from "./Return";
+import {Break} from "./Break.js";
+import {Return} from "./Return.js";
 
 export class If extends Instruction {
 
@@ -24,9 +24,9 @@ export class If extends Instruction {
 
     interpret(tree: Tree, table: SymbolTable): any {
         let flag: boolean = this.expr.interpret(tree, table);
-
+        console.log(flag);
         if (this.expr.get_type() === type.BOOL) {
-            if (flag) {
+            if (JSON.parse(String(flag))) {
                 let new_table = new SymbolTable(table, `If - ${this.row}-${this.column}`)
 
                 for (let item of this.instructions) {

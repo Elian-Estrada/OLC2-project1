@@ -18,8 +18,8 @@ import SymbolTable from "../SymbolTable/SymbolTable.js";
 import { type } from "../SymbolTable/Type.js";
 import Exception from "../SymbolTable/Exception.js";
 import { Continue } from "./Continue.js";
-import { Break } from "./Break";
-import { Return } from "./Return";
+import { Break } from "./Break.js";
+import { Return } from "./Return.js";
 var If = /** @class */ (function (_super) {
     __extends(If, _super);
     function If(expr, instructions, else_instr, elseif, row, col) {
@@ -32,8 +32,9 @@ var If = /** @class */ (function (_super) {
     }
     If.prototype.interpret = function (tree, table) {
         var flag = this.expr.interpret(tree, table);
+        console.log(flag);
         if (this.expr.get_type() === type.BOOL) {
-            if (flag) {
+            if (JSON.parse(String(flag))) {
                 var new_table = new SymbolTable(table, "If - ".concat(this.row, "-").concat(this.column));
                 for (var _i = 0, _a = this.instructions; _i < _a.length; _i++) {
                     var item = _a[_i];

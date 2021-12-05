@@ -14,7 +14,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 import { Instruction } from "../Abstract/Instruction.js";
-import Exception from "../SymbolTable/Exception";
+import Exception from "../SymbolTable/Exception.js";
 var Return = /** @class */ (function (_super) {
     __extends(Return, _super);
     function Return(expr, type, result, row, col) {

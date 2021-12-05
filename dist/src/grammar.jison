@@ -137,6 +137,7 @@
 	import { Assignment } from "./Instructions/Assignment.js"
 	import { Print } from "./Instructions/Print.js";
 	import { Inc_Dec } from "./Instructions/Inc_Dec.js";
+	import { If } from "./Instructions/If.js";
 %}
 
 /* Operators Precedence */
@@ -170,6 +171,7 @@ instruction
 	| assignment ptcommP		{ $$ = $1; }
 	| prod_print ptcommP 		{ $$ = $1; }
 	| inc_dec ptcommP			{ $$ = $1; }
+	| prod_if ptcommP           { $$ = $1; }
 ;
 
 ptcommP
@@ -201,6 +203,19 @@ prod_print
 inc_dec
 	: IDENTIFIER INCSIGN		{ $$ = new Inc_Dec(new Arithmetic(new Identifier($1, this._$.first_line, this._$.first_column), null, Arithmetic_operator.INC, this._$.first_line, this._$.first_column), this._$.first_line, this._$.first_column); }
 	| IDENTIFIER DECSIGN		{ $$ = new Inc_Dec(new Arithmetic(new Identifier($1, this._$.first_line, this._$.first_column), null, Arithmetic_operator.DEC, this._$.first_line, this._$.first_column), this._$.first_line, this._$.first_column); }
+;
+
+/* Prods about If */
+prod_if
+    : RIF PARLEFT expression PARRIGHT CURLYLEFT instructions CURLYRIGHT {
+        $$ = new If($3, $6, null, null, @1.first_line, @1.first_column);
+    }
+    | RIF PARLEFT expression PARRIGHT CURLYLEFT instructions CURLYRIGHT RELSE CURLYLEFT instructions CURLYRIGHT {
+        $$ = new If($3, $6, $10, null, @1.first_line, @1.first_column);
+    }
+    | RIF PARLEFT expression PARRIGHT CURLYLEFT instructions CURLYRIGHT RELSE prod_if {
+        $$ = new If($3, $6, null, $9, @1.first_line, @1.first_column);
+    }
 ;
 
 type
