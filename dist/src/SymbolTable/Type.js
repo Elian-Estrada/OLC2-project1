@@ -17,6 +17,7 @@ export var Arithmetic_operator;
     Arithmetic_operator["MODULS"] = "%";
     Arithmetic_operator["INC"] = "++";
     Arithmetic_operator["DEC"] = "--";
+    Arithmetic_operator["REPETITION"] = "^";
 })(Arithmetic_operator || (Arithmetic_operator = {}));
 export var Relational_operator;
 (function (Relational_operator) {

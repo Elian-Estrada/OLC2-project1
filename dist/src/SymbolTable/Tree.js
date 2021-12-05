@@ -16,8 +16,9 @@ var Tree = /** @class */ (function () {
     Tree.prototype.get_console = function () {
         return this.console;
     };
-    Tree.prototype.update_console = function (input) {
-        this.console += "".concat(input, "\n");
+    Tree.prototype.update_console = function (input, flag) {
+        if (flag === void 0) { flag = true; }
+        flag ? this.console += "".concat(input, "\n") : this.console += "".concat(input);
     };
     Tree.prototype.set_global_table = function (table) {
         this.global_table = table;
