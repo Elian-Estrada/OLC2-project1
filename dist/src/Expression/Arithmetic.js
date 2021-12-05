@@ -16,6 +16,7 @@ var __extends = (this && this.__extends) || (function () {
 import { Instruction } from "../Abstract/Instruction.js";
 import { Arithmetic_operator, type } from "../SymbolTable/Type.js";
 import Exception from "../SymbolTable/Exception.js";
+import Symbol from "../SymbolTable/Symbol";
 var Arithmetic = /** @class */ (function (_super) {
     __extends(Arithmetic, _super);
     function Arithmetic(exp1, exp2, operator, row, column) {
@@ -171,6 +172,7 @@ var Arithmetic = /** @class */ (function (_super) {
                     }
             }
             if (this.exp2.value == null) {
+                var symbol = null;
                 switch (this.operator) {
                     case Arithmetic_operator.SUBSTRACTION:
                         switch (this.exp1.get_type()) {
@@ -185,6 +187,11 @@ var Arithmetic = /** @class */ (function (_super) {
                             default:
                                 return new Exception("Semantic", "The type ".concat(this.exp2.get_type().toString(), " cannot be operated with operator -"), this.row, this.column);
                         }
+                        break;
+                    case Arithmetic_operator.INC:
+                        symbol = new Symbol(this.exp1._id, this.exp1.get_type(), this.row, this.column, left + 1);
+                    case Arithmetic_operator.DEC:
+                        symbol = new Symbol(this.exp1._id, this.exp1.get_type(), this.row, this.column, left - 1);
                         break;
                     default:
                         return new Exception("Semantic", "Invalid operator: ".concat(this.operator.toString()), this.row, this.column);
