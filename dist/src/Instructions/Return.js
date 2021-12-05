@@ -14,29 +14,30 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 import { Instruction } from "../Abstract/Instruction.js";
-import { type } from "../SymbolTable/Type.js";
 import Exception from "../SymbolTable/Exception.js";
-var Print = /** @class */ (function (_super) {
-    __extends(Print, _super);
-    function Print(expression, row, col, flag) {
-        if (flag === void 0) { flag = true; }
+var Return = /** @class */ (function (_super) {
+    __extends(Return, _super);
+    function Return(expr, type, result, row, col) {
         var _this = _super.call(this, row, col) || this;
-        _this.expression = expression;
-        _this.flag = flag;
+        _this.expr = expr;
+        _this.type = type;
+        _this.result = result;
         return _this;
     }
-    Print.prototype.interpret = function (tree, table) {
-        var value = this.expression.interpret(tree, table);
+    Return.prototype.interpret = function (tree, table) {
+        var value = this.expr.interpret(tree, table);
         if (value instanceof Exception)
             return value;
-        if (this.expression.get_type() == type.ARRAY) {
-            return new Exception("Semantic", "Don't print array", this.row, this.column);
-        }
-        else if (this.expression.get_type() == type.NULL) {
-            return new Exception("Semantic", "Null Pointer Exception", this.row, this.column);
-        }
-        tree.update_console("".concat(value), this.flag);
+        this.type = this.expr.get_type();
+        this.result = value;
+        return this;
     };
-    return Print;
+    Return.prototype.get_type = function () {
+        return this.type;
+    };
+    Return.prototype.get_result = function () {
+        return this.type;
+    };
+    return Return;
 }(Instruction));
-export { Print };
+export { Return };
