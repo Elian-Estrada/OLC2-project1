@@ -44,11 +44,10 @@ var If = /** @class */ (function (_super) {
                         tree.update_console(instruction.toString());
                     }
                     else {
-                        switch (instruction) {
-                            case instruction instanceof Continue:
-                            case instruction instanceof Break:
-                            case instruction instanceof Return:
-                                return instruction;
+                        if ((instruction instanceof Continue) ||
+                            (instruction instanceof Break) ||
+                            (instruction instanceof Return)) {
+                            return instruction;
                         }
                     }
                 }
@@ -64,23 +63,19 @@ var If = /** @class */ (function (_super) {
                             tree.update_console(instruction_else.toString());
                         }
                         else {
-                            switch (instruction_else) {
-                                case instruction_else instanceof Continue:
-                                case instruction_else instanceof Break:
-                                case instruction_else instanceof Return:
-                                    return instruction_else;
+                            if ((instruction_else instanceof Continue) ||
+                                (instruction_else instanceof Break) ||
+                                (instruction_else instanceof Return)) {
+                                return instruction_else;
                             }
                         }
                     }
                 }
                 else if (this.elseif != null) {
                     var result = this.elseif.interpret(tree, table);
-                    switch (result) {
-                        case result instanceof Continue:
-                        case result instanceof Break:
-                        case result instanceof Return:
-                        case result instanceof Exception:
-                            return result;
+                    if ((result instanceof Continue) || (result instanceof Break) ||
+                        (result instanceof Return) || (result instanceof Exception)) {
+                        return result;
                     }
                 }
             }
