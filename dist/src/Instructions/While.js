@@ -35,7 +35,7 @@ var While = /** @class */ (function (_super) {
             if (flag instanceof Exception)
                 return flag;
             if (this.expr.get_type() == type.BOOL) {
-                if (JSON.parse(String(flag))) {
+                if (String(flag) == "true") {
                     var new_table = new SymbolTable(table, "While-".concat(this.row, "-").concat(this.column));
                     for (var _i = 0, _a = this.instructions; _i < _a.length; _i++) {
                         var item = _a[_i];
