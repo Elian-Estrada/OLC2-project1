@@ -1,6 +1,4 @@
 import {Main} from "./src/Main.js";
-// @ts-ignore
-import {grammar} from "./grammar.js";
 
 let btnAnalyze: HTMLElement | null = document.getElementById('btnAnalyze');
 let bufferStream: string;
@@ -44,7 +42,6 @@ btnAnalyze.addEventListener('click', () => {
     // console.log(bufferStream);
     let main = new Main();
     // @ts-ignore
-    let res: string = grammar.parse("print(3+4);");
-    // let res: string = main.lexicalAnalysis(bufferStream);
+    let res: string = main.lexicalAnalysis(bufferStream);
     updateCodeMirror(res);
 });

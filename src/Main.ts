@@ -1,3 +1,5 @@
+// @ts-ignore
+import {grammar} from "../dist/src/grammar";
 
 export class Main {
     lexicalAnalysis(bufferStream: string) {

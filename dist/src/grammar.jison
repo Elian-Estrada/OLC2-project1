@@ -122,6 +122,8 @@
 
 %{
     import {Arithmetic} from "./Expression/Arithmetic.js";
+
+    import { Print } from "./Instructions/Print.js";
 %}
 
 /* Operators Precedence */
@@ -146,12 +148,16 @@ instructions
 ;
 
 instruction
-    : RPRINT PARLEFT expression PARRIGHT SEMICOLON {
-        return 'El valor de la expresión con print es: ' + $3;
-    }
+    : prod_print SEMICOLON { $$ = $1; }
 	| REVALUAR BRACKETLEFT expression BRACKETRIGHT SEMICOLON {
 		return 'El valor de la expresión con print es: ' + $3;
 	}
+;
+
+prod_print
+    : RPRINT PARLEFT expression PARRIGHT {
+        $$ = new Print($3, @1.first_line, @1.first_column);
+    }
 ;
 
 type
@@ -163,12 +169,13 @@ type
 ;
 
 expression
-	: SUBSIGN expression %prec UMENOS  { $$ = $2 *-1; }
-	| expression PLUSSIGN expression       { $$ = $1 + $3; }
-	| expression SUBSIGN expression     { $$ = $1 - $3; }
-	| expression MULTSIGN expression       { $$ = $1 * $3; }
-	| expression DIVSIGN expression  { $$ = $1 / $3; }
-	| INTEGER                        { $$ = Number($1); }
-	| DECIMAL                       { $$ = Number($1); }
-	| PARLEFT expression PARRIGHT       { $$ = $2; }
+	: SUBSIGN expression %prec UMENOS       { $$ = $2 *-1; }
+	| expression PLUSSIGN expression        { $$ = new Arithmetic($1, $3, '+', @1.first_line, @1.first_column); }
+	| expression SUBSIGN expression         { $$ = new Arithmetic($1, $3, '-', @1.first_line, @1.first_column); }
+	| expression MULTSIGN expression        { $$ = new Arithmetic($1, $3, '*', @1.first_line, @1.first_column); }
+	| expression DIVSIGN expression         { $$ = new Arithmetic($1, $3, '/', @1.first_line, @1.first_column); }
+	| INTEGER                               { $$ = Number($1); }
+	| DECIMAL                               { $$ = Number($1); }
+	| CADENA                                { $$ = $1.toString() }
+	| PARLEFT expression PARRIGHT           { $$ = $2; }
 ;

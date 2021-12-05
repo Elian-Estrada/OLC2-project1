@@ -1,5 +1,5 @@
-import { type } from "../SymbolTable/Type";
-import Exception from "../SymbolTable/Exception";
+import { type } from "../SymbolTable/Type.js";
+import Exception from "../SymbolTable/Exception.js";
 var Print = /** @class */ (function () {
     function Print(expression, row, col) {
         this.expression = expression;

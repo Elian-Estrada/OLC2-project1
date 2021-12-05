@@ -1,8 +1,8 @@
 import {Instruction} from "../Abstract/Instruction";
-import Tree from "../SymbolTable/Tree";
-import SymbolTable from "../SymbolTable/SymbolTable";
-import {type} from "../SymbolTable/Type";
-import Exception from "../SymbolTable/Exception";
+import Tree from "../SymbolTable/Tree.js";
+import SymbolTable from "../SymbolTable/SymbolTable.js";
+import {type} from "../SymbolTable/Type.js";
+import Exception from "../SymbolTable/Exception.js";
 
 export class Print {
 
@@ -10,7 +10,7 @@ export class Print {
     private readonly row: number;
     private readonly col: number;
 
-    constructor(expression: any, row: number, col: number, ifln: boolean = false) {
+    constructor(expression: any, row: number, col: number) {
         this.expression = expression;
         this.row = row;
         this.col = col;
