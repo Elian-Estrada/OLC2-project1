@@ -138,6 +138,7 @@
 	import { Print } from "./Instructions/Print.js";
 	import { Inc_Dec } from "./Instructions/Inc_Dec.js";
 	import { If } from "./Instructions/If.js";
+	import { While } from "./Instructions/While.js";
 %}
 
 /* Operators Precedence */
@@ -172,6 +173,7 @@ instruction
 	| prod_print ptcommP 		{ $$ = $1; }
 	| inc_dec ptcommP			{ $$ = $1; }
 	| prod_if ptcommP           { $$ = $1; }
+	| prod_while ptcommP        { $$ = $1; }
 ;
 
 ptcommP
@@ -215,6 +217,13 @@ prod_if
     }
     | RIF PARLEFT expression PARRIGHT CURLYLEFT instructions CURLYRIGHT RELSE prod_if {
         $$ = new If($3, $6, null, $9, @1.first_line, @1.first_column);
+    }
+;
+
+/* Prods about While */
+prod_while
+    : RWHILE PARLEFT expression PARRIGHT CURLYLEFT instructions CURLYRIGHT {
+        $$ = new While($3, $6, @1.first_line, @1.first_column);
     }
 ;
 
