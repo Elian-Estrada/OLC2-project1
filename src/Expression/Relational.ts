@@ -1,8 +1,8 @@
-import { Instruction } from "../Abstract/Instruction";
-import { type, Relational_operator } from "../SymbolTable/Type";
-import Exception from "../SymbolTable/Exception";
-import Tree from "../SymbolTable/Tree";
-import SymbolTable from "../SymbolTable/SymbolTable";
+import { Instruction } from "../Abstract/Instruction.js";
+import { type, Relational_operator } from "../SymbolTable/Type.js";
+import Exception from "../SymbolTable/Exception.js";
+import Tree from "../SymbolTable/Tree.js";
+import SymbolTable from "../SymbolTable/SymbolTable.js";
 
 export class Relational extends Instruction{
 
@@ -145,17 +145,23 @@ export class Relational extends Instruction{
 
         switch(operator){
             case Relational_operator.EQUAL:
-                return String(op1 == op2).toLowerCase();
+                this.value = String(op1 == op2).toLowerCase();
+                return this.value
             case Relational_operator.UNEQUAL:
-                return String(op1 != op2).toLowerCase();
+                this.value = String(op1 != op2).toLowerCase();
+                return this.value
             case Relational_operator.GREATER:
-                return String(op1 > op2).toLowerCase();
+                this.value = String(op1 > op2).toLowerCase();
+                return this.value
             case Relational_operator.GREATEREQUAL:
-                return String(op1 >= op2).toLowerCase();
+                this.value = String(op1 >= op2).toLowerCase();
+                return this.value
             case Relational_operator.LESS:
-                return String(op1 < op2).toLowerCase();
+                this.value = String(op1 < op2).toLowerCase();
+                return this.value
             case Relational_operator.LESSEQUAL:
-                return String(op1 <= op2).toLowerCase();
+                this.value = String(op1 <= op2).toLowerCase();
+                return this.value
         }
 
     }

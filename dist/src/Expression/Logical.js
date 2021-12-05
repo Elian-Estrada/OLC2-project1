@@ -13,9 +13,9 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-import { Instruction } from "../Abstract/Instruction";
-import Exception from "../SymbolTable/Exception";
-import { Logical_operator, type } from "../SymbolTable/Type";
+import { Instruction } from "../Abstract/Instruction.js";
+import Exception from "../SymbolTable/Exception.js";
+import { Logical_operator, type } from "../SymbolTable/Type.js";
 var Logical = /** @class */ (function (_super) {
     __extends(Logical, _super);
     function Logical(exp1, exp2, operator, row, column) {
@@ -29,8 +29,8 @@ var Logical = /** @class */ (function (_super) {
     }
     Logical.prototype.interpret = function (tree, table) {
         var left = this.exp1.interpret(tree, table);
+        console.log(left);
         if (left instanceof Exception) {
-            return left;
         }
         if (this.exp2 != null) {
             var right = this.exp2.interpret(tree, table);
@@ -40,10 +40,11 @@ var Logical = /** @class */ (function (_super) {
             if (this.exp1.get_type() === type.BOOL && this.exp2.get_type() === type.BOOL) {
                 switch (this.operator) {
                     case Logical_operator.AND:
-                        this.value = String(Boolean(left) && Boolean(right)).toLowerCase();
+                        this.value = String(JSON.parse(left) && JSON.parse(right)).toLowerCase();
+                        console.log(this.value, JSON.parse(left), JSON.parse(right));
                         return this.value;
                     case Logical_operator.OR:
-                        this.value = String(Boolean(left) || Boolean(right)).toLowerCase();
+                        this.value = String(JSON.parse(left) || JSON.parse(right)).toLowerCase();
                         return this.value;
                 }
             }
@@ -53,7 +54,7 @@ var Logical = /** @class */ (function (_super) {
         }
         else {
             if (this.exp1.get_type() == type.BOOL) {
-                this.value = String(!Boolean(left)).toLowerCase();
+                this.value = String(!JSON.parse(left)).toLowerCase();
                 return this.value;
             }
             else {

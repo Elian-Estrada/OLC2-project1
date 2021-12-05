@@ -1,6 +1,6 @@
-import { Instruction } from "../Abstract/Instruction";
-import Exception from "./Exception";
-import SymbolTable from "./SymbolTable";
+import { Instruction } from "../Abstract/Instruction.js";
+import Exception from "./Exception.js";
+import SymbolTable from "./SymbolTable.js";
 
 export default class Tree {
 

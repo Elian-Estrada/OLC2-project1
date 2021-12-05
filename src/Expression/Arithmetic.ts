@@ -3,7 +3,7 @@ import {Arithmetic_operator, Logical_operator, type} from "../SymbolTable/Type.j
 import SymbolTable from "../SymbolTable/SymbolTable.js";
 import Tree from "../SymbolTable/Tree.js";
 import Exception from "../SymbolTable/Exception.js";
-import Symbol from "../SymbolTable/Symbol";
+import Symbol from "../SymbolTable/Symbol.js";
 
 export class Arithmetic extends Instruction {
 

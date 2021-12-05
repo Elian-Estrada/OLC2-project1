@@ -13,9 +13,9 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-import { Instruction } from "../Abstract/Instruction";
-import { type, Relational_operator } from "../SymbolTable/Type";
-import Exception from "../SymbolTable/Exception";
+import { Instruction } from "../Abstract/Instruction.js";
+import { type, Relational_operator } from "../SymbolTable/Type.js";
+import Exception from "../SymbolTable/Exception.js";
 var Relational = /** @class */ (function (_super) {
     __extends(Relational, _super);
     function Relational(exp1, exp2, operator, row, column) {
@@ -133,17 +133,23 @@ var Relational = /** @class */ (function (_super) {
     Relational.prototype.to_lower = function (op1, op2, operator) {
         switch (operator) {
             case Relational_operator.EQUAL:
-                return String(op1 == op2).toLowerCase();
+                this.value = String(op1 == op2).toLowerCase();
+                return this.value;
             case Relational_operator.UNEQUAL:
-                return String(op1 != op2).toLowerCase();
+                this.value = String(op1 != op2).toLowerCase();
+                return this.value;
             case Relational_operator.GREATER:
-                return String(op1 > op2).toLowerCase();
+                this.value = String(op1 > op2).toLowerCase();
+                return this.value;
             case Relational_operator.GREATEREQUAL:
-                return String(op1 >= op2).toLowerCase();
+                this.value = String(op1 >= op2).toLowerCase();
+                return this.value;
             case Relational_operator.LESS:
-                return String(op1 < op2).toLowerCase();
+                this.value = String(op1 < op2).toLowerCase();
+                return this.value;
             case Relational_operator.LESSEQUAL:
-                return String(op1 <= op2).toLowerCase();
+                this.value = String(op1 <= op2).toLowerCase();
+                return this.value;
         }
     };
     Relational.prototype.get_type = function () {

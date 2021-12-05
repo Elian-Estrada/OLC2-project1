@@ -140,7 +140,7 @@
 %right UNOT
 %nonassoc 'EQUALIZATIONSIGN' 'DIFFSIGN' 'LESSEQUAL' 'GREATEREQUAL' 'SMALLERTHAN' 'GREATERTHAN'
 %left 'PLUSSIGN' 'SUBSIGN'
-%left 'MULTSIGN' 'DIVSIGN'
+%left 'MULTSIGN' 'DIVSIGN' 'MODSIGN'
 %right UMENOS
 %left 'RINCSIGN' 'RDECSIGN'
 
@@ -197,8 +197,8 @@ expression
 	| expression SMALLERTHAN expression		{ $$ = new Relational($1, $3, Relational_operator.LESS, @1.first_line, @1.first_column); }
 	| expression GREATERTHAN expression		{ $$ = new Relational($1, $3, Relational_operator.GREATER, @1.first_line, @1.first_column); }
 	| expression AND expression				{ $$ = new Logical($1, $3, Logical_operator.AND, @1.first_line, @1.first_column); }
-	| expression OR expression				{ $$ = new Logical($1, $3, Logical_operator.AND, @1.first_line, @1.first_column); }
-	| NOT expression %prec UNOT				{ $$ = new Logical($1, $3, Logical_operator.AND, @1.first_line, @1.first_column); }
+	| expression OR expression				{ $$ = new Logical($1, $3, Logical_operator.OR, @1.first_line, @1.first_column); }
+	| NOT expression %prec UNOT				{ $$ = new Logical($1, $3, Logical_operator.NOT, @1.first_line, @1.first_column); }
 	| INTEGER                               { $$ = new Primitive($1, type.INT, @1.first_line, @1.first_column); }
 	| DOUBLE                                { $$ = new Primitive($1, type.DOUBLE, @1.first_line, @1.first_column) }
 	| STRING                                { $$ = new Primitive($1, type.STRING, @1.first_line, @1.first_column); }

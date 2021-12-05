@@ -16,7 +16,7 @@ var __extends = (this && this.__extends) || (function () {
 import { Instruction } from "../Abstract/Instruction.js";
 import { Arithmetic_operator, type } from "../SymbolTable/Type.js";
 import Exception from "../SymbolTable/Exception.js";
-import Symbol from "../SymbolTable/Symbol";
+import Symbol from "../SymbolTable/Symbol.js";
 var Arithmetic = /** @class */ (function (_super) {
     __extends(Arithmetic, _super);
     function Arithmetic(exp1, exp2, operator, row, column) {
