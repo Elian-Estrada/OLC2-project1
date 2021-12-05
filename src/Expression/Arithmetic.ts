@@ -3,6 +3,7 @@ import {Arithmetic_operator, type} from "../SymbolTable/Type.js";
 import SymbolTable from "../SymbolTable/SymbolTable.js";
 import Tree from "../SymbolTable/Tree.js";
 import Exception from "../SymbolTable/Exception.js";
+import Symbol from "../SymbolTable/Symbol";
 
 export class Arithmetic extends Instruction {
 
@@ -43,15 +44,19 @@ export class Arithmetic extends Instruction {
                     if ( this.exp1.getType() === type.INT ) {
                         switch ( this.exp2.getType() ) {
                             case type.INT:
+                                this.type = type.INT;
                                 this.value = parseInt(left) + parseInt(right)
                                 break;
                             case type.DOUBLE:
+                                this.type = type.DOUBLE;
                                 this.value = parseFloat(left) + parseFloat(right);
                                 break;
                             case type.CHAR:
+                                this.type = type.CHAR;
                                 this.value = parseInt(left) + right.charCodeAt(0);
                                 break;
                             case type.STRING:
+                                this.type = type.STRING;
                                 this.value = left.toString() + right.toString();
                                 break;
                             default:
@@ -65,6 +70,7 @@ export class Arithmetic extends Instruction {
                             case type.DOUBLE:
                             case type.CHAR:
                             case type.STRING:
+                                this.type = type.STRING;
                                 this.value = left.toString() + right.toString();
                                 break;
                             default:
@@ -75,6 +81,7 @@ export class Arithmetic extends Instruction {
                     else if ( this.exp1.getType() === type.BOOL ) {
                         switch ( this.exp2.getType() ) {
                             case type.STRING:
+                                this.type = type.STRING;
                                 this.value = left.toString() + right.toString();
                                 break;
                             default:
@@ -91,12 +98,15 @@ export class Arithmetic extends Instruction {
                     if ( this.exp1.getType() === type.INT ) {
                         switch ( this.exp2.getType() ) {
                             case type.INT:
+                                this.type = type.INT;
                                 this.value = parseInt(left) + parseInt(right)
                                 break;
                             case type.DOUBLE:
+                                this.type = type.DOUBLE;
                                 this.value = parseFloat(left) + parseFloat(right);
                                 break;
                             case type.CHAR:
+                                this.type = type.CHAR;
                                 this.value = parseInt(left) + right.charCodeAt(0);
                                 break;
                             default:
@@ -133,6 +143,27 @@ export class Arithmetic extends Instruction {
                                 return new Exception("Semantic", `The type ${this.exp2.get_type().toString()} cannot be operated with type: CHAR`, this.row, this.column);
                         }
                     }
+            }
+
+            if ( this.exp2.value == null ) {
+                switch ( this.operator ) {
+                    case Arithmetic_operator.SUBSTRACTION:
+                        switch ( this.exp1.getType() ) {
+                            case type.INT:
+                                this.type = type.INT;
+                                this.value = - parseInt(left);
+                                break;
+                            case type.DOUBLE:
+                                this.type = type.DOUBLE;
+                                this.value = - parseFloat(left);
+                                break
+                            default:
+                                return new Exception("Semantic", `The type ${this.exp2.get_type().toString()} cannot be operated with operator -`, this.row, this.column);
+                        }
+                        break;
+                    default:
+                        return new Exception("Semantic", `Invalid operator: ${this.operator.toString()}`, this.row, this.column);
+                }
             }
         }
 

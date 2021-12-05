@@ -1,4 +1,4 @@
-import {type} from './Type';
+import {type} from './Type.js';
 
 export default class Symbol {
 

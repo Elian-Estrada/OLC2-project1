@@ -1,6 +1,6 @@
-import Exception from "./Exception";
-import Symbol from "./Symbol";
-import {type} from './Type';
+import Exception from "./Exception.js";
+import Symbol from "./Symbol.js";
+import {type} from './Type.js';
 
 export default class SymbolTable {
 
