@@ -16,7 +16,6 @@ var Main = /** @class */ (function () {
         tree.set_global_table(global_table);
         for (var _i = 0, _a = tree.get_instructions(); _i < _a.length; _i++) {
             var instruction = _a[_i];
-            console.log(instruction);
             instruction.interpret(tree, global_table);
         }
         console.log(tree.get_instructions());

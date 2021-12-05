@@ -19,8 +19,6 @@ export class Main {
         tree.set_global_table(global_table);
         
         for (let instruction of tree.get_instructions()){
-            console.log(instruction);
-            
             instruction.interpret(tree, global_table);
         }
         console.log(tree.get_instructions());

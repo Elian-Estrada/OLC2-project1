@@ -127,15 +127,15 @@
 
 %{
 	import {type, Relational_operator, Logical_operator, Arithmetic_operator} from "./SymbolTable/Type.js"
-
     import { Arithmetic } from "./Expression/Arithmetic.js";
 	import { Logical } from "./Expression/Logical.js";
 	import { Relational } from "./Expression/Relational.js";
-    import { Print } from "./Instructions/Print.js";
 	import { Primitive } from "./Expression/Primitive.js";
 	import { Identifier } from "./Expression/Identifier.js"
 
 	import { Declaration } from "./Instructions/Declaration.js"
+	import { Assignment } from "./Instructions/Assignment.js"
+	import { Print } from "./Instructions/Print.js";
 %}
 
 /* Operators Precedence */
@@ -166,7 +166,8 @@ instructions
 
 instruction
     : declaration ptcommP 		{ $$ = $1; }
-	| prod_print ptcommP 	{ $$ = $1; }
+	| assignment ptcommP		{ $$ = $1; }
+	| prod_print ptcommP 		{ $$ = $1; }
 ;
 
 ptcommP
@@ -182,6 +183,10 @@ declaration
 list_id
 	: list_id COMMASIGN IDENTIFIER	{ $$ = $1; $$.push($3); }
 	| IDENTIFIER					{ $$ = []; $$.push($1); }
+;
+
+assignment
+	: IDENTIFIER EQUALSIGN expression 	{ $$ = new Assignment($1, $3, this._$.first_line, this._$.first_column); }
 ;
 
 prod_print
