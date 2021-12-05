@@ -4,6 +4,7 @@ import SymbolTable from "../SymbolTable/SymbolTable.js";
 import Tree from "../SymbolTable/Tree.js";
 import Exception from "../SymbolTable/Exception.js";
 import Symbol from "../SymbolTable/Symbol.js";
+import { Identifier } from "./Identifier.js";
 
 export class Arithmetic extends Instruction {
 
@@ -196,10 +197,36 @@ export class Arithmetic extends Instruction {
                         }
                         break;
                     case Arithmetic_operator.INC:
-                        symbol = new Symbol(this.exp1._id, this.exp1.get_type(), this.row, this.column, left + 1);
                     case Arithmetic_operator.DEC:
-                        symbol = new Symbol(this.exp1._id, this.exp1.get_type(), this.row, this.column, left - 1);
-                        break;
+                        if (this.exp1 instanceof Identifier){
+                            switch (this.exp1.get_type()){
+                                case type.INT:
+                                    left = parseInt(left);
+                                    break;
+                                case type.DOUBLE:
+                                    left = parseFloat(left);
+                                    break;
+                                default:
+                                    return new Exception("Semantic", `The type: ${this.exp1.get_type()} cannot be operated whit operator: ${this.operator}`, this.row, this.column);            
+                            }
+
+                            if (this.operator === Arithmetic_operator.INC){
+                                symbol = new Symbol(this.exp1.get_id(), this.exp1.get_type(), this.row, this.column, String(left + 1));
+                            }else {
+                                symbol = new Symbol(this.exp1.get_id(), this.exp1.get_type(), this.row, this.column, String(left - 1));
+                            }
+
+                            let result = table.update_table(symbol);
+
+                            if (result instanceof Exception){
+                                return result;
+                            }
+
+                            this.type = this.exp1.get_type();
+                            this.value = symbol.value();
+
+                            return this.value;
+                        }
                     default:
                         return new Exception("Semantic", `Invalid operator: ${this.operator.toString()}`, this.row, this.column);
                 }

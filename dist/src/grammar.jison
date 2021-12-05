@@ -66,6 +66,7 @@
 /* ---------------------------------------- Tokens ---------------------------------------- */
 /* Special Characters */
 ":"                 return 'TWOPOINTS';
+","					return 'COMMASIGN';
 "^"                 return 'REPETITIONSIGN';
 
 /* Grouping Signs  */
@@ -127,11 +128,14 @@
 %{
 	import {type, Relational_operator, Logical_operator, Arithmetic_operator} from "./SymbolTable/Type.js"
 
-    import {Arithmetic} from "./Expression/Arithmetic.js";
-	import {Logical} from "./Expression/Logical.js";
-	import {Relational} from "./Expression/Relational.js";
+    import { Arithmetic } from "./Expression/Arithmetic.js";
+	import { Logical } from "./Expression/Logical.js";
+	import { Relational } from "./Expression/Relational.js";
     import { Print } from "./Instructions/Print.js";
-	import {Primitive} from "./Expression/Primitive.js";
+	import { Primitive } from "./Expression/Primitive.js";
+	import { Identifier } from "./Expression/Identifier.js"
+
+	import { Declaration } from "./Instructions/Declaration.js"
 %}
 
 /* Operators Precedence */
@@ -157,14 +161,27 @@ ini
 instructions
 	: instructions instruction          { $1.push($2); $$ = $1; }
 	| instruction                       { $$ = [$1]; }
-	| error { console.error('Este es un error sintáctico: ' + yytext + ', en la linea: ' + this._$.first_line + ', en la columna: ' + this._$.first_column); }
+	| error { console.error('Este es un error sintáctico: [' + yytext + '] en la linea: ' + this._$.first_line + ', en la columna: ' + this._$.first_column); }
 ;
 
 instruction
-    : prod_print SEMICOLON { $$ = $1; }
-	| REVALUAR BRACKETLEFT expression BRACKETRIGHT SEMICOLON {
-		return 'El valor de la expresión con print es: ' + $3;
-	}
+    : declaration ptcommP 		{ $$ = $1; }
+	| prod_print ptcommP 	{ $$ = $1; }
+;
+
+ptcommP
+	: SEMICOLON
+	|
+;
+
+declaration
+	: type IDENTIFIER EQUALSIGN expression	{ $$ = new Declaration([$2], $1, @1.first_line, @1.first_column, $4); }
+	| type list_id							{ $$ = new Declaration($2, $1, this._$.first_line, this._$.first_column); }
+;
+
+list_id
+	: list_id COMMASIGN IDENTIFIER	{ $$ = $1; $$.push($3); }
+	| IDENTIFIER					{ $$ = []; $$.push($1); }
 ;
 
 prod_print
@@ -204,6 +221,7 @@ expression
 	| STRING                                { $$ = new Primitive($1, type.STRING, @1.first_line, @1.first_column); }
 	| CHAR									{ $$ = new Primitive($1, type.CHAR, @1.first_line, @1.first_column); }
 	| boolean								{ $$ = new Primitive($1, type.BOOL, @1.first_line, @1.first_column); }
+	| IDENTIFIER							{ $$ = new Identifier($1, @1.first_line, @1.first_column); }
 	| PARLEFT expression PARRIGHT           { $$ = $2; }
 ;
 

@@ -12,16 +12,20 @@ export class Main {
 
         let instructions: Array<Instruction>;
         instructions = grammar.parse(bufferStream);
-
+        
         let tree: Tree = new Tree(instructions);
         let global_table: SymbolTable = new SymbolTable(undefined, undefined);
 
         tree.set_global_table(global_table);
         
         for (let instruction of tree.get_instructions()){
+            console.log(instruction);
+            
             instruction.interpret(tree, global_table);
         }
         console.log(tree.get_instructions());
+        console.log(tree.get_global_table());
+        
         return tree.get_console();
         
         
