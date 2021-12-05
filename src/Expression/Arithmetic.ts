@@ -180,60 +180,71 @@ export class Arithmetic extends Instruction {
             }
 
             if ( this.exp2.value == null ) {
-                let symbol: Symbol | null = null;
-                switch ( this.operator ) {
-                    case Arithmetic_operator.SUBSTRACTION:
-                        switch ( this.exp1.get_type() ) {
+                
+            }
+            
+        } else {
+            let symbol: Symbol | null = null;
+            console.log(this.operator);
+            
+            switch ( this.operator ) {
+                case Arithmetic_operator.SUBSTRACTION:
+                    switch ( this.exp1.get_type() ) {
+                        case type.INT:
+                            this.type = type.INT;
+                            this.value = String(- parseInt(left));
+                            break;
+                        case type.DOUBLE:
+                            this.type = type.DOUBLE;
+                            this.value = String(- parseFloat(left));
+                            break
+                        default:
+                            return new Exception("Semantic", `The type ${this.exp2.get_type().toString()} cannot be operated with operator -`, this.row, this.column);
+                    }
+                    break;
+                case Arithmetic_operator.INC:
+                case Arithmetic_operator.DEC:
+                    if (this.exp1 instanceof Identifier){
+                        switch (this.exp1.get_type()){
                             case type.INT:
-                                this.type = type.INT;
-                                this.value = String(- parseInt(left));
+                                left = parseInt(left);
                                 break;
                             case type.DOUBLE:
-                                this.type = type.DOUBLE;
-                                this.value = String(- parseFloat(left));
-                                break
+                                left = parseFloat(left);
+                                break;
                             default:
-                                return new Exception("Semantic", `The type ${this.exp2.get_type().toString()} cannot be operated with operator -`, this.row, this.column);
+                                return new Exception("Semantic", `The type: ${this.exp1.get_type()} cannot be operated whit operator: ${this.operator}`, this.row, this.column);            
                         }
-                        break;
-                    case Arithmetic_operator.INC:
-                    case Arithmetic_operator.DEC:
-                        if (this.exp1 instanceof Identifier){
-                            switch (this.exp1.get_type()){
-                                case type.INT:
-                                    left = parseInt(left);
-                                    break;
-                                case type.DOUBLE:
-                                    left = parseFloat(left);
-                                    break;
-                                default:
-                                    return new Exception("Semantic", `The type: ${this.exp1.get_type()} cannot be operated whit operator: ${this.operator}`, this.row, this.column);            
-                            }
 
-                            if (this.operator === Arithmetic_operator.INC){
-                                symbol = new Symbol(this.exp1.get_id(), this.exp1.get_type(), this.row, this.column, String(left + 1));
-                            }else {
-                                symbol = new Symbol(this.exp1.get_id(), this.exp1.get_type(), this.row, this.column, String(left - 1));
-                            }
+                        console.log(left);
+                        
 
-                            let result = table.update_table(symbol);
-
-                            if (result instanceof Exception){
-                                return result;
-                            }
-
-                            this.type = this.exp1.get_type();
-                            this.value = symbol.value();
-
-                            return this.value;
+                        if (this.operator === Arithmetic_operator.INC){
+                            symbol = new Symbol(this.exp1.get_id(), this.exp1.get_type(), this.row, this.column, String(left + 1));
+                        }else {
+                            symbol = new Symbol(this.exp1.get_id(), this.exp1.get_type(), this.row, this.column, String(left - 1));
                         }
-                    default:
-                        return new Exception("Semantic", `Invalid operator: ${this.operator.toString()}`, this.row, this.column);
-                }
+
+                        console.log(symbol);
+                        
+                        let result = table.update_table(symbol);
+
+                        console.log(result);
+                        
+                        if (result instanceof Exception){
+                            return result;
+                        }
+
+                        this.type = this.exp1.get_type();
+                        this.value = symbol.value;
+
+                        return this.value;
+                    }
+                default:
+                    return new Exception("Semantic", `Invalid operator: ${this.operator.toString()}`, this.row, this.column);
             }
-            return this.value;
         }
-
+        return this.value;
     }
 
     operation(op1: any, op2: any, op: Arithmetic_operator): String{

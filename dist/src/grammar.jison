@@ -136,6 +136,7 @@
 	import { Declaration } from "./Instructions/Declaration.js"
 	import { Assignment } from "./Instructions/Assignment.js"
 	import { Print } from "./Instructions/Print.js";
+	import { Inc_Dec } from "./Instructions/Inc_Dec.js";
 %}
 
 /* Operators Precedence */
@@ -146,7 +147,7 @@
 %left 'PLUSSIGN' 'SUBSIGN'
 %left 'MULTSIGN' 'DIVSIGN' 'MODSIGN'
 %right UMENOS
-%left 'RINCSIGN' 'RDECSIGN'
+%left 'INCSIGN' 'DECSIGN'
 
 %start ini
 
@@ -168,6 +169,7 @@ instruction
     : declaration ptcommP 		{ $$ = $1; }
 	| assignment ptcommP		{ $$ = $1; }
 	| prod_print ptcommP 		{ $$ = $1; }
+	| inc_dec ptcommP			{ $$ = $1; }
 ;
 
 ptcommP
@@ -196,6 +198,11 @@ prod_print
 	| RPRINTLN PARLEFT expression PARRIGHT { $$ = new Print($3, @1.first_line, @1.first_column)}
 ;
 
+inc_dec
+	: IDENTIFIER INCSIGN		{ $$ = new Inc_Dec(new Arithmetic(new Identifier($1, this._$.first_line, this._$.first_column), null, Arithmetic_operator.INC, this._$.first_line, this._$.first_column), this._$.first_line, this._$.first_column); }
+	| IDENTIFIER DECSIGN		{ $$ = new Inc_Dec(new Arithmetic(new Identifier($1, this._$.first_line, this._$.first_column), null, Arithmetic_operator.DEC, this._$.first_line, this._$.first_column), this._$.first_line, this._$.first_column); }
+;
+
 type
     : RINT 	{ $$ = type.INT; }
     | RDOUBLE 	{ $$ = type.DOUBLE; }
@@ -212,6 +219,8 @@ expression
 	| expression MULTSIGN expression        { $$ = new Arithmetic($1, $3, Arithmetic_operator.MULTIPLICATION, @1.first_line, @1.first_column); }
 	| expression DIVSIGN expression         { $$ = new Arithmetic($1, $3, Arithmetic_operator.DIVISION, @1.first_line, @1.first_column); }
 	| expression MODSIGN expression			{ $$ = new Arithmetic($1, $3, Arithmetic_operator.MODULS, @1.first_line, @1.first_column); }
+	| expression INCSIGN					{ $$ = new Arithmetic($1, null, Arithmetic_operator.INC, @1.first_line, @1.first_column); }
+	| expression DECSIGN					{ $$ = new Arithmetic($1, null, Arithmetic_operator.DEC, @1.first_line, @1.first_column); }
 	| expression EQUALIZATIONSIGN expression{ $$ = new Relational($1, $3, Relational_operator.EQUAL, @1.first_line, @1.first_column); }
 	| expression DIFFSIGN expression		{ $$ = new Relational($1, $3, Relational_operator.UNEQUAL, @1.first_line, @1.first_column); }
 	| expression LESSEQUAL expression		{ $$ = new Relational($1, $3, Relational_operator.LESSEQUAL, @1.first_line, @1.first_column); }
