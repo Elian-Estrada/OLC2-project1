@@ -13,7 +13,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-import { Instruction } from "../Abstract/Instruction";
+import { Instruction } from "../Abstract/Instruction.js";
 var Primitive = /** @class */ (function (_super) {
     __extends(Primitive, _super);
     function Primitive(value, type, row, column) {

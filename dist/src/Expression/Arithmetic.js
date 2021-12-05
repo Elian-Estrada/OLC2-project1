@@ -23,7 +23,7 @@ var Arithmetic = /** @class */ (function (_super) {
         _this.operator = operator;
         _this.exp1 = exp1;
         _this.exp2 = exp2;
-        _this.value = null;
+        _this.value = "";
         _this.type = null;
         _this.bool = {
             true: true,
@@ -41,19 +41,28 @@ var Arithmetic = /** @class */ (function (_super) {
                 return right;
             switch (this.operator) {
                 case Arithmetic_operator.ADDITION:
-                    if (this.exp1.getType() === type.INT) {
-                        switch (this.exp2.getType()) {
+                    if (this.exp1.get_type() === type.INT || this.exp1.get_type() === type.DOUBLE) {
+                        switch (this.exp2.get_type()) {
                             case type.INT:
-                                this.type = type.INT;
-                                this.value = parseInt(left) + parseInt(right);
+                                this.exp1.get_type() === type.INT ?
+                                    this.type = type.INT :
+                                    this.type = type.DOUBLE;
+                                this.exp1.get_type() === type.INT ?
+                                    this.value = String(parseInt(left) + parseInt(right)) :
+                                    this.value = String(parseFloat(left) + parseFloat(right));
+                                return this.value;
                                 break;
                             case type.DOUBLE:
                                 this.type = type.DOUBLE;
-                                this.value = parseFloat(left) + parseFloat(right);
+                                this.value = String(parseFloat(left) + parseFloat(right));
                                 break;
                             case type.CHAR:
-                                this.type = type.CHAR;
-                                this.value = parseInt(left) + right.charCodeAt(0);
+                                this.exp1.get_type() === type.INT ?
+                                    this.type = type.INT :
+                                    this.type = type.DOUBLE;
+                                this.exp1.get_type() === type.INT ?
+                                    this.value = String(parseInt(left) + right.charCodeAt(0)) :
+                                    this.value = String(parseFloat(left) + right.charCodeAt(0));
                                 break;
                             case type.STRING:
                                 this.type = type.STRING;
@@ -63,12 +72,34 @@ var Arithmetic = /** @class */ (function (_super) {
                                 return new Exception("Semantic", "The type ".concat(this.exp2.get_type().toString(), " cannot be operated with type: INTEGER"), this.row, this.column);
                         }
                     }
-                    else if (this.exp1.getType() === type.STRING) {
-                        switch (this.exp2.getType()) {
+                    else if (this.exp1.get_type() === type.CHAR) {
+                        switch (this.exp2.get_type()) {
+                            case type.INT:
+                            case type.DOUBLE:
+                                this.exp2.get_type() === type.INT ?
+                                    this.type = type.INT :
+                                    this.type = type.DOUBLE;
+                                this.exp2.get_type() === type.INT ?
+                                    this.value = String(parseInt(right) + left.charCodeAt(0)) :
+                                    this.value = String(parseFloat(right) + left.charCodeAt(0));
+                                break;
+                            case type.STRING:
+                                this.type = type.STRING;
+                                this.value = left + right;
+                                break;
+                            case type.CHAR:
+                                this.type = type.INT;
+                                this.value = String(left.charCodeAt() + right.charCodeAt());
+                                break;
+                        }
+                    }
+                    else if (this.exp1.get_type() === type.STRING) {
+                        switch (this.exp2.get_type()) {
                             case type.INT:
                             case type.DOUBLE:
                             case type.CHAR:
                             case type.STRING:
+                            case type.BOOL:
                                 this.type = type.STRING;
                                 this.value = left.toString() + right.toString();
                                 break;
@@ -76,8 +107,8 @@ var Arithmetic = /** @class */ (function (_super) {
                                 return new Exception("Semantic", "The type ".concat(this.exp2.get_type().toString(), " cannot be operated with type: STRING"), this.row, this.column);
                         }
                     }
-                    else if (this.exp1.getType() === type.BOOL) {
-                        switch (this.exp2.getType()) {
+                    else if (this.exp1.get_type() === type.BOOL) {
+                        switch (this.exp2.get_type()) {
                             case type.STRING:
                                 this.type = type.STRING;
                                 this.value = left.toString() + right.toString();
@@ -92,47 +123,47 @@ var Arithmetic = /** @class */ (function (_super) {
                 case Arithmetic_operator.MULTIPLICATION:
                 case Arithmetic_operator.DIVISION:
                 case Arithmetic_operator.MODULS:
-                    if (this.exp1.getType() === type.INT) {
-                        switch (this.exp2.getType()) {
+                    if (this.exp1.get_type() === type.INT) {
+                        switch (this.exp2.get_type()) {
                             case type.INT:
                                 this.type = type.INT;
-                                this.value = parseInt(left) + parseInt(right);
+                                this.value = this.operation(parseInt(left), parseInt(right), this.operator);
                                 break;
                             case type.DOUBLE:
                                 this.type = type.DOUBLE;
-                                this.value = parseFloat(left) + parseFloat(right);
+                                this.value = this.operation(parseFloat(left), parseFloat(right), this.operator);
                                 break;
                             case type.CHAR:
                                 this.type = type.CHAR;
-                                this.value = parseInt(left) + right.charCodeAt(0);
+                                this.value = this.operation(parseInt(left), right.charCodeAt(0), this.operator);
                                 break;
                             default:
                                 return new Exception("Semantic", "The type ".concat(this.exp2.get_type().toString(), " cannot be operated with type: INTEGER"), this.row, this.column);
                         }
                     }
-                    else if (this.exp1.getType() === type.DOUBLE) {
-                        switch (this.exp2.getType()) {
+                    else if (this.exp1.get_type() === type.DOUBLE) {
+                        switch (this.exp2.get_type()) {
                             case type.INT:
                             case type.DOUBLE:
-                                this.value = parseFloat(left) + parseFloat(right);
+                                this.value = this.operation(parseFloat(left), parseFloat(right), this.operator);
                                 break;
                             case type.CHAR:
-                                this.value = parseInt(left) + right.charCodeAt(0);
+                                this.value = this.operation(parseInt(left), right.charCodeAt(0), this.operator);
                                 break;
                             default:
                                 return new Exception("Semantic", "The type ".concat(this.exp2.get_type().toString(), " cannot be operated with type: DOUBLE"), this.row, this.column);
                         }
                     }
-                    else if (this.exp1.getType() === type.CHAR) {
+                    else if (this.exp1.get_type() === type.CHAR) {
                         switch (this.exp2.get_type()) {
                             case type.INT:
-                                this.value = left.charCodeAt(0) - parseInt(right);
+                                this.value = this.operation(left.charCodeAt(0), parseInt(right), this.operator);
                                 break;
                             case type.DOUBLE:
-                                this.value = parseFloat(left.charCodeAt(0)) - parseFloat(right);
+                                this.value = this.operation(parseFloat(left.charCodeAt(0)), parseFloat(right), this.operator);
                                 break;
                             case type.CHAR:
-                                this.value = left.charCodeAt(0) - right.charCodeAt(0);
+                                this.value = this.operation(left.charCodeAt(0), right.charCodeAt(0), this.operator);
                                 break;
                             default:
                                 return new Exception("Semantic", "The type ".concat(this.exp2.get_type().toString(), " cannot be operated with type: CHAR"), this.row, this.column);
@@ -142,14 +173,14 @@ var Arithmetic = /** @class */ (function (_super) {
             if (this.exp2.value == null) {
                 switch (this.operator) {
                     case Arithmetic_operator.SUBSTRACTION:
-                        switch (this.exp1.getType()) {
+                        switch (this.exp1.get_type()) {
                             case type.INT:
                                 this.type = type.INT;
-                                this.value = -parseInt(left);
+                                this.value = String(-parseInt(left));
                                 break;
                             case type.DOUBLE:
                                 this.type = type.DOUBLE;
-                                this.value = -parseFloat(left);
+                                this.value = String(-parseFloat(left));
                                 break;
                             default:
                                 return new Exception("Semantic", "The type ".concat(this.exp2.get_type().toString(), " cannot be operated with operator -"), this.row, this.column);
@@ -159,11 +190,28 @@ var Arithmetic = /** @class */ (function (_super) {
                         return new Exception("Semantic", "Invalid operator: ".concat(this.operator.toString()), this.row, this.column);
                 }
             }
+            return this.value;
         }
-        return this.value;
+    };
+    Arithmetic.prototype.operation = function (op1, op2, op) {
+        switch (op) {
+            case Arithmetic_operator.MULTIPLICATION:
+                return String(op1 * op2);
+            case Arithmetic_operator.SUBSTRACTION:
+                return String(op1 - op2);
+            case Arithmetic_operator.MODULS:
+                return String(op1 % op2);
+            case Arithmetic_operator.DIVISION:
+                return String(op1 / op2);
+            default:
+                return "";
+        }
     };
     Arithmetic.prototype.get_type = function () {
         return this.type;
+    };
+    Arithmetic.prototype.toString = function () {
+        return this.value;
     };
     return Arithmetic;
 }(Instruction));

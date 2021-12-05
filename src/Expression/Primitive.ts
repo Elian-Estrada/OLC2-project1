@@ -1,7 +1,7 @@
-import { Instruction } from "../Abstract/Instruction";
-import SymbolTable from "../SymbolTable/SymbolTable";
-import Tree from "../SymbolTable/Tree";
-import { type } from "../SymbolTable/Type";
+import { Instruction } from "../Abstract/Instruction.js";
+import SymbolTable from "../SymbolTable/SymbolTable.js";
+import Tree from "../SymbolTable/Tree.js";
+import { type } from "../SymbolTable/Type.js";
 
 export class Primitive extends Instruction {
 

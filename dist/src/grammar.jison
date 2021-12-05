@@ -58,7 +58,10 @@
 "tan"               return 'RTAN';
 "print"             return 'RPRINT';
 "println"           return 'RPRINTLN';
-"Evaluar"           return 'REVALUAR';
+
+/* Boolean's values */
+"true"				return 'RTRUE';
+"false"				return 'RFALSE';
 
 /* ---------------------------------------- Tokens ---------------------------------------- */
 /* Special Characters */
@@ -110,10 +113,11 @@
 [ \r\t]+            {}
 \n                  {}
 
-\"[^\"]*\"				{ yytext = yytext.substr(1,yyleng-2); return 'CADENA'; }
-[0-9]+("."[0-9]+)?\b                                          return 'DECIMAL';
-[0-9]+\b                                                      return 'ENTERO';
-([a-zA-Z])[a-zA-Z0-9_]*	                                      return 'IDENTIFICADOR';
+\"[^\"]*\"				{ yytext = yytext.substr(1,yyleng-2); 	return 'STRING'; }
+"'"[^']"'"				{ yytext = yytext.substr(1, yyleng-2); 	return 'CHAR'; }
+[0-9]+"."[0-9]+\b                                          		return 'DOUBLE';
+[0-9]+\b                                                      	return 'INTEGER';
+([a-zA-Z])[a-zA-Z0-9_]*	                                      	return 'IDENTIFIER';
 
 <<EOF>>                 return 'EOF';
 
@@ -121,9 +125,13 @@
 /lex
 
 %{
+	import {type, Relational_operator, Logical_operator, Arithmetic_operator} from "./SymbolTable/Type.js"
+
     import {Arithmetic} from "./Expression/Arithmetic.js";
 
     import { Print } from "./Instructions/Print.js";
+
+	import {Primitive} from "./Expression/Primitive.js";
 %}
 
 /* Operators Precedence */
@@ -156,26 +164,35 @@ instruction
 
 prod_print
     : RPRINT PARLEFT expression PARRIGHT {
-        $$ = new Print($3, @1.first_line, @1.first_column);
+        $$ = new Print($3, @1.first_line, @1.first_column, false);
     }
+	| RPRINTLN PARLEFT expression PARRIGHT { $$ = new Print($3, @1.first_line, @1.first_column)}
 ;
 
 type
-    : RINT 	{ $$ = 'entero'; }
-    | RDOUBLE 	{ $$ = 'decimal'; }
-    | RBOOLEAN 	{ $$ = 'booleano'; }
-    | RCHAR 	{ $$ = 'caracter'; }
-    | RSTRING 	{ $$ = 'cadena'; }
+    : RINT 	{ $$ = type.INT; }
+    | RDOUBLE 	{ $$ = type.DOUBLE; }
+    | RBOOLEAN 	{ $$ = type.BOOL; }
+    | RCHAR 	{ $$ = type.CHAR; }
+    | RSTRING 	{ $$ = type.STRING; }
+	| RNULL		{ $$ = type.NULL; }
 ;
 
 expression
 	: SUBSIGN expression %prec UMENOS       { $$ = $2 *-1; }
-	| expression PLUSSIGN expression        { $$ = new Arithmetic($1, $3, '+', @1.first_line, @1.first_column); }
-	| expression SUBSIGN expression         { $$ = new Arithmetic($1, $3, '-', @1.first_line, @1.first_column); }
-	| expression MULTSIGN expression        { $$ = new Arithmetic($1, $3, '*', @1.first_line, @1.first_column); }
-	| expression DIVSIGN expression         { $$ = new Arithmetic($1, $3, '/', @1.first_line, @1.first_column); }
-	| INTEGER                               { $$ = Number($1); }
-	| DECIMAL                               { $$ = Number($1); }
-	| CADENA                                { $$ = $1.toString() }
+	| expression PLUSSIGN expression        { $$ = new Arithmetic($1, $3, Arithmetic_operator.ADDITION, @1.first_line, @1.first_column); }
+	| expression SUBSIGN expression         { $$ = new Arithmetic($1, $3, Arithmetic_operator.SUBSTRACTION, @1.first_line, @1.first_column); }
+	| expression MULTSIGN expression        { $$ = new Arithmetic($1, $3, Arithmetic_operator.MULTIPLICATION, @1.first_line, @1.first_column); }
+	| expression DIVSIGN expression         { $$ = new Arithmetic($1, $3, Arithmetic_operator.DIVISION, @1.first_line, @1.first_column); }
+	| INTEGER                               { $$ = new Primitive($1, type.INT, @1.first_line, @1.first_column); }
+	| DOUBLE                                { $$ = new Primitive($1, type.DOUBLE, @1.first_line, @1.first_column) }
+	| STRING                                { $$ = new Primitive($1, type.STRING, @1.first_line, @1.first_column); }
+	| CHAR									{ $$ = new Primitive($1, type.CHAR, @1.first_line, @1.first_column); }
+	| boolean								{ $$ = new Primitive($1, type.BOOL, @1.first_line, @1.first_column); }
 	| PARLEFT expression PARRIGHT           { $$ = $2; }
+;
+
+boolean 
+	: RTRUE		{ $$ = $1}
+	| RFALSE 	{ $$ = $1}
 ;

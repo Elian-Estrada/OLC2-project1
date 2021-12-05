@@ -18,22 +18,24 @@ import { type } from "../SymbolTable/Type.js";
 import Exception from "../SymbolTable/Exception.js";
 var Print = /** @class */ (function (_super) {
     __extends(Print, _super);
-    function Print(expression, row, col) {
+    function Print(expression, row, col, flag) {
+        if (flag === void 0) { flag = true; }
         var _this = _super.call(this, row, col) || this;
         _this.expression = expression;
+        _this.flag = flag;
         return _this;
     }
     Print.prototype.interpret = function (tree, table) {
         var value = this.expression.interpret(tree, table);
         if (value instanceof Error)
             return value;
-        if (this.expression.getType() == type.ARRAY) {
+        if (this.expression.get_type() == type.ARRAY) {
             return new Exception("Semantic", "Don't print array", this.row, this.column);
         }
-        else if (this.expression.getType() == type.NULL) {
+        else if (this.expression.get_type() == type.NULL) {
             return new Exception("Semantic", "Null Pointer Exception", this.row, this.column);
         }
-        tree.update_console("> ".concat(value.toString()));
+        tree.update_console("".concat(value), this.flag);
     };
     return Print;
 }(Instruction));
