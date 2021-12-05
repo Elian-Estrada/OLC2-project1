@@ -28,7 +28,7 @@ export class While extends Instruction {
                 return flag;
 
             if ( this.expr.get_type() == type.BOOL ) {
-                if ( JSON.parse(String(flag)) ) {
+                if ( String(flag) == "true" ) {
                     let new_table = new SymbolTable(table, `While-${this.row}-${this.column}`);
 
                     for ( let item of this.instructions ) {

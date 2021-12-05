@@ -139,6 +139,11 @@
 	import { Inc_Dec } from "./Instructions/Inc_Dec.js";
 	import { If } from "./Instructions/If.js";
 	import { While } from "./Instructions/While.js";
+	import { Switch } from "./Instructions/Switch.js";
+	import { Case } from "./Instructions/Case.js";
+	import { Break } from "./Instructions/Break.js";
+	import { Return } from "./Instructions/Return.js";
+	import { Continue } from "./Instructions/Continue.js";
 %}
 
 /* Operators Precedence */
@@ -174,6 +179,8 @@ instruction
 	| inc_dec ptcommP			{ $$ = $1; }
 	| prod_if ptcommP           { $$ = $1; }
 	| prod_while ptcommP        { $$ = $1; }
+	| prod_switch ptcommP       { $$ = $1; }
+	| transfer_prod ptcommP     { $$ = $1; }
 ;
 
 ptcommP
@@ -225,6 +232,41 @@ prod_while
     : RWHILE PARLEFT expression PARRIGHT CURLYLEFT instructions CURLYRIGHT {
         $$ = new While($3, $6, @1.first_line, @1.first_column);
     }
+;
+
+/* Prods about Switch */
+prod_switch
+    : RSWITCH PARLEFT expression PARRIGHT CURLYLEFT prod_default CURLYRIGHT {
+        $$ = new Switch($3, null, $6, @1.first_line, @1.first_column);
+    }
+    | RSWITCH PARLEFT expression PARRIGHT CURLYLEFT list_cases CURLYRIGHT {
+            $$ = new Switch($3, $6, null, @1.first_line, @1.first_column);
+    }
+    | RSWITCH PARLEFT expression PARRIGHT CURLYLEFT list_cases prod_default CURLYRIGHT {
+            $$ = new Switch($3, $6, $7, @1.first_line, @1.first_column);
+    }
+;
+
+prod_default
+    : RDEFAULT TWOPOINTS instructions { $$ = $3; }
+;
+
+list_cases
+    : list_cases case { ($2 != null) ? $1.push($2) : null; $$ = $1; }
+    | case { $$ = ($1 == null) ? [] : [$1] }
+;
+
+case
+    : RCASE expression TWOPOINTS instructions {
+        $$ = new Case($2, $4, @1.first_line, @1.first_column);
+    }
+;
+
+/* Transfer Structures Prods */
+transfer_prod
+    : RBREAK                   { $$ = new Break(@1.first_line, @1.first_column) }
+    | RRETURN expression       { $$ = new Return($2, @1.first_line, @1.first_column) }
+    | RCONTINUE                { $$ = new Continue(@1.first_line, @1.first_column) }
 ;
 
 type
