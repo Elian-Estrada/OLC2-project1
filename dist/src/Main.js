@@ -1,5 +1,5 @@
 // @ts-ignore
-import { grammar } from "./grammar.js";
+import { grammar } from "../dist/src/grammar";
 var Main = /** @class */ (function () {
     function Main() {
     }

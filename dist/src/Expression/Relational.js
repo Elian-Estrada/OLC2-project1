@@ -25,7 +25,6 @@ var Relational = /** @class */ (function (_super) {
         _this.operator = operator;
         _this.type = type.BOOL;
         _this.value = "";
-        _this.isBool = { "true": true, "false": false };
         return _this;
     }
     Relational.prototype.interpret = function (tree, table) {
