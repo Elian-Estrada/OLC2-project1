@@ -31,13 +31,13 @@ export class Arithmetic extends Instruction {
     public interpret(tree: Tree, table: SymbolTable) {
         let left = this.exp1.interpret(tree, table);
 
-        if ( left instanceof Error )
+        if ( left instanceof Exception )
             return left;
 
         if ( this.exp2 != null ) {
             let right = this.exp2.interpret(tree, table);
 
-            if ( right instanceof  Error )
+            if ( right instanceof  Exception )
                 return right;
 
             switch ( this.operator ) {

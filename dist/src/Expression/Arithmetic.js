@@ -35,11 +35,11 @@ var Arithmetic = /** @class */ (function (_super) {
     }
     Arithmetic.prototype.interpret = function (tree, table) {
         var left = this.exp1.interpret(tree, table);
-        if (left instanceof Error)
+        if (left instanceof Exception)
             return left;
         if (this.exp2 != null) {
             var right = this.exp2.interpret(tree, table);
-            if (right instanceof Error)
+            if (right instanceof Exception)
                 return right;
             switch (this.operator) {
                 case Arithmetic_operator.ADDITION:

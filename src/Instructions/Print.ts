@@ -18,7 +18,7 @@ export class Print extends Instruction {
     public interpret(tree: Tree, table: SymbolTable) {
         let value = this.expression.interpret(tree, table);
 
-        if ( value instanceof Error )
+        if ( value instanceof Exception )
             return value;
 
         if ( this.expression.get_type() == type.ARRAY ) {
