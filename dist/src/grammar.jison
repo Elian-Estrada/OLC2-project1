@@ -128,13 +128,17 @@
 	import {type, Relational_operator, Logical_operator, Arithmetic_operator} from "./SymbolTable/Type.js"
 
     import {Arithmetic} from "./Expression/Arithmetic.js";
-
+	import {Logical} from "./Expression/Logical.js";
+	import {Relational} from "./Expression/Relational.js";
     import { Print } from "./Instructions/Print.js";
-
 	import {Primitive} from "./Expression/Primitive.js";
 %}
 
 /* Operators Precedence */
+%left 'OR'
+%left 'AND'
+%left UNOT
+%nonassoc 'EQUALIZATIONSIGN' 'DIFFSIGN' 'LESSEQUAL' 'GREATEREQUAL' 'SMALLERTHAN' 'GREATERTHAN'
 %left 'PLUSSIGN' 'SUBSIGN'
 %left 'MULTSIGN' 'DIVSIGN'
 %left UMENOS
@@ -179,11 +183,20 @@ type
 ;
 
 expression
-	: SUBSIGN expression %prec UMENOS       { $$ = $2 *-1; }
+	: SUBSIGN expression %prec UMENOS       { $$ = new Arithmetic($2, null, Arithmetic_operator.SUBSTRACTION, @1.first_line, @1.first_column); }
 	| expression PLUSSIGN expression        { $$ = new Arithmetic($1, $3, Arithmetic_operator.ADDITION, @1.first_line, @1.first_column); }
 	| expression SUBSIGN expression         { $$ = new Arithmetic($1, $3, Arithmetic_operator.SUBSTRACTION, @1.first_line, @1.first_column); }
 	| expression MULTSIGN expression        { $$ = new Arithmetic($1, $3, Arithmetic_operator.MULTIPLICATION, @1.first_line, @1.first_column); }
 	| expression DIVSIGN expression         { $$ = new Arithmetic($1, $3, Arithmetic_operator.DIVISION, @1.first_line, @1.first_column); }
+	| expression EQUALIZATIONSIGN expression{ $$ = new Relational($1, $3, Relational_operator.EQUAL, @1.first_line, @1.first_column); }
+	| expression DIFFSIGN expression		{ $$ = new Relational($1, $3, Relational_operator.UNEQUAL, @1.first_line, @1.first_column); }
+	| expression LESSEQUAL expression		{ $$ = new Relational($1, $3, Relational_operator.LESSEQUAL, @1.first_line, @1.first_column); }
+	| expression GREATEREQUAL expression	{ $$ = new Relational($1, $3, Relational_operator.GREATEREQUAL, @1.first_line, @1.first_column); }
+	| expression SMALLERTHAN expression		{ $$ = new Relational($1, $3, Relational_operator.LESS, @1.first_line, @1.first_column); }
+	| expression GREATERTHAN expression		{ $$ = new Relational($1, $3, Relational_operator.GREATER, @1.first_line, @1.first_column); }
+	| expression AND expression				{ $$ = new Logical($1, $3, Logical_operator.AND, @1.first_line, @1.first_column); }
+	| expression OR expression				{ $$ = new Logical($1, $3, Logical_operator.AND, @1.first_line, @1.first_column); }
+	| NOT expression %prec UNOT				{ $$ = new Logical($1, $3, Logical_operator.AND, @1.first_line, @1.first_column); }
 	| INTEGER                               { $$ = new Primitive($1, type.INT, @1.first_line, @1.first_column); }
 	| DOUBLE                                { $$ = new Primitive($1, type.DOUBLE, @1.first_line, @1.first_column) }
 	| STRING                                { $$ = new Primitive($1, type.STRING, @1.first_line, @1.first_column); }
