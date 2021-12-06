@@ -273,8 +273,19 @@ transfer_prod
 
 /* Prods about For */
 for_prod
+    : for_it                    { $$ = $1; }
+    | for_in                    { $$ = $1; }
+;
+
+for_it
     : RFOR PARLEFT for_init SEMICOLON expression SEMICOLON for_step PARRIGHT CURLYLEFT instructions CURLYRIGHT {
         $$ = new For($3, $5, $7, $10, @1.first_line, @1.first_column)
+    }
+;
+
+for_in
+    : RFOR expression RIN expression CURLYLEFT instructions CURLYRIGHT {
+
     }
 ;
 
