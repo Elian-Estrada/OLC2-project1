@@ -145,6 +145,7 @@
 	import { Return } from "./Instructions/Return.js";
 	import { Continue } from "./Instructions/Continue.js";
 	import { For } from "./Instructions/For.js";
+	import { ForIn } from "./Instructions/ForIn.js";
 	import { DoWhile } from "./Instructions/DoWhile.js";
 %}
 
@@ -227,7 +228,16 @@ prod_if
     | RIF PARLEFT expression PARRIGHT CURLYLEFT instructions CURLYRIGHT RELSE prod_if {
         $$ = new If($3, $6, null, $9, @1.first_line, @1.first_column);
     }
+    | RIF PARLEFT expression PARRIGHT instruction {
+        $$ = new If($3, $5, null, null, @1.first_line, @1.first_column);
+    }
 ;
+
+/*if_without_curly
+    : RIF PARLEFT expression PARRIGHT instructions {
+        $$ = new If($3, $6, null, null, @1.first_line, @1.first_column);
+    }
+;*/
 
 /* Loops Prods */
 prod_loops
@@ -293,13 +303,13 @@ for_prod
 
 for_it
     : RFOR PARLEFT for_init SEMICOLON expression SEMICOLON for_step PARRIGHT CURLYLEFT instructions CURLYRIGHT {
-        $$ = new For($3, $5, $7, $10, @1.first_line, @1.first_column)
+        $$ = new For($3, $5, $7, $10, @1.first_line, @1.first_column);
     }
 ;
 
 for_in
-    : RFOR expression RIN expression CURLYLEFT instructions CURLYRIGHT {
-
+    : RFOR PARLEFT declaration RIN expression PARRIGHT CURLYLEFT instructions CURLYRIGHT {
+        $$ = new ForIn($3, $5, $8, @1.first_line, @1.first_column);
     }
 ;
 

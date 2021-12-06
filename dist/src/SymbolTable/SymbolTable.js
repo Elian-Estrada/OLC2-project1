@@ -35,7 +35,7 @@ var SymbolTable = /** @class */ (function () {
                     return undefined;
                 }
                 else {
-                    return new Exception("Semantic", "Cannot assign vlaue of type: ".concat(symbol.type, " in a variable of type: ").concat((_a = current_table.table.get(symbol.id)) === null || _a === void 0 ? void 0 : _a.type), symbol.row, symbol.column);
+                    return new Exception("Semantic", "Cannot assign value of type: ".concat(symbol.type, " in a variable of type: ").concat((_a = current_table.table.get(symbol.id)) === null || _a === void 0 ? void 0 : _a.type), symbol.row, symbol.column);
                 }
             }
             current_table = current_table.prev;

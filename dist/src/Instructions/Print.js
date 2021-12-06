@@ -26,6 +26,7 @@ var Print = /** @class */ (function (_super) {
         return _this;
     }
     Print.prototype.interpret = function (tree, table) {
+        console.log("algo");
         var value = this.expression.interpret(tree, table);
         if (value instanceof Exception)
             return value;

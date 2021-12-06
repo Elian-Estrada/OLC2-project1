@@ -50,7 +50,7 @@ export default class SymbolTable {
                     current_symbol.value = symbol.value;
                     return undefined;
                 } else {
-                    return new Exception("Semantic", `Cannot assign vlaue of type: ${symbol.type} in a variable of type: ${current_table.table.get(symbol.id)?.type}`, symbol.row, symbol.column);
+                    return new Exception("Semantic", `Cannot assign value of type: ${symbol.type} in a variable of type: ${current_table.table.get(symbol.id)?.type}`, symbol.row, symbol.column);
                 }
             }
             
