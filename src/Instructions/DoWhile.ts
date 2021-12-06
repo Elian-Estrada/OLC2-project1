@@ -22,14 +22,15 @@ export class DoWhile extends Instruction {
     }
 
     interpret(tree: Tree, table: SymbolTable): any {
-        do {
+        let flag2 = false;
+        while (true) {
             let flag = this.expr.interpret(tree, table);
 
             if ( flag instanceof Exception )
                 return flag;
 
             if ( this.expr.get_type() == type.BOOL ) {
-                if ( String(flag) == "true" ) {
+                if ( String(flag) == "true" || !flag2 ) {
                     let new_table = new SymbolTable(table, `DoWhile-${this.row}-${this.column}`);
 
                     for ( let item of this.instructions ) {
@@ -48,15 +49,14 @@ export class DoWhile extends Instruction {
                             return inst;
                         }
                     }
+                    flag2 = true;
                 } else {
                     break;
                 }
             } else {
                 return new Exception("Semantic", `Expect a Boolean type expression. Not ${this.expr.get_type().name}`, this.row, this.column);
             }
-
             this.counter += 1;
-
-        } while (true)
+        }
     }
 }
