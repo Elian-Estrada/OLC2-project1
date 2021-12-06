@@ -34,8 +34,6 @@ export class While extends Instruction {
                     for ( let item of this.instructions ) {
                         let instruction = item.interpret(tree, new_table);
 
-                        // console.log(instruction)
-
                         if ( instruction instanceof Exception ) {
                             tree.get_errors().push(instruction);
                             tree.update_console(instruction.toString());

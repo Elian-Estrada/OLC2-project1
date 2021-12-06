@@ -40,7 +40,6 @@ var While = /** @class */ (function (_super) {
                     for (var _i = 0, _a = this.instructions; _i < _a.length; _i++) {
                         var item = _a[_i];
                         var instruction = item.interpret(tree, new_table);
-                        // console.log(instruction)
                         if (instruction instanceof Exception) {
                             tree.get_errors().push(instruction);
                             tree.update_console(instruction.toString());
