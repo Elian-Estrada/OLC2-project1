@@ -170,7 +170,7 @@ case 26:
 break;
 case 27:
 
-        this.$ = new If($$[$0-2], $$[$0], null, null, _$[$0-4].first_line, _$[$0-4].first_column);
+        this.$ = new If($$[$0-2], [$$[$0]], null, null, _$[$0-4].first_line, _$[$0-4].first_column);
     
 break;
 case 31:

@@ -229,7 +229,7 @@ prod_if
         $$ = new If($3, $6, null, $9, @1.first_line, @1.first_column);
     }
     | RIF PARLEFT expression PARRIGHT instruction {
-        $$ = new If($3, $5, null, null, @1.first_line, @1.first_column);
+        $$ = new If($3, [$5], null, null, @1.first_line, @1.first_column);
     }
 ;
 
