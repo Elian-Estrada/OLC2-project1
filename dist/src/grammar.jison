@@ -68,6 +68,7 @@
 ":"                 return 'TWOPOINTS';
 ","					return 'COMMASIGN';
 "^"                 return 'REPETITIONSIGN';
+"#"					return 'COPY';
 
 /* Grouping Signs  */
 "("                 return 'PARLEFT';
@@ -166,15 +167,11 @@ instructions
 ;
 
 instruction
-    : declaration ptcommP 		{ $$ = $1; }
-	| assignment ptcommP		{ $$ = $1; }
-	| prod_print ptcommP 		{ $$ = $1; }
-	| inc_dec ptcommP			{ $$ = $1; }
-;
-
-ptcommP
-	: SEMICOLON
-	|
+    : declaration SEMICOLON 		{ $$ = $1; }
+	| assignment SEMICOLON			{ $$ = $1; }
+	| declaration_array SEMICOLON 	{ $$ = $1; }
+	| prod_print SEMICOLON 			{ $$ = $1; }
+	| inc_dec SEMICOLON				{ $$ = $1; }
 ;
 
 declaration
@@ -189,6 +186,26 @@ list_id
 
 assignment
 	: IDENTIFIER EQUALSIGN expression 	{ $$ = new Assignment($1, $3, this._$.first_line, this._$.first_column); }
+;
+
+declaration_array
+	: type BRACKETLEFT BRACKETRIGHT IDENTIFIER EQUALSIGN values_array
+	| type BRACKETLEFT BRACKETRIGHT IDENTIFIER EQUALSIGN IDENTIFIER
+	| type BRACKETLEFT BRACKETRIGHT IDENTIFIER EQUALSIGN COPY IDENTIFIER
+;
+
+values_array
+	: BRACKETLEFT list_values_array BRACKETRIGHT	{ $$ = $2; }
+;
+
+list_values_array
+	: list_values_array COMMA values	{ $1.append($3); $$ = $1;}
+	| values							{ $$ = [$1]; }
+;
+
+values
+	: expression		{ $$ = $1; }
+	| values_array		{ $$ = $1; }
 ;
 
 prod_print
