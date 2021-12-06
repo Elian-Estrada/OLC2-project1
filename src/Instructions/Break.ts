@@ -8,7 +8,8 @@ export class Break extends Instruction {
         super(row, col);
     }
 
-    public interpret(tree: Tree, table: SymbolTable): any {
+    public interpret(tree: Tree, table: SymbolTable) {
+        // console.log("Hola")
         return this;
     }
 }

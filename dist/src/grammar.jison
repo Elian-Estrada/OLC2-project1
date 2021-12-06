@@ -144,6 +144,7 @@
 	import { Break } from "./Instructions/Break.js";
 	import { Return } from "./Instructions/Return.js";
 	import { Continue } from "./Instructions/Continue.js";
+	import { For } from "./Instructions/For.js";
 %}
 
 /* Operators Precedence */
@@ -181,6 +182,7 @@ instruction
 	| prod_while ptcommP        { $$ = $1; }
 	| prod_switch ptcommP       { $$ = $1; }
 	| transfer_prod ptcommP     { $$ = $1; }
+	| for_prod ptcommP          { $$ = $1; }
 ;
 
 ptcommP
@@ -267,6 +269,23 @@ transfer_prod
     : RBREAK                   { $$ = new Break(@1.first_line, @1.first_column) }
     | RRETURN expression       { $$ = new Return($2, @1.first_line, @1.first_column) }
     | RCONTINUE                { $$ = new Continue(@1.first_line, @1.first_column) }
+;
+
+/* Prods about For */
+for_prod
+    : RFOR PARLEFT for_init SEMICOLON expression SEMICOLON for_step PARRIGHT CURLYLEFT instructions CURLYRIGHT {
+        $$ = new For($3, $5, $7, $10, @1.first_line, @1.first_column)
+    }
+;
+
+for_init
+    : declaration   { $$ = $1; }
+    | assignment    { $$ = $1; }
+;
+
+for_step
+    : inc_dec       { $$ = $1; }
+    | assignment    { $$ = $1; }
 ;
 
 type
