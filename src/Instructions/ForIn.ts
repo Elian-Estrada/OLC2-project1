@@ -1,6 +1,6 @@
 import {Instruction} from "../Abstract/Instruction.js";
-import Tree from "../SymbolTable/Tree";
-import SymbolTable from "../SymbolTable/SymbolTable";
+import Tree from "../SymbolTable/Tree.js";
+import SymbolTable from "../SymbolTable/SymbolTable.js";
 
 export class ForIn extends Instruction {
 

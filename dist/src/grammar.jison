@@ -145,6 +145,7 @@
 	import { Return } from "./Instructions/Return.js";
 	import { Continue } from "./Instructions/Continue.js";
 	import { For } from "./Instructions/For.js";
+	import { DoWhile } from "./Instructions/DoWhile.js";
 %}
 
 /* Operators Precedence */
@@ -178,11 +179,10 @@ instruction
 	| assignment ptcommP		{ $$ = $1; }
 	| prod_print ptcommP 		{ $$ = $1; }
 	| inc_dec ptcommP			{ $$ = $1; }
-	| prod_if ptcommP           { $$ = $1; }
-	| prod_while ptcommP        { $$ = $1; }
-	| prod_switch ptcommP       { $$ = $1; }
+	| prod_if                   { $$ = $1; }
+	| prod_loops                { $$ = $1; }
+	| prod_switch               { $$ = $1; }
 	| transfer_prod ptcommP     { $$ = $1; }
-	| for_prod ptcommP          { $$ = $1; }
 ;
 
 ptcommP
@@ -229,10 +229,24 @@ prod_if
     }
 ;
 
+/* Loops Prods */
+prod_loops
+    : prod_while    { $$ = $1; }
+    | for_prod      { $$ = $1; }
+    | do_prod     { $$ = $1; }
+;
+
 /* Prods about While */
 prod_while
     : RWHILE PARLEFT expression PARRIGHT CURLYLEFT instructions CURLYRIGHT {
         $$ = new While($3, $6, @1.first_line, @1.first_column);
+    }
+;
+
+/* Prods about do */
+do_prod
+    : RDO CURLYLEFT instructions CURLYRIGHT RWHILE PARLEFT expression PARRIGHT ptcommP {
+        $$ = new DoWhile($7, $3, @1.first_line, @1.first_column);
     }
 ;
 
