@@ -34,7 +34,7 @@ export class Declaration_array extends Instruction {
         if (this.expression === null){
 
             let value = this.get_values(this.list_expression, tree, table);
-
+            
             if (value instanceof Exception){
                 return value
             }
@@ -54,13 +54,8 @@ export class Declaration_array extends Instruction {
             if (!(array instanceof Declaration_array)){
                 return new Exception("Semantic", `Assignated only arrays`, this.row, this.column);
             }
-
-            console.log(this.type_array, array.get_subtype());
-            console.log(this.type_array !== array.get_subtype());
-            
             
             if (this.type_array !== array.get_subtype()){
-                console.log("Tipos diferentes");
                 
                 return new Exception("Semantic", `The type: ${array.get_subtype()} cannot assignated to array of type: ${this.type_array}`, this.row, this.column);
             }
@@ -103,7 +98,6 @@ export class Declaration_array extends Instruction {
                 expression.push(value);
             }
         } else {
-            console.log(list_expression);
             
             let value = list_expression.interpret(tree, table);
 
@@ -119,6 +113,10 @@ export class Declaration_array extends Instruction {
 
     get_value(){
         return this.value;
+    }
+
+    set_value(value: Array<any>){
+        this.value = value;
     }
 
     get_subtype(){

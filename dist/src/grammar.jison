@@ -133,6 +133,7 @@
 	import { Relational } from "./Expression/Relational.js";
 	import { Primitive } from "./Expression/Primitive.js";
 	import { Identifier } from "./Expression/Identifier.js"
+	import { Access_array } from "./Expression/Access_array.js"
 
 	import { Declaration } from "./Instructions/Declaration.js"
 	import { Assignment } from "./Instructions/Assignment.js"
@@ -171,6 +172,7 @@ instruction
     : declaration SEMICOLON 		{ $$ = $1; }
 	| assignment SEMICOLON			{ $$ = $1; }
 	| declaration_array SEMICOLON 	{ $$ = $1; }
+	| assignment_array SEMICOLON	{ $$ = $1; }
 	| prod_print SEMICOLON 			{ $$ = $1; }
 	| inc_dec SEMICOLON				{ $$ = $1; }
 ;
@@ -197,6 +199,7 @@ declaration_array
 
 values_array
 	: BRACKETLEFT list_values_array BRACKETRIGHT	{ $$ = $2; }
+	| BRACKETLEFT BRACKETRIGHT						{ $$ = []; }
 ;
 
 list_values_array
@@ -207,6 +210,19 @@ list_values_array
 values
 	: expression		{ $$ = $1; }
 	| values_array		{ $$ = $1; }
+;
+
+assignment_array
+	: IDENTIFIER list_brackets EQUALSIGN expression 	{ $$ = new Access_array(new Identifier($1, this._$.first_line, this._$.first_column), $2, $4, this._$.first_line, this._$.first_column); }
+;
+
+list_brackets
+	: list_brackets brackets				{ $1.push($2); $$ = $1; }
+	| brackets								{ $$ = [$1]; }
+;
+
+brackets
+	: BRACKETLEFT expression BRACKETRIGHT	{ $$ = $2; }
 ;
 
 prod_print

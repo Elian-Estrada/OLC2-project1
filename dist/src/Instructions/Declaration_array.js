@@ -49,10 +49,7 @@ var Declaration_array = /** @class */ (function (_super) {
             if (!(array instanceof Declaration_array)) {
                 return new Exception("Semantic", "Assignated only arrays", this.row, this.column);
             }
-            console.log(this.type_array, array.get_subtype());
-            console.log(this.type_array !== array.get_subtype());
             if (this.type_array !== array.get_subtype()) {
-                console.log("Tipos diferentes");
                 return new Exception("Semantic", "The type: ".concat(array.get_subtype(), " cannot assignated to array of type: ").concat(this.type_array), this.row, this.column);
             }
             var value = void 0;
@@ -84,7 +81,6 @@ var Declaration_array = /** @class */ (function (_super) {
             }
         }
         else {
-            console.log(list_expression);
             var value = list_expression.interpret(tree, table);
             if (this.type_array !== list_expression.get_type()) {
                 return new Exception("Semantic", "The type: ".concat(list_expression.get_type(), " cannot assignet at array of type: ").concat(this.type_array), this.row, this.column);
@@ -95,6 +91,9 @@ var Declaration_array = /** @class */ (function (_super) {
     };
     Declaration_array.prototype.get_value = function () {
         return this.value;
+    };
+    Declaration_array.prototype.set_value = function (value) {
+        this.value = value;
     };
     Declaration_array.prototype.get_subtype = function () {
         return this.type_array;
