@@ -185,6 +185,8 @@ instruction
 	| prod_print ptcommP 		{ $$ = $1; }
 	| inc_dec ptcommP			{ $$ = $1; }
 	| prod_if                   { $$ = $1; }
+	| prof_if2                  { $$ = $1; }
+	| prod_if_full              { $$ = $1; }
 	| prod_loops                { $$ = $1; }
 	| prod_switch               { $$ = $1; }
 	| transfer_prod ptcommP     { $$ = $1; }
@@ -220,7 +222,6 @@ inc_dec
 	| IDENTIFIER DECSIGN		{ $$ = new Inc_Dec(new Arithmetic(new Identifier($1, this._$.first_line, this._$.first_column), null, Arithmetic_operator.DEC, this._$.first_line, this._$.first_column), this._$.first_line, this._$.first_column); }
 ;
 
-/* Prods about If */
 prod_if
     : RIF PARLEFT expression PARRIGHT CURLYLEFT instructions CURLYRIGHT {
         $$ = new If($3, $6, null, null, @1.first_line, @1.first_column);
@@ -235,12 +236,6 @@ prod_if
         $$ = new If($3, [$5], null, null, @1.first_line, @1.first_column);
     }
 ;
-
-/*if_without_curly
-    : RIF PARLEFT expression PARRIGHT instructions {
-        $$ = new If($3, $6, null, null, @1.first_line, @1.first_column);
-    }
-;*/
 
 /* Loops Prods */
 prod_loops
@@ -353,7 +348,7 @@ expression
 	| expression CONCAT expression          { $$ = new StringText($1, $3, String_operator.CONCAT, @1.first_line, @1.first_column); }
 	| expression AND expression				{ $$ = new Logical($1, $3, Logical_operator.AND, @1.first_line, @1.first_column); }
 	| expression OR expression				{ $$ = new Logical($1, $3, Logical_operator.OR, @1.first_line, @1.first_column); }
-	| NOT expression %prec UNOT				{ $$ = new Logical($1, $3, Logical_operator.NOT, @1.first_line, @1.first_column); }
+	| NOT expression %prec UNOT				{ $$ = new Logical($2, null, Logical_operator.NOT, @1.first_line, @1.first_column); }
 	| INTEGER                               { $$ = new Primitive($1, type.INT, @1.first_line, @1.first_column); }
 	| DOUBLE                                { $$ = new Primitive($1, type.DOUBLE, @1.first_line, @1.first_column) }
 	| STRING                                { $$ = new Primitive($1, type.STRING, @1.first_line, @1.first_column); }

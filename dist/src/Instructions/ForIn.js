@@ -33,32 +33,25 @@ var ForIn = /** @class */ (function (_super) {
         return _this;
     }
     ForIn.prototype.interpret = function (tree, table) {
-        console.log("Start");
         var value_dec;
         var value_iterable;
         if (this.firsExp != null) {
             value_iterable = this.secondExp.interpret(tree, table);
-            console.log("Interpretando la expresion ".concat(value_iterable));
             if (value_iterable instanceof Exception) {
                 return value_iterable;
             }
             if (this.secondExp.get_type() == type.STRING) {
-                console.log("Verificando tipos " + this.secondExp.get_type());
                 var new_table = new SymbolTable(table, "ForIn-".concat(this.row, "-").concat(this.column));
                 /* Hacer nueva declaration */
                 // @ts-ignore
                 var new_var = new Declaration([this.firsExp.toString()], type.STRING, this.row, this.column, null);
-                console.log(new_var);
-                console.log(new_table);
                 var res_dec = new_var.interpret(tree, new_table);
-                console.log("Interpretando la declaracion ".concat(res_dec));
+                if (res_dec instanceof Exception)
+                    return res_dec;
                 for (var _i = 0, value_iterable_1 = value_iterable; _i < value_iterable_1.length; _i++) {
                     var item_dec = value_iterable_1[_i];
-                    console.log("Valor de la iteracion: ".concat(item_dec));
                     var new_symbol = new Symbol(new_var.get_id()[0], type.STRING, this.row, this.column, item_dec);
-                    console.log(new_symbol);
                     var res_new_table = new_table.update_table(new_symbol);
-                    console.log(res_new_table);
                     if (res_new_table instanceof Exception)
                         return res_new_table;
                     if (this.instructions != null) {
