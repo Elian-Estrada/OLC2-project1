@@ -65,10 +65,6 @@ export class Arithmetic extends Instruction {
                                 this.value = String(parseInt(left) + right.charCodeAt(0)) :  
                                 this.value = String(parseFloat(left) + right.charCodeAt(0));
                                 break;
-                            case type.STRING:
-                                this.type = type.STRING;
-                                this.value = left.toString() + right.toString();
-                                break;
                             default:
                                 return new Exception("Semantic", `The type ${this.exp2.get_type().toString()} cannot be operated with type: INTEGER`, this.row, this.column);
                         }
@@ -85,41 +81,15 @@ export class Arithmetic extends Instruction {
                                 this.value = String(parseInt(right) + left.charCodeAt(0)) :  
                                 this.value = String(parseFloat(right) + left.charCodeAt(0));
                                 break;
-                            case type.STRING:
+                            /*case type.STRING:
                                 this.type = type.STRING;
                                 this.value = left + right;
-                                break;
+                                break;*/
                             case type.CHAR:
                                 this.type = type.INT;
                                 this.value = String(left.charCodeAt() + right.charCodeAt());
                                 break;
 
-                        }
-                    }
-
-                    else if ( this.exp1.get_type() === type.STRING ) {
-                        switch ( this.exp2.get_type() ) {
-                            case type.INT:
-                            case type.DOUBLE:
-                            case type.CHAR:
-                            case type.STRING:
-                            case type.BOOL:
-                                this.type = type.STRING;
-                                this.value = left.toString() + right.toString();
-                                break;
-                            default:
-                                return new Exception("Semantic", `The type ${this.exp2.get_type().toString()} cannot be operated with type: STRING`, this.row, this.column);
-                        }
-                    }
-
-                    else if ( this.exp1.get_type() === type.BOOL ) {
-                        switch ( this.exp2.get_type() ) {
-                            case type.STRING:
-                                this.type = type.STRING;
-                                this.value = left.toString() + right.toString();
-                                break;
-                            default:
-                                return new Exception("Semantic", `The type ${this.exp2.get_type().toString()} cannot be operated with type: BOOLEAN`, this.row, this.column);
                         }
                     }
             }

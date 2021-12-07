@@ -35,3 +35,8 @@ export var Logical_operator;
     Logical_operator["NOT"] = "!";
     Logical_operator["OR"] = "||";
 })(Logical_operator || (Logical_operator = {}));
+export var String_operator;
+(function (String_operator) {
+    String_operator["CONCAT"] = "&";
+    String_operator["REPETITION"] = "^";
+})(String_operator || (String_operator = {}));
