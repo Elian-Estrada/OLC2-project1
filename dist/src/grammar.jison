@@ -107,6 +107,9 @@
 "&&"                return 'AND';
 "!"                 return 'NOT';
 
+/* String Operators */
+"&"                 return 'CONCAT';
+
 /* Declaration and Assignment */
 "="                 return "EQUALSIGN";
 
@@ -126,12 +129,13 @@
 /lex
 
 %{
-	import {type, Relational_operator, Logical_operator, Arithmetic_operator} from "./SymbolTable/Type.js"
+	import {type, Relational_operator, Logical_operator, Arithmetic_operator, String_operator} from "./SymbolTable/Type.js"
     import { Arithmetic } from "./Expression/Arithmetic.js";
 	import { Logical } from "./Expression/Logical.js";
 	import { Relational } from "./Expression/Relational.js";
 	import { Primitive } from "./Expression/Primitive.js";
-	import { Identifier } from "./Expression/Identifier.js"
+	import { Identifier } from "./Expression/Identifier.js";
+	import { StringText } from "./Expression/StringText.js";
 
 	import { Declaration } from "./Instructions/Declaration.js"
 	import { Assignment } from "./Instructions/Assignment.js"
@@ -154,7 +158,7 @@
 %left 'AND'
 %right UNOT
 %nonassoc 'EQUALIZATIONSIGN' 'DIFFSIGN' 'LESSEQUAL' 'GREATEREQUAL' 'SMALLERTHAN' 'GREATERTHAN'
-%left 'PLUSSIGN' 'SUBSIGN'
+%left 'PLUSSIGN' 'SUBSIGN', 'CONCAT'
 %left 'MULTSIGN' 'DIVSIGN' 'MODSIGN'
 %right UMENOS
 %left 'INCSIGN' 'DECSIGN'
@@ -188,7 +192,6 @@ instruction
 
 ptcommP
 	: SEMICOLON
-	|
 ;
 
 declaration
@@ -347,6 +350,7 @@ expression
 	| expression GREATEREQUAL expression	{ $$ = new Relational($1, $3, Relational_operator.GREATEREQUAL, @1.first_line, @1.first_column); }
 	| expression SMALLERTHAN expression		{ $$ = new Relational($1, $3, Relational_operator.LESS, @1.first_line, @1.first_column); }
 	| expression GREATERTHAN expression		{ $$ = new Relational($1, $3, Relational_operator.GREATER, @1.first_line, @1.first_column); }
+	| expression CONCAT expression          { $$ = new StringText($1, $3, String_operator.CONCAT, @1.first_line, @1.first_column); }
 	| expression AND expression				{ $$ = new Logical($1, $3, Logical_operator.AND, @1.first_line, @1.first_column); }
 	| expression OR expression				{ $$ = new Logical($1, $3, Logical_operator.OR, @1.first_line, @1.first_column); }
 	| NOT expression %prec UNOT				{ $$ = new Logical($1, $3, Logical_operator.NOT, @1.first_line, @1.first_column); }

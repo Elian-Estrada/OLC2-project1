@@ -34,3 +34,8 @@ export enum Logical_operator {
     NOT     = "!",
     OR      = "||"
 }
+
+export enum String_operator {
+    CONCAT      = "&",
+    REPETITION  = "^"
+}
