@@ -38,7 +38,7 @@ export class For extends Instruction {
             if (this.init instanceof Declaration) {
                 new_table = new SymbolTable(table, `Init_For-${this.row}-${this.column}`);
                 declare_flag = true;
-                start = this.init.interpret(tree, new_table)
+                start = this.init.interpret(tree, new_table);
             } else {
                 start = this.init.interpret(tree, table);
             }

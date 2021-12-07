@@ -24,13 +24,16 @@ export class If extends Instruction {
 
     interpret(tree: Tree, table: SymbolTable): any {
         let flag: boolean = this.expr.interpret(tree, table);
-        console.log(flag);
+        // console.log(flag);
         if (this.expr.get_type() === type.BOOL) {
             if (JSON.parse(String(flag))) {
                 let new_table = new SymbolTable(table, `If - ${this.row}-${this.column}`)
 
+                console.log(this.instructions)
                 for (let item of this.instructions) {
+                    console.log(item);
                     let instruction = item.interpret(tree, new_table);
+                    console.log(instruction)
 
                     if (instruction instanceof Exception) {
                         tree.get_errors().push(instruction);

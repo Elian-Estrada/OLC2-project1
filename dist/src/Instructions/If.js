@@ -32,13 +32,16 @@ var If = /** @class */ (function (_super) {
     }
     If.prototype.interpret = function (tree, table) {
         var flag = this.expr.interpret(tree, table);
-        console.log(flag);
+        // console.log(flag);
         if (this.expr.get_type() === type.BOOL) {
             if (JSON.parse(String(flag))) {
                 var new_table = new SymbolTable(table, "If - ".concat(this.row, "-").concat(this.column));
+                console.log(this.instructions);
                 for (var _i = 0, _a = this.instructions; _i < _a.length; _i++) {
                     var item = _a[_i];
+                    console.log(item);
                     var instruction = item.interpret(tree, new_table);
+                    console.log(instruction);
                     if (instruction instanceof Exception) {
                         tree.get_errors().push(instruction);
                         tree.update_console(instruction.toString());

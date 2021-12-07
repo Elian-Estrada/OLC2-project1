@@ -27,15 +27,19 @@ var SymbolTable = /** @class */ (function () {
     SymbolTable.prototype.update_table = function (symbol) {
         var _a;
         var current_table = this;
+        console.log("Entrando en SymbolTable");
+        console.log(current_table);
         while (current_table !== undefined) {
+            console.log(current_table.table);
             if (current_table.table.has(symbol.id)) {
                 var current_symbol = current_table.table.get(symbol.id);
+                console.log(current_symbol);
                 if (current_symbol.type === symbol.type) {
                     current_symbol.value = symbol.value;
                     return undefined;
                 }
                 else {
-                    return new Exception("Semantic", "Cannot assign vlaue of type: ".concat(symbol.type, " in a variable of type: ").concat((_a = current_table.table.get(symbol.id)) === null || _a === void 0 ? void 0 : _a.type), symbol.row, symbol.column);
+                    return new Exception("Semantic", "Cannot assign value of type: ".concat(symbol.type, " in a variable of type: ").concat((_a = current_table.table.get(symbol.id)) === null || _a === void 0 ? void 0 : _a.type), symbol.row, symbol.column);
                 }
             }
             current_table = current_table.prev;

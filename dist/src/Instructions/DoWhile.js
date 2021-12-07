@@ -30,12 +30,13 @@ var DoWhile = /** @class */ (function (_super) {
         return _this;
     }
     DoWhile.prototype.interpret = function (tree, table) {
-        do {
+        var flag2 = false;
+        while (true) {
             var flag = this.expr.interpret(tree, table);
             if (flag instanceof Exception)
                 return flag;
             if (this.expr.get_type() == type.BOOL) {
-                if (String(flag) == "true") {
+                if (String(flag) == "true" || !flag2) {
                     var new_table = new SymbolTable(table, "DoWhile-".concat(this.row, "-").concat(this.column));
                     for (var _i = 0, _a = this.instructions; _i < _a.length; _i++) {
                         var item = _a[_i];
@@ -54,6 +55,7 @@ var DoWhile = /** @class */ (function (_super) {
                             return inst;
                         }
                     }
+                    flag2 = true;
                 }
                 else {
                     break;
@@ -63,7 +65,7 @@ var DoWhile = /** @class */ (function (_super) {
                 return new Exception("Semantic", "Expect a Boolean type expression. Not ".concat(this.expr.get_type().name), this.row, this.column);
             }
             this.counter += 1;
-        } while (true);
+        }
     };
     return DoWhile;
 }(Instruction));
