@@ -27,9 +27,13 @@ var SymbolTable = /** @class */ (function () {
     SymbolTable.prototype.update_table = function (symbol) {
         var _a;
         var current_table = this;
+        console.log("Entrando en SymbolTable");
+        console.log(current_table);
         while (current_table !== undefined) {
+            console.log(current_table.table);
             if (current_table.table.has(symbol.id)) {
                 var current_symbol = current_table.table.get(symbol.id);
+                console.log(current_symbol);
                 if (current_symbol.type === symbol.type) {
                     current_symbol.value = symbol.value;
                     return undefined;

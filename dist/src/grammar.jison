@@ -308,8 +308,8 @@ for_it
 ;
 
 for_in
-    : RFOR PARLEFT declaration RIN expression PARRIGHT CURLYLEFT instructions CURLYRIGHT {
-        $$ = new ForIn($3, $5, $8, @1.first_line, @1.first_column);
+    : RFOR IDENTIFIER RIN expression CURLYLEFT instructions CURLYRIGHT {
+        $$ = new ForIn($2, $4, $6, @1.first_line, @1.first_column);
     }
 ;
 
