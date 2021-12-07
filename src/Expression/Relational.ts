@@ -27,7 +27,7 @@ export class Relational extends Instruction{
         //bool == bool -> si
         //bool != bool -> si
         //String == String -> si
-        //STring != String -> si
+        //String != String -> si
         //array == array -> si
         //array != array -> si
         //int y double -> si

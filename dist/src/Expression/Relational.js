@@ -31,7 +31,7 @@ var Relational = /** @class */ (function (_super) {
         //bool == bool -> si
         //bool != bool -> si
         //String == String -> si
-        //STring != String -> si
+        //String != String -> si
         //array == array -> si
         //array != array -> si
         //int y double -> si

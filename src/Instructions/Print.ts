@@ -16,7 +16,6 @@ export class Print extends Instruction {
     }
     
     public interpret(tree: Tree, table: SymbolTable) {
-        // console.log("algo");
         let value = this.expression.interpret(tree, table);
 
         if ( value instanceof Exception )

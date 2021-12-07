@@ -148,10 +148,6 @@ export class Arithmetic extends Instruction {
                         }
                     }
             }
-
-            if ( this.exp2.value == null ) {
-                
-            }
             
         } else {
             let symbol: Symbol | null = null;

@@ -113,6 +113,9 @@
 /* Declaration and Assignment */
 "="                 return "EQUALSIGN";
 
+/* Ternary Operators */
+"?"                 return "VALUEIFTRUE";
+
 /* White Spaces */
 [ \r\t]+            {}
 \n                  {}
@@ -136,6 +139,7 @@
 	import { Primitive } from "./Expression/Primitive.js";
 	import { Identifier } from "./Expression/Identifier.js";
 	import { StringText } from "./Expression/StringText.js";
+	import { Ternary } from "./Expression/Ternary.js";
 
 	import { Declaration } from "./Instructions/Declaration.js"
 	import { Assignment } from "./Instructions/Assignment.js"
@@ -157,7 +161,7 @@
 %left 'OR'
 %left 'AND'
 %right UNOT
-%nonassoc 'EQUALIZATIONSIGN' 'DIFFSIGN' 'LESSEQUAL' 'GREATEREQUAL' 'SMALLERTHAN' 'GREATERTHAN'
+%nonassoc 'EQUALIZATIONSIGN' 'DIFFSIGN' 'LESSEQUAL' 'GREATEREQUAL' 'SMALLERTHAN' 'GREATERTHAN', 'VALUEIFTRUE'
 %left 'PLUSSIGN' 'SUBSIGN', 'CONCAT'
 %left 'MULTSIGN' 'DIVSIGN' 'MODSIGN'
 %right UMENOS
@@ -185,11 +189,10 @@ instruction
 	| prod_print ptcommP 		{ $$ = $1; }
 	| inc_dec ptcommP			{ $$ = $1; }
 	| prod_if                   { $$ = $1; }
-	| prof_if2                  { $$ = $1; }
-	| prod_if_full              { $$ = $1; }
 	| prod_loops                { $$ = $1; }
 	| prod_switch               { $$ = $1; }
 	| transfer_prod ptcommP     { $$ = $1; }
+	| prod_ternary ptcommP      { $$ = $1; }
 ;
 
 ptcommP
@@ -321,6 +324,13 @@ for_step
     | assignment    { $$ = $1; }
 ;
 
+/* Ternary Prod */
+prod_ternary
+    : PARLEFT expression PARRIGHT VALUEIFTRUE expression TWOPOINTS expression {
+        $$ = new Ternary($2, $5, $7, @1.first_line, @1.first_column);
+    }
+;
+
 type
     : RINT 	{ $$ = type.INT; }
     | RDOUBLE 	{ $$ = type.DOUBLE; }
@@ -356,6 +366,7 @@ expression
 	| boolean								{ $$ = new Primitive($1, type.BOOL, @1.first_line, @1.first_column); }
 	| IDENTIFIER							{ $$ = new Identifier($1, @1.first_line, @1.first_column); }
 	| PARLEFT expression PARRIGHT           { $$ = $2; }
+	| prod_ternary                          { $$ = $1; }
 ;
 
 boolean 
