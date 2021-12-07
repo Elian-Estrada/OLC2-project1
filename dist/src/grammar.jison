@@ -138,6 +138,7 @@
 	import { Assignment } from "./Instructions/Assignment.js"
 	import { Print } from "./Instructions/Print.js";
 	import { Inc_Dec } from "./Instructions/Inc_Dec.js";
+	import { Declaration_array } from "./Instructions/Declaration_array.js"
 %}
 
 /* Operators Precedence */
@@ -189,9 +190,9 @@ assignment
 ;
 
 declaration_array
-	: type BRACKETLEFT BRACKETRIGHT IDENTIFIER EQUALSIGN values_array
-	| type BRACKETLEFT BRACKETRIGHT IDENTIFIER EQUALSIGN IDENTIFIER
-	| type BRACKETLEFT BRACKETRIGHT IDENTIFIER EQUALSIGN COPY IDENTIFIER
+	: type BRACKETLEFT BRACKETRIGHT IDENTIFIER EQUALSIGN values_array		{ $$ = new Declaration_array($4, $1, null, $6, this._$.first_line, this._$.first_column); }
+	| type BRACKETLEFT BRACKETRIGHT IDENTIFIER EQUALSIGN IDENTIFIER			{ $$ = new Declaration_array($4, $1, new Identifier($6, this._$.first_line, this._$.first_column), [], this._$.first_line, this._$.first_column); }
+	| type BRACKETLEFT BRACKETRIGHT IDENTIFIER EQUALSIGN COPY IDENTIFIER	{ $$ = new Declaration_array($4, $1, new Identifier($7, this._$.first_line, this._$.first_column), [], this._$.first_line, this._$.first_column, false); }
 ;
 
 values_array
@@ -199,8 +200,8 @@ values_array
 ;
 
 list_values_array
-	: list_values_array COMMA values	{ $1.append($3); $$ = $1;}
-	| values							{ $$ = [$1]; }
+	: list_values_array COMMASIGN values	{ $1.push($3); $$ = $1;}
+	| values								{ $$ = [$1]; }
 ;
 
 values

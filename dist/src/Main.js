@@ -2,6 +2,7 @@
 import { grammar } from "./grammar.js";
 import Tree from "./SymbolTable/Tree.js";
 import SymbolTable from "./SymbolTable/SymbolTable.js";
+import Exception from "./SymbolTable/Exception.js";
 var Main = /** @class */ (function () {
     function Main() {
     }
@@ -16,10 +17,16 @@ var Main = /** @class */ (function () {
         tree.set_global_table(global_table);
         for (var _i = 0, _a = tree.get_instructions(); _i < _a.length; _i++) {
             var instruction = _a[_i];
-            instruction.interpret(tree, global_table);
+            var result = instruction.interpret(tree, global_table);
+            console.log(result);
+            if (result instanceof Exception) {
+                tree.get_errors().push(result);
+                tree.update_console(result.toString());
+            }
         }
         console.log(tree.get_instructions());
         console.log(tree.get_global_table());
+        console.log(tree.get_errors());
         return tree.get_console();
         // console.log(res);
     };

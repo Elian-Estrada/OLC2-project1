@@ -3,6 +3,7 @@ import {grammar} from "./grammar.js";
 import { Instruction } from "./Abstract/Instruction.js";
 import Tree from "./SymbolTable/Tree.js";
 import SymbolTable from "./SymbolTable/SymbolTable.js";
+import Exception from "./SymbolTable/Exception.js";
 
 export class Main {
     lexicalAnalysis(bufferStream: string) {
@@ -19,10 +20,18 @@ export class Main {
         tree.set_global_table(global_table);
         
         for (let instruction of tree.get_instructions()){
-            instruction.interpret(tree, global_table);
+            let result = instruction.interpret(tree, global_table);
+            console.log(result);
+            
+            if (result instanceof Exception){
+                tree.get_errors().push(result);
+                tree.update_console(result.toString());
+            }
         }
         console.log(tree.get_instructions());
         console.log(tree.get_global_table());
+        console.log(tree.get_errors());
+        
         
         return tree.get_console();
         
