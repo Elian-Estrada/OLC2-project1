@@ -5,7 +5,7 @@
 /* Definición Léxica */
 %lex
 
-%options case-insensitive
+%options case-sensitive
 
 %%
 
