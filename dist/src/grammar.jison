@@ -21,7 +21,7 @@
 "boolean"           return 'RBOOLEAN';
 "char"              return 'RCHAR';
 "string"            return 'RSTRING';
-"null"              return 'RNULL';
+"void"              return 'RVOID';
 
 /* Conditional Structures */
 "if"                return 'RIF';
@@ -155,6 +155,7 @@
 	import { For } from "./Instructions/For.js";
 	import { ForIn } from "./Instructions/ForIn.js";
 	import { DoWhile } from "./Instructions/DoWhile.js";
+	import { Function } from "./Instructions/Function.js";
 %}
 
 /* Operators Precedence */
@@ -193,6 +194,7 @@ instruction
 	| prod_switch               { $$ = $1; }
 	| transfer_prod ptcommP     { $$ = $1; }
 	| prod_ternary ptcommP      { $$ = $1; }
+	| functions                 { $$ = $1; }
 ;
 
 ptcommP
@@ -225,6 +227,7 @@ inc_dec
 	| IDENTIFIER DECSIGN		{ $$ = new Inc_Dec(new Arithmetic(new Identifier($1, this._$.first_line, this._$.first_column), null, Arithmetic_operator.DEC, this._$.first_line, this._$.first_column), this._$.first_line, this._$.first_column); }
 ;
 
+/* Prods about If */
 prod_if
     : RIF PARLEFT expression PARRIGHT CURLYLEFT instructions CURLYRIGHT {
         $$ = new If($3, $6, null, null, @1.first_line, @1.first_column);
@@ -331,6 +334,13 @@ prod_ternary
     }
 ;
 
+/* Prods about Functions */
+functions
+    : type IDENTIFIER PARLEFT PARRIGHT CURLYLEFT instructions CURLYRIGHT {
+        $$ = new Function($1, $2, [], $6, @1.first_line, @1.first_column);
+    }
+;
+
 type
     : RINT 	{ $$ = type.INT; }
     | RDOUBLE 	{ $$ = type.DOUBLE; }
@@ -338,6 +348,7 @@ type
     | RCHAR 	{ $$ = type.CHAR; }
     | RSTRING 	{ $$ = type.STRING; }
 	| RNULL		{ $$ = type.NULL; }
+	| RVOID     { $$ = type.VOID; }
 ;
 
 expression
@@ -363,7 +374,8 @@ expression
 	| DOUBLE                                { $$ = new Primitive($1, type.DOUBLE, @1.first_line, @1.first_column) }
 	| STRING                                { $$ = new Primitive($1, type.STRING, @1.first_line, @1.first_column); }
 	| CHAR									{ $$ = new Primitive($1, type.CHAR, @1.first_line, @1.first_column); }
-	| boolean								{ $$ = new Primitive($1, type.BOOL, @1.first_line, @1.first_column); }
+	| BOOLEAN								{ $$ = new Primitive($1, type.BOOL, @1.first_line, @1.first_column); }
+	| VOID                                  { $$ = new Primitive($1, type.VOID, @1.first_line, @1.first_column); }
 	| IDENTIFIER							{ $$ = new Identifier($1, @1.first_line, @1.first_column); }
 	| PARLEFT expression PARRIGHT           { $$ = $2; }
 	| prod_ternary                          { $$ = $1; }

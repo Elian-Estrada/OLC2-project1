@@ -6,14 +6,14 @@ import Exception from "../SymbolTable/Exception.js";
 export class Return extends Instruction {
 
     private expr: any;
-    private type: string;
-    private result: string;
+    private type: string | null;
+    private result: string | null;
 
-    constructor(expr: any, type: string, result: string, row: number, col: number) {
+    constructor(expr: any, row: number, col: number) {
         super(row, col);
         this.expr = expr;
-        this.type = type;
-        this.result = result;
+        this.type = null;
+        this.result = null;
     }
 
     public interpret(tree: Tree, table: SymbolTable): any {

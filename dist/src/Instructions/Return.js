@@ -17,11 +17,11 @@ import { Instruction } from "../Abstract/Instruction.js";
 import Exception from "../SymbolTable/Exception.js";
 var Return = /** @class */ (function (_super) {
     __extends(Return, _super);
-    function Return(expr, type, result, row, col) {
+    function Return(expr, row, col) {
         var _this = _super.call(this, row, col) || this;
         _this.expr = expr;
-        _this.type = type;
-        _this.result = result;
+        _this.type = null;
+        _this.result = null;
         return _this;
     }
     Return.prototype.interpret = function (tree, table) {
