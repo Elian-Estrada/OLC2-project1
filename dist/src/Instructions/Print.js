@@ -30,7 +30,9 @@ var Print = /** @class */ (function (_super) {
         if (value instanceof Exception)
             return value;
         if (this.expression.get_type() == type.ARRAY) {
-            return new Exception("Semantic", "Don't print array", this.row, this.column);
+            //return new Exception("Semantic", "Don't print array", this.row, this.column);
+            console.log(value.get_value());
+            value = JSON.stringify(value.get_value());
         }
         else if (this.expression.get_type() == type.NULL) {
             return new Exception("Semantic", "Null Pointer Exception", this.row, this.column);

@@ -85,7 +85,15 @@ var Declaration_array = /** @class */ (function (_super) {
             if (this.type_array !== list_expression.get_type()) {
                 return new Exception("Semantic", "The type: ".concat(list_expression.get_type(), " cannot assignet at array of type: ").concat(this.type_array), this.row, this.column);
             }
-            return value;
+            switch (list_expression.get_type()) {
+                case type.INT:
+                    return parseInt(value);
+                case type.DOUBLE:
+                    console.log(parseFloat(value));
+                    return parseFloat(value);
+                case type.BOOL:
+                    return JSON.parse(value);
+            }
         }
         return expression;
     };

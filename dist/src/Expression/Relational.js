@@ -81,7 +81,7 @@ var Relational = /** @class */ (function (_super) {
                         case type.BOOL:
                             switch (this.exp2.get_type()) {
                                 case type.BOOL:
-                                    return this.to_lower(left, right, this.operator);
+                                    return this.to_lower(JSON.parse(left), JSON.parse(right), this.operator);
                                 default:
                                     return new Exception("Semantic", "The type: ".concat(this.exp2.get_type(), " cannot be operated whit type: ").concat(type.BOOL), this.row, this.column);
                             }
@@ -133,6 +133,7 @@ var Relational = /** @class */ (function (_super) {
     Relational.prototype.to_lower = function (op1, op2, operator) {
         switch (operator) {
             case Relational_operator.EQUAL:
+                console.log(op1, op2);
                 this.value = String(op1 == op2).toLowerCase();
                 return this.value;
             case Relational_operator.UNEQUAL:

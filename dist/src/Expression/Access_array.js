@@ -58,8 +58,15 @@ var Access_array = /** @class */ (function (_super) {
                         if (this.expression.get_type() !== array.get_subtype()) {
                             return new Exception("Semantic", "The type: ".concat(this.expression.get_type(), " cannot be assignated at array of type: ").concat(array.get_subtype()), this.expression.row, this.expression.column);
                         }
+                        switch (this.expression.get_type()) {
+                            case type.INT:
+                                result = parseInt(result);
+                            case type.DOUBLE:
+                                result = parseFloat(result);
+                            case type.BOOL:
+                                result = JSON.parse(result);
+                        }
                         value[pos] = result;
-                        console.log(value);
                         break;
                     }
                     value = value[pos];

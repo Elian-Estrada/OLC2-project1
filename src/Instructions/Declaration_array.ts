@@ -105,7 +105,16 @@ export class Declaration_array extends Instruction {
                 return new Exception("Semantic", `The type: ${list_expression.get_type()} cannot assignet at array of type: ${this.type_array}`, this.row, this.column);
             }
 
-            return value;
+            switch(list_expression.get_type()){
+                case type.INT:
+                    return parseInt(value);
+                case type.DOUBLE:
+                    console.log(parseFloat(value));
+                    
+                    return parseFloat(value);
+                case type.BOOL:
+                    return JSON.parse(value);
+            }
         }
 
         return expression;
