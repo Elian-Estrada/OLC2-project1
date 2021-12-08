@@ -8,6 +8,7 @@ export var type;
     type["ARRAY"] = "array";
     type["STRUCT"] = "struct";
     type["NULL"] = "null";
+    type["VOID"] = "void";
 })(type || (type = {}));
 export var Arithmetic_operator;
 (function (Arithmetic_operator) {

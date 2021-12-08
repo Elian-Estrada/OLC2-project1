@@ -29,11 +29,11 @@ export class If extends Instruction {
             if (JSON.parse(String(flag))) {
                 let new_table = new SymbolTable(table, `If - ${this.row}-${this.column}`)
 
-                console.log(this.instructions)
+                // console.log(this.instructions)
                 for (let item of this.instructions) {
-                    console.log(item);
+                    // console.log(item);
                     let instruction = item.interpret(tree, new_table);
-                    console.log(instruction)
+                    // console.log(instruction)
 
                     if (instruction instanceof Exception) {
                         tree.get_errors().push(instruction);

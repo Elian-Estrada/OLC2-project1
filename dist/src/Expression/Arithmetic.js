@@ -144,8 +144,6 @@ var Arithmetic = /** @class */ (function (_super) {
                         }
                     }
             }
-            if (this.exp2.value == null) {
-            }
         }
         else {
             var symbol = null;

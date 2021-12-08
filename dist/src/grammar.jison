@@ -47,7 +47,6 @@
 "return"            return 'RRETURN';
 
 /* Generic Functions */
-"function"          return 'RFUNCTION';
 "void"              return 'RVOID';
 
 /* Language Functions */
@@ -136,7 +135,6 @@
 	import { Primitive } from "./Expression/Primitive.js";
 	import { Identifier } from "./Expression/Identifier.js";
 	import { StringText } from "./Expression/StringText.js";
-
 	import { Declaration } from "./Instructions/Declaration.js"
 	import { Assignment } from "./Instructions/Assignment.js"
 	import { Print } from "./Instructions/Print.js";
@@ -151,6 +149,7 @@
 	import { For } from "./Instructions/For.js";
 	import { ForIn } from "./Instructions/ForIn.js";
 	import { DoWhile } from "./Instructions/DoWhile.js";
+	import { Function } from "./Instructions/Function.js";
 %}
 
 /* Operators Precedence */
@@ -188,6 +187,7 @@ instruction
 	| prod_loops                { $$ = $1; }
 	| prod_switch               { $$ = $1; }
 	| transfer_prod ptcommP     { $$ = $1; }
+	| functions                 { $$ = $1; }
 ;
 
 ptcommP
@@ -293,9 +293,10 @@ case
 
 /* Transfer Structures Prods */
 transfer_prod
-    : RBREAK                   { $$ = new Break(@1.first_line, @1.first_column) }
-    | RRETURN expression       { $$ = new Return($2, @1.first_line, @1.first_column) }
-    | RCONTINUE                { $$ = new Continue(@1.first_line, @1.first_column) }
+    : RBREAK                   { $$ = new Break(@1.first_line, @1.first_column); }
+    | RRETURN expression       { $$ = new Return($2, @1.first_line, @1.first_column); }
+    | RRETURN                  { $$ = new Return(null, @1.first_line, @1.first_column); }
+    | RCONTINUE                { $$ = new Continue(@1.first_line, @1.first_column); }
 ;
 
 /* Prods about For */
@@ -326,6 +327,18 @@ for_step
     | assignment    { $$ = $1; }
 ;
 
+/* Prods about Functions */
+functions
+    : func_main       { $$ = $1; }
+    | type IDENTIFIER PARLEFT PARRIGHT CURLYLEFT instructions CURLYRIGHT {
+        $$ = new Function($1, $2, [], $6, @1.first_line, @1.first_column);
+    }
+;
+
+func_main
+    :
+;
+
 type
     : RINT 	{ $$ = type.INT; }
     | RDOUBLE 	{ $$ = type.DOUBLE; }
@@ -333,6 +346,7 @@ type
     | RCHAR 	{ $$ = type.CHAR; }
     | RSTRING 	{ $$ = type.STRING; }
 	| RNULL		{ $$ = type.NULL; }
+	| RVOID     { $$ = type.VOID; }
 ;
 
 expression
@@ -363,7 +377,7 @@ expression
 	| PARLEFT expression PARRIGHT           { $$ = $2; }
 ;
 
-boolean 
+boolean
 	: RTRUE		{ $$ = $1}
 	| RFALSE 	{ $$ = $1}
 ;
