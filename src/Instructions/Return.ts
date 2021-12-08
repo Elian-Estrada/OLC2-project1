@@ -17,6 +17,10 @@ export class Return extends Instruction {
     }
 
     public interpret(tree: Tree, table: SymbolTable): any {
+
+        if ( this.expr == null )
+            return;
+
         let value = this.expr.interpret(tree, table);
 
         if ( value instanceof Exception )

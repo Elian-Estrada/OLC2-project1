@@ -28,6 +28,10 @@ export class Function extends Instruction {
         for ( let instruction of this.instructions ) {
             // console.log(instruction)
             let value = instruction.interpret(tree, new_table);
+            // console.log(value)
+
+            if ( value == undefined )
+                return;
 
             if ( value instanceof Exception ) {
                 tree.get_errors().push(value);
@@ -47,6 +51,7 @@ export class Function extends Instruction {
             }
 
             if ( value instanceof Return ) {
+
                 if ( this.type != value.get_type() ){
                     return new Exception("Semantic", "Function doesn't return same data type", instruction.row, instruction.column);
                 }

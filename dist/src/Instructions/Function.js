@@ -36,6 +36,9 @@ var Function = /** @class */ (function (_super) {
             var instruction = _a[_i];
             // console.log(instruction)
             var value = instruction.interpret(tree, new_table);
+            // console.log(value)
+            if (value == undefined)
+                return;
             if (value instanceof Exception) {
                 tree.get_errors().push(value);
                 tree.update_console(value.toString());
