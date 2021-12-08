@@ -269,6 +269,7 @@ expression
 	| STRING                                { $$ = new Primitive($1, type.STRING, @1.first_line, @1.first_column); }
 	| CHAR									{ $$ = new Primitive($1, type.CHAR, @1.first_line, @1.first_column); }
 	| boolean								{ $$ = new Primitive($1, type.BOOL, @1.first_line, @1.first_column); }
+	| IDENTIFIER list_brackets				{ $$ = new Access_array(new Identifier($1, this._$.first_line, this._$.first_column), $2, null, this._$.first_line, this._$.first_column); }
 	| IDENTIFIER							{ $$ = new Identifier($1, @1.first_line, @1.first_column); }
 	| PARLEFT expression PARRIGHT           { $$ = $2; }
 ;

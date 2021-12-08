@@ -9,14 +9,18 @@ export class Access_array extends Instruction {
     private id: any;
     private positions: Array<any>;
     private expression: any;
-    private value: any; 
+    private values: any; 
+    private value: any;
+    private type: type;
 
     constructor(id: any, positions: Array<any>, expression: any, row: number, column: number) {
         super(row, column);
         this.id = id;
         this.positions = positions;
         this.expression = expression;
+        this.values = [];
         this.value = null;
+        this.type = type.NULL;
     }
 
     interpret(tree: Tree, table: SymbolTable){
@@ -27,19 +31,14 @@ export class Access_array extends Instruction {
             return array;
         }
 
-        this.value = array.get_value();
-
-        let positions = this.get_values(this.positions, tree, table);
-
-        if (positions instanceof Exception){
-            return positions;
-        }
+        this.values = array.get_value();
 
         let value: any;
         let pos: any;
-        let i = 0;                          //[1, 2];
-        for (let item of this.positions){        //[0][0]
-            i++;    //1
+        let i = 0;
+        let result;
+        for (let item of this.positions){
+            i++;
 
             pos = item.interpret(tree, table);
             
@@ -49,36 +48,44 @@ export class Access_array extends Instruction {
 
 
             if (i === 1){
-                console.log("Entra 1 vez");
-                
                 value = array.get_value()[pos];
             } else {
-                console.log(pos);
-                console.log(value);
-                //value = value[pos];
+
                 if (value instanceof Array){
-                    value = value[pos];    //1, undefined
-                    console.log(value);
+
+                    if (this.expression !== null && i == this.positions.length){
+                        result = this.expression.interpret(tree, table);
+
+                        if (result instanceof Exception){
+                            return result;
+                        }
+
+                        if (this.expression.get_type() !== array.get_subtype()){
+                            return new Exception("Semantic", `The type: ${this.expression.get_type()} cannot be assignated at array of type: ${array.get_subtype()}`, this.expression.row, this.expression.column);
+                        }
+
+                        value[pos] = result;     
+                        console.log(value);
+                        
+                        break;
+                    }                    
+
+                    value = value[pos];
                     
                 } else {
                     value = undefined;
                 }
-
-                //value = undefined;
-                console.log(value);
-                
             }
 
-            if (value === undefined){ //false
-                console.log("entra?");
-                
+            if (value === undefined){
                 return new Exception("Semantic", `The index: ${item} out of range`, item.row, item.column);
             }
         }
 
-        console.log(value);
+        this.type = array.get_subtype();
         
-
+        this.value = value;
+        return value;
     }
 
     get_values(positions: any, tree: Tree, table: SymbolTable): any{
@@ -114,4 +121,12 @@ export class Access_array extends Instruction {
 
     }
 
+
+    get_value(){
+        return this.value;
+    }
+
+    get_type(){
+        return this.type;
+    }
 }

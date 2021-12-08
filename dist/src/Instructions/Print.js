@@ -27,7 +27,7 @@ var Print = /** @class */ (function (_super) {
     }
     Print.prototype.interpret = function (tree, table) {
         var value = this.expression.interpret(tree, table);
-        if (value instanceof Error)
+        if (value instanceof Exception)
             return value;
         if (this.expression.get_type() == type.ARRAY) {
             return new Exception("Semantic", "Don't print array", this.row, this.column);

@@ -23,7 +23,9 @@ var Access_array = /** @class */ (function (_super) {
         _this.id = id;
         _this.positions = positions;
         _this.expression = expression;
+        _this.values = [];
         _this.value = null;
+        _this.type = type.NULL;
         return _this;
     }
     Access_array.prototype.interpret = function (tree, table) {
@@ -31,45 +33,48 @@ var Access_array = /** @class */ (function (_super) {
         if (array instanceof Exception) {
             return array;
         }
-        this.value = array.get_value();
-        var positions = this.get_values(this.positions, tree, table);
-        if (positions instanceof Exception) {
-            return positions;
-        }
+        this.values = array.get_value();
         var value;
         var pos;
-        var i = 0; //[1, 2];
-        for (var _i = 0, _a = this.positions; _i < _a.length; _i++) { //[0][0]
+        var i = 0;
+        var result;
+        for (var _i = 0, _a = this.positions; _i < _a.length; _i++) {
             var item = _a[_i];
-            i++; //1
+            i++;
             pos = item.interpret(tree, table);
             if (item.get_type() !== type.INT) {
                 return new Exception("Semantic", "The index of array cannot be of type: ".concat(value.get_type(), " expected type: ").concat(type.INT), item.row, item.column);
             }
             if (i === 1) {
-                console.log("Entra 1 vez");
                 value = array.get_value()[pos];
             }
             else {
-                console.log(pos);
-                console.log(value);
-                //value = value[pos];
                 if (value instanceof Array) {
-                    value = value[pos]; //1, undefined
-                    console.log(value);
+                    if (this.expression !== null && i == this.positions.length) {
+                        result = this.expression.interpret(tree, table);
+                        if (result instanceof Exception) {
+                            return result;
+                        }
+                        if (this.expression.get_type() !== array.get_subtype()) {
+                            return new Exception("Semantic", "The type: ".concat(this.expression.get_type(), " cannot be assignated at array of type: ").concat(array.get_subtype()), this.expression.row, this.expression.column);
+                        }
+                        value[pos] = result;
+                        console.log(value);
+                        break;
+                    }
+                    value = value[pos];
                 }
                 else {
                     value = undefined;
                 }
-                //value = undefined;
-                console.log(value);
             }
-            if (value === undefined) { //false
-                console.log("entra?");
+            if (value === undefined) {
                 return new Exception("Semantic", "The index: ".concat(item, " out of range"), item.row, item.column);
             }
         }
-        console.log(value);
+        this.type = array.get_subtype();
+        this.value = value;
+        return value;
     };
     Access_array.prototype.get_values = function (positions, tree, table) {
         var values = [];
@@ -92,6 +97,12 @@ var Access_array = /** @class */ (function (_super) {
             return value;
         }
         return values;
+    };
+    Access_array.prototype.get_value = function () {
+        return this.value;
+    };
+    Access_array.prototype.get_type = function () {
+        return this.type;
     };
     return Access_array;
 }(Instruction));

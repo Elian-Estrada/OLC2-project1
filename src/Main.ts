@@ -7,7 +7,7 @@ import Exception from "./SymbolTable/Exception.js";
 
 export class Main {
     lexicalAnalysis(bufferStream: string) {
-        console.log(`Analizando ${bufferStream}`);
+        //console.log(`Analizando ${bufferStream}`);
         // @ts-ignore
         //return grammar.parse(bufferStream);
 
@@ -21,7 +21,6 @@ export class Main {
         
         for (let instruction of tree.get_instructions()){
             let result = instruction.interpret(tree, global_table);
-            console.log(result);
             
             if (result instanceof Exception){
                 tree.get_errors().push(result);
