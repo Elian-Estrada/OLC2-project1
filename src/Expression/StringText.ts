@@ -40,11 +40,12 @@ export class StringText extends Instruction {
                         case type.DOUBLE:
                         case type.BOOL:
                         case type.CHAR:
+                        case type.NULL:
                             if ( this.exp2.get_type() == type.STRING ) {
                                 this.type = type.STRING;
                                 this.value = left.toString() + right.toString();
                             } else
-                                return new Exception("Semantic", `The type: ${this.exp1.get_type()} \n cannot be concatenated whit operator: ${this.operator}`, this.row, this.column);
+                                return new Exception("Semantic", `The type: ${this.exp1.get_type()} \n cannot be concatenated whit type: ${this.exp2.get_type()}`, this.row, this.column);
                             break;
                     }
 
@@ -55,6 +56,7 @@ export class StringText extends Instruction {
                             case type.BOOL:
                             case type.CHAR:
                             case type.STRING:
+                            case type.NULL:
                                 this.type = type.STRING;
                                 this.value = left.toString() + right.toString();
                                 break;
