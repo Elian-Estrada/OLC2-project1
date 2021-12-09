@@ -53,7 +53,6 @@ var Arithmetic = /** @class */ (function (_super) {
                                     this.value = String(parseInt(left) + parseInt(right)) :
                                     this.value = String(parseFloat(left) + parseFloat(right));
                                 return this.value;
-                                break;
                             case type.DOUBLE:
                                 this.type = type.DOUBLE;
                                 this.value = String(parseFloat(left) + parseFloat(right));
@@ -67,7 +66,7 @@ var Arithmetic = /** @class */ (function (_super) {
                                     this.value = String(parseFloat(left) + right.charCodeAt(0));
                                 break;
                             default:
-                                return new Exception("Semantic", "The type ".concat(this.exp2.get_type().toString(), " cannot be operated with type: INTEGER"), this.row, this.column);
+                                return new Exception("Semantic", "The type ".concat(this.exp2.get_type().toString(), " \n cannot be operated with type: INTEGER"), this.row, this.column);
                         }
                     }
                     else if (this.exp1.get_type() === type.CHAR) {
@@ -81,15 +80,16 @@ var Arithmetic = /** @class */ (function (_super) {
                                     this.value = String(parseInt(right) + left.charCodeAt(0)) :
                                     this.value = String(parseFloat(right) + left.charCodeAt(0));
                                 break;
-                            /*case type.STRING:
-                                this.type = type.STRING;
-                                this.value = left + right;
-                                break;*/
                             case type.CHAR:
                                 this.type = type.INT;
                                 this.value = String(left.charCodeAt() + right.charCodeAt());
                                 break;
                         }
+                    }
+                    else if (this.exp1.get_type() === type.STRING ||
+                        this.exp1.get_type() === type.BOOL ||
+                        this.exp1.get_type() === type.NULL) {
+                        return new Exception("Semantic", "The type ".concat(this.exp2.get_type().toString(), " \n cannot  be operated with type: ").concat(this.exp1.get_type().toString()), this.row, this.column);
                     }
             }
             switch (this.operator) {
@@ -112,7 +112,7 @@ var Arithmetic = /** @class */ (function (_super) {
                                 this.value = this.operation(parseInt(left), right.charCodeAt(0), this.operator);
                                 break;
                             default:
-                                return new Exception("Semantic", "The type ".concat(this.exp2.get_type().toString(), " cannot be operated with type: INTEGER"), this.row, this.column);
+                                return new Exception("Semantic", "The type ".concat(this.exp2.get_type().toString(), " \n cannot be operated with type: INTEGER"), this.row, this.column);
                         }
                     }
                     else if (this.exp1.get_type() === type.DOUBLE) {
@@ -125,7 +125,7 @@ var Arithmetic = /** @class */ (function (_super) {
                                 this.value = this.operation(parseInt(left), right.charCodeAt(0), this.operator);
                                 break;
                             default:
-                                return new Exception("Semantic", "The type ".concat(this.exp2.get_type().toString(), " cannot be operated with type: DOUBLE"), this.row, this.column);
+                                return new Exception("Semantic", "The type ".concat(this.exp2.get_type().toString(), " \n cannot be operated with type: DOUBLE"), this.row, this.column);
                         }
                     }
                     else if (this.exp1.get_type() === type.CHAR) {
@@ -140,7 +140,7 @@ var Arithmetic = /** @class */ (function (_super) {
                                 this.value = this.operation(left.charCodeAt(0), right.charCodeAt(0), this.operator);
                                 break;
                             default:
-                                return new Exception("Semantic", "The type ".concat(this.exp2.get_type().toString(), " cannot be operated with type: CHAR"), this.row, this.column);
+                                return new Exception("Semantic", "The type ".concat(this.exp2.get_type().toString(), " \n cannot be operated with type: CHAR"), this.row, this.column);
                         }
                     }
             }
@@ -160,7 +160,7 @@ var Arithmetic = /** @class */ (function (_super) {
                             this.value = String(-parseFloat(left));
                             break;
                         default:
-                            return new Exception("Semantic", "The type ".concat(this.exp2.get_type().toString(), " cannot be operated with operator -"), this.row, this.column);
+                            return new Exception("Semantic", "The type ".concat(this.exp2.get_type().toString(), " \n cannot be operated with operator -"), this.row, this.column);
                     }
                     break;
                 case Arithmetic_operator.INC:
@@ -174,7 +174,7 @@ var Arithmetic = /** @class */ (function (_super) {
                                 left = parseFloat(left);
                                 break;
                             default:
-                                return new Exception("Semantic", "The type: ".concat(this.exp1.get_type(), " cannot be operated whit operator: ").concat(this.operator), this.row, this.column);
+                                return new Exception("Semantic", "The type: ".concat(this.exp1.get_type(), " \n cannot be operated whit operator: ").concat(this.operator), this.row, this.column);
                         }
                         console.log(left);
                         if (this.operator === Arithmetic_operator.INC) {
