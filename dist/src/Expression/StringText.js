@@ -46,6 +46,8 @@ var StringText = /** @class */ (function (_super) {
                                 this.type = type.STRING;
                                 this.value = left.toString() + right.toString();
                             }
+                            else
+                                return new Exception("Semantic", "The type: ".concat(this.exp1.get_type(), " \n cannot be concatenated whit operator: ").concat(this.operator), this.row, this.column);
                             break;
                     }
                     if (this.exp1.get_type() == type.STRING) {

@@ -5,7 +5,7 @@
 /* Definición Léxica */
 %lex
 
-%options case-sensitive
+%options case-insensitive
 
 %%
 
@@ -21,7 +21,6 @@
 "boolean"           return 'RBOOLEAN';
 "char"              return 'RCHAR';
 "string"            return 'RSTRING';
-"null"              return 'RNULL';
 
 /* Conditional Structures */
 "if"                return 'RIF';
@@ -112,6 +111,9 @@
 /* Declaration and Assignment */
 "="                 return "EQUALSIGN";
 
+/* Ternary Operators */
+"?"                 return "VALUEIFTRUE";
+
 /* White Spaces */
 [ \r\t]+            {}
 \n                  {}
@@ -135,6 +137,7 @@
 	import { Primitive } from "./Expression/Primitive.js";
 	import { Identifier } from "./Expression/Identifier.js";
 	import { StringText } from "./Expression/StringText.js";
+	import { Ternary } from "./Expression/Ternary.js";
 	import { Declaration } from "./Instructions/Declaration.js"
 	import { Assignment } from "./Instructions/Assignment.js"
 	import { Print } from "./Instructions/Print.js";
@@ -156,7 +159,7 @@
 %left 'OR'
 %left 'AND'
 %right UNOT
-%nonassoc 'EQUALIZATIONSIGN' 'DIFFSIGN' 'LESSEQUAL' 'GREATEREQUAL' 'SMALLERTHAN' 'GREATERTHAN'
+%nonassoc 'EQUALIZATIONSIGN' 'DIFFSIGN' 'LESSEQUAL' 'GREATEREQUAL' 'SMALLERTHAN' 'GREATERTHAN', 'VALUEIFTRUE'
 %left 'PLUSSIGN' 'SUBSIGN', 'CONCAT'
 %left 'MULTSIGN' 'DIVSIGN' 'MODSIGN'
 %right UMENOS
@@ -187,6 +190,7 @@ instruction
 	| prod_loops                { $$ = $1; }
 	| prod_switch               { $$ = $1; }
 	| transfer_prod ptcommP     { $$ = $1; }
+	| prod_ternary ptcommP      { $$ = $1; }
 	| functions                 { $$ = $1; }
 ;
 
@@ -220,7 +224,7 @@ inc_dec
 	| IDENTIFIER DECSIGN		{ $$ = new Inc_Dec(new Arithmetic(new Identifier($1, this._$.first_line, this._$.first_column), null, Arithmetic_operator.DEC, this._$.first_line, this._$.first_column), this._$.first_line, this._$.first_column); }
 ;
 
-/* Prods about If */
+/* Prods about if */
 prod_if
     : RIF PARLEFT expression PARRIGHT CURLYLEFT instructions CURLYRIGHT {
         $$ = new If($3, $6, null, null, @1.first_line, @1.first_column);
@@ -235,12 +239,6 @@ prod_if
         $$ = new If($3, [$5], null, null, @1.first_line, @1.first_column);
     }
 ;
-
-/*if_without_curly
-    : RIF PARLEFT expression PARRIGHT instructions {
-        $$ = new If($3, $6, null, null, @1.first_line, @1.first_column);
-    }
-;*/
 
 /* Loops Prods */
 prod_loops
@@ -327,16 +325,17 @@ for_step
     | assignment    { $$ = $1; }
 ;
 
-/* Prods about Functions */
-functions
-    : func_main       { $$ = $1; }
-    | type IDENTIFIER PARLEFT PARRIGHT CURLYLEFT instructions CURLYRIGHT {
-        $$ = new Function($1, $2, [], $6, @1.first_line, @1.first_column);
+/* Ternary Prod */
+prod_ternary
+    : PARLEFT expression PARRIGHT VALUEIFTRUE expression TWOPOINTS expression {
+        $$ = new Ternary($2, $5, $7, @1.first_line, @1.first_column);
     }
 ;
 
-func_main
-    :
+functions
+    : type IDENTIFIER PARLEFT PARRIGHT CURLYLEFT instructions CURLYRIGHT {
+        $$ = new Function($1, $2, [], $6, @1.first_line, @1.first_column);
+    }
 ;
 
 type
@@ -367,14 +366,16 @@ expression
 	| expression CONCAT expression          { $$ = new StringText($1, $3, String_operator.CONCAT, @1.first_line, @1.first_column); }
 	| expression AND expression				{ $$ = new Logical($1, $3, Logical_operator.AND, @1.first_line, @1.first_column); }
 	| expression OR expression				{ $$ = new Logical($1, $3, Logical_operator.OR, @1.first_line, @1.first_column); }
-	| NOT expression %prec UNOT				{ $$ = new Logical($1, $3, Logical_operator.NOT, @1.first_line, @1.first_column); }
+	| NOT expression %prec UNOT				{ $$ = new Logical($2, null, Logical_operator.NOT, @1.first_line, @1.first_column); }
 	| INTEGER                               { $$ = new Primitive($1, type.INT, @1.first_line, @1.first_column); }
 	| DOUBLE                                { $$ = new Primitive($1, type.DOUBLE, @1.first_line, @1.first_column) }
 	| STRING                                { $$ = new Primitive($1, type.STRING, @1.first_line, @1.first_column); }
 	| CHAR									{ $$ = new Primitive($1, type.CHAR, @1.first_line, @1.first_column); }
 	| boolean								{ $$ = new Primitive($1, type.BOOL, @1.first_line, @1.first_column); }
+	| VOID                                  { $$ = new Primitive($1, type.VOID, @1.first_line, @1.first_column); }
 	| IDENTIFIER							{ $$ = new Identifier($1, @1.first_line, @1.first_column); }
 	| PARLEFT expression PARRIGHT           { $$ = $2; }
+	| prod_ternary                          { $$ = $1; }
 ;
 
 boolean

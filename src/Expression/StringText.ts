@@ -43,7 +43,8 @@ export class StringText extends Instruction {
                             if ( this.exp2.get_type() == type.STRING ) {
                                 this.type = type.STRING;
                                 this.value = left.toString() + right.toString();
-                            }
+                            } else
+                                return new Exception("Semantic", `The type: ${this.exp1.get_type()} \n cannot be concatenated whit operator: ${this.operator}`, this.row, this.column);
                             break;
                     }
 

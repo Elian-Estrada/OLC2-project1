@@ -27,6 +27,14 @@ function updateCodeMirror(data) {
 }
 // @ts-ignore
 btnAnalyze.addEventListener('click', function () {
+    codeToAnalyze();
+});
+window.addEventListener('keydown', function (e) {
+    if (e.ctrlKey && e.key == "Enter") {
+        codeToAnalyze();
+    }
+});
+function codeToAnalyze() {
     bufferStream = myCodeMirror.getValue();
     // console.log(bufferStream);
     var main = new Main();
@@ -34,4 +42,4 @@ btnAnalyze.addEventListener('click', function () {
     // @ts-ignore
     var res = main.lexicalAnalysis(bufferStream);
     updateCodeMirror(res);
-});
+}

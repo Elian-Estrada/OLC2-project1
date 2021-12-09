@@ -38,6 +38,16 @@ function updateCodeMirror(data: string){
 
 // @ts-ignore
 btnAnalyze.addEventListener('click', () => {
+    codeToAnalyze();
+});
+
+window.addEventListener('keydown', (e) => {
+    if ( e.ctrlKey && e.key == "Enter" ) {
+        codeToAnalyze();
+    }
+})
+
+function codeToAnalyze() {
     bufferStream = myCodeMirror.getValue();
     // console.log(bufferStream);
     let main = new Main();
@@ -45,4 +55,4 @@ btnAnalyze.addEventListener('click', () => {
     // @ts-ignore
     let res: string = main.lexicalAnalysis(bufferStream);
     updateCodeMirror(res);
-});
+}
