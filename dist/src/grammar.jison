@@ -1,5 +1,5 @@
 /**
- * Ejemplo mi primer proyecto con Jison utilizando Nodejs en Ubuntu
+ * Jison Compiler
  */
 
 /* Definición Léxica */
@@ -126,7 +126,7 @@
 
 <<EOF>>                 return 'EOF';
 
-.                       { console.error('Este es un error léxico: ' + yytext + ', en la linea: ' + yylloc.first_line + ', en la columna: ' + yylloc.first_column); }
+.                        { errors.push(new Exception("Lexical", `Lexical error ${yytext}`, yylloc.first_line, yylloc.first_column)); }
 /lex
 
 %{
@@ -153,6 +153,11 @@
 	import { ForIn } from "./Instructions/ForIn.js";
 	import { DoWhile } from "./Instructions/DoWhile.js";
 	import { Function } from "./Instructions/Function.js";
+	import Exception from "./SymbolTable/Exception.js";
+%}
+
+%{
+    let errors = [];
 %}
 
 /* Operators Precedence */
@@ -178,7 +183,7 @@ ini
 instructions
 	: instructions instruction          { $1.push($2); $$ = $1; }
 	| instruction                       { $$ = [$1]; }
-	| error { console.error('Este es un error sintáctico: [' + yytext + '] en la linea: ' + this._$.first_line + ', en la columna: ' + this._$.first_column); }
+	| error ptcommP                     { errors.push(new Exception("Sintactic", `Sintactic error ${yytext}`, this._$.first_line, this._$.first_column)); }
 ;
 
 instruction
