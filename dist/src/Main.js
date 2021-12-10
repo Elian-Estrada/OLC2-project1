@@ -1,5 +1,7 @@
 // @ts-ignore
 import { grammar } from "./grammar.js";
+// @ts-ignore
+import { errors } from "./grammar.js";
 import Tree from "./SymbolTable/Tree.js";
 import SymbolTable from "./SymbolTable/SymbolTable.js";
 import Exception from "./SymbolTable/Exception.js";
@@ -9,19 +11,34 @@ var Main = /** @class */ (function () {
     Main.prototype.lexicalAnalysis = function (bufferStream) {
         console.log("Analizando ".concat(bufferStream));
         // @ts-ignore
-        //return grammar.parse(bufferStream);
         var instructions;
         instructions = grammar.parse(bufferStream);
+        // console.log(instructions)
         var tree = new Tree(instructions);
         var global_table = new SymbolTable(undefined, undefined);
         tree.set_global_table(global_table);
-        for (var _i = 0, _a = tree.get_instructions(); _i < _a.length; _i++) {
-            var instruction = _a[_i];
-            var result = instruction.interpret(tree, global_table);
-            console.log(result);
-            if (result instanceof Exception) {
-                tree.get_errors().push(result);
-                tree.update_console(result.toString());
+        // console.log(errors);
+        for (var _i = 0, errors_1 = errors; _i < errors_1.length; _i++) {
+            var error = errors_1[_i];
+            // @ts-ignore
+            // console.log(error);
+            tree.get_errors().push(error);
+            tree.update_console(error.toString());
+        }
+        // @ts-ignore
+        if (tree.get_instructions() != ';') {
+            try {
+                for (var _a = 0, _b = tree.get_instructions(); _a < _b.length; _a++) {
+                    var instruction = _b[_a];
+                    var result = instruction.interpret(tree, global_table);
+                    if (result instanceof Exception) {
+                        tree.get_errors().push(result);
+                        tree.update_console(result.toString());
+                    }
+                }
+            }
+            catch (e) {
+                return e;
             }
         }
         console.log(tree.get_instructions());

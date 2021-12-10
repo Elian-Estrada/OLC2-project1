@@ -42,10 +42,13 @@ var StringText = /** @class */ (function (_super) {
                         case type.DOUBLE:
                         case type.BOOL:
                         case type.CHAR:
+                        case type.NULL:
                             if (this.exp2.get_type() == type.STRING) {
                                 this.type = type.STRING;
                                 this.value = left.toString() + right.toString();
                             }
+                            else
+                                return new Exception("Semantic", "The type: ".concat(this.exp1.get_type(), " \n cannot be concatenated whit type: ").concat(this.exp2.get_type()), this.row, this.column);
                             break;
                     }
                     if (this.exp1.get_type() == type.STRING) {
@@ -55,6 +58,7 @@ var StringText = /** @class */ (function (_super) {
                             case type.BOOL:
                             case type.CHAR:
                             case type.STRING:
+                            case type.NULL:
                                 this.type = type.STRING;
                                 this.value = left.toString() + right.toString();
                                 break;
