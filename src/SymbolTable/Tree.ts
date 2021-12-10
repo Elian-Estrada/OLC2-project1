@@ -1,6 +1,7 @@
 import { Instruction } from "../Abstract/Instruction.js";
 import Exception from "./Exception.js";
 import SymbolTable from "./SymbolTable.js";
+import {Function} from "../Instructions/Function";
 
 export default class Tree {
 
@@ -8,11 +9,13 @@ export default class Tree {
     private errors: Array<Exception>;
     private console: String;
     private global_table: SymbolTable|undefined;
+    private functions: Array<Function>;
 
     constructor(instructions: Array<Instruction>){
         this.instructions = instructions;
         this.console = "";
         this.errors = [];
+        this.functions = [];
     }
 
     public set_instructions(instructions: Array<Instruction>){
@@ -43,4 +46,11 @@ export default class Tree {
         return this.global_table;
     }
 
+    public get_function(name: string) {
+        for ( let item of this.functions ) {
+            if ( item.get_name() == name )
+                return item;
+            return null;
+        }
+    }
 }

@@ -157,6 +157,7 @@
 	import { ForIn } from "./Instructions/ForIn.js";
 	import { DoWhile } from "./Instructions/DoWhile.js";
 	import { Function } from "./Instructions/Function.js";
+	import { Call } from "./Instructions/Call.js";
 	import Exception from "./SymbolTable/Exception.js";
 %}
 
@@ -207,6 +208,7 @@ instruction
 	| transfer_prod ptcommP     { $$ = $1; }
 	| prod_ternary ptcommP      { $$ = $1; }
 	| functions                 { $$ = $1; }
+	| call_function ptcommP     { $$ = $1; }
 ;
 
 ptcommP
@@ -381,9 +383,48 @@ prod_ternary
     }
 ;
 
+/* Prods about Functions and Calls to Functions */
 functions
     : type IDENTIFIER PARLEFT PARRIGHT CURLYLEFT instructions CURLYRIGHT {
         $$ = new Function($1, $2, [], $6, @1.first_line, @1.first_column);
+    }
+    | type IDENTIFIER PARLEFT list_params PARRIGHT CURLYLEFT instructions CURLYRIGHT {
+        $$ = new Function($1, $2, $4, $6, @1.first_line, @1.first_column);
+    }
+;
+
+list_params
+    : list_params COMMASIGN params {
+        $1.push($3);
+        $$ = $1;
+    }
+    | params { $$ = [$1]; }
+;
+
+call_function
+    : IDENTIFIER PARLEFT PARRIGHT {
+        $$ = new Call($1, [], @1.first_line, @1.first_column);
+    }
+    | IDENTIFIER PARLEFT list_params_call PARRIGHT {
+        $$ = new Call($1, $3, @1.first_line, @1.first_column);
+    }
+;
+
+list_params_call
+    : list_params_call COMMASIGN params_call {
+        $1.push($3);
+        $$ = $1;
+    }
+    | params_call { $$ = [$1]; }
+;
+
+params_call
+    : expression { $$ = $1; }
+;
+
+params
+    : type IDENTIFIER {
+        $$ = { type: $1, name: $2 };
     }
 ;
 

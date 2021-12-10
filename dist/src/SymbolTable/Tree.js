@@ -3,6 +3,7 @@ var Tree = /** @class */ (function () {
         this.instructions = instructions;
         this.console = "";
         this.errors = [];
+        this.functions = [];
     }
     Tree.prototype.set_instructions = function (instructions) {
         this.instructions = instructions;
@@ -25,6 +26,14 @@ var Tree = /** @class */ (function () {
     };
     Tree.prototype.get_global_table = function () {
         return this.global_table;
+    };
+    Tree.prototype.get_function = function (name) {
+        for (var _i = 0, _a = this.functions; _i < _a.length; _i++) {
+            var item = _a[_i];
+            if (item.get_name() == name)
+                return item;
+            return null;
+        }
     };
     return Tree;
 }());
