@@ -1,7 +1,5 @@
 // @ts-ignore
-import {grammar} from "./grammar.js";
-// @ts-ignore
-import { errors } from "./grammar.js";
+import { grammar, errors, clean_errors } from "./grammar.js";
 import { Instruction } from "./Abstract/Instruction.js";
 import Tree from "./SymbolTable/Tree.js";
 import SymbolTable from "./SymbolTable/SymbolTable.js";
@@ -13,6 +11,9 @@ export class Main {
         // @ts-ignore
 
         let instructions: Array<Instruction>;
+        
+        clean_errors();
+
         instructions = grammar.parse(bufferStream);
         // console.log(instructions)
         
@@ -20,7 +21,6 @@ export class Main {
         let global_table: SymbolTable = new SymbolTable(undefined, undefined);
 
         tree.set_global_table(global_table);
-        // console.log(errors);
 
         for ( let error of errors ) {
             // @ts-ignore

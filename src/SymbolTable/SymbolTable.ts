@@ -2,6 +2,8 @@ import Exception from "./Exception.js";
 import Symbol from "./Symbol.js";
 import {type} from './Type.js';
 
+export let variables = [];
+
 export default class SymbolTable {
 
     private name: String;

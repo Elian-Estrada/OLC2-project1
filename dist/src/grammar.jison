@@ -162,6 +162,10 @@
 
 %{
     let errors = [];
+
+	function get_errors(){
+		return errors;
+	}
 %}
 
 /* Operators Precedence */

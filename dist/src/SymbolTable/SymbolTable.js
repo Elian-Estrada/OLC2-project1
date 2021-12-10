@@ -1,4 +1,5 @@
 import Exception from "./Exception.js";
+export var variables = [];
 var SymbolTable = /** @class */ (function () {
     function SymbolTable(prev, name) {
         if (name === void 0) { name = "Global"; }
