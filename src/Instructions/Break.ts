@@ -9,7 +9,6 @@ export class Break extends Instruction {
     }
 
     public interpret(tree: Tree, table: SymbolTable) {
-        // console.log("Hola")
         return this;
     }
 }

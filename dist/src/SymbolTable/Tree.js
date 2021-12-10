@@ -42,6 +42,9 @@ var Tree = /** @class */ (function () {
     Tree.prototype.get_symbol_table = function () {
         return this.symbol_table;
     };
+    Tree.prototype.add_function = function (name) {
+        this.functions.push(name);
+    };
     return Tree;
 }());
 export default Tree;

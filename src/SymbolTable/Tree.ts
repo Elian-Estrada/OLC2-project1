@@ -63,4 +63,8 @@ export default class Tree {
     public get_symbol_table() {
         return this.symbol_table;
     }
+
+    public add_function (name: Function) {
+        this.functions.push(name);
+    }
 }

@@ -20,7 +20,6 @@ var Break = /** @class */ (function (_super) {
         return _super.call(this, row, col) || this;
     }
     Break.prototype.interpret = function (tree, table) {
-        // console.log("Hola")
         return this;
     };
     return Break;
