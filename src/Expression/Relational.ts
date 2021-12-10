@@ -87,7 +87,7 @@ export class Relational extends Instruction{
                         case type.BOOL:
                             switch(this.exp2.get_type()){
                                 case type.BOOL:
-                                    return this.to_lower(left, right, this.operator);
+                                    return this.to_lower(JSON.parse(left), JSON.parse(right), this.operator);
                                 default:
                                     return new Exception("Semantic", `The type: ${this.exp2.get_type()} cannot be operated whit type: ${type.BOOL}`, this.row, this.column);
                             }
@@ -145,6 +145,8 @@ export class Relational extends Instruction{
 
         switch(operator){
             case Relational_operator.EQUAL:
+                console.log(op1, op2);
+                
                 this.value = String(op1 == op2).toLowerCase();
                 return this.value
             case Relational_operator.UNEQUAL:

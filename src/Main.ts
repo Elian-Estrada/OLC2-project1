@@ -9,7 +9,7 @@ import Exception from "./SymbolTable/Exception.js";
 
 export class Main {
     lexicalAnalysis(bufferStream: string) {
-        console.log(`Analizando ${bufferStream}`);
+        //console.log(`Analizando ${bufferStream}`);
         // @ts-ignore
 
         let instructions: Array<Instruction>;
@@ -48,6 +48,7 @@ export class Main {
         console.log(tree.get_instructions());
         console.log(tree.get_global_table());
         console.log(tree.get_errors());
+        
         
         return tree.get_console();
         // console.log(res);

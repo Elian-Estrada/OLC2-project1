@@ -66,6 +66,7 @@
 ":"                 return 'TWOPOINTS';
 ","					return 'COMMASIGN';
 "^"                 return 'REPETITIONSIGN';
+"#"					return 'COPY';
 
 /* Grouping Signs  */
 "("                 return 'PARLEFT';
@@ -138,7 +139,10 @@
 	import { Identifier } from "./Expression/Identifier.js";
 	import { StringText } from "./Expression/StringText.js";
 	import { Ternary } from "./Expression/Ternary.js";
+	import { Access_array } from "./Expression/Access_array.js"
+
 	import { Declaration } from "./Instructions/Declaration.js"
+	import { Declaration_array } from "./Instructions/Declaration_array.js"
 	import { Assignment } from "./Instructions/Assignment.js"
 	import { Print } from "./Instructions/Print.js";
 	import { Inc_Dec } from "./Instructions/Inc_Dec.js";
@@ -189,6 +193,8 @@ instructions
 instruction
     : declaration ptcommP 		{ $$ = $1; }
 	| assignment ptcommP		{ $$ = $1; }
+	| declaration_array ptcommP { $$ = $1; }
+	| assignment_array ptcommP	{ $$ = $1; }
 	| prod_print ptcommP 		{ $$ = $1; }
 	| inc_dec ptcommP			{ $$ = $1; }
 	| prod_if                   { $$ = $1; }
@@ -215,6 +221,40 @@ list_id
 
 assignment
 	: IDENTIFIER EQUALSIGN expression 	{ $$ = new Assignment($1, $3, this._$.first_line, this._$.first_column); }
+;
+
+declaration_array
+	: type BRACKETLEFT BRACKETRIGHT IDENTIFIER EQUALSIGN values_array		{ $$ = new Declaration_array($4, $1, null, $6, this._$.first_line, this._$.first_column); }
+	| type BRACKETLEFT BRACKETRIGHT IDENTIFIER EQUALSIGN IDENTIFIER			{ $$ = new Declaration_array($4, $1, new Identifier($6, this._$.first_line, this._$.first_column), [], this._$.first_line, this._$.first_column); }
+	| type BRACKETLEFT BRACKETRIGHT IDENTIFIER EQUALSIGN COPY IDENTIFIER	{ $$ = new Declaration_array($4, $1, new Identifier($7, this._$.first_line, this._$.first_column), [], this._$.first_line, this._$.first_column, false); }
+;
+
+values_array
+	: BRACKETLEFT list_values_array BRACKETRIGHT	{ $$ = $2; }
+	| BRACKETLEFT BRACKETRIGHT						{ $$ = []; }
+;
+
+list_values_array
+	: list_values_array COMMASIGN values	{ $1.push($3); $$ = $1;}
+	| values								{ $$ = [$1]; }
+;
+
+values
+	: expression		{ $$ = $1; }
+	| values_array		{ $$ = $1; }
+;
+
+assignment_array
+	: IDENTIFIER list_brackets EQUALSIGN expression 	{ $$ = new Access_array(new Identifier($1, this._$.first_line, this._$.first_column), $2, $4, this._$.first_line, this._$.first_column); }
+;
+
+list_brackets
+	: list_brackets brackets				{ $1.push($2); $$ = $1; }
+	| brackets								{ $$ = [$1]; }
+;
+
+brackets
+	: BRACKETLEFT expression BRACKETRIGHT	{ $$ = $2; }
 ;
 
 prod_print
@@ -379,6 +419,7 @@ expression
 	| boolean								{ $$ = new Primitive($1, type.BOOL, @1.first_line, @1.first_column); }
 	| VOID                                  { $$ = new Primitive($1, type.VOID, @1.first_line, @1.first_column); }
 	| RNULL                                 { $$ = new Primitive($1, type.NULL, @1.first_line, @1.first_column); }
+	| IDENTIFIER list_brackets				{ $$ = new Access_array(new Identifier($1, this._$.first_line, this._$.first_column), $2, null, this._$.first_line, this._$.first_column); }
 	| IDENTIFIER							{ $$ = new Identifier($1, @1.first_line, @1.first_column); }
 	| PARLEFT expression PARRIGHT           { $$ = $2; }
 	| prod_ternary                          { $$ = $1; }

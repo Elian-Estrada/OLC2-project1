@@ -9,7 +9,7 @@ var Main = /** @class */ (function () {
     function Main() {
     }
     Main.prototype.lexicalAnalysis = function (bufferStream) {
-        console.log("Analizando ".concat(bufferStream));
+        //console.log(`Analizando ${bufferStream}`);
         // @ts-ignore
         var instructions;
         instructions = grammar.parse(bufferStream);
