@@ -4,6 +4,7 @@ var Tree = /** @class */ (function () {
         this.console = "";
         this.errors = [];
         this.functions = [];
+        this.symbol_table = null;
     }
     Tree.prototype.set_instructions = function (instructions) {
         this.instructions = instructions;
@@ -34,6 +35,12 @@ var Tree = /** @class */ (function () {
                 return item;
             return null;
         }
+    };
+    Tree.prototype.set_symbol_table = function (symbol_table) {
+        this.symbol_table = symbol_table;
+    };
+    Tree.prototype.get_symbol_table = function () {
+        return this.symbol_table;
     };
     return Tree;
 }());

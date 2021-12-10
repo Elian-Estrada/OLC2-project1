@@ -15,10 +15,10 @@ var __extends = (this && this.__extends) || (function () {
 })();
 import { Instruction } from "../Abstract/Instruction.js";
 import SymbolTable from "../SymbolTable/SymbolTable.js";
-import Exception from "../SymbolTable/Exception";
-import { Function } from "./Function";
-import { Continue } from "./Continue";
-import { Break } from "./Break";
+import Exception from "../SymbolTable/Exception.js";
+import { Function } from "./Function.js";
+import { Continue } from "./Continue.js";
+import { Break } from "./Break.js";
 var MainInstruction = /** @class */ (function (_super) {
     __extends(MainInstruction, _super);
     function MainInstruction(instructions, row, col) {
@@ -28,6 +28,7 @@ var MainInstruction = /** @class */ (function (_super) {
     }
     MainInstruction.prototype.interpret = function (tree, table) {
         var new_table = new SymbolTable(table, "Method_Main");
+        tree.set_symbol_table(new_table);
         for (var _i = 0, _a = this.instructions; _i < _a.length; _i++) {
             var item = _a[_i];
             if (item instanceof Function) {
@@ -36,6 +37,8 @@ var MainInstruction = /** @class */ (function (_super) {
                 tree.update_console(error.toString());
             }
             var instruction = item.interpret(tree, new_table);
+            if (instruction == undefined)
+                return;
             if (instruction instanceof Exception) {
                 var error = new Exception("Semantic", "The instruction Continue is loop instruction", item.row, item.column);
                 tree.get_errors().push(error);

@@ -56,6 +56,7 @@
 "tan"               return 'RTAN';
 "print"             return 'RPRINT';
 "println"           return 'RPRINTLN';
+"main"              return 'RMAIN';
 
 /* Boolean's values */
 "true"				return 'RTRUE';
@@ -159,6 +160,7 @@
 	import { Function } from "./Instructions/Function.js";
 	import { Call } from "./Instructions/Call.js";
 	import Exception from "./SymbolTable/Exception.js";
+	import {MainInstruction} from "./Instructions/MainInstruction.js";
 %}
 
 %{
@@ -385,6 +387,17 @@ prod_ternary
 
 /* Prods about Functions and Calls to Functions */
 functions
+    : function_main     { $$ = $1; }
+    | function_general  { $$ = $1; }
+;
+
+function_main
+    : RVOID RMAIN PARLEFT PARRIGHT CURLYLEFT instructions CURLYRIGHT {
+        $$ = new MainInstruction($6, @1.first_line, @1.first_column);
+    }
+;
+
+function_general
     : type IDENTIFIER PARLEFT PARRIGHT CURLYLEFT instructions CURLYRIGHT {
         $$ = new Function($1, $2, [], $6, @1.first_line, @1.first_column);
     }

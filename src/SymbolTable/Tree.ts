@@ -10,12 +10,14 @@ export default class Tree {
     private console: String;
     private global_table: SymbolTable|undefined;
     private functions: Array<Function>;
+    private symbol_table: SymbolTable | null;
 
     constructor(instructions: Array<Instruction>){
         this.instructions = instructions;
         this.console = "";
         this.errors = [];
         this.functions = [];
+        this.symbol_table = null;
     }
 
     public set_instructions(instructions: Array<Instruction>){
@@ -52,5 +54,13 @@ export default class Tree {
                 return item;
             return null;
         }
+    }
+
+    public set_symbol_table(symbol_table: SymbolTable) {
+        this.symbol_table = symbol_table;
+    }
+
+    public get_symbol_table() {
+        return this.symbol_table;
     }
 }
