@@ -13,6 +13,17 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 import { Instruction } from "../Abstract/Instruction.js";
 import Exception from "../SymbolTable/Exception.js";
 import Symbol from "../SymbolTable/Symbol.js";
@@ -58,6 +69,13 @@ var Declaration_array = /** @class */ (function (_super) {
             }
             else {
                 value = JSON.parse(JSON.stringify(array));
+                value = __assign(__assign({}, value), { get_type: function () {
+                        return this.type_array;
+                    }, get_value: function () {
+                        return this.value;
+                    }, set_value: function (value) {
+                        this.value = value;
+                    } });
             }
             symbol = new Symbol(this.id, this.type, this.row, this.column, value);
         }

@@ -66,6 +66,17 @@ export class Declaration_array extends Instruction {
                 value = array;
             }else {
                 value = JSON.parse(JSON.stringify(array));
+                value = {...value,
+                    get_type(): any{
+                        return this.type_array;
+                    },
+                    get_value(): any{
+                        return this.value;
+                    },
+                    set_value(value: Array<any>){
+                        this.value = value;
+                    }
+                };
             }
 
             symbol = new Symbol(this.id, this.type, this.row, this.column, value);

@@ -37,12 +37,15 @@ var MainInstruction = /** @class */ (function (_super) {
                 tree.update_console(error.toString());
             }
             var instruction = item.interpret(tree, new_table);
-            if (instruction == undefined)
-                return;
+            console.log(instruction);
+            // if ( instruction === undefined ){
+            //     console.log("entro");    
+            //     return;
+            // }
             if (instruction instanceof Exception) {
-                var error = new Exception("Semantic", "The instruction Continue is loop instruction", item.row, item.column);
-                tree.get_errors().push(error);
-                tree.update_console(error.toString());
+                //let error = new Exception("Semantic", "The instruction Continue is loop instruction", item.row, item.column);
+                tree.get_errors().push(instruction);
+                tree.update_console(instruction.toString());
             }
             if (instruction instanceof Break) {
                 var error = new Exception("Semantic", "The instruction Break is loop instruction", item.row, item.column);

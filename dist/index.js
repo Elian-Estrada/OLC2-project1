@@ -1,14 +1,16 @@
 import { Main } from "./src/Main.js";
 var btnAnalyze = document.getElementById('btnAnalyze');
 var bufferStream;
+var myCodeMirror;
 // @ts-ignore
-var myCodeMirror = CodeMirror.fromTextArea(document.getElementById("code"), {
+myCodeMirror = CodeMirror.fromTextArea(document.getElementById("code"), {
     lineNumbers: true,
     styleActivateLine: true,
     matchBrackets: true,
     theme: "moxer",
     mode: "text/x-java",
 });
+myCodeMirror.setValue("void Main(){\n\treturn;\n}");
 // @ts-ignore
 var myCodeMirror2 = CodeMirror.fromTextArea(document.getElementById("pythonConsole"), {
     lineNumbers: false,
