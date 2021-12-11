@@ -102,7 +102,7 @@ export class Declaration_array extends Instruction {
             let value = list_expression.interpret(tree, table);
 
             if (this.type_array !== list_expression.get_type()){
-                return new Exception("Semantic", `The type: ${list_expression.get_type()} cannot assignet at array of type: ${this.type_array}`, this.row, this.column);
+                return new Exception("Semantic", `The type: ${list_expression.get_type()} cannot assignet at array of type: ${this.type_array}`, list_expression.row, list_expression.column);
             }
 
             switch(list_expression.get_type()){

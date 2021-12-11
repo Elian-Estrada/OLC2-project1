@@ -295,7 +295,7 @@ prod_if
 prod_loops
     : prod_while    { $$ = $1; }
     | for_prod      { $$ = $1; }
-    | do_prod     { $$ = $1; }
+    | do_prod     	{ $$ = $1; }
 ;
 
 /* Prods about While */
@@ -405,6 +405,9 @@ attribute
 	| type BRACKETLEFT BRACKETRIGHT IDENTIFIER	{ $$ = { "type": type.ARRAY, "sub_type": $1, "id": $4, "value": []}; }
 ;
 
+instance_struct
+	: IDENTIFIER PARLEFT 
+;
 
 type
     : RINT 		{ $$ = type.INT; }
@@ -444,6 +447,7 @@ expression
 	| RNULL                                 { $$ = new Primitive($1, type.NULL, @1.first_line, @1.first_column); }
 	| IDENTIFIER list_brackets				{ $$ = new Access_array(new Identifier($1, this._$.first_line, this._$.first_column), $2, null, this._$.first_line, this._$.first_column); }
 	| IDENTIFIER							{ $$ = new Identifier($1, @1.first_line, @1.first_column); }
+	| instance_struct						{ $$ = $1; }
 	| PARLEFT expression PARRIGHT           { $$ = $2; }
 	| prod_ternary                          { $$ = $1; }
 ;
