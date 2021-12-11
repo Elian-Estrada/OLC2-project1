@@ -158,13 +158,14 @@
 	import { DoWhile } from "./Instructions/DoWhile.js";
 	import { Function } from "./Instructions/Function.js";
 	import Exception from "./SymbolTable/Exception.js";
+	import { Struct } from "./Instructions/Struct.js";
 %}
 
 %{
     let errors = [];
 
-	function get_errors(){
-		return errors;
+	function clean_errors(){
+		errors = [];
 	}
 %}
 
@@ -191,7 +192,6 @@ ini
 instructions
 	: instructions instruction          { $1.push($2); $$ = $1; }
 	| instruction                       { $$ = [$1]; }
-	| error ptcommP                     { errors.push(new Exception("Sintactic", `Sintactic error ${yytext}`, this._$.first_line, this._$.first_column)); }
 ;
 
 instruction
@@ -207,6 +207,8 @@ instruction
 	| transfer_prod ptcommP     { $$ = $1; }
 	| prod_ternary ptcommP      { $$ = $1; }
 	| functions                 { $$ = $1; }
+	| struct ptcommP			{ $$ = $1; }
+	| error ptcommP                     { errors.push(new Exception("Sintactic", `Sintactic error ${yytext}`, this._$.first_line, this._$.first_column)); }
 ;
 
 ptcommP
@@ -387,8 +389,25 @@ functions
     }
 ;
 
+
+struct
+	: RSTRUCT IDENTIFIER CURLYLEFT attribute_list CURLYRIGHT		{ $$ = new Struct($2, $4, this._$.first_line, this._$.first_column); }
+;
+
+attribute_list
+	: attribute_list COMMASIGN attribute		{ $1.push($3); $$ = $1; }
+	| attribute									{ $$ = [$1]; }
+;
+
+attribute
+	: type IDENTIFIER							{ $$ = { "type": $1, "id": $2, "value": "null" }; }
+	| IDENTIFIER IDENTIFIER						{ $$ = { "type": type.STRUCT, "struct": $1, "id": $2, "value": "null"}; }
+	| type BRACKETLEFT BRACKETRIGHT IDENTIFIER	{ $$ = { "type": type.ARRAY, "sub_type": $1, "id": $4, "value": []}; }
+;
+
+
 type
-    : RINT 	{ $$ = type.INT; }
+    : RINT 		{ $$ = type.INT; }
     | RDOUBLE 	{ $$ = type.DOUBLE; }
     | RBOOLEAN 	{ $$ = type.BOOL; }
     | RCHAR 	{ $$ = type.CHAR; }

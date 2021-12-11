@@ -52,6 +52,9 @@ export class Declaration extends Instruction {
                 case type.BOOL:
                     value = "false";
                     break;
+                case type.STRUCT:
+                    value = "null";
+                    break;
             }
         }
 

@@ -48,6 +48,8 @@ export class Main {
         console.log(tree.get_instructions());
         console.log(tree.get_global_table());
         console.log(tree.get_errors());
+        console.log(tree.get_all_structs());
+        
         
         
         return tree.get_console();
