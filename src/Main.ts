@@ -11,6 +11,7 @@ import {Break} from "./Instructions/Break.js";
 import {Continue} from "./Instructions/Continue.js";
 import {Return} from "./Instructions/Return.js";
 import {MainInstruction} from "./Instructions/MainInstruction.js";
+import { Struct } from "./Instructions/Struct.js";
 
 export class Main {
     lexicalAnalysis(bufferStream: string) {
@@ -45,6 +46,16 @@ export class Main {
                     // console.log(instruction)
                     if ( instruction instanceof Function )
                         tree.add_function(instruction);
+
+                    if ( instruction instanceof Struct){
+                        let value:any = instruction.interpret(tree, global_table);
+
+                        if (value instanceof Exception){
+                            tree.get_errors().push(value);
+                            tree.update_console(value.toString());
+                            continue;
+                        }
+                    }
 
                     if ( instruction instanceof Declaration ||
                         instruction instanceof Assignment ) {
@@ -124,7 +135,7 @@ export class Main {
                 /* Fourth run for instruction outside main */
                 for ( let instruction of tree.get_instructions() ) {
                     if ( !(instruction instanceof MainInstruction || instruction instanceof Declaration
-                        || instruction instanceof Assignment || instruction instanceof Function) ) {
+                        || instruction instanceof Assignment || instruction instanceof Function || instruction instanceof Struct) ) {
                         let error = new Exception("Semantic", "Instruction outside main", instruction.row, instruction.column);
                         tree.get_errors().push(error);
                         tree.update_console(error.toString());

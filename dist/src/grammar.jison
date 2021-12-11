@@ -141,7 +141,6 @@
 	import { StringText } from "./Expression/StringText.js";
 	import { Ternary } from "./Expression/Ternary.js";
 	import { Access_array } from "./Expression/Access_array.js"
-	import { Instance_struct } from "./Expression/Instance_struct.js"
 
 	import { Declaration } from "./Instructions/Declaration.js"
 	import { Declaration_array } from "./Instructions/Declaration_array.js"
@@ -435,7 +434,8 @@ list_params_call
 ;
 
 params_call
-    : expression { $$ = $1; }
+    : expression 	{ $$ = $1; }
+	| values_array	{ $$ = $1; }
 ;
 
 params
