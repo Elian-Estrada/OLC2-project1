@@ -1,4 +1,5 @@
 import { Instruction } from "../Abstract/Instruction.js";
+import { Struct } from "../Instructions/Struct.js";
 import Exception from "./Exception.js";
 import SymbolTable from "./SymbolTable.js";
 import {Function} from "../Instructions/Function";
@@ -11,6 +12,7 @@ export default class Tree {
     private global_table: SymbolTable|undefined;
     private functions: Array<Function>;
     private symbol_table: SymbolTable | null;
+    private structs: Array<Struct>;
 
     constructor(instructions: Array<Instruction>){
         this.instructions = instructions;
@@ -18,6 +20,7 @@ export default class Tree {
         this.errors = [];
         this.functions = [];
         this.symbol_table = null;
+        this.structs = [];
     }
 
     public set_instructions(instructions: Array<Instruction>){
@@ -67,4 +70,22 @@ export default class Tree {
     public add_function (name: Function) {
         this.functions.push(name);
     }
+    public get_struct(id: string){
+        for (let item of this.structs){
+            if (item.get_id() === id){
+                return item;
+            }
+        }
+
+        return null;
+    }
+
+    public get_all_structs(){
+        return this.structs;
+    }
+
+    public add_struct(struct: Struct){
+        this.structs.push(struct);
+    }
+
 }

@@ -5,6 +5,7 @@ var Tree = /** @class */ (function () {
         this.errors = [];
         this.functions = [];
         this.symbol_table = null;
+        this.structs = [];
     }
     Tree.prototype.set_instructions = function (instructions) {
         this.instructions = instructions;
@@ -44,6 +45,21 @@ var Tree = /** @class */ (function () {
     };
     Tree.prototype.add_function = function (name) {
         this.functions.push(name);
+    };
+    Tree.prototype.get_struct = function (id) {
+        for (var _i = 0, _a = this.structs; _i < _a.length; _i++) {
+            var item = _a[_i];
+            if (item.get_id() === id) {
+                return item;
+            }
+        }
+        return null;
+    };
+    Tree.prototype.get_all_structs = function () {
+        return this.structs;
+    };
+    Tree.prototype.add_struct = function (struct) {
+        this.structs.push(struct);
     };
     return Tree;
 }());

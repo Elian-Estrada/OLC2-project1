@@ -141,6 +141,7 @@
 	import { StringText } from "./Expression/StringText.js";
 	import { Ternary } from "./Expression/Ternary.js";
 	import { Access_array } from "./Expression/Access_array.js"
+	import { Instance_struct } from "./Expression/Instance_struct.js"
 
 	import { Declaration } from "./Instructions/Declaration.js"
 	import { Declaration_array } from "./Instructions/Declaration_array.js"
@@ -161,13 +162,14 @@
 	import { Call } from "./Instructions/Call.js";
 	import Exception from "./SymbolTable/Exception.js";
 	import {MainInstruction} from "./Instructions/MainInstruction.js";
+	import { Struct } from "./Instructions/Struct.js";
 %}
 
 %{
     let errors = [];
 
-	function get_errors(){
-		return errors;
+	function clean_errors(){
+		errors = [];
 	}
 %}
 
@@ -194,7 +196,6 @@ ini
 instructions
 	: instructions instruction          { $1.push($2); $$ = $1; }
 	| instruction                       { $$ = [$1]; }
-	| error ptcommP                     { errors.push(new Exception("Sintactic", `Sintactic error ${yytext}`, this._$.first_line, this._$.first_column)); }
 ;
 
 instruction
@@ -211,6 +212,8 @@ instruction
 	| prod_ternary ptcommP      { $$ = $1; }
 	| functions                 { $$ = $1; }
 	| call_function ptcommP     { $$ = $1; }
+	| struct ptcommP			{ $$ = $1; }
+	| error ptcommP                     { errors.push(new Exception("Sintactic", `Sintactic error ${yytext}`, this._$.first_line, this._$.first_column)); }
 ;
 
 ptcommP
@@ -297,7 +300,7 @@ prod_if
 prod_loops
     : prod_while    { $$ = $1; }
     | for_prod      { $$ = $1; }
-    | do_prod     { $$ = $1; }
+    | do_prod     	{ $$ = $1; }
 ;
 
 /* Prods about While */
@@ -441,8 +444,24 @@ params
     }
 ;
 
+
+struct
+	: RSTRUCT IDENTIFIER CURLYLEFT attribute_list CURLYRIGHT		{ $$ = new Struct($2, $4, this._$.first_line, this._$.first_column); }
+;
+
+attribute_list
+	: attribute_list COMMASIGN attribute		{ $1.push($3); $$ = $1; }
+	| attribute									{ $$ = [$1]; }
+;
+
+attribute
+	: type IDENTIFIER							{ $$ = { "type": $1, "id": $2, "value": "null" }; }
+	| IDENTIFIER IDENTIFIER						{ $$ = { "type": type.STRUCT, "struct": $1, "id": $2, "value": "null"}; }
+	| type BRACKETLEFT BRACKETRIGHT IDENTIFIER	{ $$ = { "type": type.ARRAY, "sub_type": $1, "id": $4, "value": []}; }
+;
+
 type
-    : RINT 	{ $$ = type.INT; }
+    : RINT 		{ $$ = type.INT; }
     | RDOUBLE 	{ $$ = type.DOUBLE; }
     | RBOOLEAN 	{ $$ = type.BOOL; }
     | RCHAR 	{ $$ = type.CHAR; }

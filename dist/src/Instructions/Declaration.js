@@ -56,6 +56,9 @@ var Declaration = /** @class */ (function (_super) {
                 case type.BOOL:
                     value = "false";
                     break;
+                case type.STRUCT:
+                    value = "null";
+                    break;
             }
         }
         var errors = [];

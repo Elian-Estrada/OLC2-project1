@@ -83,7 +83,7 @@ var Declaration_array = /** @class */ (function (_super) {
         else {
             var value = list_expression.interpret(tree, table);
             if (this.type_array !== list_expression.get_type()) {
-                return new Exception("Semantic", "The type: ".concat(list_expression.get_type(), " cannot assignet at array of type: ").concat(this.type_array), this.row, this.column);
+                return new Exception("Semantic", "The type: ".concat(list_expression.get_type(), " cannot assignet at array of type: ").concat(this.type_array), list_expression.row, list_expression.column);
             }
             switch (list_expression.get_type()) {
                 case type.INT:
