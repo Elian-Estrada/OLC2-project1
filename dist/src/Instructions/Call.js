@@ -53,6 +53,14 @@ var Call = /** @class */ (function (_super) {
                     var val_expression = expression.interpret(tree, table);
                     if (val_expression instanceof Error)
                         return val_expression;
+                    for (var _b = 0, _c = ob_function.get_params(); _b < _c.length; _b++) {
+                        var param = _c[_b];
+                        console.log(expression.get_type());
+                        if (expression.get_type() !== param.type) {
+                            return new Exception("Semantic", "Different type of parameter data", expression.row, expression.column);
+                        }
+                        break;
+                    }
                     var expr_to_valuate = String(ob_function.get_params()[count].name).toLowerCase();
                     var table_res = null;
                     /*switch (expr_to_valuate) {

@@ -31,7 +31,7 @@ export class Print extends Instruction {
             console.log("entra al print");
             
             //return new Exception("Semantic", "Don't print array", this.row, this.column);
-            console.log(value.get_value());
+            // console.log(value.get_value());
             
             value = JSON.stringify(value.get_value());
             
