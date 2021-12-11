@@ -34,7 +34,6 @@ var Function = /** @class */ (function (_super) {
         var new_table = new SymbolTable(table, "Function-".concat(this.name, "-").concat(this.row, "-").concat(this.column));
         for (var _i = 0, _a = this.instructions; _i < _a.length; _i++) {
             var instruction = _a[_i];
-            // console.log(instruction)
             var value = instruction.interpret(tree, new_table);
             // console.log(value)
             if (value === "void")
@@ -50,15 +49,17 @@ var Function = /** @class */ (function (_super) {
                 // tree.get_update(error);
             }
             if (value instanceof Continue) {
+                console.log("Hola");
                 error = new Exception("Semantic", "Instruction Continue out of loop", instruction.row, instruction.column);
                 tree.get_errors().push(error);
             }
             if (value instanceof Return) {
+                if (this.type == type.VOID) {
+                    // console.log("Hola")
+                    return new Exception("Semantic", "Function should not return anything", instruction.row, instruction.column);
+                }
                 if (this.type != value.get_type()) {
                     return new Exception("Semantic", "Function doesn't return same data type", instruction.row, instruction.column);
-                }
-                if (this.type == type.VOID) {
-                    return new Exception("Semantic", "Function should not return anything", instruction.row, instruction.column);
                 }
                 return value.get_result();
             }

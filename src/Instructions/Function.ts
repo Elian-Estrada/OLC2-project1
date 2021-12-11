@@ -26,7 +26,6 @@ export class Function extends Instruction {
         let new_table = new SymbolTable(table, `Function-${this.name}-${this.row}-${this.column}`);
 
         for ( let instruction of this.instructions ) {
-            // console.log(instruction)
             let value = instruction.interpret(tree, new_table);
             // console.log(value)
 
@@ -46,18 +45,19 @@ export class Function extends Instruction {
             }
 
             if ( value instanceof Continue ) {
+                // console.log("Hola")
                 error = new Exception("Semantic", "Instruction Continue out of loop", instruction.row, instruction.column);
                 tree.get_errors().push(error);
             }
 
             if ( value instanceof Return ) {
+                if ( this.type == type.VOID ) {
+                    // console.log("Hola")
+                    return new Exception("Semantic", "Function should not return anything", instruction.row, instruction.column);
+                }
 
                 if ( this.type != value.get_type() ){
                     return new Exception("Semantic", "Function doesn't return same data type", instruction.row, instruction.column);
-                }
-
-                if ( this.type == type.VOID ) {
-                    return new Exception("Semantic", "Function should not return anything", instruction.row, instruction.column);
                 }
 
                 return value.get_result();

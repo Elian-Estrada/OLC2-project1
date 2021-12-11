@@ -42,6 +42,7 @@ export class Main {
                 /* First run for functions and assigns */
                 for ( let instruction of tree.get_instructions() ){
 
+                    // console.log(instruction)
                     if ( instruction instanceof Function )
                         tree.add_function(instruction);
 
@@ -96,10 +97,6 @@ export class Main {
                     /* Third run for interpret main */
                     for ( let instruction of tree.get_instructions() ) {
                         if ( instruction instanceof  MainInstruction ) {
-
-                            // console.log(instruction)
-
-                            // console.log(instruction)
                             let value = instruction.interpret(tree, global_table);
 
                             let error;

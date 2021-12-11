@@ -36,6 +36,7 @@ var Main = /** @class */ (function () {
                 /* First run for functions and assigns */
                 for (var _a = 0, _b = tree.get_instructions(); _a < _b.length; _a++) {
                     var instruction = _b[_a];
+                    // console.log(instruction)
                     if (instruction instanceof Function)
                         tree.add_function(instruction);
                     if (instruction instanceof Declaration ||
@@ -85,8 +86,6 @@ var Main = /** @class */ (function () {
                     for (var _e = 0, _f = tree.get_instructions(); _e < _f.length; _e++) {
                         var instruction = _f[_e];
                         if (instruction instanceof MainInstruction) {
-                            // console.log(instruction)
-                            // console.log(instruction)
                             var value = instruction.interpret(tree, global_table);
                             var error = void 0;
                             if (instruction instanceof Break) {
