@@ -3,8 +3,10 @@ import {Main} from "./src/Main.js";
 let btnAnalyze: HTMLElement | null = document.getElementById('btnAnalyze');
 let bufferStream: string;
 
+let myCodeMirror: any;
+
 // @ts-ignore
-let myCodeMirror = CodeMirror.fromTextArea(
+myCodeMirror = CodeMirror.fromTextArea(
     document.getElementById("code"),
     {
         lineNumbers: true,
@@ -13,7 +15,9 @@ let myCodeMirror = CodeMirror.fromTextArea(
         theme: "moxer",
         mode: "text/x-java",
     }
-);
+)
+
+myCodeMirror.setValue("void Main(){\n  return;\n}");
 
 // @ts-ignore
 let myCodeMirror2 = CodeMirror.fromTextArea(

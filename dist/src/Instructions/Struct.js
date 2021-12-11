@@ -14,6 +14,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 import { Instruction } from "../Abstract/Instruction.js";
+import Exception from "../SymbolTable/Exception.js";
 import { type } from "../SymbolTable/Type.js";
 var Struct = /** @class */ (function (_super) {
     __extends(Struct, _super);
@@ -25,6 +26,7 @@ var Struct = /** @class */ (function (_super) {
         return _this;
     }
     Struct.prototype.interpret = function (tree, table) {
+        tree.add_struct(this);
         for (var _i = 0, _a = this.attributes; _i < _a.length; _i++) {
             var item = _a[_i];
             switch (item.type) {
@@ -43,9 +45,15 @@ var Struct = /** @class */ (function (_super) {
                 case type.STRING:
                     item.value = "null";
                     break;
+                case type.STRUCT:
+                    var exist = tree.get_struct(item.struct);
+                    if (exist === null) {
+                        return new Exception("Semantic", "The Struct: ".concat(item.struct, " doesn't exist"), item.row, item.column);
+                    }
+                    item.value = "null";
+                    break;
             }
         }
-        tree.add_struct(this);
         return null;
     };
     Struct.prototype.get_attributes = function () {

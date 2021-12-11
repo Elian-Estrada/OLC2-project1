@@ -49,7 +49,7 @@ var Function = /** @class */ (function (_super) {
                 // tree.get_update(error);
             }
             if (value instanceof Continue) {
-                console.log("Hola");
+                // console.log("Hola")
                 error = new Exception("Semantic", "Instruction Continue out of loop", instruction.row, instruction.column);
                 tree.get_errors().push(error);
             }

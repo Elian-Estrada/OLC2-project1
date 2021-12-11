@@ -4,13 +4,15 @@ import SymbolTable from "../SymbolTable/SymbolTable.js";
 import Exception from "../SymbolTable/Exception.js";
 import Symbol from "../SymbolTable/Symbol.js";
 import {type} from "../SymbolTable/Type.js";
+import { Declaration_array } from "./Declaration_array.js";
+import { Struct } from "./Struct.js";
 
 export class Call extends Instruction {
 
     private name: string;
     private params: Array<any>;
     private type: string | null;
-    private value: string | null;
+    private value: string | Struct | null;
 
     constructor(name: string, params: Array<any>, row: number, col: number) {
         super(row, col);
@@ -22,7 +24,8 @@ export class Call extends Instruction {
 
     interpret(tree: Tree, table: SymbolTable): any {
         let ob_function = tree.get_function(this.name);
-        let struct = tree.get_struct(this.name);
+        let struct:any = JSON.parse(JSON.stringify(tree.get_struct(this.name)));
+        
 
         if ( ob_function !== null && ob_function !== undefined){
 
@@ -88,25 +91,102 @@ export class Call extends Instruction {
             return value;
         } else if (struct !== null) {
             
+            struct = {...struct, 
+                get_attributes(){
+                    return this.attributes
+                },
+                get_type(){
+                    return this.type;
+                },
+                get_id(){
+                    return this.id;
+                }
+            }
+
             if (struct.get_attributes().length !== this.params.length){
                 return new Exception("Semantic", `${struct.get_attributes().length} parameters were expected and ${this.params.length} came`, this.row, this.column);
             }
 
-            this.params.forEach((item, i) => {
+            let result:any = this.params.forEach((item, i) => {
                 
                 if (item instanceof Array){
                     if (struct?.get_attributes()[i].type === type.ARRAY){
                         let result = this.get_values(item, tree, table, struct.get_attributes()[i].sub_type);
 
                         if (result instanceof Exception){
-                            return result;
+                            tree.get_errors().push(result);
+                            tree.update_console(result.toString());
+                        } else {
+                            struct.get_attributes()[i].value = result;
                         }
-
-                        struct.get_attributes()[i].value = result;
+                    } else {
+                        
+                        let error = new Exception("Semantic", `The attribute: ${struct?.get_attributes()[i].id} isn't an array.`, this.row, this.column);
+                        tree.get_errors().push(error);
+                        tree.update_console(error.toString());
                     }
+                } else {
+                    console.log("entro");
+                    
+                    let value = item.interpret(tree, table);
+                    console.log(item);
+                    
+                    console.log(value);
+                    
+                    if (value instanceof Exception){
+                        tree.get_errors().push(value);
+                        tree.update_console(value.toString());
+                        return;
+                    }
+
+                    if (value instanceof Declaration_array){
+                        if (struct?.get_attributes()[i].type === type.ARRAY){
+                            
+                            let result;
+                            if (struct.get_attributes()[i].sub_type !== value.get_subtype()){
+                                result = new Exception("Semantic", `The type: ${value.get_subtype()} cannot assignet at array of type: ${struct.get_attributes()[i].sub_type}`, item.row, item.column);
+                            }
+
+                            if (result instanceof Exception){
+                                tree.get_errors().push(result);
+                                tree.update_console(result.toString());
+                                return;
+                            }
+    
+                            struct.get_attributes()[i].value = value.get_value();
+                        } else {
+                            
+                            let error = new Exception("Semantic", `The attribute: ${struct?.get_attributes()[i].id} isn't an array.`, this.row, this.column);
+                            tree.get_errors().push(error);
+                            tree.update_console(error.toString());
+                        }
+                    }
+
+                    if (struct.get_attributes()[i].type !== item.get_type() && struct.get_attributes()[i].type !== type.STRUCT){
+                        let error = new Exception("Semantic", `The type: ${item.get_type()} cannot assignet at attribute of type: ${struct.get_attributes()[i].type}`, item.row, item.column)
+                        tree.get_errors().push(error);
+                        tree.update_console(error.toString());
+                        return;
+                    } else if (struct.get_attributes()[i].type === type.STRUCT) {
+                        
+                        if (item.type !== type.NULL && struct.get_attributes()[i].struct !== value.get_id()){
+                            let error = new Exception("Semantic", `The type: ${value.get_id()} cannot assignet at attribute of type: ${struct.get_attributes()[i].struct}`, item.row, item.column)
+                            tree.get_errors().push(error);
+                            tree.update_console(error.toString());
+                            return;
+                        }
+                    }
+
+                    struct.get_attributes()[i].value = value;
+
                 }
 
             });
+
+            this.type = type.STRUCT;
+            this.value = struct;
+
+            return this.value;
 
         }else {
             return new Exception("Semantic", `The function ${this.name} doesn't exists`, this.row, this.column);
@@ -153,5 +233,9 @@ export class Call extends Instruction {
 
     public get_type() {
         return this.type;
+    }
+
+    public get_id(){
+        return this.name;
     }
 }

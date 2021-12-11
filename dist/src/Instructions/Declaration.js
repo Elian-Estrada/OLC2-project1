@@ -35,8 +35,16 @@ var Declaration = /** @class */ (function (_super) {
             if (value instanceof Exception) {
                 return value;
             }
+            console.log(value);
+            if (type.STRUCT) {
+                var struct = this.id[1];
+                if (struct !== this.expression.get_id()) {
+                    return new Exception("Semantic", "The type: ".concat(this.expression.get_id(), " cannot be assignment to variable of type: ").concat(struct), this.expression.row, this.expression.column);
+                }
+                this.id.pop();
+            }
             if (this.expression.get_type() !== this.type) {
-                return new Exception("Semantic", "The type: ".concat(this.expression.get_type(), " cannot be assignment to variable of type: ").concat(this.type), this.row, this.column);
+                return new Exception("Semantic", "The type: ".concat(this.expression.get_type(), " cannot be assignment to variable of type: ").concat(this.type), this.expression.row, this.expression.column);
             }
         }
         else {

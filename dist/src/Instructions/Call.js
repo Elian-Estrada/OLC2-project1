@@ -13,11 +13,23 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 import { Instruction } from "../Abstract/Instruction.js";
 import SymbolTable from "../SymbolTable/SymbolTable.js";
 import Exception from "../SymbolTable/Exception.js";
 import Symbol from "../SymbolTable/Symbol.js";
 import { type } from "../SymbolTable/Type.js";
+import { Declaration_array } from "./Declaration_array.js";
 var Call = /** @class */ (function (_super) {
     __extends(Call, _super);
     function Call(name, params, row, col) {
@@ -31,7 +43,7 @@ var Call = /** @class */ (function (_super) {
     Call.prototype.interpret = function (tree, table) {
         var _this = this;
         var ob_function = tree.get_function(this.name);
-        var struct = tree.get_struct(this.name);
+        var struct = JSON.parse(JSON.stringify(tree.get_struct(this.name)));
         if (ob_function !== null && ob_function !== undefined) {
             var new_table = new SymbolTable(tree.get_global_table(), "Function-".concat(this.name));
             if (ob_function.get_params().length == this.params.length) {
@@ -85,20 +97,83 @@ var Call = /** @class */ (function (_super) {
             return value;
         }
         else if (struct !== null) {
+            struct = __assign(__assign({}, struct), { get_attributes: function () {
+                    return this.attributes;
+                }, get_type: function () {
+                    return this.type;
+                }, get_id: function () {
+                    return this.id;
+                } });
             if (struct.get_attributes().length !== this.params.length) {
                 return new Exception("Semantic", "".concat(struct.get_attributes().length, " parameters were expected and ").concat(this.params.length, " came"), this.row, this.column);
             }
-            this.params.forEach(function (item, i) {
+            var result = this.params.forEach(function (item, i) {
                 if (item instanceof Array) {
                     if ((struct === null || struct === void 0 ? void 0 : struct.get_attributes()[i].type) === type.ARRAY) {
-                        var result = _this.get_values(item, tree, table, struct.get_attributes()[i].sub_type);
-                        if (result instanceof Exception) {
-                            return result;
+                        var result_1 = _this.get_values(item, tree, table, struct.get_attributes()[i].sub_type);
+                        if (result_1 instanceof Exception) {
+                            tree.get_errors().push(result_1);
+                            tree.update_console(result_1.toString());
                         }
-                        struct.get_attributes()[i].value = result;
+                        else {
+                            struct.get_attributes()[i].value = result_1;
+                        }
+                    }
+                    else {
+                        var error = new Exception("Semantic", "The attribute: ".concat(struct === null || struct === void 0 ? void 0 : struct.get_attributes()[i].id, " isn't an array."), _this.row, _this.column);
+                        tree.get_errors().push(error);
+                        tree.update_console(error.toString());
                     }
                 }
+                else {
+                    console.log("entro");
+                    var value = item.interpret(tree, table);
+                    console.log(item);
+                    console.log(value);
+                    if (value instanceof Exception) {
+                        tree.get_errors().push(value);
+                        tree.update_console(value.toString());
+                        return;
+                    }
+                    if (value instanceof Declaration_array) {
+                        if ((struct === null || struct === void 0 ? void 0 : struct.get_attributes()[i].type) === type.ARRAY) {
+                            var result_2;
+                            if (struct.get_attributes()[i].sub_type !== value.get_subtype()) {
+                                result_2 = new Exception("Semantic", "The type: ".concat(value.get_subtype(), " cannot assignet at array of type: ").concat(struct.get_attributes()[i].sub_type), item.row, item.column);
+                            }
+                            if (result_2 instanceof Exception) {
+                                tree.get_errors().push(result_2);
+                                tree.update_console(result_2.toString());
+                                return;
+                            }
+                            struct.get_attributes()[i].value = value.get_value();
+                        }
+                        else {
+                            var error = new Exception("Semantic", "The attribute: ".concat(struct === null || struct === void 0 ? void 0 : struct.get_attributes()[i].id, " isn't an array."), _this.row, _this.column);
+                            tree.get_errors().push(error);
+                            tree.update_console(error.toString());
+                        }
+                    }
+                    if (struct.get_attributes()[i].type !== item.get_type() && struct.get_attributes()[i].type !== type.STRUCT) {
+                        var error = new Exception("Semantic", "The type: ".concat(item.get_type(), " cannot assignet at attribute of type: ").concat(struct.get_attributes()[i].type), item.row, item.column);
+                        tree.get_errors().push(error);
+                        tree.update_console(error.toString());
+                        return;
+                    }
+                    else if (struct.get_attributes()[i].type === type.STRUCT) {
+                        if (item.type !== type.NULL && struct.get_attributes()[i].struct !== value.get_id()) {
+                            var error = new Exception("Semantic", "The type: ".concat(value.get_id(), " cannot assignet at attribute of type: ").concat(struct.get_attributes()[i].struct), item.row, item.column);
+                            tree.get_errors().push(error);
+                            tree.update_console(error.toString());
+                            return;
+                        }
+                    }
+                    struct.get_attributes()[i].value = value;
+                }
             });
+            this.type = type.STRUCT;
+            this.value = struct;
+            return this.value;
         }
         else {
             return new Exception("Semantic", "The function ".concat(this.name, " doesn't exists"), this.row, this.column);
@@ -136,6 +211,9 @@ var Call = /** @class */ (function (_super) {
     };
     Call.prototype.get_type = function () {
         return this.type;
+    };
+    Call.prototype.get_id = function () {
+        return this.name;
     };
     return Call;
 }(Instruction));
