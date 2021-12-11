@@ -220,8 +220,9 @@ ptcommP
 ;
 
 declaration
-	: type IDENTIFIER EQUALSIGN expression	{ $$ = new Declaration([$2], $1, @1.first_line, @1.first_column, $4); }
-	| type list_id							{ $$ = new Declaration($2, $1, this._$.first_line, this._$.first_column); }
+	: type IDENTIFIER EQUALSIGN expression			{ $$ = new Declaration([$2], $1, @1.first_line, @1.first_column, $4); }
+	| type list_id									{ $$ = new Declaration($2, $1, this._$.first_line, this._$.first_column); }
+	| IDENTIFIER IDENTIFIER EQUALSIGN expression	{ $$ = new Declaration([$2, $1], type.STRUCT, this._$first_line, this._$first_column, $4); }
 ;
 
 list_id
@@ -455,9 +456,9 @@ attribute_list
 ;
 
 attribute
-	: type IDENTIFIER							{ $$ = { "type": $1, "id": $2, "value": "null" }; }
-	| IDENTIFIER IDENTIFIER						{ $$ = { "type": type.STRUCT, "struct": $1, "id": $2, "value": "null"}; }
-	| type BRACKETLEFT BRACKETRIGHT IDENTIFIER	{ $$ = { "type": type.ARRAY, "sub_type": $1, "id": $4, "value": []}; }
+	: type IDENTIFIER							{ $$ = { "type": $1, "id": $2, "value": "null", "row": this._$.first_line, "column": this._$.first_column }; }
+	| IDENTIFIER IDENTIFIER						{ $$ = { "type": type.STRUCT, "struct": $1, "id": $2, "value": "null", "row": this._$.first_line, "column": this._$.first_column}; }
+	| type BRACKETLEFT BRACKETRIGHT IDENTIFIER	{ $$ = { "type": type.ARRAY, "sub_type": $1, "id": $4, "value": [], "row": this._$.first_line, "column": this._$.first_column}; }
 ;
 
 type

@@ -20,6 +20,8 @@ export class Struct extends Instruction{
 
     interpret(tree: Tree, table: SymbolTable) {
         
+        tree.add_struct(this);
+
         for (let item of this.attributes){
             switch(item.type){
                 case type.INT:
@@ -37,10 +39,15 @@ export class Struct extends Instruction{
                 case type.STRING:
                     item.value = "null";
                     break;
+                case type.STRUCT:
+                    let exist = tree.get_struct(item.struct);
+                    if (exist === null){
+                        return new Exception("Semantic", `The Struct: ${item.struct} doesn't exist`, item.row, item.column);
+                    }
+                    item.value = "null";
+                    break;
             }
         }
-
-        tree.add_struct(this);
 
         return null;
     }

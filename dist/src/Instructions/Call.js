@@ -13,6 +13,17 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 import { Instruction } from "../Abstract/Instruction.js";
 import SymbolTable from "../SymbolTable/SymbolTable.js";
 import Exception from "../SymbolTable/Exception.js";
@@ -33,7 +44,6 @@ var Call = /** @class */ (function (_super) {
         var _this = this;
         var ob_function = tree.get_function(this.name);
         var struct = JSON.parse(JSON.stringify(tree.get_struct(this.name)));
-        console.log(struct);
         if (ob_function !== null && ob_function !== undefined) {
             var new_table = new SymbolTable(tree.get_global_table(), "Function-".concat(this.name));
             if (ob_function.get_params().length == this.params.length) {
@@ -87,7 +97,13 @@ var Call = /** @class */ (function (_super) {
             return value;
         }
         else if (struct !== null) {
-            console.log("entro");
+            struct = __assign(__assign({}, struct), { get_attributes: function () {
+                    return this.attributes;
+                }, get_type: function () {
+                    return this.type;
+                }, get_id: function () {
+                    return this.id;
+                } });
             if (struct.get_attributes().length !== this.params.length) {
                 return new Exception("Semantic", "".concat(struct.get_attributes().length, " parameters were expected and ").concat(this.params.length, " came"), this.row, this.column);
             }
@@ -112,6 +128,7 @@ var Call = /** @class */ (function (_super) {
                 else {
                     console.log("entro");
                     var value = item.interpret(tree, table);
+                    console.log(item);
                     console.log(value);
                     if (value instanceof Exception) {
                         tree.get_errors().push(value);
@@ -137,11 +154,19 @@ var Call = /** @class */ (function (_super) {
                             tree.update_console(error.toString());
                         }
                     }
-                    if (struct.get_attributes()[i].type !== item.get_type()) {
-                        var error = new Exception("Semantic", "The type: ".concat(item.get_type(), " cannot assignet at array of type: ").concat(struct.get_attributes()[i].type), item.row, item.column);
+                    if (struct.get_attributes()[i].type !== item.get_type() && struct.get_attributes()[i].type !== type.STRUCT) {
+                        var error = new Exception("Semantic", "The type: ".concat(item.get_type(), " cannot assignet at attribute of type: ").concat(struct.get_attributes()[i].type), item.row, item.column);
                         tree.get_errors().push(error);
                         tree.update_console(error.toString());
                         return;
+                    }
+                    else if (struct.get_attributes()[i].type === type.STRUCT) {
+                        if (item.type !== type.NULL && struct.get_attributes()[i].struct !== value.get_id()) {
+                            var error = new Exception("Semantic", "The type: ".concat(value.get_id(), " cannot assignet at attribute of type: ").concat(struct.get_attributes()[i].struct), item.row, item.column);
+                            tree.get_errors().push(error);
+                            tree.update_console(error.toString());
+                            return;
+                        }
                     }
                     struct.get_attributes()[i].value = value;
                 }
@@ -186,6 +211,9 @@ var Call = /** @class */ (function (_super) {
     };
     Call.prototype.get_type = function () {
         return this.type;
+    };
+    Call.prototype.get_id = function () {
+        return this.name;
     };
     return Call;
 }(Instruction));

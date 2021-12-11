@@ -25,7 +25,6 @@ export class Call extends Instruction {
     interpret(tree: Tree, table: SymbolTable): any {
         let ob_function = tree.get_function(this.name);
         let struct:any = JSON.parse(JSON.stringify(tree.get_struct(this.name)));
-        console.log(struct);
         
 
         if ( ob_function !== null && ob_function !== undefined){
@@ -91,8 +90,19 @@ export class Call extends Instruction {
             this.value = value;
             return value;
         } else if (struct !== null) {
-            console.log("entro");
             
+            struct = {...struct, 
+                get_attributes(){
+                    return this.attributes
+                },
+                get_type(){
+                    return this.type;
+                },
+                get_id(){
+                    return this.id;
+                }
+            }
+
             if (struct.get_attributes().length !== this.params.length){
                 return new Exception("Semantic", `${struct.get_attributes().length} parameters were expected and ${this.params.length} came`, this.row, this.column);
             }
@@ -119,6 +129,8 @@ export class Call extends Instruction {
                     console.log("entro");
                     
                     let value = item.interpret(tree, table);
+                    console.log(item);
+                    
                     console.log(value);
                     
                     if (value instanceof Exception){
@@ -150,11 +162,19 @@ export class Call extends Instruction {
                         }
                     }
 
-                    if (struct.get_attributes()[i].type !== item.get_type()){
-                        let error = new Exception("Semantic", `The type: ${item.get_type()} cannot assignet at array of type: ${struct.get_attributes()[i].type}`, item.row, item.column)
+                    if (struct.get_attributes()[i].type !== item.get_type() && struct.get_attributes()[i].type !== type.STRUCT){
+                        let error = new Exception("Semantic", `The type: ${item.get_type()} cannot assignet at attribute of type: ${struct.get_attributes()[i].type}`, item.row, item.column)
                         tree.get_errors().push(error);
                         tree.update_console(error.toString());
                         return;
+                    } else if (struct.get_attributes()[i].type === type.STRUCT) {
+                        
+                        if (item.type !== type.NULL && struct.get_attributes()[i].struct !== value.get_id()){
+                            let error = new Exception("Semantic", `The type: ${value.get_id()} cannot assignet at attribute of type: ${struct.get_attributes()[i].struct}`, item.row, item.column)
+                            tree.get_errors().push(error);
+                            tree.update_console(error.toString());
+                            return;
+                        }
                     }
 
                     struct.get_attributes()[i].value = value;
@@ -213,5 +233,9 @@ export class Call extends Instruction {
 
     public get_type() {
         return this.type;
+    }
+
+    public get_id(){
+        return this.name;
     }
 }
