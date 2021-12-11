@@ -402,7 +402,7 @@ function_general
         $$ = new Function($1, $2, [], $6, @1.first_line, @1.first_column);
     }
     | type IDENTIFIER PARLEFT list_params PARRIGHT CURLYLEFT instructions CURLYRIGHT {
-        $$ = new Function($1, $2, $4, $6, @1.first_line, @1.first_column);
+        $$ = new Function($1, $2, $4, $7, @1.first_line, @1.first_column);
     }
 ;
 

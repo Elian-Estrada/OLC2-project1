@@ -38,7 +38,7 @@ export class Call extends Instruction {
 
                 let expr_to_valuate = String( ob_function.get_params()[count].name ).toLowerCase();
                 let table_res = null;
-                switch (expr_to_valuate) {
+                /*switch (expr_to_valuate) {
                     case "length##param1":
                     case "round##param1":
                     case "truncate##param1":
@@ -49,9 +49,10 @@ export class Call extends Instruction {
                         if ( table_res instanceof Exception )
                             return table_res;
                         break;
-                }
+                }*/
 
-                if ( ob_function.get_params()[count].get_type() == expression.get_type() ) {
+                // console.log(ob_function.get_params()[count].type)
+                if ( ob_function.get_params()[count].type == expression.get_type() ) {
                     if ( expression.get_type() === type.ARRAY ) {
 
                         let length_func = ob_function.get_params()[count].length;

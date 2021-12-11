@@ -42,18 +42,20 @@ var Call = /** @class */ (function (_super) {
                     return val_expression;
                 var expr_to_valuate = String(ob_function.get_params()[count].name).toLowerCase();
                 var table_res = null;
-                switch (expr_to_valuate) {
+                /*switch (expr_to_valuate) {
                     case "length##param1":
                     case "round##param1":
                     case "truncate##param1":
                     case "type_of##param1":
-                        var symbol = new Symbol(expr_to_valuate, expression.get_type(), this.row, this.column, val_expression);
+                        let symbol = new Symbol(expr_to_valuate, expression.get_type(), this.row, this.column, val_expression);
                         table_res = new_table.set_table(symbol);
-                        if (table_res instanceof Exception)
+
+                        if ( table_res instanceof Exception )
                             return table_res;
                         break;
-                }
-                if (ob_function.get_params()[count].get_type() == expression.get_type()) {
+                }*/
+                // console.log(ob_function.get_params()[count].type)
+                if (ob_function.get_params()[count].type == expression.get_type()) {
                     if (expression.get_type() === type.ARRAY) {
                         var length_func = ob_function.get_params()[count].length;
                         var type_func = ob_function.get_params()[count].get_type();

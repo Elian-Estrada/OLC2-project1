@@ -280,7 +280,7 @@ case 73:
 break;
 case 74:
 
-        this.$ = new Function($$[$0-7], $$[$0-6], $$[$0-4], $$[$0-2], _$[$0-7].first_line, _$[$0-7].first_column);
+        this.$ = new Function($$[$0-7], $$[$0-6], $$[$0-4], $$[$0-1], _$[$0-7].first_line, _$[$0-7].first_column);
     
 break;
 case 75: case 79:

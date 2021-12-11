@@ -36,6 +36,7 @@ var MainInstruction = /** @class */ (function (_super) {
                 tree.get_errors().push(error);
                 tree.update_console(error.toString());
             }
+            console.log(item);
             var instruction = item.interpret(tree, new_table);
             if (instruction == undefined)
                 return;
