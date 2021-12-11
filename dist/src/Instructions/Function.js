@@ -37,7 +37,7 @@ var Function = /** @class */ (function (_super) {
             // console.log(instruction)
             var value = instruction.interpret(tree, new_table);
             // console.log(value)
-            if (value == undefined)
+            if (value === "void")
                 return;
             if (value instanceof Exception) {
                 tree.get_errors().push(value);

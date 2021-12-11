@@ -42,6 +42,8 @@ var If = /** @class */ (function (_super) {
                     // console.log(item);
                     var instruction = item.interpret(tree, new_table);
                     // console.log(instruction)
+                    if (instruction === "void")
+                        return "void";
                     if (instruction instanceof Exception) {
                         tree.get_errors().push(instruction);
                         tree.update_console(instruction.toString());

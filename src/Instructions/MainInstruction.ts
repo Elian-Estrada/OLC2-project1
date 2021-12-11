@@ -26,7 +26,6 @@ export class MainInstruction extends Instruction {
                 tree.update_console(error.toString());
             }
 
-            console.log(item)
             let instruction = item.interpret(tree, new_table);
             if ( instruction == undefined )
                 return;

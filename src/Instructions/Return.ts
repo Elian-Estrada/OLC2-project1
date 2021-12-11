@@ -19,7 +19,7 @@ export class Return extends Instruction {
     public interpret(tree: Tree, table: SymbolTable): any {
 
         if ( this.expr == null )
-            return;
+            return "void";
 
         let value = this.expr.interpret(tree, table);
 

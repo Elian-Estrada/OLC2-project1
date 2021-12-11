@@ -30,7 +30,7 @@ export class Function extends Instruction {
             let value = instruction.interpret(tree, new_table);
             // console.log(value)
 
-            if ( value == undefined )
+            if ( value === "void" )
                 return;
 
             if ( value instanceof Exception ) {

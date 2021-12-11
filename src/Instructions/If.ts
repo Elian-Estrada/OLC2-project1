@@ -35,6 +35,9 @@ export class If extends Instruction {
                     let instruction = item.interpret(tree, new_table);
                     // console.log(instruction)
 
+                    if ( instruction === "void" )
+                        return "void";
+
                     if (instruction instanceof Exception) {
                         tree.get_errors().push(instruction);
                         tree.update_console(instruction.toString());

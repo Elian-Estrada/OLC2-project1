@@ -97,7 +97,9 @@ export class Main {
                     for ( let instruction of tree.get_instructions() ) {
                         if ( instruction instanceof  MainInstruction ) {
 
-                            console.log(instruction)
+                            // console.log(instruction)
+
+                            // console.log(instruction)
                             let value = instruction.interpret(tree, global_table);
 
                             let error;

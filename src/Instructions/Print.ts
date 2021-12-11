@@ -17,9 +17,13 @@ export class Print extends Instruction {
     
     public interpret(tree: Tree, table: SymbolTable) {
         let value = this.expression.interpret(tree, table);
+        // console.log(value)
 
         if ( value instanceof Exception )
             return value;
+
+        if ( value === null )
+            return new Exception("Semantic", "Error 'void' type not allowed here", this.row, this.column);
 
         if ( this.expression.get_type() == type.ARRAY ) {
             //return new Exception("Semantic", "Don't print array", this.row, this.column);

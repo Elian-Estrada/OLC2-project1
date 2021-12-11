@@ -85,7 +85,8 @@ var Main = /** @class */ (function () {
                     for (var _e = 0, _f = tree.get_instructions(); _e < _f.length; _e++) {
                         var instruction = _f[_e];
                         if (instruction instanceof MainInstruction) {
-                            console.log(instruction);
+                            // console.log(instruction)
+                            // console.log(instruction)
                             var value = instruction.interpret(tree, global_table);
                             var error = void 0;
                             if (instruction instanceof Break) {
