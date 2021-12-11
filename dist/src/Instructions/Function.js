@@ -60,7 +60,6 @@ var Function = /** @class */ (function (_super) {
                 if (this.type == type.VOID) {
                     return new Exception("Semantic", "Function should not return anything", instruction.row, instruction.column);
                 }
-                console.log(value);
                 return value.get_result();
             }
         }

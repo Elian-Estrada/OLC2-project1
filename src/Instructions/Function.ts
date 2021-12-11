@@ -60,7 +60,6 @@ export class Function extends Instruction {
                     return new Exception("Semantic", "Function should not return anything", instruction.row, instruction.column);
                 }
 
-                console.log(value);
                 return value.get_result();
             }
         }

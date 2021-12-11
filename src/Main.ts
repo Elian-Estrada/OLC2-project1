@@ -83,7 +83,6 @@ export class Main {
                 for ( let instruction of tree.get_instructions() ) {
                     if ( instruction instanceof MainInstruction ) {
                         count += 1;
-                        console.log(count)
                         if ( count > 1 ) {
                             let error = new Exception("Semantic", "The main method is already defined", instruction.row, instruction.column);
                             tree.get_errors().push(error);

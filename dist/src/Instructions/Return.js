@@ -38,7 +38,7 @@ var Return = /** @class */ (function (_super) {
         return this.type;
     };
     Return.prototype.get_result = function () {
-        return this.type;
+        return this.result;
     };
     return Return;
 }(Instruction));

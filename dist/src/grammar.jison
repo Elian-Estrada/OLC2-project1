@@ -481,6 +481,7 @@ expression
 	| IDENTIFIER							{ $$ = new Identifier($1, @1.first_line, @1.first_column); }
 	| PARLEFT expression PARRIGHT           { $$ = $2; }
 	| prod_ternary                          { $$ = $1; }
+	| call_function                         { $$ = $1; }
 ;
 
 boolean

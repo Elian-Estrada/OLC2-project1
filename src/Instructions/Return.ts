@@ -37,6 +37,6 @@ export class Return extends Instruction {
     }
 
     public get_result() {
-        return this.type;
+        return this.result;
     }
 }

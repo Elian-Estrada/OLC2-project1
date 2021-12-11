@@ -72,7 +72,6 @@ var Main = /** @class */ (function () {
                     var instruction = _d[_c];
                     if (instruction instanceof MainInstruction) {
                         count += 1;
-                        console.log(count);
                         if (count > 1) {
                             var error = new Exception("Semantic", "The main method is already defined", instruction.row, instruction.column);
                             tree.get_errors().push(error);
