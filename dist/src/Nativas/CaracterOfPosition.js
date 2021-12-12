@@ -14,11 +14,25 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 import { Function } from "../Instructions/Function.js";
+import Exception from "../SymbolTable/Exception.js";
+import { type } from "../SymbolTable/Type.js";
 var CaracterOfPosition = /** @class */ (function (_super) {
     __extends(CaracterOfPosition, _super);
-    function CaracterOfPosition(type, name, params, instructions, row, col) {
-        return _super.call(this, type, name, params, instructions, row, col) || this;
+    function CaracterOfPosition(id, n, type, name, params, instructions, row, col) {
+        var _this = _super.call(this, type, name, params, instructions, row, col) || this;
+        _this.id = id;
+        _this.n = n;
+        return _this;
     }
+    CaracterOfPosition.prototype.interpret = function (tree, table) {
+        var id_founded = this.id.interpret(tree, table);
+        if (id_founded === null)
+            return new Exception("Semantic", "Identifier not found in the current context", this.row, this.column);
+        if (this.id.get_type() !== type.STRING)
+            return new Exception("Semantic", "The type ".concat(id_founded.type, " not valid for Length"), this.row, this.column);
+        this.type = type.CHAR;
+        return id_founded.charAt(this.n);
+    };
     return CaracterOfPosition;
 }(Function));
 export { CaracterOfPosition };
