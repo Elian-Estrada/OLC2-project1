@@ -16,6 +16,7 @@ var __extends = (this && this.__extends) || (function () {
 import { Instruction } from "../Abstract/Instruction.js";
 import { type } from "../SymbolTable/Type.js";
 import Exception from "../SymbolTable/Exception.js";
+import { Call } from "./Call.js";
 var Print = /** @class */ (function (_super) {
     __extends(Print, _super);
     function Print(expression, row, col, flag) {
@@ -26,16 +27,25 @@ var Print = /** @class */ (function (_super) {
         return _this;
     }
     Print.prototype.interpret = function (tree, table) {
+        if (this.expression instanceof Call) {
+            // console.log(this.expression)
+            // @ts-ignore
+            // console.log(this.expression.type)
+            // @ts-ignore
+            if (this.expression.type === type.VOID) {
+                return new Exception("Semantic", "Error 'void' type not allowed here", this.row, this.column);
+            }
+        }
         var value = this.expression.interpret(tree, table);
-        console.log(value);
+        // console.log(value)
         if (value instanceof Exception)
             return value;
-        if (value === null)
-            return new Exception("Semantic", "Error 'void' type not allowed here", this.row, this.column);
+        /*if ( value === null )
+            return new Exception("Semantic", "Error 'void' type not allowed here", this.row, this.column);*/
         if (this.expression.get_type() == type.ARRAY) {
-            console.log("entra al print");
+            // console.log("entra al print");
             //return new Exception("Semantic", "Don't print array", this.row, this.column);
-            console.log(value.get_value());
+            // console.log(value.get_value());
             value = JSON.stringify(value.get_value());
         }
         else if (this.expression.get_type() == type.NULL) {

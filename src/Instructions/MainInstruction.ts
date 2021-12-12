@@ -27,7 +27,7 @@ export class MainInstruction extends Instruction {
             }
 
             let instruction = item.interpret(tree, new_table);
-            console.log(instruction);
+            // console.log(instruction);
             
             // if ( instruction === undefined ){
             //     console.log("entro");    

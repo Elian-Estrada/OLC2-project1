@@ -37,7 +37,7 @@ var MainInstruction = /** @class */ (function (_super) {
                 tree.update_console(error.toString());
             }
             var instruction = item.interpret(tree, new_table);
-            console.log(instruction);
+            // console.log(instruction);
             // if ( instruction === undefined ){
             //     console.log("entro");    
             //     return;

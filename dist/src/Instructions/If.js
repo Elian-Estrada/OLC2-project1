@@ -78,6 +78,7 @@ var If = /** @class */ (function (_super) {
                 }
                 else if (this.elseif != null) {
                     var result = this.elseif.interpret(tree, table);
+                    // console.log(result)
                     if ((result instanceof Continue) || (result instanceof Break) ||
                         (result instanceof Return) || (result instanceof Exception)) {
                         return result;

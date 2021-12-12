@@ -10,7 +10,7 @@ import {Return} from "./Return.js";
 export class If extends Instruction {
 
     private expr: any;
-    private instructions: Array<Instruction>;
+    public instructions: Array<Instruction>;
     private else_instr: Array<Instruction>;
     private elseif: Instruction;
 
@@ -70,6 +70,7 @@ export class If extends Instruction {
                 }
                 else if ( this.elseif != null ) {
                     let result = this.elseif.interpret(tree, table);
+                    // console.log(result)
 
                     if ( (result instanceof Continue) || ( result instanceof Break ) ||
                         ( result instanceof Return ) || ( result instanceof Exception ) ) {

@@ -34,8 +34,8 @@ var Tree = /** @class */ (function () {
             var item = _a[_i];
             if (item.get_name() == name)
                 return item;
-            return null;
         }
+        return null;
     };
     Tree.prototype.set_symbol_table = function (symbol_table) {
         this.symbol_table = symbol_table;
