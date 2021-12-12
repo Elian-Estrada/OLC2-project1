@@ -177,7 +177,7 @@
 %left 'AND'
 %right UNOT
 %nonassoc 'EQUALIZATIONSIGN' 'DIFFSIGN' 'LESSEQUAL' 'GREATEREQUAL' 'SMALLERTHAN' 'GREATERTHAN', 'VALUEIFTRUE'
-%left 'PLUSSIGN' 'SUBSIGN', 'CONCAT'
+%left 'PLUSSIGN' 'SUBSIGN', 'CONCAT', 'REPETITIONSIGN'
 %left 'MULTSIGN' 'DIVSIGN' 'MODSIGN'
 %right UMENOS
 %left 'INCSIGN' 'DECSIGN'
@@ -487,6 +487,7 @@ expression
 	| expression SMALLERTHAN expression		{ $$ = new Relational($1, $3, Relational_operator.LESS, @1.first_line, @1.first_column); }
 	| expression GREATERTHAN expression		{ $$ = new Relational($1, $3, Relational_operator.GREATER, @1.first_line, @1.first_column); }
 	| expression CONCAT expression          { $$ = new StringText($1, $3, String_operator.CONCAT, @1.first_line, @1.first_column); }
+	| expression REPETITIONSIGN expression  { $$ = new StringText($1, $3, String_operator.REPETITION, @1.first_line, @1.first_column); }
 	| expression AND expression				{ $$ = new Logical($1, $3, Logical_operator.AND, @1.first_line, @1.first_column); }
 	| expression OR expression				{ $$ = new Logical($1, $3, Logical_operator.OR, @1.first_line, @1.first_column); }
 	| NOT expression %prec UNOT				{ $$ = new Logical($2, null, Logical_operator.NOT, @1.first_line, @1.first_column); }

@@ -108,6 +108,7 @@ export class Main {
                     /* Third run for interpret main */
                     for ( let instruction of tree.get_instructions() ) {
                         if ( instruction instanceof  MainInstruction ) {
+                            console.log(instruction)
                             let value = instruction.interpret(tree, global_table);
 
                             let error;

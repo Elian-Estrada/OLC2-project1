@@ -17,7 +17,10 @@ export class Primitive extends Instruction {
     interpret(tree: Tree, table: SymbolTable){
         return this.value;
     }
-    
+
+    get_value() {
+        return this.value;
+    }
 
     get_type(): type{
         return this.type;
