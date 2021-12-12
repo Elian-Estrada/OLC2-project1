@@ -32,36 +32,55 @@ var Function = /** @class */ (function (_super) {
     }
     Function.prototype.interpret = function (tree, table) {
         var new_table = new SymbolTable(table, "Function-".concat(this.name, "-").concat(this.row, "-").concat(this.column));
-        for (var _i = 0, _a = this.instructions; _i < _a.length; _i++) {
-            var instruction = _a[_i];
-            var value = instruction.interpret(tree, new_table);
-            // console.log(value)
-            if (value === "void")
-                return;
-            if (value instanceof Exception) {
-                tree.get_errors().push(value);
-                tree.update_console(value.toString());
+        var flag = false;
+        if (this.type !== type.VOID) {
+            for (var _i = 0, _a = this.instructions; _i < _a.length; _i++) {
+                var instruction = _a[_i];
+                console.log(instruction);
+                if (instruction instanceof Return) {
+                    flag = true;
+                }
             }
-            var error = null;
-            if (value instanceof Break) {
-                error = new Exception("Semantic", "Instruction Break out of loop", instruction.row, instruction.column);
-                tree.get_errors().push(error);
-                // tree.get_update(error);
-            }
-            if (value instanceof Continue) {
-                // console.log("Hola")
-                error = new Exception("Semantic", "Instruction Continue out of loop", instruction.row, instruction.column);
-                tree.get_errors().push(error);
-            }
-            if (value instanceof Return) {
-                if (this.type == type.VOID) {
+        }
+        else {
+            flag = true;
+        }
+        for (var _b = 0, _c = this.instructions; _b < _c.length; _b++) {
+            var instruction = _c[_b];
+            // console.log(instruction)
+            if (flag) {
+                var value = instruction.interpret(tree, new_table);
+                if (value === "void")
+                    return;
+                if (value instanceof Exception) {
+                    tree.get_errors().push(value);
+                    tree.update_console(value.toString());
+                }
+                var error = null;
+                if (value instanceof Break) {
+                    error = new Exception("Semantic", "Instruction Break out of loop", instruction.row, instruction.column);
+                    tree.get_errors().push(error);
+                    // tree.get_update(error);
+                }
+                if (value instanceof Continue) {
                     // console.log("Hola")
-                    return new Exception("Semantic", "Function should not return anything", instruction.row, instruction.column);
+                    error = new Exception("Semantic", "Instruction Continue out of loop", instruction.row, instruction.column);
+                    tree.get_errors().push(error);
                 }
-                if (this.type != value.get_type()) {
-                    return new Exception("Semantic", "Function doesn't return same data type", instruction.row, instruction.column);
+                if (value instanceof Return) {
+                    console.log(this.type);
+                    if (this.type == type.VOID) {
+                        // console.log("Hola")
+                        return new Exception("Semantic", "Function should not return anything", instruction.row, instruction.column);
+                    }
+                    if (this.type != value.get_type()) {
+                        return new Exception("Semantic", "Function doesn't return same data type", instruction.row, instruction.column);
+                    }
+                    return value.get_result();
                 }
-                return value.get_result();
+            }
+            else {
+                return new Exception("Semantic", "Function doesn't return anything", instruction.row, instruction.column);
             }
         }
         return null;

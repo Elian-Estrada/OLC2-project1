@@ -70,6 +70,7 @@ export class If extends Instruction {
                 }
                 else if ( this.elseif != null ) {
                     let result = this.elseif.interpret(tree, table);
+                    // console.log(result)
 
                     if ( (result instanceof Continue) || ( result instanceof Break ) ||
                         ( result instanceof Return ) || ( result instanceof Exception ) ) {
