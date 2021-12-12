@@ -74,7 +74,7 @@
 ")"                 return 'PARRIGHT';
 
 /* Arrays Signs */
-","                 return 'COMMA';
+"."                 return 'DOT';
 "["                 return 'BRACKETLEFT';
 "]"                 return 'BRACKETRIGHT';
 
@@ -140,11 +140,12 @@
 	import { Identifier } from "./Expression/Identifier.js";
 	import { StringText } from "./Expression/StringText.js";
 	import { Ternary } from "./Expression/Ternary.js";
-	import { Access_array } from "./Expression/Access_array.js"
+	import { Access_array } from "./Expression/Access_array.js";
+	import { Access_struct } from "./Expression/Access_struct.js";
 
-	import { Declaration } from "./Instructions/Declaration.js"
-	import { Declaration_array } from "./Instructions/Declaration_array.js"
-	import { Assignment } from "./Instructions/Assignment.js"
+	import { Declaration } from "./Instructions/Declaration.js";
+	import { Declaration_array } from "./Instructions/Declaration_array.js";
+	import { Assignment } from "./Instructions/Assignment.js";
 	import { Print } from "./Instructions/Print.js";
 	import { Inc_Dec } from "./Instructions/Inc_Dec.js";
 	import { If } from "./Instructions/If.js";
@@ -212,7 +213,8 @@ instruction
 	| functions                 { $$ = $1; }
 	| call_function ptcommP     { $$ = $1; }
 	| struct ptcommP			{ $$ = $1; }
-	| error ptcommP                     { errors.push(new Exception("Sintactic", `Sintactic error ${yytext}`, this._$.first_line, this._$.first_column)); }
+	| assignment_struct ptcommP	{ $$ = $1; }
+	| error ptcommP             { errors.push(new Exception("Sintactic", `Sintactic error ${yytext}`, this._$.first_line, this._$.first_column)); }
 ;
 
 ptcommP
@@ -222,7 +224,7 @@ ptcommP
 declaration
 	: type IDENTIFIER EQUALSIGN expression			{ $$ = new Declaration([$2], $1, @1.first_line, @1.first_column, $4); }
 	| type list_id									{ $$ = new Declaration($2, $1, this._$.first_line, this._$.first_column); }
-	| IDENTIFIER IDENTIFIER EQUALSIGN expression	{ $$ = new Declaration([$2, $1], type.STRUCT, this._$first_line, this._$first_column, $4); }
+	| IDENTIFIER IDENTIFIER EQUALSIGN expression	{ $$ = new Declaration([$2, $1], type.STRUCT, this._$.first_line, this._$.first_column, $4); }
 ;
 
 list_id
@@ -461,6 +463,20 @@ attribute
 	| type BRACKETLEFT BRACKETRIGHT IDENTIFIER	{ $$ = { "type": type.ARRAY, "sub_type": $1, "id": $4, "value": [], "row": this._$.first_line, "column": this._$.first_column}; }
 ;
 
+access_struct
+	: list_attributes							{ $$ = new Access_struct($1, null, this._$.first_line, this._$.first_column); }
+;
+
+assignment_struct
+	: list_attributes EQUALSIGN expression		{ $$ = new Access_struct($1, $3, this._$.first_line, this._$.first_column); }
+;
+
+list_attributes
+	: list_attributes DOT IDENTIFIER	{ $1.push($3); $$ = $1; }
+	| IDENTIFIER DOT IDENTIFIER			{ $$ = [$1, $3]; }
+;
+
+
 type
     : RINT 		{ $$ = type.INT; }
     | RDOUBLE 	{ $$ = type.DOUBLE; }
@@ -502,6 +518,7 @@ expression
 	| PARLEFT expression PARRIGHT           { $$ = $2; }
 	| prod_ternary                          { $$ = $1; }
 	| call_function                         { $$ = $1; }
+	| access_struct							{ $$ = $1; }
 ;
 
 boolean

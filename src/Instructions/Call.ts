@@ -126,12 +126,8 @@ export class Call extends Instruction {
                         tree.update_console(error.toString());
                     }
                 } else {
-                    console.log("entro");
                     
                     let value = item.interpret(tree, table);
-                    console.log(item);
-                    
-                    console.log(value);
                     
                     if (value instanceof Exception){
                         tree.get_errors().push(value);
@@ -220,8 +216,6 @@ export class Call extends Instruction {
                 case type.INT:
                     return parseInt(value);
                 case type.DOUBLE:
-                    console.log(parseFloat(value));
-                    
                     return parseFloat(value);
                 case type.BOOL:
                     return JSON.parse(value);

@@ -35,8 +35,7 @@ var Declaration = /** @class */ (function (_super) {
             if (value instanceof Exception) {
                 return value;
             }
-            console.log(value);
-            if (type.STRUCT) {
+            if (type.STRUCT === this.expression.get_type()) {
                 var struct = this.id[1];
                 if (struct !== this.expression.get_id()) {
                     return new Exception("Semantic", "The type: ".concat(this.expression.get_id(), " cannot be assignment to variable of type: ").concat(struct), this.expression.row, this.expression.column);

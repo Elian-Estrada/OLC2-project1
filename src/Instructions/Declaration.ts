@@ -32,10 +32,7 @@ export class Declaration extends Instruction {
                 return value;
             }
 
-            console.log(value);
-            
-
-            if (type.STRUCT){
+            if (type.STRUCT === this.expression.get_type()){
                 let struct = this.id[1];
                 if (struct !== this.expression.get_id()){
                     return new Exception("Semantic", `The type: ${this.expression.get_id()} cannot be assignment to variable of type: ${struct}`, this.expression.row, this.expression.column);

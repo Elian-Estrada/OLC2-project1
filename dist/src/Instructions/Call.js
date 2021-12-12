@@ -126,10 +126,7 @@ var Call = /** @class */ (function (_super) {
                     }
                 }
                 else {
-                    console.log("entro");
                     var value = item.interpret(tree, table);
-                    console.log(item);
-                    console.log(value);
                     if (value instanceof Exception) {
                         tree.get_errors().push(value);
                         tree.update_console(value.toString());
@@ -201,7 +198,6 @@ var Call = /** @class */ (function (_super) {
                 case type.INT:
                     return parseInt(value);
                 case type.DOUBLE:
-                    console.log(parseFloat(value));
                     return parseFloat(value);
                 case type.BOOL:
                     return JSON.parse(value);
