@@ -51,6 +51,7 @@
 "toUppercase"       return 'RUPPER';
 "toLowercase"       return 'RLOWER';
 "caracterOfPosition" return 'RCHAROF';
+"subString"         return 'RSUBSTRING';
 
 /* Language Functions */
 "pow"               return 'RPOW';
@@ -170,6 +171,7 @@
 	import { ToUpperCase } from "./Nativas/ToUpperCase.js";
 	import { ToLowerCase } from "./Nativas/ToLowerCase.js";
 	import { CaracterOfPosition } from "./Nativas/CaracterOfPosition.js";
+	import { SubString } from "./Nativas/SubString.js";
 %}
 
 %{
@@ -493,6 +495,9 @@ native_functions
     }
     | IDENTIFIER DOT RCHAROF PARLEFT INTEGER PARRIGHT {
         $$ = new CaracterOfPosition(new Identifier($1, @1.first_line, @1.first_column), $5, null, "length", [], [], @1.first_line, @1.first_column);
+    }
+    | IDENTIFIER DOT RSUBSTRING PARLEFT INTEGER COMMASIGN INTEGER PARRIGHT {
+        $$ = new SubString(new Identifier($1, @1.first_line, @1.first_column), $5, $7, null, "length", [], [], @1.first_line, @1.first_column)
     }
 ;
 
