@@ -55,7 +55,7 @@ var Call = /** @class */ (function (_super) {
                         return val_expression;
                     for (var _b = 0, _c = ob_function.get_params(); _b < _c.length; _b++) {
                         var param = _c[_b];
-                        console.log(expression.get_type());
+                        // console.log(expression.get_type())
                         if (expression.get_type() !== param.type) {
                             return new Exception("Semantic", "Different type of parameter data", expression.row, expression.column);
                         }
@@ -209,7 +209,7 @@ var Call = /** @class */ (function (_super) {
                 case type.INT:
                     return parseInt(value);
                 case type.DOUBLE:
-                    console.log(parseFloat(value));
+                    // console.log(parseFloat(value));
                     return parseFloat(value);
                 case type.BOOL:
                     return JSON.parse(value);

@@ -6,6 +6,7 @@ import {Break} from "./Break.js";
 import {Return} from "./Return.js";
 import {Continue} from "./Continue.js";
 import {type} from "../SymbolTable/Type.js";
+import {If} from "./If.js";
 
 export class Function extends Instruction {
 
@@ -22,17 +23,34 @@ export class Function extends Instruction {
         this.type = type;
     }
 
+    look_for_a_return(instruction: Instruction) {
+        let flag = false;
+        if ( instruction instanceof If ) {
+            for ( let instr of instruction.instructions ) {
+
+                if ( flag )
+                    return flag;
+
+                // console.log(instr);
+                if ( instr instanceof Return ) {
+                    console.log("Hola")
+                    flag = true;
+                    break;
+                } else {
+                    this.look_for_a_return(instr);
+                }
+            }
+        }
+
+        return flag;
+    }
+
     interpret(tree: Tree, table: SymbolTable): any {
         let new_table = new SymbolTable(table, `Function-${this.name}-${this.row}-${this.column}`);
 
         let flag = false;
         if ( this.type !== type.VOID ) {
-            for ( let instruction of this.instructions ) {
-                console.log(instruction)
-                if ( instruction instanceof Return ) {
-                    flag = true;
-                }
-            }
+            flag = this.look_for_a_return(this.instructions[0]);
         } else {
             flag = true;
         }

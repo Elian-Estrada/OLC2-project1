@@ -40,7 +40,7 @@ export class Call extends Instruction {
                         return val_expression;
 
                     for ( let param of ob_function.get_params() ) {
-                        console.log(expression.get_type())
+                        // console.log(expression.get_type())
                         if ( expression.get_type() !== param.type ) {
                             return new Exception("Semantic", "Different type of parameter data", expression.row, expression.column);
                         }
@@ -228,7 +228,7 @@ export class Call extends Instruction {
                 case type.INT:
                     return parseInt(value);
                 case type.DOUBLE:
-                    console.log(parseFloat(value));
+                    // console.log(parseFloat(value));
                     
                     return parseFloat(value);
                 case type.BOOL:

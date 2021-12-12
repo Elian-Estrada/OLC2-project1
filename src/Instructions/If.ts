@@ -10,7 +10,7 @@ import {Return} from "./Return.js";
 export class If extends Instruction {
 
     private expr: any;
-    private instructions: Array<Instruction>;
+    public instructions: Array<Instruction>;
     private else_instr: Array<Instruction>;
     private elseif: Instruction;
 

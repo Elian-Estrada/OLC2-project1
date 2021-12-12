@@ -20,6 +20,7 @@ import { Break } from "./Break.js";
 import { Return } from "./Return.js";
 import { Continue } from "./Continue.js";
 import { type } from "../SymbolTable/Type.js";
+import { If } from "./If.js";
 var Function = /** @class */ (function (_super) {
     __extends(Function, _super);
     function Function(type, name, params, instructions, row, col) {
@@ -30,23 +31,37 @@ var Function = /** @class */ (function (_super) {
         _this.type = type;
         return _this;
     }
+    Function.prototype.look_for_a_return = function (instruction) {
+        var flag = false;
+        if (instruction instanceof If) {
+            for (var _i = 0, _a = instruction.instructions; _i < _a.length; _i++) {
+                var instr = _a[_i];
+                if (flag)
+                    return flag;
+                // console.log(instr);
+                if (instr instanceof Return) {
+                    console.log("Hola");
+                    flag = true;
+                    break;
+                }
+                else {
+                    this.look_for_a_return(instr);
+                }
+            }
+        }
+        return flag;
+    };
     Function.prototype.interpret = function (tree, table) {
         var new_table = new SymbolTable(table, "Function-".concat(this.name, "-").concat(this.row, "-").concat(this.column));
         var flag = false;
         if (this.type !== type.VOID) {
-            for (var _i = 0, _a = this.instructions; _i < _a.length; _i++) {
-                var instruction = _a[_i];
-                console.log(instruction);
-                if (instruction instanceof Return) {
-                    flag = true;
-                }
-            }
+            flag = this.look_for_a_return(this.instructions[0]);
         }
         else {
             flag = true;
         }
-        for (var _b = 0, _c = this.instructions; _b < _c.length; _b++) {
-            var instruction = _c[_b];
+        for (var _i = 0, _a = this.instructions; _i < _a.length; _i++) {
+            var instruction = _a[_i];
             // console.log(instruction)
             if (flag) {
                 var value = instruction.interpret(tree, new_table);

@@ -18,9 +18,9 @@ export class Print extends Instruction {
 
     public interpret(tree: Tree, table: SymbolTable) {
         if ( this.expression instanceof Call ) {
-            console.log(this.expression)
+            // console.log(this.expression)
             // @ts-ignore
-            console.log(this.expression.type)
+            // console.log(this.expression.type)
             // @ts-ignore
             if ( this.expression.type === type.VOID ) {
                 return new Exception("Semantic", "Error 'void' type not allowed here", this.row, this.column);
