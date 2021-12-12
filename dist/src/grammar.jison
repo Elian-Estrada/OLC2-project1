@@ -50,6 +50,7 @@
 "length"            return 'RLENGTH';
 "toUppercase"       return 'RUPPER';
 "toLowercase"       return 'RLOWER';
+"caracterOfPosition" return 'RCHAROF';
 
 /* Language Functions */
 "pow"               return 'RPOW';
@@ -168,6 +169,7 @@
 	import { Length } from "./Nativas/Length.js";
 	import { ToUpperCase } from "./Nativas/ToUpperCase.js";
 	import { ToLowerCase } from "./Nativas/ToLowerCase.js";
+	import { CaracterOfPosition } from "./Nativas/CaracterOfPosition.js";
 %}
 
 %{
@@ -488,6 +490,9 @@ native_functions
     }
     | IDENTIFIER DOT RLOWER PARLEFT PARRIGHT {
         $$ = new ToLowerCase(new Identifier($1, @1.first_line, @1.first_column), null, "length", [], [], @1.first_line, @1.first_column);
+    }
+    | IDENTIFIER DOT RCHAROF PARLEFT INTEGER PARRIGHT {
+        $$ = new CaracterOfPosition(new Identifier($1, @1.first_line, @1.first_column), $5, null, "length", [], [], @1.first_line, @1.first_column);
     }
 ;
 
