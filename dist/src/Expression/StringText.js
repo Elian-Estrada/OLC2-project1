@@ -66,9 +66,19 @@ var StringText = /** @class */ (function (_super) {
                                 return new Exception("Semantic", "The type ".concat(this.exp2.get_type().toString(), " cannot be operated with type: STRING"), this.row, this.column);
                         }
                     }
-                    return this.value;
+                    break;
+                case String_operator.REPETITION:
+                    if (this.exp1.get_type() === type.STRING && this.exp2.get_type() === type.INT) {
+                        this.type = type.STRING;
+                        this.value = this.exp1.get_value().repeat(this.exp2.get_value());
+                    }
+                    else {
+                        return new Exception("Semantic", "This operation cannot be performed", this.row, this.column);
+                    }
+                    break;
             }
         }
+        return this.value;
     };
     StringText.prototype.operation = function (op1, op2, op) {
         switch (op) {

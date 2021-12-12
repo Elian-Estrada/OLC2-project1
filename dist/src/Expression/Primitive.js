@@ -25,6 +25,9 @@ var Primitive = /** @class */ (function (_super) {
     Primitive.prototype.interpret = function (tree, table) {
         return this.value;
     };
+    Primitive.prototype.get_value = function () {
+        return this.value;
+    };
     Primitive.prototype.get_type = function () {
         return this.type;
     };
