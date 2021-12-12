@@ -27,7 +27,7 @@ var Length = /** @class */ (function (_super) {
         var id_founded = this.id.interpret(tree, table);
         if (id_founded === null)
             return new Exception("Semantic", "Identifier not found in the current context", this.row, this.column);
-        console.log(this.id.get_type() == type.STRING);
+        // console.log(this.id.get_type() == type.STRING)
         if (this.id.get_type() !== type.STRING)
             return new Exception("Semantic", "The type ".concat(id_founded.type, " not valid for Length"), this.row, this.column);
         this.type = type.INT;

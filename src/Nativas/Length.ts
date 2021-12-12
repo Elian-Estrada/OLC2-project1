@@ -22,7 +22,7 @@ export class Length extends Function {
         if ( id_founded === null )
             return new Exception("Semantic", "Identifier not found in the current context", this.row, this.column);
 
-        console.log(this.id.get_type() == type.STRING)
+        // console.log(this.id.get_type() == type.STRING)
         if ( this.id.get_type() !== type.STRING )
             return new Exception("Semantic", `The type ${id_founded.type} not valid for Length`, this.row, this.column);
 

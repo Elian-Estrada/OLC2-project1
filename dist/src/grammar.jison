@@ -47,7 +47,9 @@
 
 /* Generic and Natives Functions */
 "void"              return 'RVOID';
-"length"            return "RLENGTH";
+"length"            return 'RLENGTH';
+"toUppercase"       return 'RUPPER';
+"toLowercase"       return 'RLOWER';
 
 /* Language Functions */
 "pow"               return 'RPOW';
@@ -164,6 +166,8 @@
 	import {MainInstruction} from "./Instructions/MainInstruction.js";
 	import { Struct } from "./Instructions/Struct.js";
 	import { Length } from "./Nativas/Length.js";
+	import { ToUpperCase } from "./Nativas/ToUpperCase.js";
+	import { ToLowerCase } from "./Nativas/ToLowerCase.js";
 %}
 
 %{
@@ -478,6 +482,12 @@ type
 native_functions
     : IDENTIFIER DOT RLENGTH PARLEFT PARRIGHT {
         $$ = new Length(new Identifier($1, @1.first_line, @1.first_column), null, "length", [], [], @1.first_line, @1.first_column);
+    }
+    | IDENTIFIER DOT RUPPER PARLEFT PARRIGHT {
+        $$ = new ToUpperCase(new Identifier($1, @1.first_line, @1.first_column), null, "length", [], [], @1.first_line, @1.first_column);
+    }
+    | IDENTIFIER DOT RLOWER PARLEFT PARRIGHT {
+        $$ = new ToLowerCase(new Identifier($1, @1.first_line, @1.first_column), null, "length", [], [], @1.first_line, @1.first_column);
     }
 ;
 
