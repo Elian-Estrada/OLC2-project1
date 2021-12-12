@@ -17,7 +17,6 @@ export class Print extends Instruction {
     
     public interpret(tree: Tree, table: SymbolTable) {
         let value = this.expression.interpret(tree, table);
-        console.log(value)
 
         if ( value instanceof Exception )
             return value;
@@ -28,10 +27,8 @@ export class Print extends Instruction {
         
             
         if ( this.expression.get_type() == type.ARRAY ) {
-            console.log("entra al print");
             
             //return new Exception("Semantic", "Don't print array", this.row, this.column);
-            console.log(value.get_value());
             
             value = JSON.stringify(value.get_value());
             

@@ -133,7 +133,6 @@ var Relational = /** @class */ (function (_super) {
     Relational.prototype.to_lower = function (op1, op2, operator) {
         switch (operator) {
             case Relational_operator.EQUAL:
-                console.log(op1, op2);
                 this.value = String(op1 == op2).toLowerCase();
                 return this.value;
             case Relational_operator.UNEQUAL:

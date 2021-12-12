@@ -156,7 +156,6 @@ export class Arithmetic extends Instruction {
             
         } else {
             let symbol: Symbol | null = null;
-            console.log(this.operator);
             
             switch ( this.operator ) {
                 case Arithmetic_operator.SUBSTRACTION:
@@ -187,20 +186,13 @@ export class Arithmetic extends Instruction {
                                 return new Exception("Semantic", `The type: ${this.exp1.get_type()} \n cannot be operated whit operator: ${this.operator}`, this.row, this.column);
                         }
 
-                        console.log(left);
-                        
-
                         if (this.operator === Arithmetic_operator.INC){
                             symbol = new Symbol(this.exp1.get_id(), this.exp1.get_type(), this.row, this.column, String(left + 1));
                         }else {
                             symbol = new Symbol(this.exp1.get_id(), this.exp1.get_type(), this.row, this.column, String(left - 1));
                         }
-
-                        console.log(symbol);
                         
                         let result = table.update_table(symbol);
-
-                        console.log(result);
                         
                         if (result instanceof Exception){
                             return result;

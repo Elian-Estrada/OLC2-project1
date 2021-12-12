@@ -126,7 +126,6 @@ export class Main {
                             }
 
                             if ( instruction instanceof Return ) {
-                                console.log(value);
                             }
                         }
                     }

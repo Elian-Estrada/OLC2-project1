@@ -29,7 +29,6 @@ var Logical = /** @class */ (function (_super) {
     }
     Logical.prototype.interpret = function (tree, table) {
         var left = this.exp1.interpret(tree, table);
-        console.log(left);
         if (left instanceof Exception) {
         }
         if (this.exp2 != null) {
@@ -41,7 +40,6 @@ var Logical = /** @class */ (function (_super) {
                 switch (this.operator) {
                     case Logical_operator.AND:
                         this.value = String(JSON.parse(left) && JSON.parse(right)).toLowerCase();
-                        console.log(this.value, JSON.parse(left), JSON.parse(right));
                         return this.value;
                     case Logical_operator.OR:
                         this.value = String(JSON.parse(left) || JSON.parse(right)).toLowerCase();

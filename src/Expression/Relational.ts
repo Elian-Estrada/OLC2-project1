@@ -145,7 +145,6 @@ export class Relational extends Instruction{
 
         switch(operator){
             case Relational_operator.EQUAL:
-                console.log(op1, op2);
                 
                 this.value = String(op1 == op2).toLowerCase();
                 return this.value

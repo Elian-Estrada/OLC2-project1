@@ -27,15 +27,12 @@ var Print = /** @class */ (function (_super) {
     }
     Print.prototype.interpret = function (tree, table) {
         var value = this.expression.interpret(tree, table);
-        console.log(value);
         if (value instanceof Exception)
             return value;
         if (value === null)
             return new Exception("Semantic", "Error 'void' type not allowed here", this.row, this.column);
         if (this.expression.get_type() == type.ARRAY) {
-            console.log("entra al print");
             //return new Exception("Semantic", "Don't print array", this.row, this.column);
-            console.log(value.get_value());
             value = JSON.stringify(value.get_value());
         }
         else if (this.expression.get_type() == type.NULL) {

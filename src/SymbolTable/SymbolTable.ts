@@ -44,14 +44,10 @@ export default class SymbolTable {
 
     update_table(symbol: Symbol){
         let current_table: SymbolTable | undefined = this;
-        console.log("Entrando en SymbolTable")
-        console.log(current_table)
 
         while(current_table !== undefined){
-            console.log(current_table.table)
             if (current_table.table.has(symbol.id)){
                 let current_symbol: any = current_table.table.get(symbol.id);
-                console.log(current_symbol)
                 if (current_symbol.type === symbol.type ){
                     current_symbol.value = symbol.value;
                     return undefined;

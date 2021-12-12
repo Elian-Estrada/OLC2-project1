@@ -69,12 +69,16 @@ var Declaration_array = /** @class */ (function (_super) {
             }
             else {
                 value = JSON.parse(JSON.stringify(array));
-                value = __assign(__assign({}, value), { get_type: function () {
+                value = __assign(__assign({}, value), { get_subtype: function () {
                         return this.type_array;
                     }, get_value: function () {
                         return this.value;
                     }, set_value: function (value) {
                         this.value = value;
+                    }, get_type_array: function () {
+                        return this.type;
+                    }, get_id: function () {
+                        return this.id;
                     } });
             }
             symbol = new Symbol(this.id, this.type, this.row, this.column, value);
@@ -107,7 +111,6 @@ var Declaration_array = /** @class */ (function (_super) {
                 case type.INT:
                     return parseInt(value);
                 case type.DOUBLE:
-                    console.log(parseFloat(value));
                     return parseFloat(value);
                 case type.BOOL:
                     return JSON.parse(value);
@@ -123,6 +126,12 @@ var Declaration_array = /** @class */ (function (_super) {
     };
     Declaration_array.prototype.get_subtype = function () {
         return this.type_array;
+    };
+    Declaration_array.prototype.get_type_array = function () {
+        return this.type;
+    };
+    Declaration_array.prototype.get_id = function () {
+        return this.id;
     };
     return Declaration_array;
 }(Instruction));
