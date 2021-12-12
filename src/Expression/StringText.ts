@@ -68,14 +68,13 @@ export class StringText extends Instruction {
                 case String_operator.REPETITION:
                     if ( this.exp1.get_type() === type.STRING && this.exp2.get_type() === type.INT ) {
                         this.type = type.STRING;
-                        this.value = this.exp1.get_value().repeat( this.exp2.get_value() );
+                        this.value = left.repeat(right);
                     } else {
                         return new Exception("Semantic", `This operation cannot be performed`, this.row, this.column);
                     }
                     break;
             }
         }
-
         return this.value;
     }
 
@@ -83,6 +82,8 @@ export class StringText extends Instruction {
         switch(op){
             case String_operator.CONCAT:
                 return String(op1 + op2);
+            case String_operator.REPETITION:
+                return String(op1.repeat(op2));
             default:
                 return "";
         }
