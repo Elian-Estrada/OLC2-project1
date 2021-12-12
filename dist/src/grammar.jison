@@ -45,8 +45,9 @@
 "continue"          return 'RCONTINUE';
 "return"            return 'RRETURN';
 
-/* Generic Functions */
+/* Generic and Natives Functions */
 "void"              return 'RVOID';
+"length"            return "RLENGTH";
 
 /* Language Functions */
 "pow"               return 'RPOW';
@@ -74,7 +75,7 @@
 ")"                 return 'PARRIGHT';
 
 /* Arrays Signs */
-","                 return 'COMMA';
+"."                 return 'DOT';
 "["                 return 'BRACKETLEFT';
 "]"                 return 'BRACKETRIGHT';
 
@@ -162,6 +163,7 @@
 	import Exception from "./SymbolTable/Exception.js";
 	import {MainInstruction} from "./Instructions/MainInstruction.js";
 	import { Struct } from "./Instructions/Struct.js";
+	import { Length } from "./Nativas/Length.js";
 %}
 
 %{
@@ -212,7 +214,8 @@ instruction
 	| functions                 { $$ = $1; }
 	| call_function ptcommP     { $$ = $1; }
 	| struct ptcommP			{ $$ = $1; }
-	| error ptcommP                     { errors.push(new Exception("Sintactic", `Sintactic error ${yytext}`, this._$.first_line, this._$.first_column)); }
+	| native_functions ptcommP  { $$ = $1; }
+	| error ptcommP             { errors.push(new Exception("Sintactic", `Sintactic error ${yytext}`, this._$.first_line, this._$.first_column)); }
 ;
 
 ptcommP
@@ -471,6 +474,13 @@ type
 	| RVOID     { $$ = type.VOID; }
 ;
 
+/* Native Functions */
+native_functions
+    : IDENTIFIER DOT RLENGTH PARLEFT PARRIGHT {
+        $$ = new Length(new Identifier($1, @1.first_line, @1.first_column), null, "length", [], [], @1.first_line, @1.first_column);
+    }
+;
+
 expression
 	: SUBSIGN expression %prec UMENOS       { $$ = new Arithmetic($2, null, Arithmetic_operator.SUBSTRACTION, @1.first_line, @1.first_column); }
 	| expression PLUSSIGN expression        { $$ = new Arithmetic($1, $3, Arithmetic_operator.ADDITION, @1.first_line, @1.first_column); }
@@ -503,6 +513,7 @@ expression
 	| PARLEFT expression PARRIGHT           { $$ = $2; }
 	| prod_ternary                          { $$ = $1; }
 	| call_function                         { $$ = $1; }
+	| native_functions                      { $$ = $1; }
 ;
 
 boolean

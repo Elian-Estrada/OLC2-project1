@@ -12,10 +12,18 @@ import {Continue} from "./Instructions/Continue.js";
 import {Return} from "./Instructions/Return.js";
 import {MainInstruction} from "./Instructions/MainInstruction.js";
 import { Struct } from "./Instructions/Struct.js";
+import {Length} from "./Nativas/Length.js";
+import {type} from "./SymbolTable/Type.js";
 
 export class Main {
+
+    /*create_native_functions (tree: Tree) {
+        let length_func = new Length("", 'length', [ { type: type.NULL, name: 'length##param1' } ], [], -1, -1);
+        tree.add_function(length_func);
+    }*/
+
     lexicalAnalysis(bufferStream: string) {
-        //console.log(`Analizando ${bufferStream}`);
+        console.log(`Analizando ${bufferStream}`);
         // @ts-ignore
 
         let instructions: Array<Instruction>;
@@ -24,7 +32,7 @@ export class Main {
 
         instructions = grammar.parse(bufferStream);
         // console.log(instructions)
-        
+
         let tree: Tree = new Tree(instructions);
         let global_table: SymbolTable = new SymbolTable(undefined, undefined);
         tree.set_global_table(global_table);
@@ -39,6 +47,9 @@ export class Main {
         // @ts-ignore
         if ( tree.get_instructions() != ';' ) {
             try {
+
+                // this.create_native_functions(tree);
+                // console.log(tree)
 
                 /* First run for functions and assigns */
                 for ( let instruction of tree.get_instructions() ){
@@ -142,6 +153,19 @@ export class Main {
                         tree.update_console(error.toString());
                     }
                 }
+
+                /*for ( let item of tree.get_all_functions() ) {
+                    if ( item.get_name() === 'length' ) {
+
+                        let declaration: string = "";
+                        if ( item.get_type() === type.VOID ) {
+                            declaration = "Method";
+                        } else {
+                            declaration = "Function";
+                        }
+                        global_table.inser
+                    }
+                }*/
             } catch (e) {
                 return e;
             }

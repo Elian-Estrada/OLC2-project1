@@ -61,6 +61,9 @@ var Tree = /** @class */ (function () {
     Tree.prototype.add_struct = function (struct) {
         this.structs.push(struct);
     };
+    Tree.prototype.get_all_functions = function () {
+        return this.functions;
+    };
     return Tree;
 }());
 export default Tree;
