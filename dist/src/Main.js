@@ -14,8 +14,12 @@ import { Struct } from "./Instructions/Struct.js";
 var Main = /** @class */ (function () {
     function Main() {
     }
+    /*create_native_functions (tree: Tree) {
+        let length_func = new Length("", 'length', [ { type: type.NULL, name: 'length##param1' } ], [], -1, -1);
+        tree.add_function(length_func);
+    }*/
     Main.prototype.lexicalAnalysis = function (bufferStream) {
-        //console.log(`Analizando ${bufferStream}`);
+        console.log("Analizando ".concat(bufferStream));
         // @ts-ignore
         var instructions;
         clean_errors();
@@ -34,6 +38,8 @@ var Main = /** @class */ (function () {
         // @ts-ignore
         if (tree.get_instructions() != ';') {
             try {
+                // this.create_native_functions(tree);
+                // console.log(tree)
                 /* First run for functions and assigns */
                 for (var _a = 0, _b = tree.get_instructions(); _a < _b.length; _a++) {
                     var instruction = _b[_a];
@@ -126,6 +132,18 @@ var Main = /** @class */ (function () {
                         tree.update_console(error.toString());
                     }
                 }
+                /*for ( let item of tree.get_all_functions() ) {
+                    if ( item.get_name() === 'length' ) {
+
+                        let declaration: string = "";
+                        if ( item.get_type() === type.VOID ) {
+                            declaration = "Method";
+                        } else {
+                            declaration = "Function";
+                        }
+                        global_table.inser
+                    }
+                }*/
             }
             catch (e) {
                 return e;

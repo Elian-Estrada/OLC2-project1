@@ -88,4 +88,7 @@ export default class Tree {
         this.structs.push(struct);
     }
 
+    public get_all_functions(){
+        return this.functions;
+    }
 }

@@ -69,5 +69,4 @@ export default class SymbolTable {
     get_name(){
         return this.name;
     }
-
 }

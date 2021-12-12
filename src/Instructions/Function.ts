@@ -13,7 +13,7 @@ export class Function extends Instruction {
     private name: string;
     private params: Array<any>;
     private instructions: Array<Instruction>;
-    private type: any;
+    protected type: any;
 
     constructor(type: string, name: string, params: Array<any>, instructions: Array<Instruction>, row: number, col: number) {
         super(row, col);
