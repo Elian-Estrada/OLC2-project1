@@ -114,6 +114,8 @@ var Declaration_array = /** @class */ (function (_super) {
                     return parseFloat(value);
                 case type.BOOL:
                     return JSON.parse(value);
+                default:
+                    return value;
             }
         }
         return expression;

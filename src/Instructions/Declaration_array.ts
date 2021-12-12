@@ -130,6 +130,8 @@ export class Declaration_array extends Instruction {
                     return parseFloat(value);
                 case type.BOOL:
                     return JSON.parse(value);
+                default:
+                    return value;
             }
         }
 
