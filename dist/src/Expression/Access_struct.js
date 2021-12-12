@@ -50,7 +50,14 @@ var Access_struct = /** @class */ (function (_super) {
             return null;
         }
         this.value = result;
-        return this.value;
+        switch (this.type) {
+            case type.ARRAY:
+                return this;
+            case type.STRUCT:
+                return this;
+            default:
+                return this.value;
+        }
     };
     Access_struct.prototype.for_attributes = function (ids, attributes, exp) {
         if (ids.length !== 0) {
@@ -71,6 +78,7 @@ var Access_struct = /** @class */ (function (_super) {
                     return item.value;
                 }
             }
+            return new Exception("Semantic", "The attribute: ".concat(ids[0], " doesn't exist"), this.row, this.column);
         }
     };
     Access_struct.prototype.get_type = function () {

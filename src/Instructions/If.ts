@@ -23,8 +23,13 @@ export class If extends Instruction {
     }
 
     interpret(tree: Tree, table: SymbolTable): any {
-        let flag: boolean = this.expr.interpret(tree, table);
+        let flag: any = this.expr.interpret(tree, table);
         // console.log(flag);
+
+        if (flag instanceof Exception){
+            return flag;
+        }
+
         if (this.expr.get_type() === type.BOOL) {
             if (JSON.parse(String(flag))) {
                 let new_table = new SymbolTable(table, `If - ${this.row}-${this.column}`)

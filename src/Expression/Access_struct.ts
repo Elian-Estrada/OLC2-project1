@@ -44,7 +44,7 @@ export class Access_struct extends Instruction{
         let value = struct.value;
 
         let result = this.for_attributes(this.list_ids.slice(1), value.get_attributes(), exp);
-        
+
         if (result instanceof Exception){
             return result;
         }
@@ -55,7 +55,14 @@ export class Access_struct extends Instruction{
 
         this.value = result;
 
-        return this.value;
+        switch(this.type){
+            case type.ARRAY:
+                return this;
+            case type.STRUCT:
+                return this;
+            default:
+                return this.value;
+        }
         
     }
 
@@ -80,7 +87,11 @@ export class Access_struct extends Instruction{
                     return item.value;
                 }
             }
+
+            return new Exception("Semantic", `The attribute: ${ids[0]} doesn't exist`, this.row, this.column);
         }
+
+        
     }
 
     get_type(){

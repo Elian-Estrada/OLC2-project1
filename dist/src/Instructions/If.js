@@ -33,6 +33,9 @@ var If = /** @class */ (function (_super) {
     If.prototype.interpret = function (tree, table) {
         var flag = this.expr.interpret(tree, table);
         // console.log(flag);
+        if (flag instanceof Exception) {
+            return flag;
+        }
         if (this.expr.get_type() === type.BOOL) {
             if (JSON.parse(String(flag))) {
                 var new_table = new SymbolTable(table, "If - ".concat(this.row, "-").concat(this.column));
