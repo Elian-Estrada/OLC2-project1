@@ -7,7 +7,6 @@ import { Identifier } from "./Expression/Identifier.js";
 import { StringText } from "./Expression/StringText.js";
 import { Ternary } from "./Expression/Ternary.js";
 import { Access_array } from "./Expression/Access_array.js"
-
 import { Declaration } from "./Instructions/Declaration.js"
 import { Declaration_array } from "./Instructions/Declaration_array.js"
 import { Assignment } from "./Instructions/Assignment.js"
@@ -36,7 +35,6 @@ import { SubString } from "./Nativas/SubString.js";
 import { Parse } from "./Nativas/Parse.js";
 
 let errors = [];
-
 function clean_errors(){
     errors = [];
 }
