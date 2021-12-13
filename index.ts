@@ -29,6 +29,16 @@ let myCodeMirror2 = CodeMirror.fromTextArea(
     }
 );
 
+// @ts-ignore
+let myCodeMirror2 = CodeMirror.fromTextArea(
+    document.getElementById("pythonConsole2"),
+    {
+        lineNumbers: false,
+        theme: "moxer",
+        readOnly: true,
+    }
+);
+
 function updateCodeMirror(data: string){
     let doc = myCodeMirror2.getDoc();
     let cursor = doc.getCursor(); // gets the line number in the cursor position
