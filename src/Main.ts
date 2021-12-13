@@ -12,8 +12,7 @@ import {Continue} from "./Instructions/Continue.js";
 import {Return} from "./Instructions/Return.js";
 import {MainInstruction} from "./Instructions/MainInstruction.js";
 import { Struct } from "./Instructions/Struct.js";
-import {Length} from "./Nativas/Length.js";
-import {type} from "./SymbolTable/Type.js";
+import {Declaration_array} from "./Instructions/Declaration_array.js";
 
 export class Main {
 
@@ -69,7 +68,8 @@ export class Main {
                     }
 
                     if ( instruction instanceof Declaration ||
-                        instruction instanceof Assignment ) {
+                        instruction instanceof Assignment ||
+                        instruction instanceof Declaration_array) {
                         let value = instruction.interpret(tree, global_table);
 
                         if ( value instanceof Exception ) {

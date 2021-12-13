@@ -1,10 +1,10 @@
 import {Instruction} from "../Abstract/Instruction.js";
-import {Arithmetic_operator, Logical_operator, type} from "../SymbolTable/Type.js";
+import {Arithmetic_operator, type} from "../SymbolTable/Type.js";
 import SymbolTable from "../SymbolTable/SymbolTable.js";
 import Tree from "../SymbolTable/Tree.js";
 import Exception from "../SymbolTable/Exception.js";
 import Symbol from "../SymbolTable/Symbol.js";
-import { Identifier } from "./Identifier.js";
+import {Identifier} from "./Identifier.js";
 
 export class Arithmetic extends Instruction {
 
@@ -48,6 +48,7 @@ export class Arithmetic extends Instruction {
                                 this.exp1.get_type() === type.INT ? 
                                 this.type = type.INT : 
                                 this.type = type.DOUBLE;
+
                                 this.exp1.get_type() === type.INT ? 
                                 this.value = String(parseInt(left) + parseInt(right)) :  
                                 this.value = String(parseFloat(left) + parseFloat(right));
@@ -122,9 +123,11 @@ export class Arithmetic extends Instruction {
                         switch ( this.exp2.get_type() ) {
                             case type.INT:
                             case type.DOUBLE:
+                                this.type = type.DOUBLE;
                                 this.value = this.operation(parseFloat(left), parseFloat(right), this.operator);
                                 break;
                             case type.CHAR:
+                                this.type = type.INT;
                                 this.value = this.operation(parseInt(left), right.charCodeAt(0), this.operator);
                                 break;
                             default:
@@ -135,12 +138,15 @@ export class Arithmetic extends Instruction {
                     else if ( this.exp1.get_type() === type.CHAR ) {
                         switch ( this.exp2.get_type() ) {
                             case type.INT:
+                                this.type = type.INT;
                                 this.value = this.operation(left.charCodeAt(0), parseInt(right), this.operator);
                                 break;
                             case type.DOUBLE:
+                                this.type = type.DOUBLE;
                                 this.value = this.operation(parseFloat(left.charCodeAt(0)), parseFloat(right), this.operator);
                                 break;
                             case type.CHAR:
+                                this.type = type.INT;
                                 this.value = this.operation(left.charCodeAt(0), right.charCodeAt(0), this.operator);
                                 break;
                             default:

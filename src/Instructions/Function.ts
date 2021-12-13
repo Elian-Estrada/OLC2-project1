@@ -25,6 +25,7 @@ export class Function extends Instruction {
 
     look_for_a_return(instruction: Instruction) {
         let flag = false;
+        let count = 0;
         if ( instruction instanceof If ) {
             for ( let instr of instruction.instructions ) {
 
@@ -40,6 +41,9 @@ export class Function extends Instruction {
                     this.look_for_a_return(instr);
                 }
             }
+        } else {
+            count += 1;
+            this.look_for_a_return(this.instructions[count]);
         }
 
         return flag;
@@ -47,12 +51,23 @@ export class Function extends Instruction {
 
     interpret(tree: Tree, table: SymbolTable): any {
         let new_table = new SymbolTable(table, `Function-${this.name}-${this.row}-${this.column}`);
-
         let flag = false;
-        if ( this.type !== type.VOID ) {
-            flag = this.look_for_a_return(this.instructions[0]);
-        } else {
-            flag = true;
+
+        for ( let instr of this.instructions ) {
+            if ( instr instanceof Return ) {
+                flag = true;
+                break;
+            } else {
+                this.look_for_a_return(instr);
+            }
+        }
+
+        if ( !flag ) {
+            if ( this.type !== type.VOID ) {
+                flag = this.look_for_a_return(this.instructions[0]);
+            } else {
+                flag = true;
+            }
         }
 
         for ( let instruction of this.instructions ) {

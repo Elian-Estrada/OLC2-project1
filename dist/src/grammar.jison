@@ -52,6 +52,7 @@
 "toLowercase"       return 'RLOWER';
 "caracterOfPosition" return 'RCHAROF';
 "subString"         return 'RSUBSTRING';
+"parse"             return 'RPARSE';
 
 /* Language Functions */
 "pow"               return 'RPOW';
@@ -172,6 +173,7 @@
 	import { ToLowerCase } from "./Nativas/ToLowerCase.js";
 	import { CaracterOfPosition } from "./Nativas/CaracterOfPosition.js";
 	import { SubString } from "./Nativas/SubString.js";
+	import { Parse } from "./Nativas/Parse.js";
 %}
 
 %{
@@ -222,7 +224,8 @@ instruction
 	| functions                 { $$ = $1; }
 	| call_function ptcommP     { $$ = $1; }
 	| struct ptcommP			{ $$ = $1; }
-	| native_functions ptcommP  { $$ = $1; }
+	| native_strings ptcommP    { $$ = $1; }
+	| native_function ptcommP   { $$ = $1; }
 	| error ptcommP             { errors.push(new Exception("Sintactic", `Sintactic error ${yytext}`, this._$.first_line, this._$.first_column)); }
 ;
 
@@ -483,7 +486,7 @@ type
 ;
 
 /* Native Functions */
-native_functions
+native_strings
     : IDENTIFIER DOT RLENGTH PARLEFT PARRIGHT {
         $$ = new Length(new Identifier($1, @1.first_line, @1.first_column), null, "length", [], [], @1.first_line, @1.first_column);
     }
@@ -498,6 +501,12 @@ native_functions
     }
     | IDENTIFIER DOT RSUBSTRING PARLEFT INTEGER COMMASIGN INTEGER PARRIGHT {
         $$ = new SubString(new Identifier($1, @1.first_line, @1.first_column), $5, $7, null, "length", [], [], @1.first_line, @1.first_column)
+    }
+;
+
+native_function
+    : type DOT RPARSE PARLEFT expression PARRIGHT {
+          $$ = new Parse($1, $5, @1.first_line, @1.first_column);
     }
 ;
 
@@ -533,7 +542,7 @@ expression
 	| PARLEFT expression PARRIGHT           { $$ = $2; }
 	| prod_ternary                          { $$ = $1; }
 	| call_function                         { $$ = $1; }
-	| native_functions                      { $$ = $1; }
+	| native_strings                        { $$ = $1; }
 ;
 
 boolean

@@ -119,9 +119,11 @@ var Arithmetic = /** @class */ (function (_super) {
                         switch (this.exp2.get_type()) {
                             case type.INT:
                             case type.DOUBLE:
+                                this.type = type.DOUBLE;
                                 this.value = this.operation(parseFloat(left), parseFloat(right), this.operator);
                                 break;
                             case type.CHAR:
+                                this.type = type.INT;
                                 this.value = this.operation(parseInt(left), right.charCodeAt(0), this.operator);
                                 break;
                             default:
@@ -131,12 +133,15 @@ var Arithmetic = /** @class */ (function (_super) {
                     else if (this.exp1.get_type() === type.CHAR) {
                         switch (this.exp2.get_type()) {
                             case type.INT:
+                                this.type = type.INT;
                                 this.value = this.operation(left.charCodeAt(0), parseInt(right), this.operator);
                                 break;
                             case type.DOUBLE:
+                                this.type = type.DOUBLE;
                                 this.value = this.operation(parseFloat(left.charCodeAt(0)), parseFloat(right), this.operator);
                                 break;
                             case type.CHAR:
+                                this.type = type.INT;
                                 this.value = this.operation(left.charCodeAt(0), right.charCodeAt(0), this.operator);
                                 break;
                             default:
