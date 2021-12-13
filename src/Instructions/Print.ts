@@ -23,15 +23,8 @@ export class Print extends Instruction {
 
         if ( value === null )
             return new Exception("Semantic", "Error 'void' type not allowed here", this.row, this.column);
-
-        console.log(value);
-        console.log(this.expression);
         
-        
-            
         if ( this.expression.get_type() == type.ARRAY ) {
-            
-            //return new Exception("Semantic", "Don't print array", this.row, this.column);
             
             value = JSON.stringify(value.get_value());
             
@@ -69,6 +62,10 @@ export class Print extends Instruction {
             for(let item of struct.attributes){
                 if (item.type === type.STRUCT){
                     params += this.print_struct(item) + ",";
+                } else if(item.type === type.ARRAY){
+                    console.log(item.value);
+                    
+                    params += JSON.stringify(item.value) + ","
                 } else {
                     params += item.value + ",";
                 }

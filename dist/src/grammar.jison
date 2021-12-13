@@ -464,11 +464,13 @@ attribute
 ;
 
 access_struct
-	: list_attributes							{ $$ = new Access_struct($1, null, this._$.first_line, this._$.first_column); }
+	: list_attributes							{ $$ = new Access_struct($1, null, null, this._$.first_line, this._$.first_column); }
+	| list_attributes list_brackets				{ $$ = new Access_struct($1, null, $2, this._$.first_line, this._$.first_column); }
 ;
 
 assignment_struct
-	: list_attributes EQUALSIGN expression		{ $$ = new Access_struct($1, $3, this._$.first_line, this._$.first_column); }
+	: list_attributes EQUALSIGN expression		{ $$ = new Access_struct($1, $3, null, this._$.first_line, this._$.first_column); }
+	| list_attributes list_brackets EQUALSIGN expression { $$ = new Access_struct($1, $4, $2, this._$.first_line, this._$.first_column); }
 ;
 
 list_attributes

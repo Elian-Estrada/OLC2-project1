@@ -23,40 +23,50 @@ export class DoWhile extends Instruction {
 
     interpret(tree: Tree, table: SymbolTable): any {
         let flag2 = false;
-        while (true) {
-            let flag = this.expr.interpret(tree, table);
-
-            if ( flag instanceof Exception )
-                return flag;
-
-            if ( this.expr.get_type() == type.BOOL ) {
-                if ( String(flag) == "true" || !flag2 ) {
-                    let new_table = new SymbolTable(table, `DoWhile-${this.row}-${this.column}`);
-
-                    for ( let item of this.instructions ) {
-                        let inst = item.interpret(tree, new_table);
-
-                        if ( inst instanceof Exception ) {
-                            tree.get_errors().push(inst);
-                            tree.update_console(inst.toString());
+        try {
+            
+            while (true && this.counter < 100000) {
+                let flag = this.expr.interpret(tree, table);
+    
+                if ( flag instanceof Exception )
+                    return flag;
+    
+                if ( this.expr.get_type() == type.BOOL ) {
+                    if ( String(flag) == "true" || !flag2 ) {
+                        let new_table = new SymbolTable(table, `DoWhile-${this.row}-${this.column}`);
+    
+                        for ( let item of this.instructions ) {
+                            let inst = item.interpret(tree, new_table);
+    
+                            if ( inst instanceof Exception ) {
+                                tree.get_errors().push(inst);
+                                tree.update_console(inst.toString());
+                            }
+    
+                            if ( inst instanceof Continue ) {
+                                break;
+                            } else if ( inst instanceof Break ) {
+                                return null;
+                            } else if ( inst instanceof Return ) {
+                                return inst;
+                            }
                         }
-
-                        if ( inst instanceof Continue ) {
-                            break;
-                        } else if ( inst instanceof Break ) {
-                            return null;
-                        } else if ( inst instanceof Return ) {
-                            return inst;
-                        }
+                        flag2 = true;
+                    } else {
+                        break;
                     }
-                    flag2 = true;
                 } else {
-                    break;
+                    return new Exception("Semantic", `Expect a Boolean type expression. Not ${this.expr.get_type().name}`, this.row, this.column);
                 }
-            } else {
-                return new Exception("Semantic", `Expect a Boolean type expression. Not ${this.expr.get_type().name}`, this.row, this.column);
+                this.counter += 1;
             }
-            this.counter += 1;
+    
+            if (this.counter >= 100000){
+                throw "Infinity Loop in Do-While";
+            }
+
+        } catch (error) {
+            return new Exception("Semantic", "" + error, this.row, this.column);
         }
     }
 }

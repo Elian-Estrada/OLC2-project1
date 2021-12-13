@@ -1,4 +1,5 @@
 import Exception from "./Exception.js";
+import { type } from './Type.js';
 export var variables = [];
 var SymbolTable = /** @class */ (function () {
     function SymbolTable(prev, name) {
@@ -31,7 +32,11 @@ var SymbolTable = /** @class */ (function () {
         while (current_table !== undefined) {
             if (current_table.table.has(symbol.id)) {
                 var current_symbol = current_table.table.get(symbol.id);
-                if (current_symbol.type === symbol.type) {
+                if (current_symbol.type === symbol.type && current_symbol.type !== type.STRUCT) {
+                    current_symbol.value = symbol.value;
+                    return undefined;
+                }
+                else if (current_symbol.type === symbol.type && current_symbol.value.id === symbol.value.id) {
                     current_symbol.value = symbol.value;
                     return undefined;
                 }

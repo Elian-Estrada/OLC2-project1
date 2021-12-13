@@ -48,8 +48,11 @@ export default class SymbolTable {
         while(current_table !== undefined){
             if (current_table.table.has(symbol.id)){
                 let current_symbol: any = current_table.table.get(symbol.id);
-                if (current_symbol.type === symbol.type ){
+                if (current_symbol.type === symbol.type && current_symbol.type !== type.STRUCT){
                     current_symbol.value = symbol.value;
+                    return undefined;
+                } else if (current_symbol.type === symbol.type && current_symbol.value.id === symbol.value.id) {
+                    current_symbol.value = symbol.value
                     return undefined;
                 } else {
                     return new Exception("Semantic", `Cannot assign value of type: ${symbol.type} in a variable of type: ${current_table.table.get(symbol.id)?.type}`, symbol.row, symbol.column);

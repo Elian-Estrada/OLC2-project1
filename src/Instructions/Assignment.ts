@@ -1,4 +1,6 @@
 import { Instruction } from "../Abstract/Instruction.js";
+import { Access_struct } from "../Expression/Access_struct.js";
+import { Identifier } from "../Expression/Identifier.js";
 import Exception from "../SymbolTable/Exception.js";
 import Symbol from "../SymbolTable/Symbol.js";
 import SymbolTable from "../SymbolTable/SymbolTable.js";
@@ -26,6 +28,16 @@ export class Assignment extends Instruction{
 
         if (this.expression.get_type() === type.ARRAY){
             //array implemented
+        }
+
+        if (this.expression instanceof Identifier && this.expression.get_type() === type.STRUCT){
+            value = value;
+        }
+
+        if (this.expression.get_type() === type.STRUCT && this.expression instanceof Access_struct){
+            console.log(value);
+            value = value.get_value().value;
+            console.log(value);
         }
 
         let new_symbol = new Symbol(this.id, this.expression.get_type(), this.row, this.column, value);
