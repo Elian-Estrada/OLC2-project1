@@ -33,6 +33,7 @@ var Function = /** @class */ (function (_super) {
     }
     Function.prototype.look_for_a_return = function (instruction) {
         var flag = false;
+        var count = 0;
         if (instruction instanceof If) {
             for (var _i = 0, _a = instruction.instructions; _i < _a.length; _i++) {
                 var instr = _a[_i];
@@ -49,19 +50,35 @@ var Function = /** @class */ (function (_super) {
                 }
             }
         }
+        else {
+            count += 1;
+            this.look_for_a_return(this.instructions[count]);
+        }
         return flag;
     };
     Function.prototype.interpret = function (tree, table) {
         var new_table = new SymbolTable(table, "Function-".concat(this.name, "-").concat(this.row, "-").concat(this.column));
         var flag = false;
-        if (this.type !== type.VOID) {
-            flag = this.look_for_a_return(this.instructions[0]);
-        }
-        else {
-            flag = true;
-        }
         for (var _i = 0, _a = this.instructions; _i < _a.length; _i++) {
-            var instruction = _a[_i];
+            var instr = _a[_i];
+            if (instr instanceof Return) {
+                flag = true;
+                break;
+            }
+            else {
+                this.look_for_a_return(instr);
+            }
+        }
+        if (!flag) {
+            if (this.type !== type.VOID) {
+                flag = this.look_for_a_return(this.instructions[0]);
+            }
+            else {
+                flag = true;
+            }
+        }
+        for (var _b = 0, _c = this.instructions; _b < _c.length; _b++) {
+            var instruction = _c[_b];
             // console.log(instruction)
             if (flag) {
                 var value = instruction.interpret(tree, new_table);

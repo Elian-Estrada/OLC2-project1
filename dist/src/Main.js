@@ -11,6 +11,7 @@ import { Continue } from "./Instructions/Continue.js";
 import { Return } from "./Instructions/Return.js";
 import { MainInstruction } from "./Instructions/MainInstruction.js";
 import { Struct } from "./Instructions/Struct.js";
+import { Declaration_array } from "./Instructions/Declaration_array.js";
 var Main = /** @class */ (function () {
     function Main() {
     }
@@ -55,7 +56,8 @@ var Main = /** @class */ (function () {
                         }
                     }
                     if (instruction instanceof Declaration ||
-                        instruction instanceof Assignment) {
+                        instruction instanceof Assignment ||
+                        instruction instanceof Declaration_array) {
                         var value = instruction.interpret(tree, global_table);
                         if (value instanceof Exception) {
                             tree.get_errors().push(value);
