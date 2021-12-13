@@ -40,6 +40,9 @@ var Identifier = /** @class */ (function (_super) {
     Identifier.prototype.get_id = function () {
         return this.id;
     };
+    Identifier.prototype.get_value = function () {
+        return this.value;
+    };
     Identifier.prototype.toString = function () {
         return this.value;
     };

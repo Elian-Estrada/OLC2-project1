@@ -65,6 +65,10 @@ var Access_struct = /** @class */ (function (_super) {
                 var item = attributes_1[_i];
                 if (ids[0] === item.id) {
                     if (item.type === type.STRUCT && ids.length !== 0 && item.value !== "null") {
+                        if (ids.length === 1) {
+                            this.type = type.STRUCT;
+                            return item;
+                        }
                         return this.for_attributes(ids.slice(1), item.value.get_attributes(), exp);
                     }
                     if (exp !== null && this.expression.get_type() === item.type) {
@@ -75,6 +79,9 @@ var Access_struct = /** @class */ (function (_super) {
                         return new Exception("Semantic", "The type: ".concat(this.expression.get_type(), " cannot assignment at attribute of type: ").concat(item.type), this.expression.row, this.expression.column);
                     }
                     this.type = item.type;
+                    if (item.type === type.STRUCT) {
+                        return item;
+                    }
                     return item.value;
                 }
             }

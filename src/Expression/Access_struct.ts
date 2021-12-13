@@ -72,6 +72,11 @@ export class Access_struct extends Instruction{
             for (let item of attributes){
                 if (ids[0] === item.id) {
                     if (item.type === type.STRUCT && ids.length !== 0 && item.value !== "null"){
+                        if (ids.length === 1){
+                            this.type = type.STRUCT;
+                            return item;
+                        }
+                        
                         return this.for_attributes(ids.slice(1), item.value.get_attributes(), exp)
                     }
 
@@ -84,13 +89,17 @@ export class Access_struct extends Instruction{
                     }
 
                     this.type = item.type;
+
+                    if (item.type === type.STRUCT){
+                        return item;
+                    }
+
                     return item.value;
                 }
             }
 
             return new Exception("Semantic", `The attribute: ${ids[0]} doesn't exist`, this.row, this.column);
         }
-
         
     }
 

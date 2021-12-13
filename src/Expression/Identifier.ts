@@ -38,6 +38,10 @@ export class Identifier extends Instruction {
         return this.id;
     }
 
+    get_value(){
+        return this.value;
+    }
+
     toString(): String{
         return this.value;
     }

@@ -31,14 +31,45 @@ var Print = /** @class */ (function (_super) {
             return value;
         if (value === null)
             return new Exception("Semantic", "Error 'void' type not allowed here", this.row, this.column);
+        console.log(value);
+        console.log(this.expression);
         if (this.expression.get_type() == type.ARRAY) {
             //return new Exception("Semantic", "Don't print array", this.row, this.column);
             value = JSON.stringify(value.get_value());
+        }
+        else if (this.expression.get_type() === type.STRUCT) {
+            if (this.expression.get_value().value === "null") {
+                value = "".concat(this.expression.get_value().struct, "(null)");
+            }
+            else {
+                value = this.print_struct(this.expression.get_value());
+            }
         }
         else if (this.expression.get_type() == type.NULL) {
             return new Exception("Semantic", "Null Pointer Exception", this.row, this.column);
         }
         tree.update_console("".concat(value), this.flag);
+    };
+    Print.prototype.print_struct = function (struct) {
+        if (struct.value === "null") {
+            return "null";
+        }
+        else {
+            if (struct.value !== undefined) {
+                struct = struct.value;
+            }
+            var params = "".concat(struct.id, "(");
+            for (var _i = 0, _a = struct.attributes; _i < _a.length; _i++) {
+                var item = _a[_i];
+                if (item.type === type.STRUCT) {
+                    params += this.print_struct(item) + ",";
+                }
+                else {
+                    params += item.value + ",";
+                }
+            }
+            return params.slice(0, params.length - 1) + ")";
+        }
     };
     return Print;
 }(Instruction));
