@@ -77,6 +77,9 @@ var SymbolTable = /** @class */ (function () {
         }
         return new Exception("Semantic", "The id: ".concat(symbol.id, " doesn't exist in current context"), symbol.row, symbol.column);
     };
+    SymbolTable.prototype.increment_size = function () {
+        this.size += 1;
+    };
     SymbolTable.prototype.get_name = function () {
         return this.name;
     };

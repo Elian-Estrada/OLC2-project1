@@ -1,5 +1,6 @@
 import SymbolTable from "../SymbolTable/SymbolTable.js";
 import Tree from "../SymbolTable/Tree.js";
+import {Generator3D} from "../Generator/Generator3D";
 
 export abstract class Instruction {
 
@@ -13,4 +14,5 @@ export abstract class Instruction {
 
     abstract interpret(tree: Tree, table: SymbolTable): any;
 
+    abstract compile(table: SymbolTable, generator: Generator3D): any;
 }

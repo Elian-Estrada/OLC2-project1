@@ -25,6 +25,7 @@ export class Call extends Instruction {
     interpret(tree: Tree, table: SymbolTable): any {
         let ob_function = tree.get_function(this.name);
         let struct:any = JSON.parse(JSON.stringify(tree.get_struct(this.name)));
+        console.log(ob_function)
 
 
         if ( ob_function !== null && ob_function !== undefined){
@@ -47,19 +48,7 @@ export class Call extends Instruction {
                         break;
                     }
 
-                    let expr_to_valuate = String( ob_function.get_params()[count].name ).toLowerCase();
                     let table_res = null;
-                    /*switch (expr_to_valuate) {
-                        case "length##param1":
-                        case "round##param1":
-                        case "truncate##param1":
-                        case "type_of##param1":
-                            let symbol = new Symbol(expr_to_valuate, expression.get_type(), this.row, this.column, val_expression);
-                            table_res = new_table.set_table(symbol);
-                            if ( table_res instanceof Exception )
-                                return table_res;
-                            break;
-                    }*/
 
                     // console.log(ob_function.get_params()[count].type)
                     if ( ob_function.get_params()[count].type == expression.get_type() ) {

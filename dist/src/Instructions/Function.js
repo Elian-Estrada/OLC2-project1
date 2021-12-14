@@ -32,8 +32,12 @@ var Function = /** @class */ (function (_super) {
     }
     Function.prototype.interpret = function (tree, table) {
         var new_table = new SymbolTable(table, "Function-".concat(this.name, "-").concat(this.row, "-").concat(this.column));
-        for (var _i = 0, _a = this.instructions; _i < _a.length; _i++) {
-            var instruction = _a[_i];
+        for (var _i = 0, _a = this.params; _i < _a.length; _i++) {
+            var param = _a[_i];
+            new_table.increment_size();
+        }
+        for (var _b = 0, _c = this.instructions; _b < _c.length; _b++) {
+            var instruction = _c[_b];
             var value = instruction.interpret(tree, new_table);
             if (value === "void")
                 return;
@@ -67,6 +71,7 @@ var Function = /** @class */ (function (_super) {
         if (this.type !== type.VOID) {
             return new Exception("Semantic", "Function of type: ".concat(this.type, " expected one Return"), this.instructions[this.instructions.length - 1].row, this.instructions[this.instructions.length - 1].column);
         }
+        console.log(new_table);
         return null;
     };
     Function.prototype.get_type = function () {

@@ -59,6 +59,21 @@ var MainInstruction = /** @class */ (function (_super) {
         }
         console.log(new_table);
     };
+    MainInstruction.prototype.compile = function (table, generator) {
+        /*let generator_aux = new Generator3D();
+        let generator = generator_aux.get_instance();*/
+        for (var _i = 0, _a = this.instructions; _i < _a.length; _i++) {
+            var item = _a[_i];
+            // @ts-ignore
+            if (item === ';') {
+                generator.add_print("c", "char", 10);
+            }
+            else {
+                item.compile(table, generator);
+            }
+        }
+        return generator.get_code();
+    };
     return MainInstruction;
 }(Instruction));
 export { MainInstruction };

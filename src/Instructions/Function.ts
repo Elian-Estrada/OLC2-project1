@@ -7,6 +7,7 @@ import {Return} from "./Return.js";
 import {Continue} from "./Continue.js";
 import {type} from "../SymbolTable/Type.js";
 import {If} from "./If.js";
+import Symbol from "../SymbolTable/Symbol.js";
 
 export class Function extends Instruction {
 
@@ -25,6 +26,10 @@ export class Function extends Instruction {
 
     interpret(tree: Tree, table: SymbolTable): any {
         let new_table = new SymbolTable(table, `Function-${this.name}-${this.row}-${this.column}`);
+
+        for ( let param of this.params ) {
+            new_table.increment_size();
+        }
         
         for ( let instruction of this.instructions ) {
             let value = instruction.interpret(tree, new_table);
@@ -69,6 +74,7 @@ export class Function extends Instruction {
             return new Exception("Semantic", `Function of type: ${this.type} expected one Return`, this.instructions[this.instructions.length - 1].row, this.instructions[this.instructions.length - 1].column);
         }
 
+        console.log(new_table);
         return null;
     }
 

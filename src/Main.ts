@@ -183,10 +183,31 @@ export class Main {
 
     compile (bufferStream: string) {
         console.log(`Compilando ${bufferStream}`);
+        let res = "";
+        /*let res = `/!*------HEADER------*!/\n`;
+        res += "#include <stdio.h>\n";
+        res += "#include <math.h>\n";
+        res += "double heap[30101999];\n";
+        res += "double stack[30101999];\n";
+        res += "double P;\n";
+        res += "double H;\n\n";
+        res += "/!*------MAIN------*!/\n";
+        res += "void main() {\n";
+        res += "\tP = 0; H = 0;\n";*/
+
         let generator_aux = new Generator3D();
         generator_aux.clean_all();
         let generator = generator_aux.get_instance();
 
-        return bufferStream;
+        let instructions = grammar.parse(bufferStream);
+        let tree: Tree = new Tree(instructions);
+        let global_table: SymbolTable = new SymbolTable(undefined, undefined);
+        tree.set_global_table(global_table);
+
+        for ( let instruction of tree.get_instructions() ){
+            res = instruction.compile(global_table, generator);
+        }
+
+        return res;
     }
 }

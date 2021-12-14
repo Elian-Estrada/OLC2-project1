@@ -40,8 +40,8 @@ let myCodeMirror3 = CodeMirror.fromTextArea(
     }
 );
 
-function updateCodeMirror(data: string){
-    let doc = myCodeMirror2.getDoc();
+function updateCodeMirror(data: string, codeMirror: any){
+    let doc = codeMirror.getDoc();
     let cursor = doc.getCursor(); // gets the line number in the cursor position
     let line = doc.getLine(cursor.line); // get the line contents
     let pos = { // create a new object to avoid mutation of the original selection
@@ -69,7 +69,7 @@ function codeToAnalyze() {
     myCodeMirror2.setValue("");
     // @ts-ignore
     let res: string = main.lexicalAnalysis(bufferStream);
-    updateCodeMirror(res);
+    updateCodeMirror(res, myCodeMirror2);
 }
 
 btnCompile?.addEventListener('click', () => {
@@ -77,5 +77,6 @@ btnCompile?.addEventListener('click', () => {
     let main = new Main();
     myCodeMirror3.setValue("");
     let res: string = main.compile(bufferStream);
-    console.log(res);
+    updateCodeMirror(res, myCodeMirror3);
+    // console.log(res);
 })

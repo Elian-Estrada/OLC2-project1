@@ -94,6 +94,10 @@ export default class SymbolTable {
         return new Exception("Semantic", `The id: ${symbol.id} doesn't exist in current context`, symbol.row, symbol.column);
     }
 
+    increment_size () {
+        this.size += 1;
+    }
+
     get_name(){
         return this.name;
     }

@@ -24,8 +24,8 @@ var myCodeMirror3 = CodeMirror.fromTextArea(document.getElementById("pythonConso
     theme: "moxer",
     readOnly: true,
 });
-function updateCodeMirror(data) {
-    var doc = myCodeMirror2.getDoc();
+function updateCodeMirror(data, codeMirror) {
+    var doc = codeMirror.getDoc();
     var cursor = doc.getCursor(); // gets the line number in the cursor position
     var line = doc.getLine(cursor.line); // get the line contents
     var pos = {
@@ -50,12 +50,13 @@ function codeToAnalyze() {
     myCodeMirror2.setValue("");
     // @ts-ignore
     var res = main.lexicalAnalysis(bufferStream);
-    updateCodeMirror(res);
+    updateCodeMirror(res, myCodeMirror2);
 }
 btnCompile === null || btnCompile === void 0 ? void 0 : btnCompile.addEventListener('click', function () {
     bufferStream = myCodeMirror.getValue();
     var main = new Main();
     myCodeMirror3.setValue("");
     var res = main.compile(bufferStream);
-    console.log(res);
+    updateCodeMirror(res, myCodeMirror3);
+    // console.log(res);
 });

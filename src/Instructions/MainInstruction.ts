@@ -5,6 +5,7 @@ import Exception from "../SymbolTable/Exception.js";
 import {Function} from "./Function.js";
 import {Continue} from "./Continue.js";
 import {Break} from "./Break.js";
+import {Generator3D} from "../Generator/Generator3D.js";
 
 export class MainInstruction extends Instruction {
 
@@ -53,5 +54,21 @@ export class MainInstruction extends Instruction {
         }
 
         console.log(new_table)
+    }
+
+    compile(table: SymbolTable, generator: Generator3D): any {
+        /*let generator_aux = new Generator3D();
+        let generator = generator_aux.get_instance();*/
+
+        for ( let item of this.instructions ) {
+            // @ts-ignore
+            if ( item === ';' ) {
+                generator.add_print("c", "char", 10);
+            } else {
+                item.compile(table, generator);
+            }
+        }
+
+        return generator.get_code();
     }
 }

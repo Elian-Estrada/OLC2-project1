@@ -159,10 +159,29 @@ var Main = /** @class */ (function () {
     };
     Main.prototype.compile = function (bufferStream) {
         console.log("Compilando ".concat(bufferStream));
+        var res = "";
+        /*let res = `/!*------HEADER------*!/\n`;
+        res += "#include <stdio.h>\n";
+        res += "#include <math.h>\n";
+        res += "double heap[30101999];\n";
+        res += "double stack[30101999];\n";
+        res += "double P;\n";
+        res += "double H;\n\n";
+        res += "/!*------MAIN------*!/\n";
+        res += "void main() {\n";
+        res += "\tP = 0; H = 0;\n";*/
         var generator_aux = new Generator3D();
         generator_aux.clean_all();
         var generator = generator_aux.get_instance();
-        return bufferStream;
+        var instructions = grammar.parse(bufferStream);
+        var tree = new Tree(instructions);
+        var global_table = new SymbolTable(undefined, undefined);
+        tree.set_global_table(global_table);
+        for (var _i = 0, _a = tree.get_instructions(); _i < _a.length; _i++) {
+            var instruction = _a[_i];
+            res = instruction.compile(global_table, generator);
+        }
+        return res;
     };
     return Main;
 }());

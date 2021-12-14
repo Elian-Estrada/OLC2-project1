@@ -26,6 +26,21 @@ var Print = /** @class */ (function (_super) {
         _this.flag = flag;
         return _this;
     }
+    Print.prototype.compile = function (table, generator) {
+        if (this.expression.value.length == 1) {
+            // let value = this.expression.compile(table);
+            if (this.expression.get_type() === type.INT) {
+                generator.add_print("f", "double", this.expression.value);
+            }
+            else if (this.expression.get_type() === type.STRING) {
+                this.typeString();
+            }
+        }
+        generator.add_print("c", "char", 10);
+    };
+    Print.prototype.typeString = function (value, table, generator) {
+        generator.printString();
+    };
     Print.prototype.interpret = function (tree, table) {
         if (this.expression instanceof Call) {
             // console.log(this.expression)

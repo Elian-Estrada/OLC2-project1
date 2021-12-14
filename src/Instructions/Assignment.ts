@@ -63,4 +63,7 @@ export class Assignment extends Instruction{
         return this.expression;
     }
 
+    compile(tree: Tree, table: SymbolTable): any {
+    }
+
 }

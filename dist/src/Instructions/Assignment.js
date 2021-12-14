@@ -59,6 +59,8 @@ var Assignment = /** @class */ (function (_super) {
     Assignment.prototype.get_expression = function () {
         return this.expression;
     };
+    Assignment.prototype.compile = function (tree, table) {
+    };
     return Assignment;
 }(Instruction));
 export { Assignment };
