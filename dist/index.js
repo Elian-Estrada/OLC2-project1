@@ -11,7 +11,7 @@ myCodeMirror = CodeMirror.fromTextArea(document.getElementById("code"), {
     theme: "moxer",
     mode: "text/x-java",
 });
-myCodeMirror.setValue("void Main(){\n  return;\n}");
+myCodeMirror.setValue("void main(){\n\n  return;\n}");
 // @ts-ignore
 var myCodeMirror2 = CodeMirror.fromTextArea(document.getElementById("pythonConsole"), {
     lineNumbers: false,

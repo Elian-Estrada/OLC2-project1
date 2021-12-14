@@ -18,7 +18,7 @@ myCodeMirror = CodeMirror.fromTextArea(
     }
 )
 
-myCodeMirror.setValue("void Main(){\n  return;\n}");
+myCodeMirror.setValue("void main(){\n\n  return;\n}");
 
 // @ts-ignore
 let myCodeMirror2 = CodeMirror.fromTextArea(
