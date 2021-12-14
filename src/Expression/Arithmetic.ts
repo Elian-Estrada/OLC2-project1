@@ -127,8 +127,8 @@ export class Arithmetic extends Instruction {
                                 this.value = this.operation(parseFloat(left), parseFloat(right), this.operator);
                                 break;
                             case type.CHAR:
-                                this.type = type.INT;
-                                this.value = this.operation(parseInt(left), right.charCodeAt(0), this.operator);
+                                this.type = type.DOUBLE
+                                this.value = this.operation(parseFloat(left), right.charCodeAt(0), this.operator);
                                 break;
                             default:
                                 return new Exception("Semantic", `The type ${this.exp2.get_type().toString()} \n cannot be operated with type: DOUBLE`, this.row, this.column);
@@ -138,7 +138,7 @@ export class Arithmetic extends Instruction {
                     else if ( this.exp1.get_type() === type.CHAR ) {
                         switch ( this.exp2.get_type() ) {
                             case type.INT:
-                                this.type = type.INT;
+                                this.type = type.INT
                                 this.value = this.operation(left.charCodeAt(0), parseInt(right), this.operator);
                                 break;
                             case type.DOUBLE:
@@ -157,7 +157,6 @@ export class Arithmetic extends Instruction {
             
         } else {
             let symbol: Symbol | null = null;
-            console.log(this.operator);
             
             switch ( this.operator ) {
                 case Arithmetic_operator.SUBSTRACTION:
@@ -188,20 +187,13 @@ export class Arithmetic extends Instruction {
                                 return new Exception("Semantic", `The type: ${this.exp1.get_type()} \n cannot be operated whit operator: ${this.operator}`, this.row, this.column);
                         }
 
-                        console.log(left);
-                        
-
                         if (this.operator === Arithmetic_operator.INC){
                             symbol = new Symbol(this.exp1.get_id(), this.exp1.get_type(), this.row, this.column, String(left + 1));
                         }else {
                             symbol = new Symbol(this.exp1.get_id(), this.exp1.get_type(), this.row, this.column, String(left - 1));
                         }
-
-                        console.log(symbol);
                         
                         let result = table.update_table(symbol);
-
-                        console.log(result);
                         
                         if (result instanceof Exception){
                             return result;

@@ -27,23 +27,27 @@ export class Print extends Instruction {
             }
         }
         let value = this.expression.interpret(tree, table);
-        // console.log(value)
-
+        //console.log(value);
+        
         if ( value instanceof Exception )
             return value;
 
         /*if ( value === null )
             return new Exception("Semantic", "Error 'void' type not allowed here", this.row, this.column);*/
-
-
-
+        
         if ( this.expression.get_type() == type.ARRAY ) {
-            // console.log("entra al print");
-
-            //return new Exception("Semantic", "Don't print array", this.row, this.column);
-            // console.log(value.get_value());
-
+            
             value = JSON.stringify(value.get_value());
+            
+        } else if (this.expression.get_type() === type.STRUCT && value !== "null"){
+            
+            if (this.expression.get_value().value === "null"){
+                value = `${this.expression.get_value().struct}(null)`;
+            } else {
+                
+                value = this.print_struct(this.expression.get_value());
+                
+            }
 
         }
         else if ( this.expression.get_type() == type.NULL ) {
@@ -51,5 +55,37 @@ export class Print extends Instruction {
         }
 
         tree.update_console(`${ value }`, this.flag);
+    }
+
+    print_struct(struct: any){
+
+        if (struct.value === "null"){
+
+            return `null`
+
+        } else {
+
+            if (struct.value !== undefined){
+                struct = struct.value;
+            }
+
+            let params = `${struct.id}(`;
+            for(let item of struct.attributes){
+                if (item.type === type.STRUCT){
+                    params += this.print_struct(item) + ",";
+                } else if(item.type === type.ARRAY){
+                    console.log(item.value);
+                    
+                    params += JSON.stringify(item.value) + ","
+                } else {
+                    params += item.value + ",";
+                }
+
+            }
+
+            return params.slice(0, params.length - 1) + ")";
+
+        }
+
     }
 }

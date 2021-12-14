@@ -119,7 +119,6 @@ var Main = /** @class */ (function () {
                                 continue;
                             }
                             if (instruction instanceof Return) {
-                                console.log(value);
                             }
                         }
                     }

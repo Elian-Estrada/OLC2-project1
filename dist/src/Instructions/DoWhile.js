@@ -31,40 +31,48 @@ var DoWhile = /** @class */ (function (_super) {
     }
     DoWhile.prototype.interpret = function (tree, table) {
         var flag2 = false;
-        while (true) {
-            var flag = this.expr.interpret(tree, table);
-            if (flag instanceof Exception)
-                return flag;
-            if (this.expr.get_type() == type.BOOL) {
-                if (String(flag) == "true" || !flag2) {
-                    var new_table = new SymbolTable(table, "DoWhile-".concat(this.row, "-").concat(this.column));
-                    for (var _i = 0, _a = this.instructions; _i < _a.length; _i++) {
-                        var item = _a[_i];
-                        var inst = item.interpret(tree, new_table);
-                        if (inst instanceof Exception) {
-                            tree.get_errors().push(inst);
-                            tree.update_console(inst.toString());
+        try {
+            while (true && this.counter < 100000) {
+                var flag = this.expr.interpret(tree, table);
+                if (flag instanceof Exception)
+                    return flag;
+                if (this.expr.get_type() == type.BOOL) {
+                    if (String(flag) == "true" || !flag2) {
+                        var new_table = new SymbolTable(table, "DoWhile-".concat(this.row, "-").concat(this.column));
+                        for (var _i = 0, _a = this.instructions; _i < _a.length; _i++) {
+                            var item = _a[_i];
+                            var inst = item.interpret(tree, new_table);
+                            if (inst instanceof Exception) {
+                                tree.get_errors().push(inst);
+                                tree.update_console(inst.toString());
+                            }
+                            if (inst instanceof Continue) {
+                                break;
+                            }
+                            else if (inst instanceof Break) {
+                                return null;
+                            }
+                            else if (inst instanceof Return) {
+                                return inst;
+                            }
                         }
-                        if (inst instanceof Continue) {
-                            break;
-                        }
-                        else if (inst instanceof Break) {
-                            return null;
-                        }
-                        else if (inst instanceof Return) {
-                            return inst;
-                        }
+                        flag2 = true;
                     }
-                    flag2 = true;
+                    else {
+                        break;
+                    }
                 }
                 else {
-                    break;
+                    return new Exception("Semantic", "Expect a Boolean type expression. Not ".concat(this.expr.get_type().name), this.row, this.column);
                 }
+                this.counter += 1;
             }
-            else {
-                return new Exception("Semantic", "Expect a Boolean type expression. Not ".concat(this.expr.get_type().name), this.row, this.column);
+            if (this.counter >= 100000) {
+                throw "Infinity Loop in Do-While";
             }
-            this.counter += 1;
+        }
+        catch (error) {
+            return new Exception("Semantic", "" + error, this.row, this.column);
         }
     };
     return DoWhile;

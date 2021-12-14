@@ -133,20 +133,16 @@ export class Call extends Instruction {
                         tree.update_console(error.toString());
                     }
                 } else {
-                    console.log("entro");
-
+                    
                     let value = item.interpret(tree, table);
-                    console.log(item);
-
-                    console.log(value);
-
+                    
                     if (value instanceof Exception){
                         tree.get_errors().push(value);
                         tree.update_console(value.toString());
                         return;
                     }
 
-                    if (value instanceof Declaration_array){
+                    if (item.get_type() === type.ARRAY){
                         if (struct?.get_attributes()[i].type === type.ARRAY){
 
                             let result;
@@ -161,30 +157,32 @@ export class Call extends Instruction {
                             }
 
                             struct.get_attributes()[i].value = value.get_value();
+                            
                         } else {
 
                             let error = new Exception("Semantic", `The attribute: ${struct?.get_attributes()[i].id} isn't an array.`, this.row, this.column);
                             tree.get_errors().push(error);
                             tree.update_console(error.toString());
                         }
-                    }
+                    } else {
 
-                    if (struct.get_attributes()[i].type !== item.get_type() && struct.get_attributes()[i].type !== type.STRUCT){
-                        let error = new Exception("Semantic", `The type: ${item.get_type()} cannot assignet at attribute of type: ${struct.get_attributes()[i].type}`, item.row, item.column)
-                        tree.get_errors().push(error);
-                        tree.update_console(error.toString());
-                        return;
-                    } else if (struct.get_attributes()[i].type === type.STRUCT) {
-
-                        if (item.type !== type.NULL && struct.get_attributes()[i].struct !== value.get_id()){
-                            let error = new Exception("Semantic", `The type: ${value.get_id()} cannot assignet at attribute of type: ${struct.get_attributes()[i].struct}`, item.row, item.column)
+                        if (struct.get_attributes()[i].type !== item.get_type() && struct.get_attributes()[i].type !== type.STRUCT){
+                            let error = new Exception("Semantic", `The type: ${item.get_type()} cannot assignet at attribute of type: ${struct.get_attributes()[i].type}`, item.row, item.column)
                             tree.get_errors().push(error);
                             tree.update_console(error.toString());
                             return;
+                        } else if (struct.get_attributes()[i].type === type.STRUCT) {
+                            
+                            if (item.type !== type.NULL && struct.get_attributes()[i].struct !== value.get_id()){
+                                let error = new Exception("Semantic", `The type: ${value.get_id()} cannot assignet at attribute of type: ${struct.get_attributes()[i].struct}`, item.row, item.column)
+                                tree.get_errors().push(error);
+                                tree.update_console(error.toString());
+                                return;
+                            }
                         }
-                    }
 
-                    struct.get_attributes()[i].value = value;
+                        struct.get_attributes()[i].value = value;
+                    }
 
                 }
 
@@ -227,11 +225,11 @@ export class Call extends Instruction {
                 case type.INT:
                     return parseInt(value);
                 case type.DOUBLE:
-                    // console.log(parseFloat(value));
-
                     return parseFloat(value);
                 case type.BOOL:
                     return JSON.parse(value);
+                default:
+                    return value;
             }
         }
 

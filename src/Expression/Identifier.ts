@@ -8,7 +8,7 @@ export class Identifier extends Instruction {
 
     private id: string;
     private type: type;
-    private value: string;
+    private value: string | any;
 
     constructor(id: string, row: number, col: number) {
         super(row, col);
@@ -36,6 +36,10 @@ export class Identifier extends Instruction {
 
     get_id(){
         return this.id;
+    }
+
+    get_value(){
+        return this.value;
     }
 
     toString(): String{

@@ -24,8 +24,6 @@ export class Logical extends Instruction{
     interpret(tree: Tree, table: SymbolTable){
 
         let left = this.exp1.interpret(tree, table);
-        console.log(left);
-        
 
         if (left instanceof Exception){
         }
@@ -43,7 +41,6 @@ export class Logical extends Instruction{
                 switch(this.operator){
                     case Logical_operator.AND:
                         this.value = String(JSON.parse(left) && JSON.parse(right)).toLowerCase();
-                        console.log(this.value, JSON.parse(left), JSON.parse(right));
                         
                         return this.value;
                     case Logical_operator.OR:

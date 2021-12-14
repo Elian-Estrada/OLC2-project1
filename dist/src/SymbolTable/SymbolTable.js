@@ -1,4 +1,7 @@
+import { Values_array } from "../Expression/Values_array.js";
+import { Declaration_array } from "../Instructions/Declaration_array.js";
 import Exception from "./Exception.js";
+import { type } from './Type.js';
 export var variables = [];
 var SymbolTable = /** @class */ (function () {
     function SymbolTable(prev, name) {
@@ -30,14 +33,39 @@ var SymbolTable = /** @class */ (function () {
     SymbolTable.prototype.update_table = function (symbol) {
         var _a;
         var current_table = this;
-        console.log("Entrando en SymbolTable");
-        console.log(current_table);
         while (current_table !== undefined) {
-            console.log(current_table.table);
             if (current_table.table.has(symbol.id)) {
                 var current_symbol = current_table.table.get(symbol.id);
-                console.log(current_symbol);
-                if (current_symbol.type === symbol.type) {
+                if (symbol.value === "null") {
+                    switch (current_symbol.type) {
+                        case type.STRUCT:
+                            //symbol.environment = current_symbol.environment;
+                            current_symbol.value = symbol.value;
+                            return undefined;
+                        case type.STRING:
+                        case type.CHAR:
+                            current_symbol.value = symbol.value;
+                            return undefined;
+                        default:
+                            return new Exception("Semantic", "The type: ".concat(type.NULL, " cannot assignment to variable of type: ").concat(current_symbol.type), symbol.row, symbol.column);
+                    }
+                }
+                if (current_symbol.type === symbol.type && current_symbol.type !== type.STRUCT) {
+                    if (current_symbol.value instanceof Declaration_array) {
+                        if (symbol.value instanceof Values_array) {
+                            if (current_symbol.value.get_subtype() === symbol.value.get_subtype()) {
+                                current_symbol.value.set_value(symbol.value.get_value());
+                                return undefined;
+                            }
+                            else {
+                                return new Exception("Semantic", "Cannot assign value of type: ".concat(symbol.value.get_subtype(), " in a variable of type: ").concat(current_symbol.value.get_subtype()), symbol.row, symbol.column);
+                            }
+                        }
+                    }
+                    current_symbol.value = symbol.value;
+                    return undefined;
+                }
+                else if (current_symbol.type === symbol.type && current_symbol.value.id === symbol.value.id) {
                     current_symbol.value = symbol.value;
                     return undefined;
                 }

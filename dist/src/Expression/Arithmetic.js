@@ -123,8 +123,8 @@ var Arithmetic = /** @class */ (function (_super) {
                                 this.value = this.operation(parseFloat(left), parseFloat(right), this.operator);
                                 break;
                             case type.CHAR:
-                                this.type = type.INT;
-                                this.value = this.operation(parseInt(left), right.charCodeAt(0), this.operator);
+                                this.type = type.DOUBLE;
+                                this.value = this.operation(parseFloat(left), right.charCodeAt(0), this.operator);
                                 break;
                             default:
                                 return new Exception("Semantic", "The type ".concat(this.exp2.get_type().toString(), " \n cannot be operated with type: DOUBLE"), this.row, this.column);
@@ -152,7 +152,6 @@ var Arithmetic = /** @class */ (function (_super) {
         }
         else {
             var symbol = null;
-            console.log(this.operator);
             switch (this.operator) {
                 case Arithmetic_operator.SUBSTRACTION:
                     switch (this.exp1.get_type()) {
@@ -181,16 +180,13 @@ var Arithmetic = /** @class */ (function (_super) {
                             default:
                                 return new Exception("Semantic", "The type: ".concat(this.exp1.get_type(), " \n cannot be operated whit operator: ").concat(this.operator), this.row, this.column);
                         }
-                        console.log(left);
                         if (this.operator === Arithmetic_operator.INC) {
                             symbol = new Symbol(this.exp1.get_id(), this.exp1.get_type(), this.row, this.column, String(left + 1));
                         }
                         else {
                             symbol = new Symbol(this.exp1.get_id(), this.exp1.get_type(), this.row, this.column, String(left - 1));
                         }
-                        console.log(symbol);
                         var result = table.update_table(symbol);
-                        console.log(result);
                         if (result instanceof Exception) {
                             return result;
                         }

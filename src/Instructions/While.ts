@@ -21,40 +21,51 @@ export class While extends Instruction {
     }
 
     interpret(tree: Tree, table: SymbolTable): any {
-        while (true) {
-            let flag = this.expr.interpret(tree, table);
+        try {
+            
+            while (true && this.counter < 100000) {
+                let flag = this.expr.interpret(tree, table);
 
-            if ( flag instanceof Exception )
-                return flag;
+                if ( flag instanceof Exception )
+                    return flag;
 
-            if ( this.expr.get_type() == type.BOOL ) {
-                if ( String(flag) == "true" ) {
-                    let new_table = new SymbolTable(table, `While-${this.row}-${this.column}`);
+                if ( this.expr.get_type() == type.BOOL ) {
+                    if ( String(flag) == "true" ) {
+                        let new_table = new SymbolTable(table, `While-${this.row}-${this.column}`);
 
-                    for ( let item of this.instructions ) {
-                        let instruction = item.interpret(tree, new_table);
+                        for ( let item of this.instructions ) {
+                            let instruction = item.interpret(tree, new_table);
 
-                        if ( instruction instanceof Exception ) {
-                            tree.get_errors().push(instruction);
-                            tree.update_console(instruction.toString());
+                            if ( instruction instanceof Exception ) {
+                                tree.get_errors().push(instruction);
+                                tree.update_console(instruction.toString());
+                            }
+
+                            if ( instruction instanceof Continue ) {
+                                break;
+                            } else if ( instruction instanceof Break ) {
+                                return null;
+                            } else if ( instruction instanceof Return ) {
+                                return instruction;
+                            }
                         }
-
-                        if ( instruction instanceof Continue ) {
-                            break;
-                        } else if ( instruction instanceof Break ) {
-                            return null;
-                        } else if ( instruction instanceof Return ) {
-                            return instruction;
-                        }
+                    } else {
+                        break;
                     }
                 } else {
-                    break;
+                    return new Exception("Semantic", `Expect a Boolean type expression. Not ${this.expr.get_type().name}`, this.row, this.column);
                 }
-            } else {
-                return new Exception("Semantic", `Expect a Boolean type expression. Not ${this.expr.get_type().name}`, this.row, this.column);
+
+                this.counter += 1;
             }
 
-            this.counter += 1;
+            if (this.counter >= 100000){
+                throw "Infinity Loop in While";
+            }
+
+        } catch (error) {
+            console.log(error);
+            return new Exception("Semantic", "" + error, this.row, this.column);
         }
     }
 }

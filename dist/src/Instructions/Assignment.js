@@ -14,6 +14,8 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 import { Instruction } from "../Abstract/Instruction.js";
+import { Access_struct } from "../Expression/Access_struct.js";
+import { Identifier } from "../Expression/Identifier.js";
 import Exception from "../SymbolTable/Exception.js";
 import Symbol from "../SymbolTable/Symbol.js";
 import { type } from "../SymbolTable/Type.js";
@@ -32,6 +34,17 @@ var Assignment = /** @class */ (function (_super) {
         }
         if (this.expression.get_type() === type.ARRAY) {
             //array implemented
+            if (this.expression instanceof Access_struct) {
+                //do anything
+            }
+        }
+        if (this.expression instanceof Identifier && this.expression.get_type() === type.STRUCT) {
+            value = value;
+        }
+        if (this.expression.get_type() === type.STRUCT && this.expression instanceof Access_struct) {
+            console.log(value);
+            value = value.get_value().value;
+            console.log(value);
         }
         var new_symbol = new Symbol(this.id, this.expression.get_type(), this.row, this.column, value);
         var result = table.update_table(new_symbol);

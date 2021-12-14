@@ -46,59 +46,70 @@ export class For extends Instruction {
             if (start instanceof Exception)
                 return start;
 
-            while (true) {
-                let flag = null;
-                if ( new_table == null ) {
-                    flag = this.condition.interpret(tree, table)
-                } else {
-                    flag = this.condition.interpret(tree, new_table);
-                }
-
-                if ( flag instanceof Exception )
-                    return flag;
-
-                if ( this.condition.get_type() == type.BOOL ) {
-                    if ( String(flag) == "true" ) {
-
-                        if ( !JSON.parse( String(declare_flag) ) ) {
-                            new_table = new SymbolTable(table, `For-${this.row}-${this.column}`);
-                        }
-                        else {
-                            new_table = new SymbolTable(new_table, `For-${this.row}-${this.column}`);
-                        }
-
-                        if ( this.instructions != null ) {
-                            for ( let item of this.instructions ) {
-                                let instruction = item.interpret(tree, new_table);
-
-                                if ( instruction instanceof  Exception ) {
-                                    tree.get_errors().push(instruction);
-                                    tree.update_console(instruction.toString());
-                                }
-
-                                if ( instruction instanceof Continue )
-                                    break;
-
-                                if ( instruction instanceof Break )
-                                    return null;
-
-                                if ( instruction instanceof Return )
-                                    return instruction;
+            try {
+                
+                while (true && this.counter < 100000) {
+                    let flag = null;
+                    if ( new_table == null ) {
+                        flag = this.condition.interpret(tree, table)
+                    } else {
+                        flag = this.condition.interpret(tree, new_table);
+                    }
+    
+                    if ( flag instanceof Exception )
+                        return flag;
+    
+                    if ( this.condition.get_type() == type.BOOL ) {
+                        if ( String(flag) == "true" ) {
+    
+                            if ( !JSON.parse( String(declare_flag) ) ) {
+                                new_table = new SymbolTable(table, `For-${this.row}-${this.column}`);
                             }
-
-                            let step = this.step.interpret(tree, new_table);
-
-                            if ( step instanceof Exception )
-                                return step;
+                            else {
+                                new_table = new SymbolTable(new_table, `For-${this.row}-${this.column}`);
+                            }
+    
+                            if ( this.instructions != null ) {
+                                for ( let item of this.instructions ) {
+                                    let instruction = item.interpret(tree, new_table);
+    
+                                    if ( instruction instanceof  Exception ) {
+                                        tree.get_errors().push(instruction);
+                                        tree.update_console(instruction.toString());
+                                    }
+    
+                                    if ( instruction instanceof Continue )
+                                        break;
+    
+                                    if ( instruction instanceof Break )
+                                        return null;
+    
+                                    if ( instruction instanceof Return )
+                                        return instruction;
+                                }
+    
+                                let step = this.step.interpret(tree, new_table);
+    
+                                if ( step instanceof Exception )
+                                    return step;
+                            }
+                        } else {
+                            break;
                         }
                     } else {
-                        break;
+                        return new Exception("Semantic", `Expect a Boolean type expression`, this.row, this.column);
                     }
-                } else {
-                    return new Exception("Semantic", `Expect a Boolean type expression`, this.row, this.column);
+                    this.counter += 1;
                 }
-                this.counter += 1;
+    
+                if (this.counter >= 100000){
+                    throw "Infinity Loop in For"
+                }
+
+            } catch (error) {
+                return new Exception("Semantic", "" + error, this.row, this.column);
             }
+
         } else {
             return new Exception("Semantic", "Expression Expected", this.row, this.column);
         }

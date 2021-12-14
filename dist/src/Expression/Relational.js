@@ -92,8 +92,30 @@ var Relational = /** @class */ (function (_super) {
                                 default:
                                     return new Exception("Semantic", "The type: ".concat(this.exp2.get_type(), " cannot be operated whit type: ").concat(type.ARRAY), this.row, this.column);
                             }
+                        case type.STRUCT:
+                            switch (this.exp2.get_type()) {
+                                case type.NULL:
+                                    return this.to_lower(left.get_value(), right, this.operator);
+                                case type.STRUCT:
+                                    return this.to_lower(left.get_value(), right.get_value(), this.operator);
+                                default:
+                                    return new Exception("Semantic", "The type: ".concat(this.exp2.get_type(), " cannot be operated whit type: ").concat(type.STRUCT), this.exp2.row, this.exp2.column);
+                            }
+                        case type.NULL:
+                            switch (this.exp2.get_type()) {
+                                case type.NULL:
+                                    return this.to_lower(left, right, this.operator);
+                                case type.STRUCT:
+                                    return this.to_lower(left, right.get_value(), this.operator);
+                                case type.STRING:
+                                    return this.to_lower(left, right, this.operator);
+                                case type.CHAR:
+                                    return this.to_lower(left, right, this.operator);
+                                default:
+                                    return new Exception("Semantic", "The type: ".concat(this.exp2.get_type(), " cannot be operated whit type: ").concat(type.NULL), this.exp2.row, this.exp2.column);
+                            }
                         default:
-                            return new Exception("Semantic", "The type: ".concat(this.exp1.get_type(), " cannot be operated whit operator: ").concat(this.operator), this.row, this.column);
+                            return new Exception("Semantic", "The type: ".concat(this.exp1.get_type(), " cannot be operated whit operator: ").concat(this.operator), this.exp1.row, this.exp2.row);
                     }
                 case Relational_operator.GREATER:
                 case Relational_operator.GREATEREQUAL:
@@ -133,7 +155,6 @@ var Relational = /** @class */ (function (_super) {
     Relational.prototype.to_lower = function (op1, op2, operator) {
         switch (operator) {
             case Relational_operator.EQUAL:
-                console.log(op1, op2);
                 this.value = String(op1 == op2).toLowerCase();
                 return this.value;
             case Relational_operator.UNEQUAL:

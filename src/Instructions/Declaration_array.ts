@@ -67,7 +67,7 @@ export class Declaration_array extends Instruction {
             }else {
                 value = JSON.parse(JSON.stringify(array));
                 value = {...value,
-                    get_type(): any{
+                    get_subtype(): any{
                         return this.type_array;
                     },
                     get_value(): any{
@@ -75,7 +75,14 @@ export class Declaration_array extends Instruction {
                     },
                     set_value(value: Array<any>){
                         this.value = value;
+                    },
+                    get_type_array(): any{
+                        return this.type;
+                    },
+                    get_id(): any{
+                        return this.id;
                     }
+
                 };
             }
 
@@ -120,11 +127,11 @@ export class Declaration_array extends Instruction {
                 case type.INT:
                     return parseInt(value);
                 case type.DOUBLE:
-                    console.log(parseFloat(value));
-                    
                     return parseFloat(value);
                 case type.BOOL:
                     return JSON.parse(value);
+                default:
+                    return value;
             }
         }
 
@@ -141,5 +148,13 @@ export class Declaration_array extends Instruction {
 
     get_subtype(){
         return this.type_array;
+    }
+
+    get_type_array(){
+        return this.type;
+    }
+
+    get_id(){
+        return this.id;
     }
 }

@@ -29,7 +29,6 @@ import SymbolTable from "../SymbolTable/SymbolTable.js";
 import Exception from "../SymbolTable/Exception.js";
 import Symbol from "../SymbolTable/Symbol.js";
 import { type } from "../SymbolTable/Type.js";
-import { Declaration_array } from "./Declaration_array.js";
 var Call = /** @class */ (function (_super) {
     __extends(Call, _super);
     function Call(name, params, row, col) {
@@ -133,16 +132,13 @@ var Call = /** @class */ (function (_super) {
                     }
                 }
                 else {
-                    console.log("entro");
                     var value = item.interpret(tree, table);
-                    console.log(item);
-                    console.log(value);
                     if (value instanceof Exception) {
                         tree.get_errors().push(value);
                         tree.update_console(value.toString());
                         return;
                     }
-                    if (value instanceof Declaration_array) {
+                    if (item.get_type() === type.ARRAY) {
                         if ((struct === null || struct === void 0 ? void 0 : struct.get_attributes()[i].type) === type.ARRAY) {
                             var result_2;
                             if (struct.get_attributes()[i].sub_type !== value.get_subtype()) {
@@ -161,21 +157,23 @@ var Call = /** @class */ (function (_super) {
                             tree.update_console(error.toString());
                         }
                     }
-                    if (struct.get_attributes()[i].type !== item.get_type() && struct.get_attributes()[i].type !== type.STRUCT) {
-                        var error = new Exception("Semantic", "The type: ".concat(item.get_type(), " cannot assignet at attribute of type: ").concat(struct.get_attributes()[i].type), item.row, item.column);
-                        tree.get_errors().push(error);
-                        tree.update_console(error.toString());
-                        return;
-                    }
-                    else if (struct.get_attributes()[i].type === type.STRUCT) {
-                        if (item.type !== type.NULL && struct.get_attributes()[i].struct !== value.get_id()) {
-                            var error = new Exception("Semantic", "The type: ".concat(value.get_id(), " cannot assignet at attribute of type: ").concat(struct.get_attributes()[i].struct), item.row, item.column);
+                    else {
+                        if (struct.get_attributes()[i].type !== item.get_type() && struct.get_attributes()[i].type !== type.STRUCT) {
+                            var error = new Exception("Semantic", "The type: ".concat(item.get_type(), " cannot assignet at attribute of type: ").concat(struct.get_attributes()[i].type), item.row, item.column);
                             tree.get_errors().push(error);
                             tree.update_console(error.toString());
                             return;
                         }
+                        else if (struct.get_attributes()[i].type === type.STRUCT) {
+                            if (item.type !== type.NULL && struct.get_attributes()[i].struct !== value.get_id()) {
+                                var error = new Exception("Semantic", "The type: ".concat(value.get_id(), " cannot assignet at attribute of type: ").concat(struct.get_attributes()[i].struct), item.row, item.column);
+                                tree.get_errors().push(error);
+                                tree.update_console(error.toString());
+                                return;
+                            }
+                        }
+                        struct.get_attributes()[i].value = value;
                     }
-                    struct.get_attributes()[i].value = value;
                 }
             });
             this.type = type.STRUCT;
@@ -208,10 +206,11 @@ var Call = /** @class */ (function (_super) {
                 case type.INT:
                     return parseInt(value);
                 case type.DOUBLE:
-                    // console.log(parseFloat(value));
                     return parseFloat(value);
                 case type.BOOL:
                     return JSON.parse(value);
+                default:
+                    return value;
             }
         }
         return expression;
