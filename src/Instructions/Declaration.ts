@@ -1,5 +1,6 @@
 import { Instruction } from "../Abstract/Instruction.js";
-import { Identifier } from "../Expression/Identifier";
+import { Access_struct } from "../Expression/Access_struct.js";
+import { Identifier } from "../Expression/Identifier.js";
 import Exception from "../SymbolTable/Exception.js";
 import Symbol from "../SymbolTable/Symbol.js";
 import SymbolTable from "../SymbolTable/SymbolTable.js";
@@ -32,7 +33,25 @@ export class Declaration extends Instruction {
                 return value;
             }
 
-            if (type.STRUCT === this.expression.get_type()){
+            if (this.expression instanceof Identifier && this.expression.get_type() === type.STRUCT){
+                if(this.expression.get_value().get_id() !== this.id[1]){
+                    return new Exception("Semantic", `The type: ${value.id} cannot be assignment to variable of type: ${this.id[1]}`, this.expression.row, this.expression.column);
+                }
+                
+                this.id.pop();
+            }
+
+            if (this.expression.get_type() === type.STRUCT && this.expression instanceof Access_struct){
+                if (value.get_value().struct !== this.id[1]){
+                    return new Exception("Semantic", `The type: ${value.get_value().struct} cannot be assignment to variable of type: ${this.id[1]}`, this.expression.row, this.expression.column);
+                }
+                value = value.get_value().value;
+
+                this.id.pop();
+            }
+
+            if (type.STRUCT === this.expression.get_type() && 
+                !(this.expression instanceof Identifier || this.expression instanceof Access_struct)){
                 let struct = this.id[1];
                 if (struct !== this.expression.get_id()){
                     return new Exception("Semantic", `The type: ${this.expression.get_id()} cannot be assignment to variable of type: ${struct}`, this.expression.row, this.expression.column);

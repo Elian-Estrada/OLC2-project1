@@ -79,13 +79,15 @@ export class Access_struct extends Instruction{
         if (ids.length !== 0){
             for (let item of attributes){
                 if (ids[0] === item.id) {
-                    if (item.type === type.STRUCT && ids.length !== 0 && item.value !== "null"){
-                        if (ids.length === 1){
+                    if (item.type === type.STRUCT 
+                        && ids.length !== 0 
+                        && item.value !== "null"){
+                        if (ids.length === 1 && exp === null){
                             this.type = type.STRUCT;
                             return item;
+                        }else if (ids.length > 1){
+                            return this.for_attributes(ids.slice(1), item.value.get_attributes(), exp, tree, table)    
                         }
-                        
-                        return this.for_attributes(ids.slice(1), item.value.get_attributes(), exp, tree, table)
                     }
 
                     if (this.positions !== null && item.type === type.ARRAY){

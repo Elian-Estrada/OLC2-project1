@@ -27,6 +27,7 @@ var Print = /** @class */ (function (_super) {
     }
     Print.prototype.interpret = function (tree, table) {
         var value = this.expression.interpret(tree, table);
+        console.log(value);
         if (value instanceof Exception)
             return value;
         if (value === null)
@@ -34,7 +35,7 @@ var Print = /** @class */ (function (_super) {
         if (this.expression.get_type() == type.ARRAY) {
             value = JSON.stringify(value.get_value());
         }
-        else if (this.expression.get_type() === type.STRUCT) {
+        else if (this.expression.get_type() === type.STRUCT && value !== "null") {
             if (this.expression.get_value().value === "null") {
                 value = "".concat(this.expression.get_value().struct, "(null)");
             }

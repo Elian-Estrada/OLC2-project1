@@ -48,6 +48,20 @@ export default class SymbolTable {
         while(current_table !== undefined){
             if (current_table.table.has(symbol.id)){
                 let current_symbol: any = current_table.table.get(symbol.id);
+                if (symbol.value === "null"){
+                    switch(current_symbol.type){
+                        case type.STRUCT:
+                            //symbol.environment = current_symbol.environment;
+                            current_symbol.value = symbol.value;
+                            return undefined;
+                        case type.STRING:
+                        case type.CHAR:
+                            current_symbol.value = symbol.value;
+                            return undefined;
+                        default:
+                            return new Exception("Semantic", `The type: ${type.NULL} cannot assignment to variable of type: ${current_symbol.type}`, symbol.row, symbol.column);
+                    }
+                }
                 if (current_symbol.type === symbol.type && current_symbol.type !== type.STRUCT){
                     current_symbol.value = symbol.value;
                     return undefined;

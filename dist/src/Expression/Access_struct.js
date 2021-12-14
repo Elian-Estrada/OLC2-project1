@@ -70,12 +70,16 @@ var Access_struct = /** @class */ (function (_super) {
             for (var _i = 0, attributes_1 = attributes; _i < attributes_1.length; _i++) {
                 var item = attributes_1[_i];
                 if (ids[0] === item.id) {
-                    if (item.type === type.STRUCT && ids.length !== 0 && item.value !== "null") {
-                        if (ids.length === 1) {
+                    if (item.type === type.STRUCT
+                        && ids.length !== 0
+                        && item.value !== "null") {
+                        if (ids.length === 1 && exp === null) {
                             this.type = type.STRUCT;
                             return item;
                         }
-                        return this.for_attributes(ids.slice(1), item.value.get_attributes(), exp, tree, table);
+                        else if (ids.length > 1) {
+                            return this.for_attributes(ids.slice(1), item.value.get_attributes(), exp, tree, table);
+                        }
                     }
                     if (this.positions !== null && item.type === type.ARRAY) {
                         var result = this.get_values(this.positions, item.value, exp, item.sub_type, tree, table);

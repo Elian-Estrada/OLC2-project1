@@ -17,7 +17,8 @@ export class Print extends Instruction {
     
     public interpret(tree: Tree, table: SymbolTable) {
         let value = this.expression.interpret(tree, table);
-
+        console.log(value);
+        
         if ( value instanceof Exception )
             return value;
 
@@ -28,7 +29,7 @@ export class Print extends Instruction {
             
             value = JSON.stringify(value.get_value());
             
-        } else if (this.expression.get_type() === type.STRUCT){
+        } else if (this.expression.get_type() === type.STRUCT && value !== "null"){
             
             if (this.expression.get_value().value === "null"){
                 value = `${this.expression.get_value().struct}(null)`;
