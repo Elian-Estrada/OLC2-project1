@@ -28,6 +28,10 @@ export class Assignment extends Instruction{
 
         if (this.expression.get_type() === type.ARRAY){
             //array implemented
+            if (this.expression instanceof Access_struct){
+                //do anything
+            }
+
         }
 
         if (this.expression instanceof Identifier && this.expression.get_type() === type.STRUCT){

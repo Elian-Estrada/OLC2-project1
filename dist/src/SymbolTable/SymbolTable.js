@@ -1,3 +1,5 @@
+import { Values_array } from "../Expression/Values_array.js";
+import { Declaration_array } from "../Instructions/Declaration_array.js";
 import Exception from "./Exception.js";
 import { type } from './Type.js';
 export var variables = [];
@@ -47,6 +49,17 @@ var SymbolTable = /** @class */ (function () {
                     }
                 }
                 if (current_symbol.type === symbol.type && current_symbol.type !== type.STRUCT) {
+                    if (current_symbol.value instanceof Declaration_array) {
+                        if (symbol.value instanceof Values_array) {
+                            if (current_symbol.value.get_subtype() === symbol.value.get_subtype()) {
+                                current_symbol.value.set_value(symbol.value.get_value());
+                                return undefined;
+                            }
+                            else {
+                                return new Exception("Semantic", "Cannot assign value of type: ".concat(symbol.value.get_subtype(), " in a variable of type: ").concat(current_symbol.value.get_subtype()), symbol.row, symbol.column);
+                            }
+                        }
+                    }
                     current_symbol.value = symbol.value;
                     return undefined;
                 }

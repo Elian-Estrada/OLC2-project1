@@ -140,6 +140,7 @@
 	import { Identifier } from "./Expression/Identifier.js";
 	import { StringText } from "./Expression/StringText.js";
 	import { Ternary } from "./Expression/Ternary.js";
+	import { Values_array } from "./Expression/Values_array.js";
 	import { Access_array } from "./Expression/Access_array.js";
 	import { Access_struct } from "./Expression/Access_struct.js";
 
@@ -234,6 +235,7 @@ list_id
 
 assignment
 	: IDENTIFIER EQUALSIGN expression 	{ $$ = new Assignment($1, $3, this._$.first_line, this._$.first_column); }
+	| IDENTIFIER EQUALSIGN values_array	{ $$ = new Assignment($1, new Values_array($3, this._$.first_line, this._$.first_column), this._$.first_line, this._$.first_column); }
 ;
 
 declaration_array
