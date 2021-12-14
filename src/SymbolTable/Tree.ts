@@ -55,8 +55,8 @@ export default class Tree {
         for ( let item of this.functions ) {
             if ( item.get_name() == name )
                 return item;
-            return null;
         }
+        return null;
     }
 
     public set_symbol_table(symbol_table: SymbolTable) {

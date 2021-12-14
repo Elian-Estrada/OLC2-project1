@@ -64,6 +64,10 @@ export class Function extends Instruction {
             }
         }
 
+        if (this.type !== type.VOID){
+            return new Exception("Semantic", `Function of type: ${this.type} expected one Return`, this.instructions[this.instructions.length - 1].row, this.instructions[this.instructions.length - 1].column);
+        }
+
         return null;
     }
 
