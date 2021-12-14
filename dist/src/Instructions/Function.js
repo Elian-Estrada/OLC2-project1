@@ -111,6 +111,9 @@ var Function = /** @class */ (function (_super) {
                 return new Exception("Semantic", "Function doesn't return anything", instruction.row, instruction.column);
             }
         }
+        if (this.type !== type.VOID) {
+            return new Exception("Semantic", "Function of type: ".concat(this.type, " expected one Return"), this.instructions[this.instructions.length - 1].row, this.instructions[this.instructions.length - 1].column);
+        }
         return null;
     };
     Function.prototype.get_type = function () {
