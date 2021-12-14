@@ -83,6 +83,9 @@ var SymbolTable = /** @class */ (function () {
     SymbolTable.prototype.get_name = function () {
         return this.name;
     };
+    SymbolTable.prototype.get_size = function () {
+        return this.size;
+    };
     return SymbolTable;
 }());
 export default SymbolTable;

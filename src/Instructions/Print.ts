@@ -16,14 +16,36 @@ export class Print extends Instruction {
                 generator.add_print("f", "double", this.expression.value);
             }
             else if ( this.expression.get_type() === type.STRING ) {
-                this.typeString()
+                this.typeString(this.expression.value, table, generator);
             }
         }
         generator.add_print("c", "char", 10);
     }
 
     public typeString(value: string, table: SymbolTable, generator: Generator3D) {
-        generator.printString()
+        generator.printString();
+        generator.addAssignment('P', 0);
+        generator.addAssignment('H', 0);
+
+        let paramTemp1 = generator.addTemp();
+        generator.addAssignment(paramTemp1, "H");
+
+        generator.setHeap('H', value.charCodeAt(0));
+        generator.nextHeap();
+        generator.setHeap('H', -1);
+        generator.nextHeap();
+
+        let paramTemp2 = generator.addTemp();
+        generator.addExpression(paramTemp2, 'P', table.get_size(), '+'); // T5 = P + 1;
+        generator.addExpression(paramTemp2, paramTemp2, '1', '+');
+
+        generator.setStack(paramTemp2, paramTemp1);
+        generator.newEnv(table.get_size());
+        generator.callFunc('printString'); // Mandar a llamar la funcion print
+
+        let temp = generator.addTemp();
+        generator.getStack(temp, 'P');
+        generator.setEnv(table.get_size());
     }
 
     private expression: any;

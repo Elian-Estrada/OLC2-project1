@@ -61,14 +61,16 @@ var Generator3D = /** @class */ (function () {
         }
         header += "double heap[30101999];\n";
         header += "double stack[30101999];\n";
-        header += "double P;";
-        header += "double H;";
+        header += "double P;\n";
+        header += "double H;\n";
         if (this.temps.length > 0) {
+            header += "double ";
             for (var i = 0; i < this.temps.length; i++) {
                 header += this.temps[i];
                 if (i != (this.temps.length - 1))
                     header += ", ";
             }
+            header += ";\n";
         }
         return header;
     };
@@ -92,25 +94,61 @@ var Generator3D = /** @class */ (function () {
         // Inicio de la funcion para imprimir
         this.addBeginFunc('printString');
         // Label de fin:
-        var retLbl1 = this.newLabel();
+        var retLbl1 = this.newLabel(); // L0
         // label para cmp de fin
-        var cmpLb1 = this.newLabel();
+        var cmpLb1 = this.newLabel(); // L1
         // temp a pointer stack
         var tempP = this.addTemp();
         // temp a puntero de heap
         var tempH = this.addTemp();
         // Primera operacion
-        this.addExpression(tempP, 'P', '1', '+');
-        this.getStack(tempH, tempP);
+        this.addExpression(tempP, 'P', '1', '+'); // T = P + 1;
+        this.getStack(tempH, tempP); // T2 = stack[T1];
+        // Nuevo temp para cmp
+        var tempCmp = this.addTemp();
+        this.setLabel(cmpLb1); // L1:
+        this.getHeap(tempCmp, tempH); // T3 = heap[T2];
+        this.addIf(tempCmp, '-1', '==', retLbl1); // if (t3 == -1) goto L0;
+        this.add_print('c', 'char', tempCmp); // print("%c", (char)T3);
+        this.addExpression(tempH, tempH, '1', '+'); // T2 = T2 + 1;
+        this.addGoTo(cmpLb1); // goto L1;
+        this.setLabel(retLbl1); // L1:
+        this.addEndFunc(); // return;
+        this.inNatives = false;
+        this.get_freeTemp(tempP);
+        this.get_freeTemp(tempH);
+        this.get_freeTemp(tempCmp);
     };
     Generator3D.prototype.getStack = function (place, pos) {
         this.get_freeTemp(pos);
         this.codeIn("".concat(place, " = stack[(int)").concat(pos, "];\n"));
     };
+    Generator3D.prototype.setStack = function (pos, value, freeValue) {
+        if (freeValue === void 0) { freeValue = true; }
+        this.get_freeTemp(pos);
+        if (freeValue)
+            this.get_freeTemp(value);
+        this.codeIn("stack[(int)".concat(pos, "] = ").concat(value, ";\n"));
+    };
+    Generator3D.prototype.getHeap = function (place, pos) {
+        this.get_freeTemp(pos);
+        this.codeIn("".concat(place, " = heap[(int)").concat(pos, "];\n"));
+    };
+    Generator3D.prototype.setHeap = function (pos, value) {
+        this.get_freeTemp(pos);
+        this.get_freeTemp(value);
+        this.codeIn("heap[(int)".concat(pos, "] = ").concat(value, ";\n"));
+    };
+    Generator3D.prototype.nextHeap = function () {
+        this.codeIn('H = H + 1;\n');
+    };
     Generator3D.prototype.newLabel = function () {
         var label = "L".concat(this.count_label);
         this.count_label += 1;
         return label;
+    };
+    Generator3D.prototype.setLabel = function (label) {
+        this.codeIn("".concat(label, ":\n"));
     };
     // Funcion para crear operacione binaria con operadores y temporales
     Generator3D.prototype.addExpression = function (res, left, right, ope) {
@@ -126,20 +164,45 @@ var Generator3D = /** @class */ (function () {
         this.temps_recover.temp = temp; // Diccionario en clave Tn tendrá valor de Tn
         return temp; // Retornamos temporal
     };
+    Generator3D.prototype.addAssignment = function (pointer, value) {
+        this.codeIn("".concat(pointer, " = ").concat(value, ";\n"));
+    };
     Generator3D.prototype.addBeginFunc = function (id) {
         if (!this.inNatives)
             this.inFunc = true;
         this.codeIn("void ".concat(id, " () {\n"), '');
     };
+    Generator3D.prototype.addIf = function (left, right, ope, label) {
+        this.get_freeTemp(left);
+        this.get_freeTemp(right);
+        this.codeIn("if (".concat(left, " ").concat(ope, " ").concat(right, ") goto ").concat(label, "; \n"));
+    };
+    Generator3D.prototype.addGoTo = function (label) {
+        this.codeIn("goto ".concat(label, ";\n"));
+    };
+    Generator3D.prototype.addEndFunc = function () {
+        this.codeIn("return; \n}\n");
+        if (!this.inNatives)
+            this.inFunc = false;
+    };
     Generator3D.prototype.codeIn = function (code, tab) {
         if (tab === void 0) { tab = "\t"; }
         if (this.inNatives) {
             if (this.natives == "")
-                this.natives = this.natives + "/*------NATIVES------*/\n";
+                this.natives = this.natives + "\n/*------NATIVES------*/\n";
             this.funcs = this.funcs + tab + code;
         }
         else
             this.code = this.code + "\t" + code;
+    };
+    Generator3D.prototype.newEnv = function (size) {
+        this.codeIn("P = P + ".concat(size, ";\n"));
+    };
+    Generator3D.prototype.setEnv = function (size) {
+        this.codeIn("P = P - ".concat(size, ";\n"));
+    };
+    Generator3D.prototype.callFunc = function (id) {
+        this.codeIn("".concat(id, "(); \n"));
     };
     return Generator3D;
 }());
