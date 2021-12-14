@@ -53,20 +53,17 @@ export class Function extends Instruction {
         let new_table = new SymbolTable(table, `Function-${this.name}-${this.row}-${this.column}`);
         let flag = false;
 
-        for ( let instr of this.instructions ) {
-            if ( instr instanceof Return ) {
-                flag = true;
-                break;
-            } else {
-                this.look_for_a_return(instr);
-            }
-        }
+        if ( this.type == type.VOID )
+            flag = true;
 
         if ( !flag ) {
-            if ( this.type !== type.VOID ) {
-                flag = this.look_for_a_return(this.instructions[0]);
-            } else {
-                flag = true;
+            for ( let instr of this.instructions ) {
+                if ( instr instanceof Return ) {
+                    flag = true;
+                    break;
+                } else {
+                    this.look_for_a_return(instr);
+                }
             }
         }
 

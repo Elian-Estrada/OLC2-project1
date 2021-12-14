@@ -13,6 +13,7 @@ import {Return} from "./Instructions/Return.js";
 import {MainInstruction} from "./Instructions/MainInstruction.js";
 import { Struct } from "./Instructions/Struct.js";
 import {Declaration_array} from "./Instructions/Declaration_array.js";
+import {Generator3D} from "./Generator/Generator3D.js";
 
 export class Main {
 
@@ -119,7 +120,6 @@ export class Main {
                     /* Third run for interpret main */
                     for ( let instruction of tree.get_instructions() ) {
                         if ( instruction instanceof  MainInstruction ) {
-                            console.log(instruction)
                             let value = instruction.interpret(tree, global_table);
 
                             let error;
@@ -180,5 +180,14 @@ export class Main {
         
         return tree.get_console();
         // console.log(res);
+    }
+
+    compile (bufferStream: string) {
+        console.log(`Compilando ${bufferStream}`);
+        let generator_aux = new Generator3D();
+        generator_aux.clean_all();
+        let generator = generator_aux.get_instance();
+
+        return bufferStream;
     }
 }

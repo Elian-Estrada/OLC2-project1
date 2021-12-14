@@ -1,6 +1,7 @@
 import {Main} from "./src/Main.js";
 
 let btnAnalyze: HTMLElement | null = document.getElementById('btnAnalyze');
+let btnCompile: HTMLElement | null = document.getElementById('btnCompile');
 let bufferStream: string;
 
 let myCodeMirror: any;
@@ -30,7 +31,7 @@ let myCodeMirror2 = CodeMirror.fromTextArea(
 );
 
 // @ts-ignore
-let myCodeMirror2 = CodeMirror.fromTextArea(
+let myCodeMirror3 = CodeMirror.fromTextArea(
     document.getElementById("pythonConsole2"),
     {
         lineNumbers: false,
@@ -70,3 +71,11 @@ function codeToAnalyze() {
     let res: string = main.lexicalAnalysis(bufferStream);
     updateCodeMirror(res);
 }
+
+btnCompile?.addEventListener('click', () => {
+    bufferStream = myCodeMirror.getValue();
+    let main = new Main();
+    myCodeMirror3.setValue("");
+    let res: string = main.compile(bufferStream);
+    console.log(res);
+})

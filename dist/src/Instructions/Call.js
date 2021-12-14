@@ -70,7 +70,6 @@ var Call = /** @class */ (function (_super) {
                         case "type_of##param1":
                             let symbol = new Symbol(expr_to_valuate, expression.get_type(), this.row, this.column, val_expression);
                             table_res = new_table.set_table(symbol);
-
                             if ( table_res instanceof Exception )
                                 return table_res;
                             break;

@@ -52,5 +52,7 @@ export class MainInstruction extends Instruction {
                 tree.update_console(error.toString());
             }
         }
+
+        console.log(new_table)
     }
 }

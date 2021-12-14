@@ -25,7 +25,7 @@ export class Call extends Instruction {
     interpret(tree: Tree, table: SymbolTable): any {
         let ob_function = tree.get_function(this.name);
         let struct:any = JSON.parse(JSON.stringify(tree.get_struct(this.name)));
-        
+
 
         if ( ob_function !== null && ob_function !== undefined){
 
@@ -56,7 +56,6 @@ export class Call extends Instruction {
                         case "type_of##param1":
                             let symbol = new Symbol(expr_to_valuate, expression.get_type(), this.row, this.column, val_expression);
                             table_res = new_table.set_table(symbol);
-
                             if ( table_res instanceof Exception )
                                 return table_res;
                             break;
@@ -98,8 +97,8 @@ export class Call extends Instruction {
             this.value = value;
             return value;
         } else if (struct !== null) {
-            
-            struct = {...struct, 
+
+            struct = {...struct,
                 get_attributes(){
                     return this.attributes
                 },
@@ -116,7 +115,7 @@ export class Call extends Instruction {
             }
 
             let result:any = this.params.forEach((item, i) => {
-                
+
                 if (item instanceof Array){
                     if (struct?.get_attributes()[i].type === type.ARRAY){
                         let result = this.get_values(item, tree, table, struct.get_attributes()[i].sub_type);
@@ -128,19 +127,19 @@ export class Call extends Instruction {
                             struct.get_attributes()[i].value = result;
                         }
                     } else {
-                        
+
                         let error = new Exception("Semantic", `The attribute: ${struct?.get_attributes()[i].id} isn't an array.`, this.row, this.column);
                         tree.get_errors().push(error);
                         tree.update_console(error.toString());
                     }
                 } else {
                     console.log("entro");
-                    
+
                     let value = item.interpret(tree, table);
                     console.log(item);
-                    
+
                     console.log(value);
-                    
+
                     if (value instanceof Exception){
                         tree.get_errors().push(value);
                         tree.update_console(value.toString());
@@ -149,7 +148,7 @@ export class Call extends Instruction {
 
                     if (value instanceof Declaration_array){
                         if (struct?.get_attributes()[i].type === type.ARRAY){
-                            
+
                             let result;
                             if (struct.get_attributes()[i].sub_type !== value.get_subtype()){
                                 result = new Exception("Semantic", `The type: ${value.get_subtype()} cannot assignet at array of type: ${struct.get_attributes()[i].sub_type}`, item.row, item.column);
@@ -160,10 +159,10 @@ export class Call extends Instruction {
                                 tree.update_console(result.toString());
                                 return;
                             }
-    
+
                             struct.get_attributes()[i].value = value.get_value();
                         } else {
-                            
+
                             let error = new Exception("Semantic", `The attribute: ${struct?.get_attributes()[i].id} isn't an array.`, this.row, this.column);
                             tree.get_errors().push(error);
                             tree.update_console(error.toString());
@@ -176,7 +175,7 @@ export class Call extends Instruction {
                         tree.update_console(error.toString());
                         return;
                     } else if (struct.get_attributes()[i].type === type.STRUCT) {
-                        
+
                         if (item.type !== type.NULL && struct.get_attributes()[i].struct !== value.get_id()){
                             let error = new Exception("Semantic", `The type: ${value.get_id()} cannot assignet at attribute of type: ${struct.get_attributes()[i].struct}`, item.row, item.column)
                             tree.get_errors().push(error);
@@ -217,7 +216,7 @@ export class Call extends Instruction {
                 expression.push(value);
             }
         } else {
-            
+
             let value = list_expression.interpret(tree, table);
 
             if (type_array !== list_expression.get_type()){
@@ -229,7 +228,7 @@ export class Call extends Instruction {
                     return parseInt(value);
                 case type.DOUBLE:
                     // console.log(parseFloat(value));
-                    
+
                     return parseFloat(value);
                 case type.BOOL:
                     return JSON.parse(value);
