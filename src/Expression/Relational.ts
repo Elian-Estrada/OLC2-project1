@@ -3,6 +3,7 @@ import { type, Relational_operator } from "../SymbolTable/Type.js";
 import Exception from "../SymbolTable/Exception.js";
 import Tree from "../SymbolTable/Tree.js";
 import SymbolTable from "../SymbolTable/SymbolTable.js";
+import { Cst_Node } from "../Abstract/Cst_Node.js";
 
 export class Relational extends Instruction{
 
@@ -195,7 +196,16 @@ export class Relational extends Instruction{
         return this.type;
     }
 
+    get_node() {
+        let node = new Cst_Node("Expressoin Relational");
+        node.add_childs_node(this.exp1.get_node());
+        node.add_child(this.operator);
+        node.add_childs_node(this.exp2.get_node());
+
+        return node;
+    }
+
     toString(): String{
-        return this.value;
+        return String(this.value);
     }
 }

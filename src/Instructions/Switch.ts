@@ -8,6 +8,7 @@ import {Break} from "./Break.js";
 import {Continue} from "./Continue.js";
 import {Return} from "./Return.js";
 import {Case} from "./Case.js";
+import { Cst_Node } from "../Abstract/Cst_Node.js";
 
 export class Switch extends Instruction {
 
@@ -91,5 +92,10 @@ export class Switch extends Instruction {
         if ( JSON.parse( String(flag) ) ) {
             this.flag = true;
         }
+    }
+
+    get_node() {
+        let node = new Cst_Node("Switch");
+        return node;
     }
 }

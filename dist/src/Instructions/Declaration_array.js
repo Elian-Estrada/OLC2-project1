@@ -24,6 +24,7 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
+import { Cst_Node } from "../Abstract/Cst_Node.js";
 import { Instruction } from "../Abstract/Instruction.js";
 import Exception from "../SymbolTable/Exception.js";
 import Symbol from "../SymbolTable/Symbol.js";
@@ -134,6 +135,10 @@ var Declaration_array = /** @class */ (function (_super) {
     };
     Declaration_array.prototype.get_id = function () {
         return this.id;
+    };
+    Declaration_array.prototype.get_node = function () {
+        var node = new Cst_Node("Declaration Array");
+        return node;
     };
     return Declaration_array;
 }(Instruction));

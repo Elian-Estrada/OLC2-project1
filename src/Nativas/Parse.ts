@@ -3,6 +3,7 @@ import Tree from "../SymbolTable/Tree.js";
 import SymbolTable from "../SymbolTable/SymbolTable.js";
 import {type} from "../SymbolTable/Type.js";
 import Exception from "../SymbolTable/Exception.js";
+import { Cst_Node } from "../Abstract/Cst_Node.js";
 
 export class Parse extends Instruction {
 
@@ -32,5 +33,10 @@ export class Parse extends Instruction {
 
         else
             return new Exception("Semantic", "Data type not compatible", this.row, this.column);
+    }
+
+    get_node() {
+        let node = new Cst_Node("Parse");
+        return node;
     }
 }

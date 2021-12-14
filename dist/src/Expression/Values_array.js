@@ -79,6 +79,11 @@ var Values_array = /** @class */ (function (_super) {
     Values_array.prototype.get_value = function () {
         return this.value;
     };
+    Values_array.prototype.get_node = function () {
+    };
+    Values_array.prototype.toString = function () {
+        return String(this.value);
+    };
     return Values_array;
 }(Instruction));
 export { Values_array };

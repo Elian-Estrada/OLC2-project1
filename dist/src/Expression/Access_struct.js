@@ -171,6 +171,8 @@ var Access_struct = /** @class */ (function (_super) {
     Access_struct.prototype.get_value = function () {
         return this.value;
     };
+    Access_struct.prototype.get_node = function () {
+    };
     return Access_struct;
 }(Instruction));
 export { Access_struct };

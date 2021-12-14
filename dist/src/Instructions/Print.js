@@ -17,6 +17,7 @@ import { Instruction } from "../Abstract/Instruction.js";
 import { type } from "../SymbolTable/Type.js";
 import Exception from "../SymbolTable/Exception.js";
 import { Call } from "./Call.js";
+import { Cst_Node } from "../Abstract/Cst_Node.js";
 var Print = /** @class */ (function (_super) {
     __extends(Print, _super);
     function Print(expression, row, col, flag) {
@@ -82,6 +83,10 @@ var Print = /** @class */ (function (_super) {
             }
             return params.slice(0, params.length - 1) + ")";
         }
+    };
+    Print.prototype.get_node = function () {
+        var node = new Cst_Node("Print");
+        return node;
     };
     return Print;
 }(Instruction));

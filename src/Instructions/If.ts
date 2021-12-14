@@ -6,6 +6,7 @@ import Exception from "../SymbolTable/Exception.js";
 import {Continue} from "./Continue.js";
 import {Break} from "./Break.js";
 import {Return} from "./Return.js";
+import { Cst_Node } from "../Abstract/Cst_Node.js";
 
 export class If extends Instruction {
 
@@ -86,5 +87,10 @@ export class If extends Instruction {
         } else {
             return new Exception("Semantic", `Expect a Boolean type expression. Not ${this.expr.get_type().name}`, this.row, this.column);
         }
+    }
+
+    get_node() {
+        let node = new Cst_Node("If");
+        return node;
     }
 }

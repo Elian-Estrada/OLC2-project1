@@ -16,6 +16,7 @@ var __extends = (this && this.__extends) || (function () {
 import { Function } from "../Instructions/Function.js";
 import Exception from "../SymbolTable/Exception.js";
 import { type } from "../SymbolTable/Type.js";
+import { Cst_Node } from "../Abstract/Cst_Node.js";
 var ToUpperCase = /** @class */ (function (_super) {
     __extends(ToUpperCase, _super);
     function ToUpperCase(id, type, name, params, instructions, row, col) {
@@ -31,6 +32,10 @@ var ToUpperCase = /** @class */ (function (_super) {
             return new Exception("Semantic", "The type ".concat(id_founded.type, " not valid for Length"), this.row, this.column);
         this.type = type.STRING;
         return id_founded.toUpperCase();
+    };
+    ToUpperCase.prototype.get_node = function () {
+        var node = new Cst_Node(this.id);
+        return node;
     };
     return ToUpperCase;
 }(Function));

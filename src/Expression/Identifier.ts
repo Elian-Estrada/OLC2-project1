@@ -3,6 +3,7 @@ import Tree from "../SymbolTable/Tree.js";
 import SymbolTable from "../SymbolTable/SymbolTable.js";
 import { type } from "../SymbolTable/Type.js";
 import Exception from "../SymbolTable/Exception.js";
+import { Cst_Node } from "../Abstract/Cst_Node.js";
 
 export class Identifier extends Instruction {
 
@@ -42,7 +43,14 @@ export class Identifier extends Instruction {
         return this.value;
     }
 
+    get_node() {
+        let node = new Cst_Node("Identifier");
+        node.add_child(this.id);
+
+        return node;
+    }
+
     toString(): String{
-        return this.value;
+        return String(this.value);
     }
 }

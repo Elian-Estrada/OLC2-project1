@@ -13,6 +13,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+import { Cst_Node } from "../Abstract/Cst_Node.js";
 import { Instruction } from "../Abstract/Instruction.js";
 import Exception from "../SymbolTable/Exception.js";
 import { type } from "../SymbolTable/Type.js";
@@ -31,6 +32,10 @@ var Inc_Dec = /** @class */ (function (_super) {
         }
         this.type = this.expression.get_type();
         return value;
+    };
+    Inc_Dec.prototype.get_node = function () {
+        var node = new Cst_Node("Inc_Dec");
+        return node;
     };
     return Inc_Dec;
 }(Instruction));

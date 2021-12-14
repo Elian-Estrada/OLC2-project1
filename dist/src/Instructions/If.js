@@ -20,6 +20,7 @@ import Exception from "../SymbolTable/Exception.js";
 import { Continue } from "./Continue.js";
 import { Break } from "./Break.js";
 import { Return } from "./Return.js";
+import { Cst_Node } from "../Abstract/Cst_Node.js";
 var If = /** @class */ (function (_super) {
     __extends(If, _super);
     function If(expr, instructions, else_instr, elseif, row, col) {
@@ -92,6 +93,10 @@ var If = /** @class */ (function (_super) {
         else {
             return new Exception("Semantic", "Expect a Boolean type expression. Not ".concat(this.expr.get_type().name), this.row, this.column);
         }
+    };
+    If.prototype.get_node = function () {
+        var node = new Cst_Node("If");
+        return node;
     };
     return If;
 }(Instruction));

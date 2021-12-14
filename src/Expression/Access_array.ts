@@ -1,3 +1,4 @@
+import { Cst_Node } from "../Abstract/Cst_Node.js";
 import { Instruction } from "../Abstract/Instruction.js";
 import Exception from "../SymbolTable/Exception.js";
 import SymbolTable from "../SymbolTable/SymbolTable.js";
@@ -132,5 +133,31 @@ export class Access_array extends Instruction {
 
     get_type(){
         return this.type;
+    }
+
+    get_node() {
+        let node = new Cst_Node("Access Array");
+        node.add_child(this.id);
+        
+        let positions = new Cst_Node("Expressions Array");
+
+        for (let item of this.positions){
+            positions.add_child("[");
+            positions.add_childs_node(item.get_node());
+            positions.add_child("]");
+        }
+
+        node.add_childs_node(positions);
+
+        if (this.expression !== null){
+            node.add_child("=");
+            node.add_childs_node(this.expression.get_node());
+        }
+
+        return node;
+    }
+
+    toString(){
+        return String(this.value);
     }
 }

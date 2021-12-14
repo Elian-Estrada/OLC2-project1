@@ -210,4 +210,8 @@ export class Access_struct extends Instruction{
         return this.value;
     }
 
+    get_node() {
+        
+    }
+
 }

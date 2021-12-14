@@ -20,6 +20,7 @@ import { Break } from "./Break.js";
 import { Return } from "./Return.js";
 import { Continue } from "./Continue.js";
 import { type } from "../SymbolTable/Type.js";
+import { Cst_Node } from "../Abstract/Cst_Node.js";
 var Function = /** @class */ (function (_super) {
     __extends(Function, _super);
     function Function(type, name, params, instructions, row, col) {
@@ -77,6 +78,10 @@ var Function = /** @class */ (function (_super) {
     };
     Function.prototype.get_params = function () {
         return this.params;
+    };
+    Function.prototype.get_node = function () {
+        var node = new Cst_Node("Function");
+        return node;
     };
     return Function;
 }(Instruction));

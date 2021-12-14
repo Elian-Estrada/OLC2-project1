@@ -6,6 +6,7 @@ import {type} from "../SymbolTable/Type.js";
 import {Continue} from "./Continue.js";
 import {Break} from "./Break.js";
 import {Return} from "./Return.js";
+import { Cst_Node } from "../Abstract/Cst_Node.js";
 
 export class While extends Instruction {
 
@@ -67,5 +68,10 @@ export class While extends Instruction {
             console.log(error);
             return new Exception("Semantic", "" + error, this.row, this.column);
         }
+    }
+
+    get_node() {
+        let node = new Cst_Node("While");
+        return node;
     }
 }

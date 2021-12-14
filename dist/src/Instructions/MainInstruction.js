@@ -19,6 +19,7 @@ import Exception from "../SymbolTable/Exception.js";
 import { Function } from "./Function.js";
 import { Continue } from "./Continue.js";
 import { Break } from "./Break.js";
+import { Cst_Node } from "../Abstract/Cst_Node.js";
 var MainInstruction = /** @class */ (function (_super) {
     __extends(MainInstruction, _super);
     function MainInstruction(instructions, row, col) {
@@ -58,6 +59,10 @@ var MainInstruction = /** @class */ (function (_super) {
             }
         }
         console.log(new_table);
+    };
+    MainInstruction.prototype.get_node = function () {
+        var node = new Cst_Node("Main");
+        return node;
     };
     return MainInstruction;
 }(Instruction));

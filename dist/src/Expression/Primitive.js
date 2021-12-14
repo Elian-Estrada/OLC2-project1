@@ -13,6 +13,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+import { Cst_Node } from "../Abstract/Cst_Node.js";
 import { Instruction } from "../Abstract/Instruction.js";
 var Primitive = /** @class */ (function (_super) {
     __extends(Primitive, _super);
@@ -31,8 +32,13 @@ var Primitive = /** @class */ (function (_super) {
     Primitive.prototype.get_type = function () {
         return this.type;
     };
+    Primitive.prototype.get_node = function () {
+        var node = new Cst_Node("Primitive");
+        node.add_child(this.value);
+        return node;
+    };
     Primitive.prototype.toString = function () {
-        return this.value;
+        return String(this.value);
     };
     return Primitive;
 }(Instruction));

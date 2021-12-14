@@ -4,6 +4,7 @@ import Tree from "../SymbolTable/Tree.js";
 import SymbolTable from "../SymbolTable/SymbolTable.js";
 import Exception from "../SymbolTable/Exception.js";
 import {type} from "../SymbolTable/Type.js";
+import { Cst_Node } from "../Abstract/Cst_Node.js";
 
 
 export class ToUpperCase extends Function {
@@ -26,5 +27,10 @@ export class ToUpperCase extends Function {
 
         this.type = type.STRING;
         return id_founded.toUpperCase();
+    }
+
+    get_node(): Cst_Node {
+        let node = new Cst_Node(this.id);
+        return node;
     }
 }

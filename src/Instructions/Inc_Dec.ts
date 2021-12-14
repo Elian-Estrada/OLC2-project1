@@ -1,3 +1,4 @@
+import { Cst_Node } from "../Abstract/Cst_Node.js";
 import { Instruction } from "../Abstract/Instruction.js";
 import Exception from "../SymbolTable/Exception.js";
 import Symbol from "../SymbolTable/Symbol.js";
@@ -26,5 +27,10 @@ export class Inc_Dec extends Instruction {
 
         this.type = this.expression.get_type();
         return value;
+    }
+
+    get_node() {
+        let node = new Cst_Node("Inc_Dec");
+        return node;
     }
 }

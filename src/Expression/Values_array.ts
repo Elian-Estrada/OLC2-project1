@@ -90,4 +90,12 @@ export class Values_array extends Instruction{
         return this.value;
     }
 
+    get_node() {
+        
+    }
+
+    toString(){
+        return String(this.value);
+    }
+
 }

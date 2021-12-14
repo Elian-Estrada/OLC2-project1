@@ -16,6 +16,7 @@ var __extends = (this && this.__extends) || (function () {
 import { Function } from "../Instructions/Function.js";
 import Exception from "../SymbolTable/Exception.js";
 import { type } from "../SymbolTable/Type.js";
+import { Cst_Node } from "../Abstract/Cst_Node.js";
 var Length = /** @class */ (function (_super) {
     __extends(Length, _super);
     function Length(id, type, name, params, instructions, row, col) {
@@ -32,6 +33,10 @@ var Length = /** @class */ (function (_super) {
             return new Exception("Semantic", "The type ".concat(id_founded.type, " not valid for Length"), this.row, this.column);
         this.type = type.INT;
         return id_founded.length;
+    };
+    Length.prototype.get_node = function () {
+        var node = new Cst_Node(this.id);
+        return node;
     };
     return Length;
 }(Function));

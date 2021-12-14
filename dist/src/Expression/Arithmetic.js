@@ -18,6 +18,7 @@ import { Arithmetic_operator, type } from "../SymbolTable/Type.js";
 import Exception from "../SymbolTable/Exception.js";
 import Symbol from "../SymbolTable/Symbol.js";
 import { Identifier } from "./Identifier.js";
+import { Cst_Node } from "../Abstract/Cst_Node.js";
 var Arithmetic = /** @class */ (function (_super) {
     __extends(Arithmetic, _super);
     function Arithmetic(exp1, exp2, operator, row, column) {
@@ -217,8 +218,21 @@ var Arithmetic = /** @class */ (function (_super) {
     Arithmetic.prototype.get_type = function () {
         return this.type;
     };
+    Arithmetic.prototype.get_node = function () {
+        var node = new Cst_Node("Expression Arithmetic");
+        if (this.exp2 !== null) {
+            node.add_childs_node(this.exp1.get_node());
+            node.add_child(this.operator);
+            node.add_childs_node(this.exp2.get_node());
+        }
+        else {
+            node.add_child("-");
+            node.add_childs_node(this.exp1.get_node());
+        }
+        return node;
+    };
     Arithmetic.prototype.toString = function () {
-        return this.value;
+        return String(this.value);
     };
     return Arithmetic;
 }(Instruction));

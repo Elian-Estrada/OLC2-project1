@@ -1,6 +1,7 @@
 import {Instruction} from "../Abstract/Instruction.js";
 import Tree from "../SymbolTable/Tree.js";
 import SymbolTable from "../SymbolTable/SymbolTable.js";
+import { Cst_Node } from "../Abstract/Cst_Node.js";
 
 export class Case extends Instruction {
 
@@ -23,5 +24,21 @@ export class Case extends Instruction {
 
     public get_value() {
         return this.expr;
+    }
+
+    get_node() {
+        let node = new Cst_Node("Case");
+        node.add_child("case");
+        node.add_childs_node(this.expr.get_node());
+        node.add_child(":");
+
+        let instructions = new Cst_Node("Instructions");
+        for (let item of this.instructions){
+            instructions.add_childs_node(item.get_node());
+        }
+
+        node.add_childs_node(instructions);
+
+        return node;
     }
 }

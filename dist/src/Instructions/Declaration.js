@@ -13,6 +13,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+import { Cst_Node } from "../Abstract/Cst_Node.js";
 import { Instruction } from "../Abstract/Instruction.js";
 import { Access_struct } from "../Expression/Access_struct.js";
 import { Identifier } from "../Expression/Identifier.js";
@@ -104,6 +105,16 @@ var Declaration = /** @class */ (function (_super) {
     };
     Declaration.prototype.get_value = function () {
         return this.expression;
+    };
+    Declaration.prototype.get_node = function () {
+        var node = new Cst_Node("Declaration");
+        node.add_child(this.type);
+        node.add_child(this.id);
+        if (this.expression !== null) {
+            node.add_child("=");
+            node.add_childs_node(this.expression.get_node());
+        }
+        return node;
     };
     return Declaration;
 }(Instruction));

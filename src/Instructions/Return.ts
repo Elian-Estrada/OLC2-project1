@@ -2,6 +2,7 @@ import {Instruction} from "../Abstract/Instruction.js";
 import Tree from "../SymbolTable/Tree.js";
 import SymbolTable from "../SymbolTable/SymbolTable.js";
 import Exception from "../SymbolTable/Exception.js";
+import { Cst_Node } from "../Abstract/Cst_Node.js";
 
 export class Return extends Instruction {
 
@@ -38,5 +39,10 @@ export class Return extends Instruction {
 
     public get_result() {
         return this.result;
+    }
+
+    get_node() {
+        let node = new Cst_Node("Return");
+        return node;
     }
 }

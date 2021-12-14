@@ -16,6 +16,7 @@ var __extends = (this && this.__extends) || (function () {
 import { Instruction } from "../Abstract/Instruction.js";
 import { type, Relational_operator } from "../SymbolTable/Type.js";
 import Exception from "../SymbolTable/Exception.js";
+import { Cst_Node } from "../Abstract/Cst_Node.js";
 var Relational = /** @class */ (function (_super) {
     __extends(Relational, _super);
     function Relational(exp1, exp2, operator, row, column) {
@@ -177,8 +178,15 @@ var Relational = /** @class */ (function (_super) {
     Relational.prototype.get_type = function () {
         return this.type;
     };
+    Relational.prototype.get_node = function () {
+        var node = new Cst_Node("Expressoin Relational");
+        node.add_childs_node(this.exp1.get_node());
+        node.add_child(this.operator);
+        node.add_childs_node(this.exp2.get_node());
+        return node;
+    };
     Relational.prototype.toString = function () {
-        return this.value;
+        return String(this.value);
     };
     return Relational;
 }(Instruction));

@@ -4,6 +4,7 @@ import SymbolTable from "../SymbolTable/SymbolTable.js";
 import {type} from "../SymbolTable/Type.js";
 import Exception from "../SymbolTable/Exception.js";
 import {Call} from "./Call.js";
+import { Cst_Node } from "../Abstract/Cst_Node.js";
 
 export class Print extends Instruction {
 
@@ -87,5 +88,10 @@ export class Print extends Instruction {
 
         }
 
+    }
+
+    get_node() {
+        let node = new Cst_Node("Print");
+        return node;
     }
 }

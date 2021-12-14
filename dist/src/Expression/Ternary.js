@@ -47,6 +47,11 @@ var Ternary = /** @class */ (function (_super) {
     Ternary.prototype.get_type = function () {
         return this.exp_if_false.get_type();
     };
+    Ternary.prototype.get_node = function () {
+    };
+    Ternary.prototype.toString = function () {
+        return String(this.value);
+    };
     return Ternary;
 }(Instruction));
 export { Ternary };

@@ -10,6 +10,7 @@ import {Assignment} from "./Assignment.js";
 import Symbol from "../SymbolTable/Symbol.js";
 import {Identifier} from "../Expression/Identifier.js";
 import {Declaration} from "./Declaration.js";
+import { Cst_Node } from "../Abstract/Cst_Node.js";
 
 export class ForIn extends Instruction {
 
@@ -82,5 +83,10 @@ export class ForIn extends Instruction {
                 }
             }
         }
+    }
+
+    get_node() {
+        let node = new Cst_Node("For-In");
+        return node;
     }
 }

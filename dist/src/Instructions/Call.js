@@ -29,6 +29,7 @@ import SymbolTable from "../SymbolTable/SymbolTable.js";
 import Exception from "../SymbolTable/Exception.js";
 import Symbol from "../SymbolTable/Symbol.js";
 import { type } from "../SymbolTable/Type.js";
+import { Cst_Node } from "../Abstract/Cst_Node.js";
 var Call = /** @class */ (function (_super) {
     __extends(Call, _super);
     function Call(name, params, row, col) {
@@ -220,6 +221,19 @@ var Call = /** @class */ (function (_super) {
     };
     Call.prototype.get_id = function () {
         return this.name;
+    };
+    Call.prototype.get_node = function () {
+        var node = new Cst_Node("Call Function");
+        node.add_child(this.name);
+        node.add_child("(");
+        var parameters = new Cst_Node("Parameters");
+        for (var _i = 0, _a = this.params; _i < _a.length; _i++) {
+            var item = _a[_i];
+            parameters.add_childs_node(item.get_node());
+        }
+        node.add_childs_node(parameters);
+        node.add_child(")");
+        return node;
     };
     return Call;
 }(Instruction));

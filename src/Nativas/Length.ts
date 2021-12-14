@@ -5,6 +5,7 @@ import SymbolTable from "../SymbolTable/SymbolTable.js";
 import Exception from "../SymbolTable/Exception.js";
 import Symbol from "../SymbolTable/Symbol.js";
 import {type} from "../SymbolTable/Type.js";
+import { Cst_Node } from "../Abstract/Cst_Node.js";
 
 
 export class Length extends Function {
@@ -28,5 +29,10 @@ export class Length extends Function {
 
         this.type = type.INT;
         return id_founded.length;
+    }
+
+    get_node(): Cst_Node {
+        let node = new Cst_Node(this.id);
+        return node;
     }
 }

@@ -7,6 +7,7 @@ import {Return} from "./Return.js";
 import {Continue} from "./Continue.js";
 import {type} from "../SymbolTable/Type.js";
 import {If} from "./If.js";
+import { Cst_Node } from "../Abstract/Cst_Node.js";
 
 export class Function extends Instruction {
 
@@ -82,5 +83,10 @@ export class Function extends Instruction {
 
     public get_params() {
         return this.params;
+    }
+
+    get_node() {
+        let node = new Cst_Node("Function");
+        return node;
     }
 }

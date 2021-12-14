@@ -1,3 +1,4 @@
+import { Cst_Node } from "../Abstract/Cst_Node.js";
 import { Instruction } from "../Abstract/Instruction.js";
 import Exception from "../SymbolTable/Exception.js";
 import Symbol from "../SymbolTable/Symbol.js";
@@ -62,6 +63,11 @@ export class Struct extends Instruction{
 
     get_id(){
         return this.id;
+    }
+
+    get_node() {
+        let node = new Cst_Node("Struct");
+        return node;
     }
 
 }

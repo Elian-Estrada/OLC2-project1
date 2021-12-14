@@ -16,6 +16,7 @@ var __extends = (this && this.__extends) || (function () {
 import { Instruction } from "../Abstract/Instruction.js";
 import { type } from "../SymbolTable/Type.js";
 import Exception from "../SymbolTable/Exception.js";
+import { Cst_Node } from "../Abstract/Cst_Node.js";
 var Identifier = /** @class */ (function (_super) {
     __extends(Identifier, _super);
     function Identifier(id, row, col) {
@@ -43,8 +44,13 @@ var Identifier = /** @class */ (function (_super) {
     Identifier.prototype.get_value = function () {
         return this.value;
     };
+    Identifier.prototype.get_node = function () {
+        var node = new Cst_Node("Identifier");
+        node.add_child(this.id);
+        return node;
+    };
     Identifier.prototype.toString = function () {
-        return this.value;
+        return String(this.value);
     };
     return Identifier;
 }(Instruction));

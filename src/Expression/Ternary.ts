@@ -47,4 +47,12 @@ export class Ternary extends Instruction {
     public get_type(): type | null {
         return this.exp_if_false.get_type();
     }
+
+    get_node() {
+        
+    }
+
+    toString(){
+        return String(this.value);
+    }
 }

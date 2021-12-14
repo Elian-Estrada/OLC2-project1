@@ -21,6 +21,7 @@ import Exception from "../SymbolTable/Exception.js";
 import { Break } from "./Break.js";
 import { Continue } from "./Continue.js";
 import { Return } from "./Return.js";
+import { Cst_Node } from "../Abstract/Cst_Node.js";
 var Switch = /** @class */ (function (_super) {
     __extends(Switch, _super);
     function Switch(expr, list_cases, default_case, row, col) {
@@ -91,6 +92,10 @@ var Switch = /** @class */ (function (_super) {
         if (JSON.parse(String(flag))) {
             this.flag = true;
         }
+    };
+    Switch.prototype.get_node = function () {
+        var node = new Cst_Node("Switch");
+        return node;
     };
     return Switch;
 }(Instruction));

@@ -4,6 +4,7 @@ import Tree from "../SymbolTable/Tree.js";
 import SymbolTable from "../SymbolTable/SymbolTable.js";
 import Exception from "../SymbolTable/Exception.js";
 import {type} from "../SymbolTable/Type.js";
+import { Cst_Node } from "../Abstract/Cst_Node.js";
 
 export class CaracterOfPosition extends Function {
 
@@ -28,5 +29,10 @@ export class CaracterOfPosition extends Function {
 
         this.type = type.CHAR;
         return id_founded.charAt(this.n);
+    }
+
+    get_node(): Cst_Node {
+        let node = new Cst_Node(this.id);
+        return node;
     }
 }

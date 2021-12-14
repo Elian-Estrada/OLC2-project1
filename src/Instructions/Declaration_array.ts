@@ -1,3 +1,4 @@
+import { Cst_Node } from "../Abstract/Cst_Node.js";
 import { Instruction } from "../Abstract/Instruction.js";
 import Exception from "../SymbolTable/Exception.js";
 import Symbol from "../SymbolTable/Symbol.js";
@@ -156,5 +157,10 @@ export class Declaration_array extends Instruction {
 
     get_id(){
         return this.id;
+    }
+
+    get_node() {
+        let node = new Cst_Node("Declaration Array");
+        return node;
     }
 }

@@ -93,8 +93,10 @@ var StringText = /** @class */ (function (_super) {
     StringText.prototype.get_type = function () {
         return this.type;
     };
+    StringText.prototype.get_node = function () {
+    };
     StringText.prototype.toString = function () {
-        return this.value;
+        return String(this.value);
     };
     return StringText;
 }(Instruction));

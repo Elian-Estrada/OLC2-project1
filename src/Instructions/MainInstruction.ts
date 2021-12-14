@@ -5,6 +5,7 @@ import Exception from "../SymbolTable/Exception.js";
 import {Function} from "./Function.js";
 import {Continue} from "./Continue.js";
 import {Break} from "./Break.js";
+import { Cst_Node } from "../Abstract/Cst_Node.js";
 
 export class MainInstruction extends Instruction {
 
@@ -53,5 +54,10 @@ export class MainInstruction extends Instruction {
         }
 
         console.log(new_table)
+    }
+
+    get_node() {
+        let node = new Cst_Node("Main");
+        return node;
     }
 }

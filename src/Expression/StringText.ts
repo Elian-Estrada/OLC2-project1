@@ -93,7 +93,11 @@ export class StringText extends Instruction {
         return this.type;
     }
 
+    get_node() {
+        
+    }
+
     toString(): String {
-        return this.value;
+        return String(this.value);
     }
 }

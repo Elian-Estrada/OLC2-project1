@@ -5,6 +5,7 @@ import Tree from "../SymbolTable/Tree.js";
 import Exception from "../SymbolTable/Exception.js";
 import Symbol from "../SymbolTable/Symbol.js";
 import {Identifier} from "./Identifier.js";
+import { Cst_Node } from "../Abstract/Cst_Node.js";
 
 export class Arithmetic extends Instruction {
 
@@ -230,7 +231,22 @@ export class Arithmetic extends Instruction {
         return this.type;
     }
 
+    get_node() {
+        let node = new Cst_Node("Expression Arithmetic");
+
+        if (this.exp2 !== null){
+            node.add_childs_node(this.exp1.get_node());
+            node.add_child(this.operator);
+            node.add_childs_node(this.exp2.get_node());
+        } else {
+            node.add_child("-");
+            node.add_childs_node(this.exp1.get_node());
+        }
+
+        return node;
+    }
+
     toString(): String {
-        return this.value;
+        return String(this.value);
     }
 }

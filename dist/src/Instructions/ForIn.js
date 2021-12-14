@@ -22,6 +22,7 @@ import { Return } from "./Return.js";
 import { type } from "../SymbolTable/Type.js";
 import Symbol from "../SymbolTable/Symbol.js";
 import { Declaration } from "./Declaration.js";
+import { Cst_Node } from "../Abstract/Cst_Node.js";
 var ForIn = /** @class */ (function (_super) {
     __extends(ForIn, _super);
     function ForIn(identifier, secondExp, instructions, row, col) {
@@ -78,6 +79,10 @@ var ForIn = /** @class */ (function (_super) {
                 }
             }
         }
+    };
+    ForIn.prototype.get_node = function () {
+        var node = new Cst_Node("For-In");
+        return node;
     };
     return ForIn;
 }(Instruction));
