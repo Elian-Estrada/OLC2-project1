@@ -12,6 +12,7 @@ import { Return } from "./Instructions/Return.js";
 import { MainInstruction } from "./Instructions/MainInstruction.js";
 import { Struct } from "./Instructions/Struct.js";
 import { Declaration_array } from "./Instructions/Declaration_array.js";
+import { Generator3D } from "./Generator/Generator3D.js";
 var Main = /** @class */ (function () {
     function Main() {
     }
@@ -103,7 +104,6 @@ var Main = /** @class */ (function () {
                     for (var _e = 0, _f = tree.get_instructions(); _e < _f.length; _e++) {
                         var instruction = _f[_e];
                         if (instruction instanceof MainInstruction) {
-                            console.log(instruction);
                             var value = instruction.interpret(tree, global_table);
                             var error = void 0;
                             if (instruction instanceof Break) {
@@ -157,6 +157,13 @@ var Main = /** @class */ (function () {
         console.log(tree.get_all_structs());
         return tree.get_console();
         // console.log(res);
+    };
+    Main.prototype.compile = function (bufferStream) {
+        console.log("Compilando ".concat(bufferStream));
+        var generator_aux = new Generator3D();
+        generator_aux.clean_all();
+        var generator = generator_aux.get_instance();
+        return bufferStream;
     };
     return Main;
 }());

@@ -6,11 +6,13 @@ export let variables = [];
 
 export default class SymbolTable {
 
+    private size: number;
     private name: String;
     private table: Map<String, Symbol>;
     private prev: SymbolTable|undefined;
 
     constructor(prev?: SymbolTable, name: String = "Global") {
+        this.size = 0;
         this.name = name;
         this.prev = prev;
         this.table = new Map<String, Symbol>();
@@ -23,6 +25,7 @@ export default class SymbolTable {
 
         symbol.environment = this.name;
         this.table.set(symbol.id, symbol);
+        this.size += 1;
 
         return undefined;
     }

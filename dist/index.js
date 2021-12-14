@@ -1,5 +1,6 @@
 import { Main } from "./src/Main.js";
 var btnAnalyze = document.getElementById('btnAnalyze');
+var btnCompile = document.getElementById('btnCompile');
 var bufferStream;
 var myCodeMirror;
 // @ts-ignore
@@ -18,7 +19,7 @@ var myCodeMirror2 = CodeMirror.fromTextArea(document.getElementById("pythonConso
     readOnly: true,
 });
 // @ts-ignore
-var myCodeMirror2 = CodeMirror.fromTextArea(document.getElementById("pythonConsole2"), {
+var myCodeMirror3 = CodeMirror.fromTextArea(document.getElementById("pythonConsole2"), {
     lineNumbers: false,
     theme: "moxer",
     readOnly: true,
@@ -51,3 +52,10 @@ function codeToAnalyze() {
     var res = main.lexicalAnalysis(bufferStream);
     updateCodeMirror(res);
 }
+btnCompile === null || btnCompile === void 0 ? void 0 : btnCompile.addEventListener('click', function () {
+    bufferStream = myCodeMirror.getValue();
+    var main = new Main();
+    myCodeMirror3.setValue("");
+    var res = main.compile(bufferStream);
+    console.log(res);
+});

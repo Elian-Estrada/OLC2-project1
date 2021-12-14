@@ -58,6 +58,7 @@ var MainInstruction = /** @class */ (function (_super) {
                 tree.update_console(error.toString());
             }
         }
+        console.log(new_table);
     };
     return MainInstruction;
 }(Instruction));

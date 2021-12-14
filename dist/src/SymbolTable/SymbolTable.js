@@ -3,6 +3,7 @@ export var variables = [];
 var SymbolTable = /** @class */ (function () {
     function SymbolTable(prev, name) {
         if (name === void 0) { name = "Global"; }
+        this.size = 0;
         this.name = name;
         this.prev = prev;
         this.table = new Map();
@@ -13,6 +14,7 @@ var SymbolTable = /** @class */ (function () {
         }
         symbol.environment = this.name;
         this.table.set(symbol.id, symbol);
+        this.size += 1;
         return undefined;
     };
     SymbolTable.prototype.get_table = function (id) {
