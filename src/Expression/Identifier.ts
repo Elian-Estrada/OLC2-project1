@@ -5,6 +5,7 @@ import { type } from "../SymbolTable/Type.js";
 import Exception from "../SymbolTable/Exception.js";
 import { Cst_Node } from "../Abstract/Cst_Node.js";
 import { Generator3D } from "../Generator/Generator3D.js";
+import {Value} from "../Abstract/Value.js";
 
 export class Identifier extends Instruction {
 
@@ -69,6 +70,7 @@ export class Identifier extends Instruction {
         let temp_pos = value.position;
         generator.getStack(temp, temp_pos);
 
-        return value;
+        // @ts-ignore
+        return new Value(temp, value.get_type(), true);
     }
 }

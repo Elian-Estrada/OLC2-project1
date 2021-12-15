@@ -28,6 +28,29 @@ var StringText = /** @class */ (function (_super) {
         _this.type = null;
         return _this;
     }
+    StringText.prototype.compile = function (table, generator) {
+        var left = this.exp1.compile(table, generator);
+        var right = this.exp2.compile(table, generator);
+        var temp = generator.addTemp();
+        var operation = this.operator;
+        if (operation === "&") {
+            generator.concatString();
+            var paramTemp = generator.addTemp();
+            generator.addExpression(paramTemp, 'P', table.get_size(), '+');
+            // Valor izquierda
+            generator.addExpression(paramTemp, paramTemp, '1', '+');
+            generator.setStack(paramTemp, left.value);
+            // Valor derecha
+            generator.addExpression(paramTemp, paramTemp, '1', '+');
+            generator.setStack(paramTemp, right.value);
+            generator.newEnv(table.get_size());
+            generator.callFunc('concatString');
+            var temp_1 = generator.addTemp();
+            generator.getStack(temp_1, 'P');
+            generator.setEnv(table.get_size());
+            return;
+        }
+    };
     StringText.prototype.interpret = function (tree, table) {
         var left = this.exp1.interpret(tree, table);
         if (left instanceof Exception)
@@ -93,8 +116,6 @@ var StringText = /** @class */ (function (_super) {
     };
     StringText.prototype.get_type = function () {
         return this.type;
-    };
-    StringText.prototype.compile = function (table, generator) {
     };
     StringText.prototype.get_node = function () {
         var node = new Cst_Node("Concat");

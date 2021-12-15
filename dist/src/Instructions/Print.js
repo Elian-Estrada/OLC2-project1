@@ -31,14 +31,10 @@ var Print = /** @class */ (function (_super) {
         var res = this.expression.compile(table, generator);
         var valueShow = res.value;
         if (res.get_type() === type.INT || res.get_type() === type.DOUBLE) {
-            if (Object.keys(generator.get_TempsRecover()).length > 0) {
-                // @ts-ignore
-                valueShow = generator.get_TempsRecover().temp;
-            }
             generator.add_print("f", "double", valueShow);
         }
         else if (res.get_type() === type.STRING || res.get_type() === type.CHAR) {
-            this.typeString(valueShow.value, table, generator);
+            this.typeString(valueShow, table, generator);
         }
         else if (res.get_type() === type.BOOL) {
             this.typeBoolean(valueShow.value, generator);
@@ -49,17 +45,16 @@ var Print = /** @class */ (function (_super) {
         generator.printString();
         var paramTemp1 = generator.addTemp();
         generator.addAssignment(paramTemp1, "H");
-        for (var _i = 0, value_1 = value; _i < value_1.length; _i++) {
-            var item = value_1[_i];
+        /*for ( let item of value ) {
             generator.setHeap('H', item.charCodeAt(0));
             generator.nextHeap();
         }
         generator.setHeap('H', -1);
-        generator.nextHeap();
+        generator.nextHeap();*/
         var paramTemp2 = generator.addTemp();
         generator.addExpression(paramTemp2, 'P', table.get_size(), '+'); // T5 = P + 1;
         generator.addExpression(paramTemp2, paramTemp2, '1', '+');
-        generator.setStack(paramTemp2, paramTemp1);
+        generator.setStack(paramTemp2, value);
         generator.newEnv(table.get_size());
         generator.callFunc('printString'); // Mandar a llamar la funcion print
         var temp = generator.addTemp();

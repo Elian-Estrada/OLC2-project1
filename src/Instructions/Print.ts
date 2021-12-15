@@ -7,6 +7,7 @@ import {Call} from "./Call.js";
 import {Generator3D} from "../Generator/Generator3D.js";
 import { Cst_Node } from "../Abstract/Cst_Node.js";
 import {Identifier} from "../Expression/Identifier.js";
+import {Primitive} from "../Expression/Primitive.js";
 
 export class Print extends Instruction {
 
@@ -16,14 +17,10 @@ export class Print extends Instruction {
         let valueShow = res.value;
 
         if ( res.get_type() === type.INT || res.get_type() === type.DOUBLE ) {
-            if ( Object.keys(generator.get_TempsRecover()).length > 0 ) {
-                // @ts-ignore
-                valueShow = generator.get_TempsRecover().temp;
-            }
             generator.add_print("f", "double", valueShow);
         }
         else if ( res.get_type() === type.STRING || res.get_type() === type.CHAR ) {
-            this.typeString(valueShow.value, table, generator);
+            this.typeString(valueShow, table, generator);
         }
         else if ( res.get_type() === type.BOOL ) {
             this.typeBoolean(valueShow.value, generator);
@@ -37,18 +34,18 @@ export class Print extends Instruction {
         let paramTemp1 = generator.addTemp();
         generator.addAssignment(paramTemp1, "H");
 
-        for ( let item of value ) {
+        /*for ( let item of value ) {
             generator.setHeap('H', item.charCodeAt(0));
             generator.nextHeap();
         }
         generator.setHeap('H', -1);
-        generator.nextHeap();
+        generator.nextHeap();*/
 
         let paramTemp2 = generator.addTemp();
         generator.addExpression(paramTemp2, 'P', table.get_size(), '+'); // T5 = P + 1;
         generator.addExpression(paramTemp2, paramTemp2, '1', '+');
 
-        generator.setStack(paramTemp2, paramTemp1);
+        generator.setStack(paramTemp2, value);
         generator.newEnv(table.get_size());
         generator.callFunc('printString'); // Mandar a llamar la funcion print
 

@@ -4,6 +4,7 @@ import SymbolTable from "../SymbolTable/SymbolTable.js";
 import Tree from "../SymbolTable/Tree.js";
 import {type} from "../SymbolTable/Type.js";
 import {Generator3D} from "../Generator/Generator3D.js";
+import {Value} from "../Abstract/Value.js";
 
 export class Primitive extends Instruction {
 
@@ -39,8 +40,8 @@ export class Primitive extends Instruction {
     }
 
     compile(table: SymbolTable, generator: Generator3D): any {
-        /*if ( this.type === type.INT || this.type === type.DOUBLE ) {
-            return this;
+        if ( this.type === type.INT || this.type === type.DOUBLE ) {
+            return new Value(this.value, this.type, false);
         }
         else if ( this.type === type.STRING ) {
             let ret_temp = generator.addTemp();
@@ -54,8 +55,10 @@ export class Primitive extends Instruction {
             generator.setHeap('H', -1);
             generator.nextHeap();
 
-            return this;
-        }*/
-        return this;
+            return new Value(ret_temp, type.STRING, true);
+        }
+        else {
+            return new Value(this.value, this.type, false);
+        }
     }
 }

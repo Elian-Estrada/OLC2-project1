@@ -90,6 +90,13 @@ var Generator3D = /** @class */ (function () {
     Generator3D.prototype.addError = function (message, line, column) {
         this.errors.push(new Exception("Semantic", "Id not existent", line, column));
     };
+    Generator3D.prototype.concatString = function () {
+        if (this.concat_str)
+            return;
+        this.concat_str = true;
+        this.inNatives = true;
+        this.addBeginFunc('concatString');
+    };
     Generator3D.prototype.printString = function () {
         if (this.print_string)
             return;

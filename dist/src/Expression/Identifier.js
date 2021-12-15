@@ -17,6 +17,7 @@ import { Instruction } from "../Abstract/Instruction.js";
 import { type } from "../SymbolTable/Type.js";
 import Exception from "../SymbolTable/Exception.js";
 import { Cst_Node } from "../Abstract/Cst_Node.js";
+import { Value } from "../Abstract/Value.js";
 var Identifier = /** @class */ (function (_super) {
     __extends(Identifier, _super);
     function Identifier(id, row, col) {
@@ -64,7 +65,8 @@ var Identifier = /** @class */ (function (_super) {
         // @ts-ignore
         var temp_pos = value.position;
         generator.getStack(temp, temp_pos);
-        return value;
+        // @ts-ignore
+        return new Value(temp, value.get_type(), true);
     };
     return Identifier;
 }(Instruction));

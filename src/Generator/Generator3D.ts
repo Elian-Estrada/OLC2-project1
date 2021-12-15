@@ -128,6 +128,14 @@ export class Generator3D {
         this.errors.push(new Exception("Semantic", "Id not existent", line, column));
     }
 
+    public concatString() {
+        if ( this.concat_str )
+            return;
+        this.concat_str = true;
+        this.inNatives = true;
+        this.addBeginFunc('concatString');
+    }
+
     public printString() {
         if ( this.print_string )
             return;

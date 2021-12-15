@@ -5,8 +5,39 @@ import Exception from "../SymbolTable/Exception.js";
 import {String_operator, type} from "../SymbolTable/Type.js";
 import { Cst_Node } from "../Abstract/Cst_Node.js";
 import { Generator3D } from "../Generator/Generator3D.js";
+import Symbol from "../SymbolTable/Symbol";
 
 export class StringText extends Instruction {
+
+    compile(table: SymbolTable, generator: Generator3D) {
+        let left = this.exp1.compile(table, generator);
+        let right = this.exp2.compile(table, generator);
+        let temp = generator.addTemp();
+        let operation = this.operator;
+
+        if ( operation === "&" ) {
+            generator.concatString();
+            let paramTemp = generator.addTemp();
+            generator.addExpression(paramTemp, 'P', table.get_size(), '+');
+
+            // Valor izquierda
+            generator.addExpression(paramTemp, paramTemp, '1', '+');
+            generator.setStack(paramTemp, left.value);
+
+            // Valor derecha
+            generator.addExpression(paramTemp, paramTemp, '1', '+');
+            generator.setStack(paramTemp, right.value);
+
+            generator.newEnv(table.get_size());
+            generator.callFunc('concatString');
+
+            let temp = generator.addTemp();
+            generator.getStack(temp, 'P');
+            generator.setEnv(table.get_size());
+
+            return ;
+        }
+    }
 
     private operator: string;
     private exp1: any;
@@ -93,10 +124,6 @@ export class StringText extends Instruction {
 
     public get_type(): type | null {
         return this.type;
-    }
-
-    compile(table: SymbolTable, generator: Generator3D) {
-        
     }
 
     get_node() {

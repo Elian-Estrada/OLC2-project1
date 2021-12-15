@@ -15,6 +15,8 @@ var __extends = (this && this.__extends) || (function () {
 })();
 import { Cst_Node } from "../Abstract/Cst_Node.js";
 import { Instruction } from "../Abstract/Instruction.js";
+import { type } from "../SymbolTable/Type.js";
+import { Value } from "../Abstract/Value.js";
 var Primitive = /** @class */ (function (_super) {
     __extends(Primitive, _super);
     function Primitive(value, type, row, column) {
@@ -41,24 +43,24 @@ var Primitive = /** @class */ (function (_super) {
         return String(this.value);
     };
     Primitive.prototype.compile = function (table, generator) {
-        /*if ( this.type === type.INT || this.type === type.DOUBLE ) {
-            return this;
+        if (this.type === type.INT || this.type === type.DOUBLE) {
+            return new Value(this.value, this.type, false);
         }
-        else if ( this.type === type.STRING ) {
-            let ret_temp = generator.addTemp();
+        else if (this.type === type.STRING) {
+            var ret_temp = generator.addTemp();
             generator.addExpression(ret_temp, 'H', '', '');
-
-            for ( let char of String(this.value) ) {
+            for (var _i = 0, _a = String(this.value); _i < _a.length; _i++) {
+                var char = _a[_i];
                 generator.setHeap('H', char.charCodeAt(0));
                 generator.nextHeap();
             }
-
             generator.setHeap('H', -1);
             generator.nextHeap();
-
-            return this;
-        }*/
-        return this;
+            return new Value(ret_temp, type.STRING, true);
+        }
+        else {
+            return new Value(this.value, this.type, false);
+        }
     };
     return Primitive;
 }(Instruction));
