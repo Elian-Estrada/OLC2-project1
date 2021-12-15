@@ -1,11 +1,13 @@
 var Symbol = /** @class */ (function () {
-    function Symbol(id, type, row, column, value, environment) {
+    function Symbol(id, type, row, column, value, environment, in_heap, pos) {
         this._id = id;
         this._type = type;
         this._row = row;
         this._column = column;
         this._value = value;
         this._environment = environment;
+        this._inHeap = in_heap;
+        this.pos = pos;
     }
     Object.defineProperty(Symbol.prototype, "id", {
         get: function () {
@@ -17,10 +19,10 @@ var Symbol = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
+    Symbol.prototype.get_type = function () {
+        return this._type;
+    };
     Object.defineProperty(Symbol.prototype, "type", {
-        get: function () {
-            return this._type;
-        },
         set: function (v) {
             this._type = v;
         },
@@ -63,6 +65,16 @@ var Symbol = /** @class */ (function () {
         },
         set: function (v) {
             this._column = v;
+        },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(Symbol.prototype, "position", {
+        get: function () {
+            return this.pos;
+        },
+        set: function (v) {
+            this.pos = v;
         },
         enumerable: false,
         configurable: true

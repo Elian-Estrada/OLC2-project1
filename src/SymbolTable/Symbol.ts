@@ -9,14 +9,18 @@ export default class Symbol {
     private _environment : String|undefined;
     private _row : Number;
     private _column : Number;
+    private _inHeap: boolean | undefined;
+    private pos: number | undefined;
     
-    constructor(id: String, type: type, row: Number, column: Number, value: any, environment?: String) {
+    constructor(id: String, type: type, row: Number, column: Number, value: any, environment?: String, in_heap?: boolean, pos?: number) {
         this._id = id;
         this._type = type;
         this._row = row;
         this._column = column;
         this._value = value;
         this._environment = environment;
+        this._inHeap = in_heap;
+        this.pos = pos;
     }
 
     public get id() : String {
@@ -26,7 +30,7 @@ export default class Symbol {
         this._id = v;
     }
     
-    public get type() : type {
+    public get_type() : type {
         return this._type;
     }
     public set type(v : type) {
@@ -60,6 +64,11 @@ export default class Symbol {
     public set column(v : Number) {
         this._column = v;
     }
-    
 
+    public get position(): number {
+        return <number>this.pos;
+    }
+    public set position(v: number) {
+        this.pos = v;
+    }
 }

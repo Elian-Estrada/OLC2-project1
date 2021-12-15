@@ -6,26 +6,33 @@ import Exception from "../SymbolTable/Exception.js";
 import {Call} from "./Call.js";
 import {Generator3D} from "../Generator/Generator3D.js";
 import { Cst_Node } from "../Abstract/Cst_Node.js";
+import {Identifier} from "../Expression/Identifier.js";
 
 export class Print extends Instruction {
 
     compile(table: SymbolTable, generator: Generator3D) {
-        if ( this.expression.get_type() === type.INT || this.expression.get_type() === type.DOUBLE ) {
-            generator.add_print("f", "double", this.expression.value);
+
+        let res = this.expression.compile(table, generator);
+        let valueShow = res.value;
+
+        if ( res.get_type() === type.INT || res.get_type() === type.DOUBLE ) {
+            if ( Object.keys(generator.get_TempsRecover()).length > 0 ) {
+                // @ts-ignore
+                valueShow = generator.get_TempsRecover().temp;
+            }
+            generator.add_print("f", "double", valueShow);
         }
-        else if ( this.expression.get_type() === type.STRING || this.expression.get_type() === type.CHAR ) {
-            this.typeString(this.expression.value, table, generator);
+        else if ( res.get_type() === type.STRING || res.get_type() === type.CHAR ) {
+            this.typeString(valueShow.value, table, generator);
         }
-        else if ( this.expression.get_type() === type.BOOL ) {
-            this.typeBoolean(this.expression.value, generator);
+        else if ( res.get_type() === type.BOOL ) {
+            this.typeBoolean(valueShow, generator);
         }
         generator.add_print("c", "char", 10);
     }
 
     public typeString(value: string, table: SymbolTable, generator: Generator3D) {
         generator.printString();
-        generator.addAssignment('P', 0);
-        generator.addAssignment('H', 0);
 
         let paramTemp1 = generator.addTemp();
         generator.addAssignment(paramTemp1, "H");
@@ -51,9 +58,6 @@ export class Print extends Instruction {
     }
 
     public typeBoolean(value: boolean, generator: Generator3D) {
-        generator.addAssignment('P', 0);
-        generator.addAssignment('H', 0);
-
         let exit_label = generator.newLabel();
         let true_label = generator.newLabel();
         let false_label = generator.newLabel();

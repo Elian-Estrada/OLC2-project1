@@ -44,8 +44,6 @@ var Identifier = /** @class */ (function (_super) {
     Identifier.prototype.get_value = function () {
         return this.value;
     };
-    Identifier.prototype.compile = function (table, generator) {
-    };
     Identifier.prototype.get_node = function () {
         var node = new Cst_Node("Identifier");
         node.add_child(this.id);
@@ -53,6 +51,20 @@ var Identifier = /** @class */ (function (_super) {
     };
     Identifier.prototype.toString = function () {
         return String(this.value);
+    };
+    Identifier.prototype.compile = function (table, generator) {
+        generator.addComment("---- START COMPILER ACCESS----");
+        var value = table.get_table(this.id);
+        if (value === null) {
+            // @ts-ignore
+            generator.addError("Variable not exists ".concat(this.id), this.row, this.column);
+            return;
+        }
+        var temp = generator.addTemp();
+        // @ts-ignore
+        var temp_pos = value.position;
+        generator.getStack(temp, temp_pos);
+        return value;
     };
     return Identifier;
 }(Instruction));

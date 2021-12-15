@@ -61,14 +61,17 @@ export class MainInstruction extends Instruction {
         /*let generator_aux = new Generator3D();
         let generator = generator_aux.get_instance();*/
 
-        for ( let item of this.instructions ) {
-            // @ts-ignore
-            if ( item === ';' ) {
-                generator.add_print("c", "char", 10);
-            } else {
-                item.compile(table, generator);
+        if ( this.instructions.length > 0 ) {
+            for ( let item of this.instructions ) {
+                // @ts-ignore
+                if ( item === ';' ) {
+                    generator.add_print("c", "char", 10);
+                } else {
+                    item.compile(table, generator);
+                }
             }
         }
+
 
         return generator.get_code();
 

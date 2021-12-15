@@ -28,6 +28,7 @@ export default class SymbolTable {
         symbol.environment = this.name;
         this.table.set(symbol.id, symbol);
         this.size += 1;
+        symbol.position = this.size;
 
         return undefined;
     }

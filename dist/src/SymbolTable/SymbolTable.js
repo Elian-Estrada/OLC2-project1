@@ -18,6 +18,7 @@ var SymbolTable = /** @class */ (function () {
         symbol.environment = this.name;
         this.table.set(symbol.id, symbol);
         this.size += 1;
+        symbol.position = this.size;
         return undefined;
     };
     SymbolTable.prototype.get_table = function (id) {

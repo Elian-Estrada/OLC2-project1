@@ -2,7 +2,7 @@ import { Cst_Node } from "../Abstract/Cst_Node.js";
 import { Instruction } from "../Abstract/Instruction.js";
 import SymbolTable from "../SymbolTable/SymbolTable.js";
 import Tree from "../SymbolTable/Tree.js";
-import { type } from "../SymbolTable/Type.js";
+import {type} from "../SymbolTable/Type.js";
 import {Generator3D} from "../Generator/Generator3D.js";
 
 export class Primitive extends Instruction {
@@ -38,11 +38,24 @@ export class Primitive extends Instruction {
         return String(this.value);
     }
 
-    compile(table: SymbolTable): any {
-        let generator_aux = new Generator3D();
-        let generator = generator_aux.get_instance();
+    compile(table: SymbolTable, generator: Generator3D): any {
+        /*if ( this.type === type.INT || this.type === type.DOUBLE ) {
+            return this;
+        }
+        else if ( this.type === type.STRING ) {
+            let ret_temp = generator.addTemp();
+            generator.addExpression(ret_temp, 'H', '', '');
 
-        if ( this.type === type.INT || this.type === type.DOUBLE )
-            return this.value;
+            for ( let char of String(this.value) ) {
+                generator.setHeap('H', char.charCodeAt(0));
+                generator.nextHeap();
+            }
+
+            generator.setHeap('H', -1);
+            generator.nextHeap();
+
+            return this;
+        }*/
+        return this;
     }
 }

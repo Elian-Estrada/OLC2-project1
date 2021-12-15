@@ -1,4 +1,5 @@
 import SymbolTable from "../SymbolTable/SymbolTable";
+import Exception from "../SymbolTable/Exception.js";
 
 
 export class Generator3D {
@@ -89,13 +90,13 @@ export class Generator3D {
             header += "#include <stdio.h>\n";
         }
 
-        header += "double heap[30101999];\n";
-        header += "double stack[30101999];\n";
-        header += "double P;\n"
-        header += "double H;\n"
+        header += "float heap[30101999];\n";
+        header += "float stack[30101999];\n";
+        header += "float P;\n"
+        header += "float H;\n"
 
         if ( this.temps.length > 0 ) {
-            header += "double ";
+            header += "float ";
             for ( let i = 0; i < this.temps.length; i++) {
                 header += this.temps[i];
                 if ( i != (this.temps.length-1) )
@@ -108,7 +109,7 @@ export class Generator3D {
     }
 
     public get_code() {
-        return `${this.initial_header()}${this.natives}\n${this.funcs}\n/*------MAIN------*/\n void main() { \n ${this.code}\n\t return; \n }`;
+        return `${this.initial_header()}${this.natives}\n${this.funcs}\n/*------MAIN------*/\n void main() { \n\tP = 0; H = 0;\n ${this.code}\n\t return; \n }`;
     }
 
     public get_freeTemp(temp: any) {
@@ -121,6 +122,10 @@ export class Generator3D {
     public add_print(type: string, data_type: string, value: any) {
         this.get_freeTemp(value);
         this.codeIn(`printf("%${type}", (${data_type})${value});\n`);
+    }
+
+    public addError(message: string, line: number, column: number) {
+        this.errors.push(new Exception("Semantic", "Id not existent", line, column));
     }
 
     public printString() {
@@ -209,7 +214,7 @@ export class Generator3D {
     }
 
     public addTemp() {
-        let temp = `T${this.count_temp}`;   // Crear temporal Tn
+        let temp = `t${this.count_temp}`;   // Crear temporal Tn
         this.count_temp += 1;               // Incrementar contador de temporales en 1
         this.temps.push(temp);              // Meter en el arreglo de temporales al nuevo Tn
         // @ts-ignore
@@ -235,6 +240,10 @@ export class Generator3D {
 
     public addGoTo(label: any) {
         this.codeIn(`goto ${label};\n`);
+    }
+
+    public addComment(comment: string) {
+        this.codeIn(`/* ${comment} */\n`);
     }
 
     public addEndFunc() {
@@ -277,5 +286,9 @@ export class Generator3D {
         this.add_print("c", "char", 108);
         this.add_print("c", "char", 115);
         this.add_print("c", "char", 101);
+    }
+
+    public get_TempsRecover() {
+        return this.temps_recover;
     }
 }

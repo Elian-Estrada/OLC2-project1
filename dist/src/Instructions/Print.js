@@ -28,21 +28,25 @@ var Print = /** @class */ (function (_super) {
         return _this;
     }
     Print.prototype.compile = function (table, generator) {
-        if (this.expression.get_type() === type.INT || this.expression.get_type() === type.DOUBLE) {
-            generator.add_print("f", "double", this.expression.value);
+        var res = this.expression.compile(table, generator);
+        var valueShow = res.value;
+        if (res.get_type() === type.INT || res.get_type() === type.DOUBLE) {
+            if (Object.keys(generator.get_TempsRecover()).length > 0) {
+                // @ts-ignore
+                valueShow = generator.get_TempsRecover().temp;
+            }
+            generator.add_print("f", "double", valueShow);
         }
-        else if (this.expression.get_type() === type.STRING || this.expression.get_type() === type.CHAR) {
-            this.typeString(this.expression.value, table, generator);
+        else if (res.get_type() === type.STRING || res.get_type() === type.CHAR) {
+            this.typeString(valueShow.value, table, generator);
         }
-        else if (this.expression.get_type() === type.BOOL) {
-            this.typeBoolean(this.expression.value, generator);
+        else if (res.get_type() === type.BOOL) {
+            this.typeBoolean(valueShow, generator);
         }
         generator.add_print("c", "char", 10);
     };
     Print.prototype.typeString = function (value, table, generator) {
         generator.printString();
-        generator.addAssignment('P', 0);
-        generator.addAssignment('H', 0);
         var paramTemp1 = generator.addTemp();
         generator.addAssignment(paramTemp1, "H");
         for (var _i = 0, value_1 = value; _i < value_1.length; _i++) {
@@ -63,8 +67,6 @@ var Print = /** @class */ (function (_super) {
         generator.setEnv(table.get_size());
     };
     Print.prototype.typeBoolean = function (value, generator) {
-        generator.addAssignment('P', 0);
-        generator.addAssignment('H', 0);
         var exit_label = generator.newLabel();
         var true_label = generator.newLabel();
         var false_label = generator.newLabel();

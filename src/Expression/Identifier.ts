@@ -44,10 +44,6 @@ export class Identifier extends Instruction {
         return this.value;
     }
 
-    compile(table: SymbolTable, generator: Generator3D) {
-        
-    }
-
     get_node() {
         let node = new Cst_Node("Identifier");
         node.add_child(this.id);
@@ -57,5 +53,22 @@ export class Identifier extends Instruction {
 
     toString(): String{
         return String(this.value);
+    }
+
+    compile(table: SymbolTable, generator: Generator3D): any {
+        generator.addComment("---- START COMPILER ACCESS----");
+        let value = table.get_table(this.id);
+        if ( value === null ) {
+            // @ts-ignore
+            generator.addError(`Variable not exists ${this.id}`, this.row, this.column);
+            return;
+        }
+
+        let temp = generator.addTemp();
+        // @ts-ignore
+        let temp_pos = value.position;
+        generator.getStack(temp, temp_pos);
+
+        return value;
     }
 }

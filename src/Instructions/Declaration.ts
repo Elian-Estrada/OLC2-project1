@@ -7,10 +7,26 @@ import Exception from "../SymbolTable/Exception.js";
 import Symbol from "../SymbolTable/Symbol.js";
 import SymbolTable from "../SymbolTable/SymbolTable.js";
 import Tree from "../SymbolTable/Tree.js";
-import { type } from "../SymbolTable/Type.js";
-import { Struct } from "./Struct.js";
+import {type} from "../SymbolTable/Type.js";
+import {Struct} from "./Struct.js";
 
 export class Declaration extends Instruction {
+    compile(table: SymbolTable, generator: Generator3D) {
+        let value = this.expression.compile(table, generator);
+        let new_var = table.get_table(this.get_id()[0]);
+        let new_symbol = null;
+        if ( new_var === undefined ) {
+            let in_heap = ( value.get_type() === type.STRING || value.get_type() === type.STRUCT || value.get_type() === type.ARRAY );
+            new_symbol = new Symbol(this.id[0], value.get_type(), this.row, this.column, this.expression, undefined, in_heap);
+            table.set_table(new_symbol);
+        }
+
+        // @ts-ignore
+        let temp_pos = new_symbol.position;
+        if ( value.get_type() !== type.STRING ) {
+            generator.setStack(temp_pos, this.expression.value);
+        }
+    }
 
     private id: Array<String>;
     private type: type;
@@ -115,10 +131,6 @@ export class Declaration extends Instruction {
 
     get_value(){
         return this.expression;
-    }
-
-    compile(table: SymbolTable, generator: Generator3D) {
-        
     }
 
     get_node() {

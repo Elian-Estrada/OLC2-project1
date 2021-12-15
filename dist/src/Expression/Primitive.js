@@ -15,8 +15,6 @@ var __extends = (this && this.__extends) || (function () {
 })();
 import { Cst_Node } from "../Abstract/Cst_Node.js";
 import { Instruction } from "../Abstract/Instruction.js";
-import { type } from "../SymbolTable/Type.js";
-import { Generator3D } from "../Generator/Generator3D.js";
 var Primitive = /** @class */ (function (_super) {
     __extends(Primitive, _super);
     function Primitive(value, type, row, column) {
@@ -42,11 +40,25 @@ var Primitive = /** @class */ (function (_super) {
     Primitive.prototype.toString = function () {
         return String(this.value);
     };
-    Primitive.prototype.compile = function (table) {
-        var generator_aux = new Generator3D();
-        var generator = generator_aux.get_instance();
-        if (this.type === type.INT || this.type === type.DOUBLE)
-            return this.value;
+    Primitive.prototype.compile = function (table, generator) {
+        /*if ( this.type === type.INT || this.type === type.DOUBLE ) {
+            return this;
+        }
+        else if ( this.type === type.STRING ) {
+            let ret_temp = generator.addTemp();
+            generator.addExpression(ret_temp, 'H', '', '');
+
+            for ( let char of String(this.value) ) {
+                generator.setHeap('H', char.charCodeAt(0));
+                generator.nextHeap();
+            }
+
+            generator.setHeap('H', -1);
+            generator.nextHeap();
+
+            return this;
+        }*/
+        return this;
     };
     return Primitive;
 }(Instruction));

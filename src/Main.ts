@@ -197,16 +197,6 @@ export class Main {
     compile (bufferStream: string) {
         console.log(`Compilando ${bufferStream}`);
         let res = "";
-        /*let res = `/!*------HEADER------*!/\n`;
-        res += "#include <stdio.h>\n";
-        res += "#include <math.h>\n";
-        res += "double heap[30101999];\n";
-        res += "double stack[30101999];\n";
-        res += "double P;\n";
-        res += "double H;\n\n";
-        res += "/!*------MAIN------*!/\n";
-        res += "void main() {\n";
-        res += "\tP = 0; H = 0;\n";*/
 
         let generator_aux = new Generator3D();
         generator_aux.clean_all();

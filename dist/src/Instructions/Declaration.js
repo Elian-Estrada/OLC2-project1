@@ -30,6 +30,21 @@ var Declaration = /** @class */ (function (_super) {
         _this.expression = expression;
         return _this;
     }
+    Declaration.prototype.compile = function (table, generator) {
+        var value = this.expression.compile(table, generator);
+        var new_var = table.get_table(this.get_id()[0]);
+        var new_symbol = null;
+        if (new_var === undefined) {
+            var in_heap = (value.get_type() === type.STRING || value.get_type() === type.STRUCT || value.get_type() === type.ARRAY);
+            new_symbol = new Symbol(this.id[0], value.get_type(), this.row, this.column, this.expression, undefined, in_heap);
+            table.set_table(new_symbol);
+        }
+        // @ts-ignore
+        var temp_pos = new_symbol.position;
+        if (value.get_type() !== type.STRING) {
+            generator.setStack(temp_pos, this.expression.value);
+        }
+    };
     Declaration.prototype.interpret = function (tree, table) {
         var symbol = null;
         var value = null;
@@ -105,8 +120,6 @@ var Declaration = /** @class */ (function (_super) {
     };
     Declaration.prototype.get_value = function () {
         return this.expression;
-    };
-    Declaration.prototype.compile = function (table, generator) {
     };
     Declaration.prototype.get_node = function () {
         var node = new Cst_Node("Declaration");
