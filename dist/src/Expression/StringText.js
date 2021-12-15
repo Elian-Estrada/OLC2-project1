@@ -43,6 +43,7 @@ var StringText = /** @class */ (function (_super) {
                         case type.DOUBLE:
                         case type.BOOL:
                         case type.CHAR:
+                        case type.ARRAY:
                         case type.NULL:
                             if (this.exp2.get_type() == type.STRING) {
                                 this.type = type.STRING;
@@ -59,6 +60,7 @@ var StringText = /** @class */ (function (_super) {
                             case type.BOOL:
                             case type.CHAR:
                             case type.STRING:
+                            case type.ARRAY:
                             case type.NULL:
                                 this.type = type.STRING;
                                 this.value = left.toString() + right.toString();

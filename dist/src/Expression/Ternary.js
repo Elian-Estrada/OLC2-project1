@@ -24,6 +24,7 @@ var Ternary = /** @class */ (function (_super) {
         _this.expr = expr;
         _this.exp_if_true = exp_if_true;
         _this.exp_if_false = exp_if_false;
+        _this.type = type.NULL;
         return _this;
     }
     Ternary.prototype.interpret = function (tree, table) {
@@ -35,18 +36,20 @@ var Ternary = /** @class */ (function (_super) {
                 if (res_if_true instanceof Exception)
                     return res_if_true;
                 this.value = res_if_true;
+                this.type = this.exp_if_true.get_type();
             }
             else {
                 var res_if_false = this.exp_if_false.interpret(tree, table);
                 if (res_if_false instanceof Exception)
                     return res_if_false;
                 this.value = res_if_false;
+                this.type = this.exp_if_false.get_type();
             }
         }
         return this.value;
     };
     Ternary.prototype.get_type = function () {
-        return this.exp_if_false.get_type();
+        return this.type;
     };
     Ternary.prototype.compile = function (table, generator) {
     };

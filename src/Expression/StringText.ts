@@ -42,6 +42,7 @@ export class StringText extends Instruction {
                         case type.DOUBLE:
                         case type.BOOL:
                         case type.CHAR:
+                        case type.ARRAY:
                         case type.NULL:
                             if ( this.exp2.get_type() == type.STRING ) {
                                 this.type = type.STRING;
@@ -58,6 +59,7 @@ export class StringText extends Instruction {
                             case type.BOOL:
                             case type.CHAR:
                             case type.STRING:
+                            case type.ARRAY:
                             case type.NULL:
                                 this.type = type.STRING;
                                 this.value = left.toString() + right.toString();

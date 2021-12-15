@@ -27,7 +27,9 @@ var Identifier = /** @class */ (function (_super) {
         return _this;
     }
     Identifier.prototype.interpret = function (tree, table) {
+        console.log(this.id);
         var symbol = table.get_table(this.id);
+        console.log(symbol);
         if (symbol == undefined) {
             return new Exception("Semantic", "The id: ".concat(this.id, " doesn't exist in current context"), this.row, this.column);
         }

@@ -12,12 +12,14 @@ export class Ternary extends Instruction {
     private exp_if_true: any;
     private exp_if_false: any;
     private value: any;
+    private type: type;
 
     constructor(expr: any, exp_if_true: any, exp_if_false: any, row: number, col: number) {
         super(row, col);
         this.expr = expr;
         this.exp_if_true = exp_if_true;
         this.exp_if_false = exp_if_false;
+        this.type = type.NULL;
     }
 
     interpret(tree: Tree, table: SymbolTable): any {
@@ -33,6 +35,7 @@ export class Ternary extends Instruction {
                     return res_if_true;
 
                 this.value = res_if_true;
+                this.type = this.exp_if_true.get_type();
             }
             else {
                 let res_if_false = this.exp_if_false.interpret(tree, table);
@@ -40,14 +43,15 @@ export class Ternary extends Instruction {
                     return res_if_false;
 
                 this.value = res_if_false
+                this.type = this.exp_if_false.get_type();
             }
         }
 
         return this.value;
     }
 
-    public get_type(): type | null {
-        return this.exp_if_false.get_type();
+    public get_type(): type {
+        return this.type;
     }
 
     compile(table: SymbolTable, generator: Generator3D) {

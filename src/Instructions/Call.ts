@@ -62,13 +62,13 @@ export class Call extends Instruction {
                         if ( val_expression instanceof Error )
                             return val_expression;
 
-                        for ( let param of ob_function.get_params() ) {
-                            // console.log(expression.get_type())
-                            if ( expression.get_type() !== param.type ) {
-                                return new Exception("Semantic", "Different type of parameter data", expression.row, expression.column);
-                            }
-                            break;
-                        }
+                        // for ( let param of ob_function.get_params() ) {
+                        //     // console.log(expression.get_type())
+                        //     if ( expression.get_type() !== param.type ) {
+                        //         return new Exception("Semantic", "Different type of parameter data", expression.row, expression.column);
+                        //     }
+                        //     break;
+                        // }
 
                         // console.log(ob_function.get_params()[count].type)
                         if ( ob_function.get_params()[count].type == expression.get_type() ) {

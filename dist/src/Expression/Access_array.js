@@ -66,17 +66,17 @@ var Access_array = /** @class */ (function (_super) {
     };
     Access_array.prototype.get_values = function (positions, array, value, type_array, tree, table) {
         if (positions.length !== 0 && array !== undefined) {
+            var pos = positions[0].interpret(tree, table);
             if (value === null) {
-                var pos = positions[0].interpret(tree, table);
                 if (pos instanceof Exception) {
                     return pos;
                 }
                 if (positions[0].get_type() !== type.INT) {
                     return new Exception("Semantic", "The index of array cannot be of type: ".concat(positions[0].get_type(), " expected type: ").concat(type.INT), positions[0].row, positions[0].column);
                 }
-                return this.get_values(positions.slice(1), array[positions[0]], value, type_array, tree, table);
+                return this.get_values(positions.slice(1), array[pos], value, type_array, tree, table);
             }
-            if (positions.length === 1 && array[positions[0]] !== undefined) {
+            if (positions.length === 1 && array[pos] !== undefined) {
                 if (this.expression.get_type() !== type_array) {
                     return new Exception("Semantic", "The type: ".concat(this.expression.get_type(), " cannot be assignated at array of type: ").concat(type_array), this.expression.row, this.expression.column);
                 }
@@ -91,17 +91,20 @@ var Access_array = /** @class */ (function (_super) {
                         value = JSON.parse(value);
                         break;
                 }
-                array[positions[0]] = value;
+                array[pos] = value;
                 return null;
             }
             else if (positions.length !== 1) {
-                return this.get_values(positions.slice(1), array[positions[0]], value, type_array, tree, table);
+                return this.get_values(positions.slice(1), array[pos], value, type_array, tree, table);
             }
             else {
+                console.log("Entra al undefined del otro arreglo");
+                console.log(positions[0]);
                 return new Exception("Semantic", "The index out of range", this.positions[this.positions.length - 1].row, this.positions[this.positions.length - 1].column);
             }
         }
         if (array === undefined) {
+            console.log("Entra al undefined");
             return new Exception("Semantic", "The index out of range", this.positions[this.positions.length - 1].row, this.positions[this.positions.length - 1].column);
         }
         return array;

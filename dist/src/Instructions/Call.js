@@ -70,14 +70,13 @@ var Call = /** @class */ (function (_super) {
                         var val_expression = expression.interpret(tree, table);
                         if (val_expression instanceof Error)
                             return val_expression;
-                        for (var _b = 0, _c = ob_function.get_params(); _b < _c.length; _b++) {
-                            var param = _c[_b];
-                            // console.log(expression.get_type())
-                            if (expression.get_type() !== param.type) {
-                                return new Exception("Semantic", "Different type of parameter data", expression.row, expression.column);
-                            }
-                            break;
-                        }
+                        // for ( let param of ob_function.get_params() ) {
+                        //     // console.log(expression.get_type())
+                        //     if ( expression.get_type() !== param.type ) {
+                        //         return new Exception("Semantic", "Different type of parameter data", expression.row, expression.column);
+                        //     }
+                        //     break;
+                        // }
                         // console.log(ob_function.get_params()[count].type)
                         if (ob_function.get_params()[count].type == expression.get_type()) {
                             if (expression.get_type() === type.ARRAY) {

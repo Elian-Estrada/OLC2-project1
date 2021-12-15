@@ -20,7 +20,12 @@ export class Identifier extends Instruction {
     }
 
     public interpret(tree: Tree, table: SymbolTable): any {
+        console.log(this.id);
+        
         let symbol = table.get_table(this.id);
+
+        console.log(symbol);
+        
 
         if (symbol == undefined){
             return new Exception("Semantic", `The id: ${this.id} doesn't exist in current context`, this.row, this.column);
