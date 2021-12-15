@@ -26,7 +26,7 @@ export class Declaration extends Instruction {
 
         if ( value.get_type() === type.BOOL ) {
             this.valueBoolean(value, temp_pos, generator);
-        } else
+        } else if ( value.get_type() === type.INT || value.get_type() === type.DOUBLE )
             generator.setStack(temp_pos, this.expression.value);
     }
 
