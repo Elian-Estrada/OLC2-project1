@@ -14,6 +14,7 @@ export class Access_array extends Instruction {
     private values: any; 
     private value: any;
     private type: type;
+    private sub_type: type;
 
     constructor(id: any, positions: Array<any>, expression: any, row: number, column: number) {
         super(row, column);
@@ -23,6 +24,7 @@ export class Access_array extends Instruction {
         this.values = [];
         this.value = null;
         this.type = type.NULL;
+        this.sub_type = type.NULL;
     }
 
     interpret(tree: Tree, table: SymbolTable){
@@ -33,7 +35,7 @@ export class Access_array extends Instruction {
             return array;
         }
 
-        if (array.get_type_array() !== type.ARRAY){
+        if (array.get_type() !== type.ARRAY){
             return new Exception("Semantic", `The variable: ${array.get_id()} isn't an Array`, array.row, array.column);
         }
 
@@ -63,6 +65,7 @@ export class Access_array extends Instruction {
 
         if (result instanceof Array){
             this.type = type.ARRAY;
+            this.sub_type = array.get_subtype();
             return this;
         } else {
             this.type = array.get_subtype();
@@ -136,13 +139,17 @@ export class Access_array extends Instruction {
         return this.type;
     }
 
+    get_subtype(){
+        return this.sub_type;
+    }
+
     compile(table: SymbolTable, generator: Generator3D) {
         
     }
 
     get_node() {
         let node = new Cst_Node("Access Array");
-        node.add_child(this.id);
+        node.add_childs_node(this.id.get_node());
         
         let positions = new Cst_Node("Expressions Array");
 

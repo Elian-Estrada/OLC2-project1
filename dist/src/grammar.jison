@@ -460,8 +460,10 @@ params_call
 
 params
     : type IDENTIFIER {
-        $$ = { type: $1, name: $2 };
+        $$ = { type: $1, name: $2, row: this._$.first_line, column: this._$.first_column };
     }
+	| type BRACKETLEFT BRACKETRIGHT IDENTIFIER  { $$ = { type: type.ARRAY, sub_type: $1, name: $4, row: this._$.first_line, column: this._$.first_column }; }
+	| IDENTIFIER IDENTIFIER						{ $$ = { type: type.STRUCT, struct: $1, name: $3, row: this._$.first_line, column: this._$.first_column}; }
 ;
 
 

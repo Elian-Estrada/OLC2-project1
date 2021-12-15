@@ -35,8 +35,27 @@ export class Call extends Instruction {
             let new_table = new SymbolTable(tree.get_global_table(), `Function-${this.name}`);
             if ( ob_function.get_params().length == this.params.length ) {
                 let count = 0;
-
+                let table_res = null;
                 for ( let expression of this.params ) {
+
+                    if (expression instanceof Array){
+                        let param = ob_function.get_params()[count];
+                        if(param.type !== type.ARRAY){
+                            return new Exception("Semantic", `The type: ${type.ARRAY} is different at parameter of type: ${param.type}`, param.row, param.column);
+                        }
+
+                        let array = new Declaration_array(param.name, param.sub_type, null, expression, param.row, param.column);
+
+                        let result = array.interpret(tree, new_table);
+
+                        if (result instanceof Exception){
+                            return result;
+                        }
+                        
+                        count++;
+
+                        continue;
+                    }
 
                     let val_expression = expression.interpret(tree, table);
                     if ( val_expression instanceof Error )
@@ -50,22 +69,17 @@ export class Call extends Instruction {
                         break;
                     }
 
-                    let table_res = null;
-
                     // console.log(ob_function.get_params()[count].type)
                     if ( ob_function.get_params()[count].type == expression.get_type() ) {
                         if ( expression.get_type() === type.ARRAY ) {
 
-                            let length_func = ob_function.get_params()[count].length;
-                            let type_func = ob_function.get_params()[count].get_type();
-                            if ( length_func !== val_expression.length )
-                                return new Exception("Semantic", `Size dimension expected: ${length_func}, received: ${val_expression.length}`, this.row, this.column);
+                            let type_func = ob_function.get_params()[count].sub_type;
 
-                            if ( type_func !== val_expression.get_type() )
-                                return new Exception("Semantic", `The type: ${val_expression.get_type().name} is different to param type: ${type_func}`, this.row, this.column);
+                            if ( type_func !== val_expression.get_subtype() )
+                                return new Exception("Semantic", `The type: ${val_expression.get_type()} is different to param type: ${type_func}`, ob_function.get_params()[count].row, ob_function.get_params()[count].column);
                         }
 
-                        let name_func = String( ob_function.get_params()[count].name ).toLowerCase();
+                        let name_func = String( ob_function.get_params()[count].name );
                         let symbol = new Symbol( name_func, expression.get_type(), this.row, this.column, val_expression );
                         table_res = new_table.set_table(symbol);
 
@@ -73,7 +87,7 @@ export class Call extends Instruction {
                             return table_res;
                     }
                     else {
-                        return new Exception("Semantic", `The type: ${expression.get_type().name} is different to param type: ${ob_function.get_params()[count].get_type()}`, this.row, this.column);
+                        return new Exception("Semantic", `The type: ${expression.get_type()} is different to param type: ${ob_function.get_params()[count].get_type()}`, this.row, this.column);
                     }
 
                     count += 1;

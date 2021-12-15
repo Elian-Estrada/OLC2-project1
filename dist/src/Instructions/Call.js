@@ -29,6 +29,7 @@ import SymbolTable from "../SymbolTable/SymbolTable.js";
 import Exception from "../SymbolTable/Exception.js";
 import Symbol from "../SymbolTable/Symbol.js";
 import { type } from "../SymbolTable/Type.js";
+import { Declaration_array } from "./Declaration_array.js";
 import { Cst_Node } from "../Abstract/Cst_Node.js";
 var Call = /** @class */ (function (_super) {
     __extends(Call, _super);
@@ -49,8 +50,22 @@ var Call = /** @class */ (function (_super) {
             var new_table = new SymbolTable(tree.get_global_table(), "Function-".concat(this.name));
             if (ob_function.get_params().length == this.params.length) {
                 var count = 0;
+                var table_res = null;
                 for (var _i = 0, _a = this.params; _i < _a.length; _i++) {
                     var expression = _a[_i];
+                    if (expression instanceof Array) {
+                        var param = ob_function.get_params()[count];
+                        if (param.type !== type.ARRAY) {
+                            return new Exception("Semantic", "The type: ".concat(type.ARRAY, " is different at parameter of type: ").concat(param.type), param.row, param.column);
+                        }
+                        var array = new Declaration_array(param.name, param.sub_type, null, expression, param.row, param.column);
+                        var result = array.interpret(tree, new_table);
+                        if (result instanceof Exception) {
+                            return result;
+                        }
+                        count++;
+                        continue;
+                    }
                     var val_expression = expression.interpret(tree, table);
                     if (val_expression instanceof Error)
                         return val_expression;
@@ -62,25 +77,21 @@ var Call = /** @class */ (function (_super) {
                         }
                         break;
                     }
-                    var table_res = null;
                     // console.log(ob_function.get_params()[count].type)
                     if (ob_function.get_params()[count].type == expression.get_type()) {
                         if (expression.get_type() === type.ARRAY) {
-                            var length_func = ob_function.get_params()[count].length;
-                            var type_func = ob_function.get_params()[count].get_type();
-                            if (length_func !== val_expression.length)
-                                return new Exception("Semantic", "Size dimension expected: ".concat(length_func, ", received: ").concat(val_expression.length), this.row, this.column);
-                            if (type_func !== val_expression.get_type())
-                                return new Exception("Semantic", "The type: ".concat(val_expression.get_type().name, " is different to param type: ").concat(type_func), this.row, this.column);
+                            var type_func = ob_function.get_params()[count].sub_type;
+                            if (type_func !== val_expression.get_subtype())
+                                return new Exception("Semantic", "The type: ".concat(val_expression.get_type(), " is different to param type: ").concat(type_func), ob_function.get_params()[count].row, ob_function.get_params()[count].column);
                         }
-                        var name_func = String(ob_function.get_params()[count].name).toLowerCase();
+                        var name_func = String(ob_function.get_params()[count].name);
                         var symbol = new Symbol(name_func, expression.get_type(), this.row, this.column, val_expression);
                         table_res = new_table.set_table(symbol);
                         if (table_res instanceof Exception)
                             return table_res;
                     }
                     else {
-                        return new Exception("Semantic", "The type: ".concat(expression.get_type().name, " is different to param type: ").concat(ob_function.get_params()[count].get_type()), this.row, this.column);
+                        return new Exception("Semantic", "The type: ".concat(expression.get_type(), " is different to param type: ").concat(ob_function.get_params()[count].get_type()), this.row, this.column);
                     }
                     count += 1;
                 }

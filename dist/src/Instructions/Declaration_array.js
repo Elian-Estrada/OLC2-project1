@@ -76,7 +76,7 @@ var Declaration_array = /** @class */ (function (_super) {
                         return this.value;
                     }, set_value: function (value) {
                         this.value = value;
-                    }, get_type_array: function () {
+                    }, get_type: function () {
                         return this.type;
                     }, get_id: function () {
                         return this.id;
@@ -130,7 +130,7 @@ var Declaration_array = /** @class */ (function (_super) {
     Declaration_array.prototype.get_subtype = function () {
         return this.type_array;
     };
-    Declaration_array.prototype.get_type_array = function () {
+    Declaration_array.prototype.get_type = function () {
         return this.type;
     };
     Declaration_array.prototype.get_id = function () {

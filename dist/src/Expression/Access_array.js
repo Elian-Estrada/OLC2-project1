@@ -27,6 +27,7 @@ var Access_array = /** @class */ (function (_super) {
         _this.values = [];
         _this.value = null;
         _this.type = type.NULL;
+        _this.sub_type = type.NULL;
         return _this;
     }
     Access_array.prototype.interpret = function (tree, table) {
@@ -34,7 +35,7 @@ var Access_array = /** @class */ (function (_super) {
         if (array instanceof Exception) {
             return array;
         }
-        if (array.get_type_array() !== type.ARRAY) {
+        if (array.get_type() !== type.ARRAY) {
             return new Exception("Semantic", "The variable: ".concat(array.get_id(), " isn't an Array"), array.row, array.column);
         }
         var exp = null;
@@ -55,6 +56,7 @@ var Access_array = /** @class */ (function (_super) {
         this.value = result;
         if (result instanceof Array) {
             this.type = type.ARRAY;
+            this.sub_type = array.get_subtype();
             return this;
         }
         else {
@@ -110,11 +112,14 @@ var Access_array = /** @class */ (function (_super) {
     Access_array.prototype.get_type = function () {
         return this.type;
     };
+    Access_array.prototype.get_subtype = function () {
+        return this.sub_type;
+    };
     Access_array.prototype.compile = function (table, generator) {
     };
     Access_array.prototype.get_node = function () {
         var node = new Cst_Node("Access Array");
-        node.add_child(this.id);
+        node.add_childs_node(this.id.get_node());
         var positions = new Cst_Node("Expressions Array");
         for (var _i = 0, _a = this.positions; _i < _a.length; _i++) {
             var item = _a[_i];
