@@ -11,8 +11,10 @@ export default class Symbol {
     private _column : Number;
     private _inHeap: boolean | undefined;
     private pos: number | undefined;
+    private label_true: string | undefined;
+    private label_false: string | undefined;
     
-    constructor(id: String, type: type, row: Number, column: Number, value: any, environment?: String, in_heap?: boolean, pos?: number) {
+    constructor(id: String, type: type, row: Number, column: Number, value: any, environment?: String, in_heap?: boolean, label_true?: string, label_false?: string) {
         this._id = id;
         this._type = type;
         this._row = row;
@@ -20,7 +22,8 @@ export default class Symbol {
         this._value = value;
         this._environment = environment;
         this._inHeap = in_heap;
-        this.pos = pos;
+        this.label_true = label_true;
+        this.label_false = label_false;
     }
 
     public get id() : String {

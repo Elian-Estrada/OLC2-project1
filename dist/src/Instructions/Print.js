@@ -37,7 +37,7 @@ var Print = /** @class */ (function (_super) {
             this.typeString(valueShow, table, generator);
         }
         else if (res.get_type() === type.BOOL) {
-            this.typeBoolean(valueShow.value, generator);
+            this.typeBoolean(res, generator);
         }
         generator.add_print("c", "char", 10);
     };
@@ -63,18 +63,17 @@ var Print = /** @class */ (function (_super) {
     };
     Print.prototype.typeBoolean = function (value, generator) {
         var exit_label = generator.newLabel();
-        var true_label = generator.newLabel();
-        var false_label = generator.newLabel();
-        if (JSON.parse(String(value))) {
+        /*let true_label = generator.newLabel();
+        let false_label = generator.newLabel();*/
+        /*if ( JSON.parse(String(value)) ) {
             generator.addGoTo(true_label);
-        }
-        else {
+        } else {
             generator.addGoTo(false_label);
-        }
-        generator.setLabel(true_label);
+        }*/
+        generator.setLabel(value.true_label);
         generator.printTrue();
         generator.addGoTo(exit_label);
-        generator.setLabel(false_label);
+        generator.setLabel(value.false_label);
         generator.printFalse();
         generator.addGoTo(exit_label);
         generator.setLabel(exit_label);

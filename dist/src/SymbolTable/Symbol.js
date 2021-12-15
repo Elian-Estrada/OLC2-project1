@@ -1,5 +1,5 @@
 var Symbol = /** @class */ (function () {
-    function Symbol(id, type, row, column, value, environment, in_heap, pos) {
+    function Symbol(id, type, row, column, value, environment, in_heap, label_true, label_false) {
         this._id = id;
         this._type = type;
         this._row = row;
@@ -7,7 +7,8 @@ var Symbol = /** @class */ (function () {
         this._value = value;
         this._environment = environment;
         this._inHeap = in_heap;
-        this.pos = pos;
+        this.label_true = label_true;
+        this.label_false = label_false;
     }
     Object.defineProperty(Symbol.prototype, "id", {
         get: function () {

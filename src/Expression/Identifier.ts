@@ -71,6 +71,27 @@ export class Identifier extends Instruction {
         generator.getStack(temp, temp_pos);
 
         // @ts-ignore
-        return new Value(temp, value.get_type(), true);
+        if ( value.get_type() !== type.BOOL ) {
+            // @ts-ignore
+            return new Value(temp, value.get_type(), true);
+        }
+
+        this.checkLabels(generator, value);
+        // @ts-ignore
+        generator.addIf(temp, '1', '==', value.label_true);
+        // @ts-ignore
+        generator.addGoTo(value.label_false);
+
+        let val_return = new Value(null, type.BOOL, false);
+        // @ts-ignore
+        val_return.true_label = value.label_true;
+        // @ts-ignore
+        val_return.false_label = value.label_false;
+        return val_return;
+    }
+
+    public checkLabels(generator: Generator3D, value: any) {
+        value.label_true = generator.newLabel();
+        value.label_false = generator.newLabel();
     }
 }

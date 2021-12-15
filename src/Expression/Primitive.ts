@@ -57,8 +57,37 @@ export class Primitive extends Instruction {
 
             return new Value(ret_temp, type.STRING, true);
         }
+        else if ( this.type === type.BOOL ) {
+            let res = new Value(this.value, this.type, false);
+            let new_value = this.checkLabels(generator, res);
+
+            if ( new_value.value === 'true' ) {
+                generator.addGoTo(new_value.true_label);
+                generator.addGoTo(new_value.false_label);
+            } else {
+                generator.addGoTo(new_value.false_label);
+                generator.addGoTo(new_value.true_label);
+            }
+
+            res.true_label = new_value.true_label;
+            res.false_label = new_value.false_label;
+
+            return res;
+        }
         else {
             return new Value(this.value, this.type, false);
         }
+    }
+
+    public checkLabels(generator: Generator3D, value: any) {
+        if ( value.true_label === '' ) {
+            value.true_label = generator.newLabel();
+        }
+
+        if ( value.false_label === '' ) {
+            value.false_label = generator.newLabel();
+        }
+
+        return value;
     }
 }

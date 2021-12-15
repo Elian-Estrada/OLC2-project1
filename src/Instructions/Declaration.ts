@@ -17,14 +17,28 @@ export class Declaration extends Instruction {
         let new_symbol = null;
         if ( new_var === undefined ) {
             let in_heap = ( value.get_type() === type.STRING || value.get_type() === type.STRUCT || value.get_type() === type.ARRAY );
-            new_symbol = new Symbol(this.id[0], value.get_type(), this.row, this.column, this.expression, undefined, in_heap);
+            new_symbol = new Symbol(this.id[0], value.get_type(), this.row, this.column, this.expression, undefined, in_heap, value.true_label, value.false_label);
             table.set_table(new_symbol);
         }
 
         // @ts-ignore
         let temp_pos = new_symbol.position;
-        if ( value.get_type() === type.INT || value.get_type() === type.DOUBLE )
+
+        if ( value.get_type() === type.BOOL ) {
+            this.valueBoolean(value, temp_pos, generator);
+        } else
             generator.setStack(temp_pos, this.expression.value);
+    }
+
+    public valueBoolean(value: any, temp_pos: any, generator: Generator3D) {
+        let temp_label = generator.newLabel();
+        generator.setLabel(value.true_label);
+        generator.setStack(temp_pos, "1");
+        generator.addGoTo(temp_label);
+
+        generator.setLabel(value.false_label);
+        generator.setStack(temp_pos, "0");
+        generator.setLabel(temp_label);
     }
 
     private id: Array<String>;

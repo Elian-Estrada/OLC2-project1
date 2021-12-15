@@ -5,8 +5,8 @@ export class Value {
     private type: any;
     private is_temp: boolean;
     private aux_type: string;
-    private true_label: string;
-    private false_label: string;
+    public true_label: string;
+    public false_label: string;
     private values_array: Array<any>;
     private type_array: any;
 

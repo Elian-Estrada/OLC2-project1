@@ -23,7 +23,7 @@ export class Print extends Instruction {
             this.typeString(valueShow, table, generator);
         }
         else if ( res.get_type() === type.BOOL ) {
-            this.typeBoolean(valueShow.value, generator);
+            this.typeBoolean(res, generator);
         }
         generator.add_print("c", "char", 10);
     }
@@ -54,22 +54,22 @@ export class Print extends Instruction {
         generator.setEnv(table.get_size());
     }
 
-    public typeBoolean(value: boolean, generator: Generator3D) {
+    public typeBoolean(value: any, generator: Generator3D) {
         let exit_label = generator.newLabel();
-        let true_label = generator.newLabel();
-        let false_label = generator.newLabel();
+        /*let true_label = generator.newLabel();
+        let false_label = generator.newLabel();*/
 
-        if ( JSON.parse(String(value)) ) {
+        /*if ( JSON.parse(String(value)) ) {
             generator.addGoTo(true_label);
         } else {
             generator.addGoTo(false_label);
-        }
+        }*/
 
-        generator.setLabel(true_label);
+        generator.setLabel(value.true_label);
         generator.printTrue();
         generator.addGoTo(exit_label);
 
-        generator.setLabel(false_label);
+        generator.setLabel(value.false_label);
         generator.printFalse();
         generator.addGoTo(exit_label);
 
