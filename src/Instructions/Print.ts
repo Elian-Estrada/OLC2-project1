@@ -10,15 +10,11 @@ import { Cst_Node } from "../Abstract/Cst_Node.js";
 export class Print extends Instruction {
 
     compile(table: SymbolTable, generator: Generator3D) {
-
-        if ( this.expression.value.length == 1 ) {
-            // let value = this.expression.compile(table);
-            if ( this.expression.get_type() === type.INT ) {
-                generator.add_print("f", "double", this.expression.value);
-            }
-            else if ( this.expression.get_type() === type.STRING ) {
-                this.typeString(this.expression.value, table, generator);
-            }
+        if ( this.expression.get_type() === type.INT || this.expression.get_type() === type.DOUBLE ) {
+            generator.add_print("f", "double", this.expression.value);
+        }
+        else if ( this.expression.get_type() === type.STRING || this.expression.get_type() === type.CHAR ) {
+            this.typeString(this.expression.value, table, generator);
         }
         generator.add_print("c", "char", 10);
     }
@@ -31,8 +27,10 @@ export class Print extends Instruction {
         let paramTemp1 = generator.addTemp();
         generator.addAssignment(paramTemp1, "H");
 
-        generator.setHeap('H', value.charCodeAt(0));
-        generator.nextHeap();
+        for ( let item of value ) {
+            generator.setHeap('H', item.charCodeAt(0));
+            generator.nextHeap();
+        }
         generator.setHeap('H', -1);
         generator.nextHeap();
 
