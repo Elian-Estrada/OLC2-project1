@@ -41,9 +41,8 @@ var Declaration = /** @class */ (function (_super) {
         }
         // @ts-ignore
         var temp_pos = new_symbol.position;
-        if (value.get_type() !== type.STRING) {
+        if (value.get_type() === type.INT || value.get_type() === type.DOUBLE)
             generator.setStack(temp_pos, this.expression.value);
-        }
     };
     Declaration.prototype.interpret = function (tree, table) {
         var symbol = null;

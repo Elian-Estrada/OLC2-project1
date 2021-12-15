@@ -26,7 +26,7 @@ export class Print extends Instruction {
             this.typeString(valueShow.value, table, generator);
         }
         else if ( res.get_type() === type.BOOL ) {
-            this.typeBoolean(valueShow, generator);
+            this.typeBoolean(valueShow.value, generator);
         }
         generator.add_print("c", "char", 10);
     }

@@ -23,9 +23,8 @@ export class Declaration extends Instruction {
 
         // @ts-ignore
         let temp_pos = new_symbol.position;
-        if ( value.get_type() !== type.STRING ) {
+        if ( value.get_type() === type.INT || value.get_type() === type.DOUBLE )
             generator.setStack(temp_pos, this.expression.value);
-        }
     }
 
     private id: Array<String>;
