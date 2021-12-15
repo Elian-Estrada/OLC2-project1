@@ -95,8 +95,22 @@ var Function = /** @class */ (function (_super) {
         for (var _i = 0, _a = this.params; _i < _a.length; _i++) {
             var item = _a[_i];
             param = new Cst_Node("Parameter");
-            param.add_child(item.type);
-            param.add_child(item.name);
+            switch (item.type) {
+                case type.ARRAY:
+                    param.add_child(item.sub_type);
+                    param.add_child("[");
+                    param.add_child("]");
+                    param.add_child(item.id);
+                    break;
+                case type.STRUCT:
+                    param.add_child(item.struct);
+                    param.add_child(item.name);
+                    break;
+                default:
+                    param.add_child(item.type);
+                    param.add_child(item.name);
+                    break;
+            }
             params.add_childs_node(param);
         }
         node.add_childs_node(params);

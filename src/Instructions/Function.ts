@@ -106,8 +106,22 @@ export class Function extends Instruction {
         let param;
         for(let item of this.params){
             param = new Cst_Node("Parameter");
-            param.add_child(item.type);
-            param.add_child(item.name);
+            switch(item.type){
+                case type.ARRAY:
+                    param.add_child(item.sub_type);
+                    param.add_child("[");
+                    param.add_child("]");
+                    param.add_child(item.id);
+                    break;
+                case type.STRUCT:
+                    param.add_child(item.struct);
+                    param.add_child(item.name);
+                    break;
+                default:
+                    param.add_child(item.type);
+                    param.add_child(item.name);
+                    break;
+            }
             params.add_childs_node(param);
         }
 

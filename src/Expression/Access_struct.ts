@@ -12,6 +12,7 @@ export class Access_struct extends Instruction{
     private expression: any;
     private positions: Array<any>;
     private type: type;
+    private sub_type: type;
     private value: any;
 
     constructor(list_ids: Array<any>, expression: any, positions:Array<any>, row: number, column: number){
@@ -20,6 +21,7 @@ export class Access_struct extends Instruction{
         this.expression = expression;
         this.positions = positions;
         this.type = type.NULL;
+        this.sub_type = type.NULL;
         this.value = null;
     }
 
@@ -105,6 +107,9 @@ export class Access_struct extends Instruction{
 
                         if (result instanceof Array){
                             this.type = item.type;
+                            this.sub_type = item.sub_type;
+                            console.log(item);
+                            
                         } else {
                             this.type = item.sub_type;
                         }
@@ -136,6 +141,10 @@ export class Access_struct extends Instruction{
 
                     if (item.type === type.STRUCT){
                         return item;
+                    }
+
+                    if (item.type === type.ARRAY){
+                        this.sub_type = item.sub_type;
                     }
 
                     return item.value;
@@ -206,6 +215,10 @@ export class Access_struct extends Instruction{
 
     get_type(){
         return this.type;
+    }
+
+    get_subtype(){
+        return this.sub_type;
     }
 
     get_value(){

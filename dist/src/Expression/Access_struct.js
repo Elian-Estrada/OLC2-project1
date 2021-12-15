@@ -25,6 +25,7 @@ var Access_struct = /** @class */ (function (_super) {
         _this.expression = expression;
         _this.positions = positions;
         _this.type = type.NULL;
+        _this.sub_type = type.NULL;
         _this.value = null;
         return _this;
     }
@@ -92,6 +93,8 @@ var Access_struct = /** @class */ (function (_super) {
                         }
                         if (result instanceof Array) {
                             this.type = item.type;
+                            this.sub_type = item.sub_type;
+                            console.log(item);
                         }
                         else {
                             this.type = item.sub_type;
@@ -117,6 +120,9 @@ var Access_struct = /** @class */ (function (_super) {
                     this.type = item.type;
                     if (item.type === type.STRUCT) {
                         return item;
+                    }
+                    if (item.type === type.ARRAY) {
+                        this.sub_type = item.sub_type;
                     }
                     return item.value;
                 }
@@ -168,6 +174,9 @@ var Access_struct = /** @class */ (function (_super) {
     };
     Access_struct.prototype.get_type = function () {
         return this.type;
+    };
+    Access_struct.prototype.get_subtype = function () {
+        return this.sub_type;
     };
     Access_struct.prototype.get_value = function () {
         return this.value;
