@@ -263,4 +263,19 @@ export class Generator3D {
     public callFunc(id: any) {
         this.codeIn(`${id}(); \n`);
     }
+
+    public printTrue() {
+        this.add_print("c", "char", 116);
+        this.add_print("c", "char", 114);
+        this.add_print("c", "char", 117);
+        this.add_print("c", "char", 101);
+    }
+
+    public printFalse() {
+        this.add_print("c", "char", 102);
+        this.add_print("c", "char", 97);
+        this.add_print("c", "char", 108);
+        this.add_print("c", "char", 115);
+        this.add_print("c", "char", 101);
+    }
 }

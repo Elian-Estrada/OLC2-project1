@@ -204,6 +204,19 @@ var Generator3D = /** @class */ (function () {
     Generator3D.prototype.callFunc = function (id) {
         this.codeIn("".concat(id, "(); \n"));
     };
+    Generator3D.prototype.printTrue = function () {
+        this.add_print("c", "char", 116);
+        this.add_print("c", "char", 114);
+        this.add_print("c", "char", 117);
+        this.add_print("c", "char", 101);
+    };
+    Generator3D.prototype.printFalse = function () {
+        this.add_print("c", "char", 102);
+        this.add_print("c", "char", 97);
+        this.add_print("c", "char", 108);
+        this.add_print("c", "char", 115);
+        this.add_print("c", "char", 101);
+    };
     return Generator3D;
 }());
 export { Generator3D };

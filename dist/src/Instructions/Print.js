@@ -34,6 +34,9 @@ var Print = /** @class */ (function (_super) {
         else if (this.expression.get_type() === type.STRING || this.expression.get_type() === type.CHAR) {
             this.typeString(this.expression.value, table, generator);
         }
+        else if (this.expression.get_type() === type.BOOL) {
+            this.typeBoolean(this.expression.value, generator);
+        }
         generator.add_print("c", "char", 10);
     };
     Print.prototype.typeString = function (value, table, generator) {
@@ -58,6 +61,26 @@ var Print = /** @class */ (function (_super) {
         var temp = generator.addTemp();
         generator.getStack(temp, 'P');
         generator.setEnv(table.get_size());
+    };
+    Print.prototype.typeBoolean = function (value, generator) {
+        generator.addAssignment('P', 0);
+        generator.addAssignment('H', 0);
+        var exit_label = generator.newLabel();
+        var true_label = generator.newLabel();
+        var false_label = generator.newLabel();
+        if (JSON.parse(String(value))) {
+            generator.addGoTo(true_label);
+        }
+        else {
+            generator.addGoTo(false_label);
+        }
+        generator.setLabel(true_label);
+        generator.printTrue();
+        generator.addGoTo(exit_label);
+        generator.setLabel(false_label);
+        generator.printFalse();
+        generator.addGoTo(exit_label);
+        generator.setLabel(exit_label);
     };
     Print.prototype.interpret = function (tree, table) {
         if (this.expression instanceof Call) {

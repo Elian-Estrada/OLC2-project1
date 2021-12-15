@@ -16,6 +16,9 @@ export class Print extends Instruction {
         else if ( this.expression.get_type() === type.STRING || this.expression.get_type() === type.CHAR ) {
             this.typeString(this.expression.value, table, generator);
         }
+        else if ( this.expression.get_type() === type.BOOL ) {
+            this.typeBoolean(this.expression.value, generator);
+        }
         generator.add_print("c", "char", 10);
     }
 
@@ -45,6 +48,31 @@ export class Print extends Instruction {
         let temp = generator.addTemp();
         generator.getStack(temp, 'P');
         generator.setEnv(table.get_size());
+    }
+
+    public typeBoolean(value: boolean, generator: Generator3D) {
+        generator.addAssignment('P', 0);
+        generator.addAssignment('H', 0);
+
+        let exit_label = generator.newLabel();
+        let true_label = generator.newLabel();
+        let false_label = generator.newLabel();
+
+        if ( JSON.parse(String(value)) ) {
+            generator.addGoTo(true_label);
+        } else {
+            generator.addGoTo(false_label);
+        }
+
+        generator.setLabel(true_label);
+        generator.printTrue();
+        generator.addGoTo(exit_label);
+
+        generator.setLabel(false_label);
+        generator.printFalse();
+        generator.addGoTo(exit_label);
+
+        generator.setLabel(exit_label);
     }
 
     private expression: any;
