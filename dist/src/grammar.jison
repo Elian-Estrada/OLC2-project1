@@ -22,7 +22,7 @@
 "double"            return 'RDOUBLE';
 "boolean"           return 'RBOOLEAN';
 "char"              return 'RCHAR';
-"string"            return 'RSTRING';
+"String"            return 'RSTRING';
 
 /* Conditional Structures */
 "if"                return 'RIF';
