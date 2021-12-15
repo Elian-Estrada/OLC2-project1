@@ -46,7 +46,6 @@ var Call = /** @class */ (function (_super) {
         try {
             var ob_function = tree.get_function(this.name);
             var struct_1 = JSON.parse(JSON.stringify(tree.get_struct(this.name)));
-            console.log(ob_function);
             if (ob_function !== null && ob_function !== undefined) {
                 var new_table = new SymbolTable(tree.get_global_table(), "Function-".concat(this.name));
                 if (ob_function.get_params().length == this.params.length) {
@@ -80,9 +79,6 @@ var Call = /** @class */ (function (_super) {
                         // console.log(ob_function.get_params()[count].type)
                         if (ob_function.get_params()[count].type == expression.get_type()) {
                             if (expression.get_type() === type.ARRAY) {
-                                console.log("El struct entro");
-                                console.log(expression);
-                                console.log(val_expression);
                                 var type_func = ob_function.get_params()[count].sub_type;
                                 if (type_func !== val_expression.get_subtype())
                                     return new Exception("Semantic", "The type: ".concat(val_expression.get_type(), " is different to param type: ").concat(type_func), ob_function.get_params()[count].row, ob_function.get_params()[count].column);

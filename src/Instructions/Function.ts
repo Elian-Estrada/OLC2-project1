@@ -58,7 +58,6 @@ export class Function extends Instruction {
             }
 
             if ( value instanceof Return ) {
-                console.log(this.type)
                 if (this.type == type.VOID) {
                     // console.log("Hola")
                     return new Exception("Semantic", "Function should not return anything", instruction.row, instruction.column);
@@ -75,8 +74,7 @@ export class Function extends Instruction {
         if (this.type !== type.VOID){
             return new Exception("Semantic", `Function of type: ${this.type} expected one Return`, this.instructions[this.instructions.length - 1].row, this.instructions[this.instructions.length - 1].column);
         }
-
-        console.log(new_table);
+        
         return null;
     }
 

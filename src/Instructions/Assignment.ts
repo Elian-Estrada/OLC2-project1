@@ -41,9 +41,7 @@ export class Assignment extends Instruction{
         }
 
         if (this.expression.get_type() === type.STRUCT && this.expression instanceof Access_struct){
-            console.log(value);
             value = value.get_value().value;
-            console.log(value);
         }
 
         let new_symbol = new Symbol(this.id, this.expression.get_type(), this.row, this.column, value);

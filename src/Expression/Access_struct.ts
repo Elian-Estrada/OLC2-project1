@@ -108,8 +108,6 @@ export class Access_struct extends Instruction{
                         if (result instanceof Array){
                             this.type = item.type;
                             this.sub_type = item.sub_type;
-                            console.log(item);
-                            
                         } else {
                             this.type = item.sub_type;
                         }
@@ -126,10 +124,8 @@ export class Access_struct extends Instruction{
                         }
 
                         if (this.expression instanceof Access_struct){
-                            console.log(item.value);
                             
                             item.value = exp.get_value().value;
-                            console.log(item);
                             
                             return null;
                         }

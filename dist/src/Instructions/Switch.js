@@ -77,7 +77,6 @@ var Switch = /** @class */ (function (_super) {
         for (var _i = 0, instructs_1 = instructs; _i < instructs_1.length; _i++) {
             var item = instructs_1[_i];
             var instr = item.interpret(tree, new_table);
-            console.log(instr);
             if (instr instanceof Exception) {
                 tree.get_errors().push(instr);
                 tree.update_console(instr.toString());

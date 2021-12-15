@@ -98,13 +98,10 @@ var Access_array = /** @class */ (function (_super) {
                 return this.get_values(positions.slice(1), array[pos], value, type_array, tree, table);
             }
             else {
-                console.log("Entra al undefined del otro arreglo");
-                console.log(positions[0]);
                 return new Exception("Semantic", "The index out of range", this.positions[this.positions.length - 1].row, this.positions[this.positions.length - 1].column);
             }
         }
         if (array === undefined) {
-            console.log("Entra al undefined");
             return new Exception("Semantic", "The index out of range", this.positions[this.positions.length - 1].row, this.positions[this.positions.length - 1].column);
         }
         return array;

@@ -193,8 +193,6 @@ var Arithmetic = /** @class */ (function (_super) {
                         }
                         this.type = this.exp1.get_type();
                         this.value = left;
-                        console.log(this.value);
-                        console.log(left);
                         return left;
                     }
                 default:

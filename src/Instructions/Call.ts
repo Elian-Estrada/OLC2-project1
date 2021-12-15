@@ -28,8 +28,6 @@ export class Call extends Instruction {
         try{
             let ob_function = tree.get_function(this.name);
             let struct:any = JSON.parse(JSON.stringify(tree.get_struct(this.name)));
-            console.log(ob_function)
-
 
             if ( ob_function !== null && ob_function !== undefined){
 
@@ -73,12 +71,6 @@ export class Call extends Instruction {
                         // console.log(ob_function.get_params()[count].type)
                         if ( ob_function.get_params()[count].type == expression.get_type() ) {
                             if ( expression.get_type() === type.ARRAY ) {
-                                console.log("El struct entro");
-                                console.log(expression);
-                                console.log(val_expression);
-                                
-                                
-                                
                                 let type_func = ob_function.get_params()[count].sub_type;
 
                                 if ( type_func !== val_expression.get_subtype() )

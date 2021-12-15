@@ -43,9 +43,7 @@ var Assignment = /** @class */ (function (_super) {
             value = value;
         }
         if (this.expression.get_type() === type.STRUCT && this.expression instanceof Access_struct) {
-            console.log(value);
             value = value.get_value().value;
-            console.log(value);
         }
         var new_symbol = new Symbol(this.id, this.expression.get_type(), this.row, this.column, value);
         var result = table.update_table(new_symbol);

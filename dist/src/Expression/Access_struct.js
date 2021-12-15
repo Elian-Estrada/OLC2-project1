@@ -94,7 +94,6 @@ var Access_struct = /** @class */ (function (_super) {
                         if (result instanceof Array) {
                             this.type = item.type;
                             this.sub_type = item.sub_type;
-                            console.log(item);
                         }
                         else {
                             this.type = item.sub_type;
@@ -110,9 +109,7 @@ var Access_struct = /** @class */ (function (_super) {
                             return null;
                         }
                         if (this.expression instanceof Access_struct) {
-                            console.log(item.value);
                             item.value = exp.get_value().value;
-                            console.log(item);
                             return null;
                         }
                         return new Exception("Semantic", "The type: ".concat(this.expression.get_type(), " cannot assignment at attribute of type: ").concat(item.type), this.expression.row, this.expression.column);

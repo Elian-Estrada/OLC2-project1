@@ -58,7 +58,6 @@ var Function = /** @class */ (function (_super) {
                 tree.get_errors().push(error);
             }
             if (value instanceof Return) {
-                console.log(this.type);
                 if (this.type == type.VOID) {
                     // console.log("Hola")
                     return new Exception("Semantic", "Function should not return anything", instruction.row, instruction.column);
@@ -72,7 +71,6 @@ var Function = /** @class */ (function (_super) {
         if (this.type !== type.VOID) {
             return new Exception("Semantic", "Function of type: ".concat(this.type, " expected one Return"), this.instructions[this.instructions.length - 1].row, this.instructions[this.instructions.length - 1].column);
         }
-        console.log(new_table);
         return null;
     };
     Function.prototype.get_type = function () {

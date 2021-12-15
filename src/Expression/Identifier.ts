@@ -20,11 +20,8 @@ export class Identifier extends Instruction {
     }
 
     public interpret(tree: Tree, table: SymbolTable): any {
-        console.log(this.id);
         
         let symbol = table.get_table(this.id);
-
-        console.log(symbol);
         
 
         if (symbol == undefined){

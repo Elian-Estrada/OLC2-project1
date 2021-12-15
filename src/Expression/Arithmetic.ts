@@ -203,9 +203,6 @@ export class Arithmetic extends Instruction {
 
                         this.type = this.exp1.get_type();
                         this.value = left;
-                        console.log(this.value);
-                        console.log(left);
-                        
                         
                         return left;
                     }

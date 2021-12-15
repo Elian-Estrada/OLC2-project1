@@ -76,7 +76,6 @@ export class Switch extends Instruction {
 
         for ( let item of instructs ) {
             let instr = item.interpret(tree, new_table);
-            console.log(instr)
 
             if ( instr instanceof Exception ) {
                 tree.get_errors().push(instr);

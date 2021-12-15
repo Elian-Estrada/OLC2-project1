@@ -106,7 +106,6 @@ var Print = /** @class */ (function (_super) {
                     params += this.print_struct(item) + ",";
                 }
                 else if (item.type === type.ARRAY) {
-                    console.log(item.value);
                     params += JSON.stringify(item.value) + ",";
                 }
                 else {
