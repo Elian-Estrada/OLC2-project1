@@ -67,7 +67,37 @@ export class Struct extends Instruction{
 
     get_node() {
         let node = new Cst_Node("Struct");
+
+        node.add_child("struct");
+        node.add_child(this.id);
+        node.add_child("{");
+        
+        let attributes = new Cst_Node("Attributes");
+        let attribute;
+        for (let item of this.attributes){
+            attribute = new Cst_Node("Attribute");
+            switch(item.type){
+                case type.ARRAY:
+                    attribute.add_child(item.sub_type);
+                    attribute.add_child("[");
+                    attribute.add_child("]");
+                    attribute.add_child(item.id);
+                    break;
+                case type.STRUCT:
+                    attribute.add_child(item.struct);
+                    attribute.add_child(item.id);
+                    break;
+                default:
+                    attribute.add_child(item.type);
+                    attribute.add_child(item.id);
+                    break;
+            }
+            attributes.add_childs_node(attribute);
+        }
+
+        node.add_childs_node(attributes);
+        node.add_child("}");
+
         return node;
     }
-
 }

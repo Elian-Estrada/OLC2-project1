@@ -81,6 +81,27 @@ var Function = /** @class */ (function (_super) {
     };
     Function.prototype.get_node = function () {
         var node = new Cst_Node("Function");
+        node.add_child(this.name);
+        node.add_child("(");
+        var params = new Cst_Node("Parameters");
+        var param;
+        for (var _i = 0, _a = this.params; _i < _a.length; _i++) {
+            var item = _a[_i];
+            param = new Cst_Node("Parameter");
+            param.add_child(item.type);
+            param.add_child(item.name);
+            params.add_childs_node(param);
+        }
+        node.add_childs_node(params);
+        node.add_child(")");
+        node.add_child("{");
+        var instructions = new Cst_Node("Instructions");
+        for (var _b = 0, _c = this.instructions; _b < _c.length; _b++) {
+            var item = _c[_b];
+            instructions.add_childs_node(item.get_node());
+        }
+        node.add_childs_node(instructions);
+        node.add_child("}");
         return node;
     };
     return Function;

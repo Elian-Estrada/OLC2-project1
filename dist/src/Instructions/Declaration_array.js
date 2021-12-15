@@ -138,7 +138,34 @@ var Declaration_array = /** @class */ (function (_super) {
     };
     Declaration_array.prototype.get_node = function () {
         var node = new Cst_Node("Declaration Array");
+        node.add_child(this.type_array);
+        node.add_child("[");
+        node.add_child("]");
+        node.add_child(this.id);
+        node.add_child("=");
+        if (this.expression === null) {
+            node.add_childs_node(this.get_node_array(this.list_expression));
+        }
+        if (this.expression !== null) {
+            node.add_childs_node(this.expression.get_node());
+        }
         return node;
+    };
+    Declaration_array.prototype.get_node_array = function (list_nodes) {
+        var value;
+        if (list_nodes instanceof Array) {
+            value = new Cst_Node("Values Array");
+            value.add_child("[");
+            for (var _i = 0, list_nodes_1 = list_nodes; _i < list_nodes_1.length; _i++) {
+                var item = list_nodes_1[_i];
+                value.add_childs_node(this.get_node_array(item));
+            }
+            value.add_child("]");
+        }
+        else {
+            return list_nodes.get_node();
+        }
+        return value;
     };
     return Declaration_array;
 }(Instruction));

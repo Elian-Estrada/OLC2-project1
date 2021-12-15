@@ -13,6 +13,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+import { Cst_Node } from "../Abstract/Cst_Node.js";
 import { Instruction } from "../Abstract/Instruction.js";
 import Exception from "../SymbolTable/Exception.js";
 import { type } from "../SymbolTable/Type.js";
@@ -172,6 +173,36 @@ var Access_struct = /** @class */ (function (_super) {
         return this.value;
     };
     Access_struct.prototype.get_node = function () {
+        var node = new Cst_Node("Access_Struct");
+        node.add_child(this.list_ids[0]);
+        var attributes = new Cst_Node("Attributes");
+        var attribute;
+        for (var _i = 0, _a = this.list_ids.slice(1); _i < _a.length; _i++) {
+            var item = _a[_i];
+            attributes.add_child(".");
+            attribute = new Cst_Node("Attribute");
+            attribute.add_child(item);
+            attributes.add_childs_node(attribute);
+        }
+        node.add_childs_node(attributes);
+        if (this.positions !== null) {
+            var positions = new Cst_Node("Positions");
+            var position = void 0;
+            for (var _b = 0, _c = this.positions; _b < _c.length; _b++) {
+                var item = _c[_b];
+                position = new Cst_Node("Position");
+                position.add_child("[");
+                position.add_childs_node(item.get_node());
+                position.add_child("]");
+                positions.add_childs_node(position);
+            }
+            node.add_childs_node(positions);
+        }
+        if (this.expression != null) {
+            node.add_child("=");
+            node.add_childs_node(this.expression.get_node());
+        }
+        return node;
     };
     return Access_struct;
 }(Instruction));

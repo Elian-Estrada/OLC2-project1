@@ -91,7 +91,22 @@ export class Print extends Instruction {
     }
 
     get_node() {
-        let node = new Cst_Node("Print");
+
+        let node;
+        
+        if (this.flag){
+            node = new Cst_Node("Println");
+            node.add_child("println")
+        } else {
+            node = new Cst_Node("Print");
+            node.add_child("print");
+        }
+
+        node.add_child("(");
+        node.add_childs_node(this.expression.get_node());
+        node.add_child(")");
+        
+
         return node;
     }
 }

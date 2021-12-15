@@ -58,6 +58,21 @@ export class MainInstruction extends Instruction {
 
     get_node() {
         let node = new Cst_Node("Main");
+
+        node.add_child("void");
+        node.add_child("main");
+        node.add_child("(");
+        node.add_child(")");
+        node.add_child("{");
+
+        let instructions = new Cst_Node("Instructios");
+
+        for (let item of this.instructions){
+            instructions.add_childs_node(item.get_node());
+        }
+        node.add_childs_node(instructions);
+
+        node.add_child("}");
         return node;
     }
 }

@@ -239,8 +239,18 @@ export class Arithmetic extends Instruction {
             node.add_child(this.operator);
             node.add_childs_node(this.exp2.get_node());
         } else {
-            node.add_child("-");
-            node.add_childs_node(this.exp1.get_node());
+            switch(this.operator){
+                case Arithmetic_operator.INC:
+                case Arithmetic_operator.DEC:
+                    node.add_childs_node(this.exp1.get_node());
+                    node.add_child(this.operator);
+                    break;
+                default:
+                    node.add_child("-");
+                    node.add_childs_node(this.exp1.get_node());
+                    break;
+            }
+            
         }
 
         return node;

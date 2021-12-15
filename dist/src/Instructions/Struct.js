@@ -68,6 +68,34 @@ var Struct = /** @class */ (function (_super) {
     };
     Struct.prototype.get_node = function () {
         var node = new Cst_Node("Struct");
+        node.add_child("struct");
+        node.add_child(this.id);
+        node.add_child("{");
+        var attributes = new Cst_Node("Attributes");
+        var attribute;
+        for (var _i = 0, _a = this.attributes; _i < _a.length; _i++) {
+            var item = _a[_i];
+            attribute = new Cst_Node("Attribute");
+            switch (item.type) {
+                case type.ARRAY:
+                    attribute.add_child(item.sub_type);
+                    attribute.add_child("[");
+                    attribute.add_child("]");
+                    attribute.add_child(item.id);
+                    break;
+                case type.STRUCT:
+                    attribute.add_child(item.struct);
+                    attribute.add_child(item.id);
+                    break;
+                default:
+                    attribute.add_child(item.type);
+                    attribute.add_child(item.id);
+                    break;
+            }
+            attributes.add_childs_node(attribute);
+        }
+        node.add_childs_node(attributes);
+        node.add_child("}");
         return node;
     };
     return Struct;

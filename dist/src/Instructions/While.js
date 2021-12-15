@@ -77,6 +77,18 @@ var While = /** @class */ (function (_super) {
     };
     While.prototype.get_node = function () {
         var node = new Cst_Node("While");
+        node.add_child("while");
+        node.add_child("(");
+        node.add_childs_node(this.expr.get_node());
+        node.add_child(")");
+        node.add_child("{");
+        var instructions = new Cst_Node("Instructions");
+        for (var _i = 0, _a = this.instructions; _i < _a.length; _i++) {
+            var item = _a[_i];
+            instructions.add_childs_node(item.get_node());
+        }
+        node.add_childs_node(instructions);
+        node.add_child("}");
         return node;
     };
     return While;

@@ -13,6 +13,7 @@ import { MainInstruction } from "./Instructions/MainInstruction.js";
 import { Struct } from "./Instructions/Struct.js";
 import { Declaration_array } from "./Instructions/Declaration_array.js";
 import { Generator3D } from "./Generator/Generator3D.js";
+import { Cst_Node } from "./Abstract/Cst_Node.js";
 var Main = /** @class */ (function () {
     function Main() {
     }
@@ -154,6 +155,15 @@ var Main = /** @class */ (function () {
         console.log(tree.get_global_table());
         console.log(tree.get_errors());
         console.log(tree.get_all_structs());
+        var init = new Cst_Node("Root");
+        var inst = new Cst_Node("Instructions");
+        for (var _j = 0, _k = tree.get_instructions(); _j < _k.length; _j++) {
+            var item = _k[_j];
+            inst.add_childs_node(item.get_node());
+        }
+        init.add_childs_node(inst);
+        var graph = tree.get_dot(init);
+        localStorage.setItem("dot", graph);
         return tree.get_console();
         // console.log(res);
     };

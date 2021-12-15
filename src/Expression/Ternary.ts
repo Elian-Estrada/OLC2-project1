@@ -3,6 +3,7 @@ import Tree from "../SymbolTable/Tree.js";
 import SymbolTable from "../SymbolTable/SymbolTable.js";
 import {type} from "../SymbolTable/Type.js";
 import Exception from "../SymbolTable/Exception.js";
+import { Cst_Node } from "../Abstract/Cst_Node.js";
 
 export class Ternary extends Instruction {
 
@@ -49,7 +50,16 @@ export class Ternary extends Instruction {
     }
 
     get_node() {
-        
+        let node = new Cst_Node("Ternary");
+        node.add_child("(");
+        node.add_childs_node(this.expr.get_node());
+        node.add_child(")");
+        node.add_child("?");
+        node.add_childs_node(this.exp_if_true.get_node());
+        node.add_child(":");
+        node.add_childs_node(this.exp_if_false.get_node())
+
+        return node;
     }
 
     toString(){

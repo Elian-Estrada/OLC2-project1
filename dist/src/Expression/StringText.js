@@ -16,6 +16,7 @@ var __extends = (this && this.__extends) || (function () {
 import { Instruction } from "../Abstract/Instruction.js";
 import Exception from "../SymbolTable/Exception.js";
 import { String_operator, type } from "../SymbolTable/Type.js";
+import { Cst_Node } from "../Abstract/Cst_Node.js";
 var StringText = /** @class */ (function (_super) {
     __extends(StringText, _super);
     function StringText(exp1, exp2, operator, row, col) {
@@ -94,6 +95,11 @@ var StringText = /** @class */ (function (_super) {
         return this.type;
     };
     StringText.prototype.get_node = function () {
+        var node = new Cst_Node("Concat");
+        node.add_childs_node(this.exp1.get_node());
+        node.add_child(this.operator);
+        node.add_childs_node(this.exp2.get_node());
+        return node;
     };
     StringText.prototype.toString = function () {
         return String(this.value);

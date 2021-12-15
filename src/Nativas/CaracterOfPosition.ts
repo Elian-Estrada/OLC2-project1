@@ -30,9 +30,4 @@ export class CaracterOfPosition extends Function {
         this.type = type.CHAR;
         return id_founded.charAt(this.n);
     }
-
-    get_node(): Cst_Node {
-        let node = new Cst_Node(this.id);
-        return node;
-    }
 }

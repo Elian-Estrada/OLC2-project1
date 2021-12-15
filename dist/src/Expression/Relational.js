@@ -179,7 +179,7 @@ var Relational = /** @class */ (function (_super) {
         return this.type;
     };
     Relational.prototype.get_node = function () {
-        var node = new Cst_Node("Expressoin Relational");
+        var node = new Cst_Node("Expression Relational");
         node.add_childs_node(this.exp1.get_node());
         node.add_child(this.operator);
         node.add_childs_node(this.exp2.get_node());

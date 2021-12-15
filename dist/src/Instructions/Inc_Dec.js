@@ -34,7 +34,8 @@ var Inc_Dec = /** @class */ (function (_super) {
         return value;
     };
     Inc_Dec.prototype.get_node = function () {
-        var node = new Cst_Node("Inc_Dec");
+        var node = new Cst_Node("Incremento_Decremento");
+        node.add_childs_node(this.expression.get_node());
         return node;
     };
     return Inc_Dec;

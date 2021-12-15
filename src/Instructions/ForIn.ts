@@ -87,6 +87,22 @@ export class ForIn extends Instruction {
 
     get_node() {
         let node = new Cst_Node("For-In");
+        node.add_child("for");
+        node.add_child("(");
+        node.add_childs_node(this.firsExp.get_node());
+        node.add_child("in");
+        node.add_childs_node(this.secondExp.get_node());
+        node.add_child(")");
+        node.add_child("{");
+
+        let instructions = new Cst_Node("Instructions");
+
+        for(let item of this.instructions){
+            instructions.add_childs_node(item.get_node());
+        }
+        node.add_childs_node(instructions);
+        node.add_child("}");
+
         return node;
     }
 }

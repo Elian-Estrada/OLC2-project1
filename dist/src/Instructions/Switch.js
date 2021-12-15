@@ -95,6 +95,32 @@ var Switch = /** @class */ (function (_super) {
     };
     Switch.prototype.get_node = function () {
         var node = new Cst_Node("Switch");
+        node.add_child("switch");
+        node.add_child("(");
+        node.add_childs_node(this.expr.get_node());
+        node.add_child(")");
+        node.add_child("{");
+        if (this.list_cases !== null) {
+            var cases = new Cst_Node("Cases");
+            for (var _i = 0, _a = this.list_cases; _i < _a.length; _i++) {
+                var item = _a[_i];
+                cases.add_childs_node(item.get_node());
+            }
+            node.add_childs_node(cases);
+        }
+        if (this.default_case !== null) {
+            var default_case = new Cst_Node("Default");
+            default_case.add_child("default");
+            default_case.add_child(":");
+            var inst_default = new Cst_Node("Instructions");
+            for (var _b = 0, _c = this.default_case; _b < _c.length; _b++) {
+                var item = _c[_b];
+                inst_default.add_childs_node(item.get_node());
+            }
+            default_case.add_childs_node(inst_default);
+            node.add_childs_node(default_case);
+        }
+        node.add_child("}");
         return node;
     };
     return Switch;

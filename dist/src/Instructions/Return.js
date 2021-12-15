@@ -43,6 +43,9 @@ var Return = /** @class */ (function (_super) {
     };
     Return.prototype.get_node = function () {
         var node = new Cst_Node("Return");
+        if (this.expr !== null) {
+            node.add_childs_node(this.expr.get_node());
+        }
         return node;
     };
     return Return;

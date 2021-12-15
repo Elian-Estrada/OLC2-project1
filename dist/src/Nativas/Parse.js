@@ -40,6 +40,11 @@ var Parse = /** @class */ (function (_super) {
     };
     Parse.prototype.get_node = function () {
         var node = new Cst_Node("Parse");
+        node.add_child(this.data_type);
+        node.add_child("parse");
+        node.add_child("(");
+        node.add_childs_node(this.exp.get_node());
+        node.add_child(")");
         return node;
     };
     return Parse;

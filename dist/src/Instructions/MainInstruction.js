@@ -62,6 +62,18 @@ var MainInstruction = /** @class */ (function (_super) {
     };
     MainInstruction.prototype.get_node = function () {
         var node = new Cst_Node("Main");
+        node.add_child("void");
+        node.add_child("main");
+        node.add_child("(");
+        node.add_child(")");
+        node.add_child("{");
+        var instructions = new Cst_Node("Instructios");
+        for (var _i = 0, _a = this.instructions; _i < _a.length; _i++) {
+            var item = _a[_i];
+            instructions.add_childs_node(item.get_node());
+        }
+        node.add_childs_node(instructions);
+        node.add_child("}");
         return node;
     };
     return MainInstruction;

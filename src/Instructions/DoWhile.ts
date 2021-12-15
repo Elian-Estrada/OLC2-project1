@@ -73,6 +73,22 @@ export class DoWhile extends Instruction {
 
     get_node() {
         let node = new Cst_Node("Do-While");
+
+        node.add_child("do");
+        node.add_child("{");
+
+        let instructions = new Cst_Node("Instructions");
+        for(let item of this.instructions){
+            instructions.add_childs_node(item.get_node());
+        }
+
+        node.add_childs_node(instructions);
+        node.add_child("}");
+        node.add_child("while");
+        node.add_child("(");
+        node.add_childs_node(this.expr.get_node());
+        node.add_child(")");
+
         return node;
     }
 }

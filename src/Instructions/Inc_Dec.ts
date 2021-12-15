@@ -30,7 +30,10 @@ export class Inc_Dec extends Instruction {
     }
 
     get_node() {
-        let node = new Cst_Node("Inc_Dec");
+        let node = new Cst_Node("Incremento_Decremento");
+
+        node.add_childs_node(this.expression.get_node())
+        
         return node;
     }
 }

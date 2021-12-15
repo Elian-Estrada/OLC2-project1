@@ -1,3 +1,4 @@
+import { Cst_Node } from "../Abstract/Cst_Node.js";
 import { Instruction } from "../Abstract/Instruction.js";
 import Exception from "../SymbolTable/Exception.js";
 import SymbolTable from "../SymbolTable/SymbolTable.js";
@@ -211,7 +212,43 @@ export class Access_struct extends Instruction{
     }
 
     get_node() {
+        let node = new Cst_Node("Access_Struct");
+        node.add_child(this.list_ids[0]);
         
+        let attributes = new Cst_Node("Attributes");
+        let attribute;
+        for (let item of this.list_ids.slice(1)){
+            attributes.add_child(".");
+            attribute = new Cst_Node("Attribute");
+            attribute.add_child(item);
+
+            attributes.add_childs_node(attribute);
+        }
+
+        node.add_childs_node(attributes);
+
+        if (this.positions !== null){
+            let positions = new Cst_Node("Positions");
+            let position;
+            for (let item of this.positions){
+                position = new Cst_Node("Position");
+                position.add_child("[");
+                position.add_childs_node(item.get_node());
+                position.add_child("]");
+
+                positions.add_childs_node(position);
+            }
+
+            node.add_childs_node(positions);
+        }
+
+        if (this.expression != null){
+
+            node.add_child("=");
+            node.add_childs_node(this.expression.get_node());
+        }
+
+        return node;
     }
 
 }

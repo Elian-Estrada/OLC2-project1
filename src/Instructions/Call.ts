@@ -251,11 +251,32 @@ export class Call extends Instruction {
         node.add_child("(");
         let parameters = new Cst_Node("Parameters");
         for (let item of this.params){
-            parameters.add_childs_node(item.get_node());
+            if (item instanceof Array){
+                parameters.add_childs_node(this.get_node_array(item));
+            } else {
+                parameters.add_childs_node(item.get_node());     
+            }
+            
         }
         node.add_childs_node(parameters);
         node.add_child(")");
 
         return node;
+    }
+
+    get_node_array(list_nodes: any){
+        let value;
+        if (list_nodes instanceof Array){
+            value = new Cst_Node("Values Array");
+            value.add_child("[");
+            for (let item of list_nodes){
+                value.add_childs_node(this.get_node_array(item));
+            }
+            value.add_child("]");
+        } else {
+            return list_nodes.get_node();
+        }
+
+        return value;
     }
 }

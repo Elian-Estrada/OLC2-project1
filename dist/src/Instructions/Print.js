@@ -85,7 +85,18 @@ var Print = /** @class */ (function (_super) {
         }
     };
     Print.prototype.get_node = function () {
-        var node = new Cst_Node("Print");
+        var node;
+        if (this.flag) {
+            node = new Cst_Node("Println");
+            node.add_child("println");
+        }
+        else {
+            node = new Cst_Node("Print");
+            node.add_child("print");
+        }
+        node.add_child("(");
+        node.add_childs_node(this.expression.get_node());
+        node.add_child(")");
         return node;
     };
     return Print;

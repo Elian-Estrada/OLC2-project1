@@ -13,6 +13,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+import { Cst_Node } from "../Abstract/Cst_Node.js";
 import { Instruction } from "../Abstract/Instruction.js";
 import Exception from "../SymbolTable/Exception.js";
 import { type } from "../SymbolTable/Type.js";
@@ -80,6 +81,23 @@ var Values_array = /** @class */ (function (_super) {
         return this.value;
     };
     Values_array.prototype.get_node = function () {
+        return this.get_node_array(this.list_expression);
+    };
+    Values_array.prototype.get_node_array = function (list_nodes) {
+        var value;
+        if (list_nodes instanceof Array) {
+            value = new Cst_Node("Values Array");
+            value.add_child("[");
+            for (var _i = 0, list_nodes_1 = list_nodes; _i < list_nodes_1.length; _i++) {
+                var item = list_nodes_1[_i];
+                value.add_childs_node(this.get_node_array(item));
+            }
+            value.add_child("]");
+        }
+        else {
+            return list_nodes.get_node();
+        }
+        return value;
     };
     Values_array.prototype.toString = function () {
         return String(this.value);

@@ -87,6 +87,31 @@ export class Function extends Instruction {
 
     get_node() {
         let node = new Cst_Node("Function");
+
+        node.add_child(this.name);
+        node.add_child("(");
+
+        let params = new Cst_Node("Parameters");
+        let param;
+        for(let item of this.params){
+            param = new Cst_Node("Parameter");
+            param.add_child(item.type);
+            param.add_child(item.name);
+            params.add_childs_node(param);
+        }
+
+        node.add_childs_node(params);
+        node.add_child(")");
+        node.add_child("{");
+
+        let instructions = new Cst_Node("Instructions");
+        for (let item of this.instructions){
+            instructions.add_childs_node(item.get_node());
+        }
+
+        node.add_childs_node(instructions);
+        node.add_child("}");
+
         return node;
     }
 }

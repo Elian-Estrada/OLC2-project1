@@ -161,6 +161,37 @@ export class Declaration_array extends Instruction {
 
     get_node() {
         let node = new Cst_Node("Declaration Array");
+
+        node.add_child(this.type_array);
+        node.add_child("[");
+        node.add_child("]");
+        node.add_child(this.id);
+        node.add_child("=");
+
+        if (this.expression === null){
+            node.add_childs_node(this.get_node_array(this.list_expression));
+        }
+
+        if (this.expression !== null){
+            node.add_childs_node(this.expression.get_node());
+        }
+
         return node;
+    }
+
+    get_node_array(list_nodes: any){
+        let value;
+        if (list_nodes instanceof Array){
+            value = new Cst_Node("Values Array");
+            value.add_child("[");
+            for (let item of list_nodes){
+                value.add_childs_node(this.get_node_array(item));
+            }
+            value.add_child("]");
+        } else {
+            return list_nodes.get_node();
+        }
+
+        return value;
     }
 }

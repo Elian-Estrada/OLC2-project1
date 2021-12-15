@@ -1,3 +1,4 @@
+import { Cst_Node } from "../Abstract/Cst_Node.js";
 import { Instruction } from "../Abstract/Instruction.js";
 import Exception from "../SymbolTable/Exception.js";
 import SymbolTable from "../SymbolTable/SymbolTable.js";
@@ -92,6 +93,23 @@ export class Values_array extends Instruction{
 
     get_node() {
         
+        return this.get_node_array(this.list_expression);
+    }
+
+    get_node_array(list_nodes: any){
+        let value;
+        if (list_nodes instanceof Array){
+            value = new Cst_Node("Values Array");
+            value.add_child("[");
+            for (let item of list_nodes){
+                value.add_childs_node(this.get_node_array(item));
+            }
+            value.add_child("]");
+        } else {
+            return list_nodes.get_node();
+        }
+
+        return value;
     }
 
     toString(){

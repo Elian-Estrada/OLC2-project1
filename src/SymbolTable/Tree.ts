@@ -13,6 +13,8 @@ export default class Tree {
     private functions: Array<Function>;
     private symbol_table: SymbolTable | null;
     private structs: Array<Struct>;
+    private count: number;
+    private dot: string;
 
     constructor(instructions: Array<Instruction>){
         this.instructions = instructions;
@@ -21,6 +23,8 @@ export default class Tree {
         this.functions = [];
         this.symbol_table = null;
         this.structs = [];
+        this.count = 0;
+        this.dot = "";
     }
 
     public set_instructions(instructions: Array<Instruction>){
@@ -90,5 +94,25 @@ export default class Tree {
 
     public get_all_functions(){
         return this.functions;
+    }
+
+    get_dot(root: any){
+        this.dot = "";
+        this.dot += `digraph {\nranksep="2";\nbgcolor = "#090B10";\nedge[color="#56cdff"];\nnode [style="filled" fillcolor = "#0F111A" fontcolor = "white" color = "#007acc"];\n`;
+        this.dot += `n0[label="${root.get_value().replace("\"", "\\\"")}"];\n`;
+        this.count = 1;
+        this.travel_cst("n0", root);
+        this.dot += "}";
+        return this.dot;
+    }
+
+    travel_cst(id_root: any, node_root: any){
+        for(let item of node_root.get_childs()){
+            let name_child = `n${this.count}`;
+            this.dot += `${name_child} [label = "${item.get_value().replace("\"", "\\\"")}"];\n`;
+            this.dot += `${id_root} -> ${name_child};\n`;
+            this.count++;
+            this.travel_cst(name_child, item);
+        }
     }
 }

@@ -43,6 +43,11 @@ export class Return extends Instruction {
 
     get_node() {
         let node = new Cst_Node("Return");
+
+        if (this.expr !== null){
+            node.add_childs_node(this.expr.get_node());
+        }
+        
         return node;
     }
 }

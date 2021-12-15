@@ -30,9 +30,4 @@ export class Length extends Function {
         this.type = type.INT;
         return id_founded.length;
     }
-
-    get_node(): Cst_Node {
-        let node = new Cst_Node(this.id);
-        return node;
-    }
 }
