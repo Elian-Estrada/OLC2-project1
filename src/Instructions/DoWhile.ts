@@ -6,6 +6,7 @@ import {type} from "../SymbolTable/Type.js";
 import {Continue} from "./Continue.js";
 import {Break} from "./Break.js";
 import {Return} from "./Return.js";
+import { Cst_Node } from "../Abstract/Cst_Node.js";
 
 
 export class DoWhile extends Instruction {
@@ -68,5 +69,26 @@ export class DoWhile extends Instruction {
         } catch (error) {
             return new Exception("Semantic", "" + error, this.row, this.column);
         }
+    }
+
+    get_node() {
+        let node = new Cst_Node("Do-While");
+
+        node.add_child("do");
+        node.add_child("{");
+
+        let instructions = new Cst_Node("Instructions");
+        for(let item of this.instructions){
+            instructions.add_childs_node(item.get_node());
+        }
+
+        node.add_childs_node(instructions);
+        node.add_child("}");
+        node.add_child("while");
+        node.add_child("(");
+        node.add_childs_node(this.expr.get_node());
+        node.add_child(")");
+
+        return node;
     }
 }

@@ -15,6 +15,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 import { Instruction } from "../Abstract/Instruction.js";
 import Exception from "../SymbolTable/Exception.js";
+import { Cst_Node } from "../Abstract/Cst_Node.js";
 var Return = /** @class */ (function (_super) {
     __extends(Return, _super);
     function Return(expr, row, col) {
@@ -39,6 +40,13 @@ var Return = /** @class */ (function (_super) {
     };
     Return.prototype.get_result = function () {
         return this.result;
+    };
+    Return.prototype.get_node = function () {
+        var node = new Cst_Node("Return");
+        if (this.expr !== null) {
+            node.add_childs_node(this.expr.get_node());
+        }
+        return node;
     };
     return Return;
 }(Instruction));

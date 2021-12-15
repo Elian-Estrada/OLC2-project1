@@ -5,6 +5,7 @@ import {type} from "../SymbolTable/Type.js";
 import Exception from "../SymbolTable/Exception.js";
 import {Call} from "./Call.js";
 import {Generator3D} from "../Generator/Generator3D.js";
+import { Cst_Node } from "../Abstract/Cst_Node.js";
 
 export class Print extends Instruction {
 
@@ -128,5 +129,25 @@ export class Print extends Instruction {
 
         }
 
+    }
+
+    get_node() {
+
+        let node;
+        
+        if (this.flag){
+            node = new Cst_Node("Println");
+            node.add_child("println")
+        } else {
+            node = new Cst_Node("Print");
+            node.add_child("print");
+        }
+
+        node.add_child("(");
+        node.add_childs_node(this.expression.get_node());
+        node.add_child(")");
+        
+
+        return node;
     }
 }

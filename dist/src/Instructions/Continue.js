@@ -14,6 +14,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 import { Instruction } from "../Abstract/Instruction.js";
+import { Cst_Node } from "../Abstract/Cst_Node.js";
 var Continue = /** @class */ (function (_super) {
     __extends(Continue, _super);
     function Continue(row, col) {
@@ -21,6 +22,9 @@ var Continue = /** @class */ (function (_super) {
     }
     Continue.prototype.interpret = function (tree, table) {
         return this;
+    };
+    Continue.prototype.get_node = function () {
+        return new Cst_Node("Continue");
     };
     return Continue;
 }(Instruction));

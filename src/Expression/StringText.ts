@@ -3,6 +3,7 @@ import Tree from "../SymbolTable/Tree.js";
 import SymbolTable from "../SymbolTable/SymbolTable.js";
 import Exception from "../SymbolTable/Exception.js";
 import {String_operator, type} from "../SymbolTable/Type.js";
+import { Cst_Node } from "../Abstract/Cst_Node.js";
 
 export class StringText extends Instruction {
 
@@ -93,7 +94,17 @@ export class StringText extends Instruction {
         return this.type;
     }
 
+    get_node() {
+        let node = new Cst_Node("Concat");
+
+        node.add_childs_node(this.exp1.get_node());
+        node.add_child(this.operator);
+        node.add_childs_node(this.exp2.get_node());
+
+        return node;
+    }
+
     toString(): String {
-        return this.value;
+        return String(this.value);
     }
 }

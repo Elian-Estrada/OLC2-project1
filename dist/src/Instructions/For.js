@@ -21,6 +21,7 @@ import { type } from "../SymbolTable/Type.js";
 import { Continue } from "./Continue.js";
 import { Break } from "./Break.js";
 import { Return } from "./Return.js";
+import { Cst_Node } from "../Abstract/Cst_Node.js";
 var For = /** @class */ (function (_super) {
     __extends(For, _super);
     function For(init, condition, step, instructions, row, col) {
@@ -108,6 +109,26 @@ var For = /** @class */ (function (_super) {
         else {
             return new Exception("Semantic", "Expression Expected", this.row, this.column);
         }
+    };
+    For.prototype.get_node = function () {
+        var node = new Cst_Node("For");
+        node.add_child("for");
+        node.add_child("(");
+        node.add_childs_node(this.init.get_node());
+        node.add_child(";");
+        node.add_childs_node(this.condition.get_node());
+        node.add_child(";");
+        node.add_childs_node(this.step.get_node());
+        node.add_child(")");
+        node.add_child("{");
+        var instructions = new Cst_Node("Instructions");
+        for (var _i = 0, _a = this.instructions; _i < _a.length; _i++) {
+            var item = _a[_i];
+            instructions.add_childs_node(item.get_node());
+        }
+        node.add_childs_node(instructions);
+        node.add_child("}");
+        return node;
     };
     return For;
 }(Instruction));

@@ -8,6 +8,7 @@ import {Break} from "./Break.js";
 import {Continue} from "./Continue.js";
 import {Return} from "./Return.js";
 import {Case} from "./Case.js";
+import { Cst_Node } from "../Abstract/Cst_Node.js";
 
 export class Switch extends Instruction {
 
@@ -91,5 +92,43 @@ export class Switch extends Instruction {
         if ( JSON.parse( String(flag) ) ) {
             this.flag = true;
         }
+    }
+
+    get_node() {
+        let node = new Cst_Node("Switch");
+
+        node.add_child("switch");
+        node.add_child("(");
+        node.add_childs_node(this.expr.get_node());
+        node.add_child(")");
+        node.add_child("{");
+
+        if (this.list_cases !== null){
+            let cases = new Cst_Node("Cases");
+
+            for (let item of this.list_cases){
+                cases.add_childs_node(item.get_node());
+            }
+            node.add_childs_node(cases);
+        }
+
+        if (this.default_case !== null){
+            let default_case = new Cst_Node("Default");
+            default_case.add_child("default");
+            default_case.add_child(":");
+
+            let inst_default = new Cst_Node("Instructions");
+
+            for (let item of this.default_case){
+                inst_default.add_childs_node(item.get_node());
+            }
+            default_case.add_childs_node(inst_default);
+
+            node.add_childs_node(default_case);
+        }
+
+        node.add_child("}");
+
+        return node;
     }
 }

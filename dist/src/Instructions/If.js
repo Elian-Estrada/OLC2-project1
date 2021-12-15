@@ -20,6 +20,7 @@ import Exception from "../SymbolTable/Exception.js";
 import { Continue } from "./Continue.js";
 import { Break } from "./Break.js";
 import { Return } from "./Return.js";
+import { Cst_Node } from "../Abstract/Cst_Node.js";
 var If = /** @class */ (function (_super) {
     __extends(If, _super);
     function If(expr, instructions, else_instr, elseif, row, col) {
@@ -92,6 +93,36 @@ var If = /** @class */ (function (_super) {
         else {
             return new Exception("Semantic", "Expect a Boolean type expression. Not ".concat(this.expr.get_type().name), this.row, this.column);
         }
+    };
+    If.prototype.get_node = function () {
+        var node = new Cst_Node("If");
+        node.add_child("if");
+        node.add_child("(");
+        node.add_childs_node(this.expr.get_node());
+        node.add_child(")");
+        node.add_child("{");
+        var instructios = new Cst_Node("Instructions");
+        for (var _i = 0, _a = this.instructions; _i < _a.length; _i++) {
+            var item = _a[_i];
+            instructios.add_childs_node(item.get_node());
+        }
+        node.add_childs_node(instructios);
+        node.add_child("}");
+        if (this.else_instr !== null) {
+            var instrctiosn_else = new Cst_Node("Else Instructions");
+            node.add_child("else");
+            node.add_child("{");
+            for (var _b = 0, _c = this.else_instr; _b < _c.length; _b++) {
+                var item = _c[_b];
+                instrctiosn_else.add_childs_node(item.get_node());
+            }
+            node.add_childs_node(instrctiosn_else);
+            node.add_child("}");
+        }
+        else if (this.elseif !== null) {
+            node.add_childs_node(this.elseif.get_node());
+        }
+        return node;
     };
     return If;
 }(Instruction));

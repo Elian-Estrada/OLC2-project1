@@ -14,6 +14,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 import { Instruction } from "../Abstract/Instruction.js";
+import { Cst_Node } from "../Abstract/Cst_Node.js";
 var Case = /** @class */ (function (_super) {
     __extends(Case, _super);
     function Case(expr, instructions, row, col) {
@@ -30,6 +31,19 @@ var Case = /** @class */ (function (_super) {
     };
     Case.prototype.get_value = function () {
         return this.expr;
+    };
+    Case.prototype.get_node = function () {
+        var node = new Cst_Node("Case");
+        node.add_child("case");
+        node.add_childs_node(this.expr.get_node());
+        node.add_child(":");
+        var instructions = new Cst_Node("Instructions");
+        for (var _i = 0, _a = this.instructions; _i < _a.length; _i++) {
+            var item = _a[_i];
+            instructions.add_childs_node(item.get_node());
+        }
+        node.add_childs_node(instructions);
+        return node;
     };
     return Case;
 }(Instruction));

@@ -13,6 +13,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+import { Cst_Node } from "../Abstract/Cst_Node.js";
 import { Instruction } from "../Abstract/Instruction.js";
 import Exception from "../SymbolTable/Exception.js";
 import { Logical_operator, type } from "../SymbolTable/Type.js";
@@ -63,8 +64,21 @@ var Logical = /** @class */ (function (_super) {
     Logical.prototype.get_type = function () {
         return this.type;
     };
+    Logical.prototype.get_node = function () {
+        var node = new Cst_Node("Expression Logic");
+        if (this.exp2 !== null) {
+            node.add_childs_node(this.exp1.get_node());
+            node.add_child(this.operator);
+            node.add_childs_node(this.exp2.get_node());
+        }
+        else {
+            node.add_child("!");
+            node.add_childs_node(this.exp1.get_node());
+        }
+        return node;
+    };
     Logical.prototype.toString = function () {
-        return this.value;
+        return String(this.value);
     };
     return Logical;
 }(Instruction));

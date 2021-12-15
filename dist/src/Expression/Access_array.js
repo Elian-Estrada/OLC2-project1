@@ -13,6 +13,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+import { Cst_Node } from "../Abstract/Cst_Node.js";
 import { Instruction } from "../Abstract/Instruction.js";
 import Exception from "../SymbolTable/Exception.js";
 import { type } from "../SymbolTable/Type.js";
@@ -108,6 +109,26 @@ var Access_array = /** @class */ (function (_super) {
     };
     Access_array.prototype.get_type = function () {
         return this.type;
+    };
+    Access_array.prototype.get_node = function () {
+        var node = new Cst_Node("Access Array");
+        node.add_child(this.id);
+        var positions = new Cst_Node("Expressions Array");
+        for (var _i = 0, _a = this.positions; _i < _a.length; _i++) {
+            var item = _a[_i];
+            positions.add_child("[");
+            positions.add_childs_node(item.get_node());
+            positions.add_child("]");
+        }
+        node.add_childs_node(positions);
+        if (this.expression !== null) {
+            node.add_child("=");
+            node.add_childs_node(this.expression.get_node());
+        }
+        return node;
+    };
+    Access_array.prototype.toString = function () {
+        return String(this.value);
     };
     return Access_array;
 }(Instruction));

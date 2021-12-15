@@ -20,6 +20,7 @@ import { type } from "../SymbolTable/Type.js";
 import { Continue } from "./Continue.js";
 import { Break } from "./Break.js";
 import { Return } from "./Return.js";
+import { Cst_Node } from "../Abstract/Cst_Node.js";
 var While = /** @class */ (function (_super) {
     __extends(While, _super);
     function While(expr, instructions, row, col) {
@@ -73,6 +74,22 @@ var While = /** @class */ (function (_super) {
             console.log(error);
             return new Exception("Semantic", "" + error, this.row, this.column);
         }
+    };
+    While.prototype.get_node = function () {
+        var node = new Cst_Node("While");
+        node.add_child("while");
+        node.add_child("(");
+        node.add_childs_node(this.expr.get_node());
+        node.add_child(")");
+        node.add_child("{");
+        var instructions = new Cst_Node("Instructions");
+        for (var _i = 0, _a = this.instructions; _i < _a.length; _i++) {
+            var item = _a[_i];
+            instructions.add_childs_node(item.get_node());
+        }
+        node.add_childs_node(instructions);
+        node.add_child("}");
+        return node;
     };
     return While;
 }(Instruction));

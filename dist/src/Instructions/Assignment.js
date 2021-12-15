@@ -13,6 +13,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+import { Cst_Node } from "../Abstract/Cst_Node.js";
 import { Instruction } from "../Abstract/Instruction.js";
 import { Access_struct } from "../Expression/Access_struct.js";
 import { Identifier } from "../Expression/Identifier.js";
@@ -59,7 +60,14 @@ var Assignment = /** @class */ (function (_super) {
     Assignment.prototype.get_expression = function () {
         return this.expression;
     };
-    Assignment.prototype.compile = function (tree, table) {
+    Assignment.prototype.compile = function (table, generator) {
+    };
+    Assignment.prototype.get_node = function () {
+        var node = new Cst_Node("Assignment");
+        node.add_child(this.id);
+        node.add_child("=");
+        node.add_childs_node(this.expression.get_node());
+        return node;
     };
     return Assignment;
 }(Instruction));

@@ -6,6 +6,7 @@ import Exception from "../SymbolTable/Exception.js";
 import {Continue} from "./Continue.js";
 import {Break} from "./Break.js";
 import {Return} from "./Return.js";
+import { Cst_Node } from "../Abstract/Cst_Node.js";
 
 export class If extends Instruction {
 
@@ -86,5 +87,39 @@ export class If extends Instruction {
         } else {
             return new Exception("Semantic", `Expect a Boolean type expression. Not ${this.expr.get_type().name}`, this.row, this.column);
         }
+    }
+
+    get_node() {
+        let node = new Cst_Node("If");
+
+        node.add_child("if");
+        node.add_child("(");
+        node.add_childs_node(this.expr.get_node());
+        node.add_child(")");
+        node.add_child("{");
+
+        let instructios = new Cst_Node("Instructions");
+        for (let item of this.instructions){
+            instructios.add_childs_node(item.get_node());
+        }
+        node.add_childs_node(instructios);
+        node.add_child("}");
+
+        if (this.else_instr !== null){
+            let instrctiosn_else = new Cst_Node("Else Instructions");
+            node.add_child("else");
+            node.add_child("{");
+
+            for(let item of this.else_instr){
+                instrctiosn_else.add_childs_node(item.get_node());
+            }
+
+            node.add_childs_node(instrctiosn_else);
+            node.add_child("}");
+        } else if (this.elseif !== null){
+            node.add_childs_node(this.elseif.get_node());
+        }
+
+        return node;
     }
 }

@@ -7,6 +7,7 @@ import {type} from "../SymbolTable/Type.js";
 import {Continue} from "./Continue.js";
 import {Break} from "./Break.js";
 import {Return} from "./Return.js";
+import { Cst_Node } from "../Abstract/Cst_Node.js";
 
 export class For extends Instruction {
 
@@ -113,5 +114,29 @@ export class For extends Instruction {
         } else {
             return new Exception("Semantic", "Expression Expected", this.row, this.column);
         }
+    }
+
+    get_node() {
+        let node = new Cst_Node("For");
+        node.add_child("for");
+        node.add_child("(");
+        node.add_childs_node(this.init.get_node());
+        node.add_child(";");
+        node.add_childs_node(this.condition.get_node());
+        node.add_child(";");
+        node.add_childs_node(this.step.get_node());
+        node.add_child(")");
+        node.add_child("{");
+        
+        let instructions = new Cst_Node("Instructions");
+
+        for (let item of this.instructions){
+            instructions.add_childs_node(item.get_node());
+        }
+
+        node.add_childs_node(instructions);
+        node.add_child("}");
+
+        return node;
     }
 }

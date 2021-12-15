@@ -6,6 +6,7 @@ import Symbol from "../SymbolTable/Symbol.js";
 import {type} from "../SymbolTable/Type.js";
 import { Declaration_array } from "./Declaration_array.js";
 import { Struct } from "./Struct.js";
+import { Cst_Node } from "../Abstract/Cst_Node.js";
 
 export class Call extends Instruction {
 
@@ -231,5 +232,40 @@ export class Call extends Instruction {
 
     public get_id(){
         return this.name;
+    }
+
+    get_node() {
+        let node = new Cst_Node("Call Function");
+        node.add_child(this.name);
+        node.add_child("(");
+        let parameters = new Cst_Node("Parameters");
+        for (let item of this.params){
+            if (item instanceof Array){
+                parameters.add_childs_node(this.get_node_array(item));
+            } else {
+                parameters.add_childs_node(item.get_node());     
+            }
+            
+        }
+        node.add_childs_node(parameters);
+        node.add_child(")");
+
+        return node;
+    }
+
+    get_node_array(list_nodes: any){
+        let value;
+        if (list_nodes instanceof Array){
+            value = new Cst_Node("Values Array");
+            value.add_child("[");
+            for (let item of list_nodes){
+                value.add_childs_node(this.get_node_array(item));
+            }
+            value.add_child("]");
+        } else {
+            return list_nodes.get_node();
+        }
+
+        return value;
     }
 }

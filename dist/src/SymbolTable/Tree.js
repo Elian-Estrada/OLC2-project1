@@ -6,6 +6,8 @@ var Tree = /** @class */ (function () {
         this.functions = [];
         this.symbol_table = null;
         this.structs = [];
+        this.count = 0;
+        this.dot = "";
     }
     Tree.prototype.set_instructions = function (instructions) {
         this.instructions = instructions;
@@ -63,6 +65,25 @@ var Tree = /** @class */ (function () {
     };
     Tree.prototype.get_all_functions = function () {
         return this.functions;
+    };
+    Tree.prototype.get_dot = function (root) {
+        this.dot = "";
+        this.dot += "digraph {\nranksep=\"2\";\nbgcolor = \"#090B10\";\nedge[color=\"#56cdff\"];\nnode [style=\"filled\" fillcolor = \"#0F111A\" fontcolor = \"white\" color = \"#007acc\"];\n";
+        this.dot += "n0[label=\"".concat(root.get_value().replace("\"", "\\\""), "\"];\n");
+        this.count = 1;
+        this.travel_cst("n0", root);
+        this.dot += "}";
+        return this.dot;
+    };
+    Tree.prototype.travel_cst = function (id_root, node_root) {
+        for (var _i = 0, _a = node_root.get_childs(); _i < _a.length; _i++) {
+            var item = _a[_i];
+            var name_child = "n".concat(this.count);
+            this.dot += "".concat(name_child, " [label = \"").concat(item.get_value().replace("\"", "\\\""), "\"];\n");
+            this.dot += "".concat(id_root, " -> ").concat(name_child, ";\n");
+            this.count++;
+            this.travel_cst(name_child, item);
+        }
     };
     return Tree;
 }());

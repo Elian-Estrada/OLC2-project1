@@ -8,6 +8,8 @@ import {Continue} from "./Continue.js";
 import {type} from "../SymbolTable/Type.js";
 import {If} from "./If.js";
 import Symbol from "../SymbolTable/Symbol.js";
+import { Cst_Node } from "../Abstract/Cst_Node.js";
+import { Generator3D } from "../Generator/Generator3D.js";
 
 export class Function extends Instruction {
 
@@ -88,5 +90,39 @@ export class Function extends Instruction {
 
     public get_params() {
         return this.params;
+    }
+
+    compile(table: SymbolTable, generator: Generator3D) {
+        
+    }
+
+    get_node() {
+        let node = new Cst_Node("Function");
+
+        node.add_child(this.name);
+        node.add_child("(");
+
+        let params = new Cst_Node("Parameters");
+        let param;
+        for(let item of this.params){
+            param = new Cst_Node("Parameter");
+            param.add_child(item.type);
+            param.add_child(item.name);
+            params.add_childs_node(param);
+        }
+
+        node.add_childs_node(params);
+        node.add_child(")");
+        node.add_child("{");
+
+        let instructions = new Cst_Node("Instructions");
+        for (let item of this.instructions){
+            instructions.add_childs_node(item.get_node());
+        }
+
+        node.add_childs_node(instructions);
+        node.add_child("}");
+
+        return node;
     }
 }

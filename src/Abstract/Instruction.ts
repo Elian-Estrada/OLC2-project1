@@ -13,6 +13,7 @@ export abstract class Instruction {
     }
 
     abstract interpret(tree: Tree, table: SymbolTable): any;
+    abstract get_node(): any;
 
     abstract compile(table: SymbolTable, generator: Generator3D): any;
 }

@@ -16,6 +16,7 @@ var __extends = (this && this.__extends) || (function () {
 import { Instruction } from "../Abstract/Instruction.js";
 import { type } from "../SymbolTable/Type.js";
 import Exception from "../SymbolTable/Exception.js";
+import { Cst_Node } from "../Abstract/Cst_Node.js";
 var Parse = /** @class */ (function (_super) {
     __extends(Parse, _super);
     function Parse(data_type, exp, row, col) {
@@ -36,6 +37,15 @@ var Parse = /** @class */ (function (_super) {
             return value.replace("", '');
         else
             return new Exception("Semantic", "Data type not compatible", this.row, this.column);
+    };
+    Parse.prototype.get_node = function () {
+        var node = new Cst_Node("Parse");
+        node.add_child(this.data_type);
+        node.add_child("parse");
+        node.add_child("(");
+        node.add_childs_node(this.exp.get_node());
+        node.add_child(")");
+        return node;
     };
     return Parse;
 }(Instruction));

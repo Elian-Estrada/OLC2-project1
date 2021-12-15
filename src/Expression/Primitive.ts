@@ -1,3 +1,4 @@
+import { Cst_Node } from "../Abstract/Cst_Node.js";
 import { Instruction } from "../Abstract/Instruction.js";
 import SymbolTable from "../SymbolTable/SymbolTable.js";
 import Tree from "../SymbolTable/Tree.js";
@@ -27,8 +28,14 @@ export class Primitive extends Instruction {
         return this.type;
     }
 
+    get_node() {
+        let node = new Cst_Node("Primitive");
+        node.add_child(this.value);
+        return node;
+    }
+
     toString(): String {
-        return this.value;
+        return String(this.value);
     }
 
     compile(table: SymbolTable): any {

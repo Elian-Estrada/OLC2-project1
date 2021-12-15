@@ -29,6 +29,7 @@ import SymbolTable from "../SymbolTable/SymbolTable.js";
 import Exception from "../SymbolTable/Exception.js";
 import Symbol from "../SymbolTable/Symbol.js";
 import { type } from "../SymbolTable/Type.js";
+import { Cst_Node } from "../Abstract/Cst_Node.js";
 var Call = /** @class */ (function (_super) {
     __extends(Call, _super);
     function Call(name, params, row, col) {
@@ -209,6 +210,40 @@ var Call = /** @class */ (function (_super) {
     };
     Call.prototype.get_id = function () {
         return this.name;
+    };
+    Call.prototype.get_node = function () {
+        var node = new Cst_Node("Call Function");
+        node.add_child(this.name);
+        node.add_child("(");
+        var parameters = new Cst_Node("Parameters");
+        for (var _i = 0, _a = this.params; _i < _a.length; _i++) {
+            var item = _a[_i];
+            if (item instanceof Array) {
+                parameters.add_childs_node(this.get_node_array(item));
+            }
+            else {
+                parameters.add_childs_node(item.get_node());
+            }
+        }
+        node.add_childs_node(parameters);
+        node.add_child(")");
+        return node;
+    };
+    Call.prototype.get_node_array = function (list_nodes) {
+        var value;
+        if (list_nodes instanceof Array) {
+            value = new Cst_Node("Values Array");
+            value.add_child("[");
+            for (var _i = 0, list_nodes_1 = list_nodes; _i < list_nodes_1.length; _i++) {
+                var item = list_nodes_1[_i];
+                value.add_childs_node(this.get_node_array(item));
+            }
+            value.add_child("]");
+        }
+        else {
+            return list_nodes.get_node();
+        }
+        return value;
     };
     return Call;
 }(Instruction));

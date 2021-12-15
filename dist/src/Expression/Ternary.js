@@ -16,6 +16,7 @@ var __extends = (this && this.__extends) || (function () {
 import { Instruction } from "../Abstract/Instruction.js";
 import { type } from "../SymbolTable/Type.js";
 import Exception from "../SymbolTable/Exception.js";
+import { Cst_Node } from "../Abstract/Cst_Node.js";
 var Ternary = /** @class */ (function (_super) {
     __extends(Ternary, _super);
     function Ternary(expr, exp_if_true, exp_if_false, row, col) {
@@ -46,6 +47,20 @@ var Ternary = /** @class */ (function (_super) {
     };
     Ternary.prototype.get_type = function () {
         return this.exp_if_false.get_type();
+    };
+    Ternary.prototype.get_node = function () {
+        var node = new Cst_Node("Ternary");
+        node.add_child("(");
+        node.add_childs_node(this.expr.get_node());
+        node.add_child(")");
+        node.add_child("?");
+        node.add_childs_node(this.exp_if_true.get_node());
+        node.add_child(":");
+        node.add_childs_node(this.exp_if_false.get_node());
+        return node;
+    };
+    Ternary.prototype.toString = function () {
+        return String(this.value);
     };
     return Ternary;
 }(Instruction));

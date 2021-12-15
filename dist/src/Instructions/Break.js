@@ -14,6 +14,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 import { Instruction } from "../Abstract/Instruction.js";
+import { Cst_Node } from "../Abstract/Cst_Node.js";
 var Break = /** @class */ (function (_super) {
     __extends(Break, _super);
     function Break(row, col) {
@@ -21,6 +22,9 @@ var Break = /** @class */ (function (_super) {
     }
     Break.prototype.interpret = function (tree, table) {
         return this;
+    };
+    Break.prototype.get_node = function () {
+        return new Cst_Node("Break");
     };
     return Break;
 }(Instruction));

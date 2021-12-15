@@ -14,6 +14,7 @@ import {MainInstruction} from "./Instructions/MainInstruction.js";
 import { Struct } from "./Instructions/Struct.js";
 import {Declaration_array} from "./Instructions/Declaration_array.js";
 import {Generator3D} from "./Generator/Generator3D.js";
+import { Cst_Node } from "./Abstract/Cst_Node.js";
 
 export class Main {
 
@@ -176,6 +177,18 @@ export class Main {
         console.log(tree.get_all_structs());
         
         
+        let init = new Cst_Node("Root");
+        let inst = new Cst_Node("Instructions");
+
+        for (let item of tree.get_instructions()){
+            inst.add_childs_node(item.get_node());
+        }
+
+        init.add_childs_node(inst);
+
+        let graph = tree.get_dot(init);
+
+        localStorage.setItem("dot", graph);
         
         return tree.get_console();
         // console.log(res);
