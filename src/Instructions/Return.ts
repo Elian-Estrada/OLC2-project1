@@ -3,6 +3,7 @@ import Tree from "../SymbolTable/Tree.js";
 import SymbolTable from "../SymbolTable/SymbolTable.js";
 import Exception from "../SymbolTable/Exception.js";
 import { Cst_Node } from "../Abstract/Cst_Node.js";
+import { Generator3D } from "../Generator/Generator3D.js";
 
 export class Return extends Instruction {
 
@@ -39,6 +40,10 @@ export class Return extends Instruction {
 
     public get_result() {
         return this.result;
+    }
+
+    compile(table: SymbolTable, generator: Generator3D) {
+        
     }
 
     get_node() {

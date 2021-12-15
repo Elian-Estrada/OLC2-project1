@@ -4,6 +4,7 @@ import SymbolTable from "../SymbolTable/SymbolTable.js";
 import Exception from "../SymbolTable/Exception.js";
 import {String_operator, type} from "../SymbolTable/Type.js";
 import { Cst_Node } from "../Abstract/Cst_Node.js";
+import { Generator3D } from "../Generator/Generator3D.js";
 
 export class StringText extends Instruction {
 
@@ -92,6 +93,10 @@ export class StringText extends Instruction {
 
     public get_type(): type | null {
         return this.type;
+    }
+
+    compile(table: SymbolTable, generator: Generator3D) {
+        
     }
 
     get_node() {

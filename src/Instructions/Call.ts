@@ -7,6 +7,7 @@ import {type} from "../SymbolTable/Type.js";
 import { Declaration_array } from "./Declaration_array.js";
 import { Struct } from "./Struct.js";
 import { Cst_Node } from "../Abstract/Cst_Node.js";
+import { Generator3D } from "../Generator/Generator3D.js";
 
 export class Call extends Instruction {
 
@@ -232,6 +233,10 @@ export class Call extends Instruction {
 
     public get_id(){
         return this.name;
+    }
+
+    compile(table: SymbolTable, generator: Generator3D) {
+        
     }
 
     get_node() {

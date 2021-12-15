@@ -2,6 +2,7 @@ import {Instruction} from "../Abstract/Instruction.js";
 import Tree from "../SymbolTable/Tree.js";
 import SymbolTable from "../SymbolTable/SymbolTable.js";
 import { Cst_Node } from "../Abstract/Cst_Node.js";
+import { Generator3D } from "../Generator/Generator3D.js";
 
 export class Break extends Instruction {
 
@@ -11,6 +12,10 @@ export class Break extends Instruction {
 
     public interpret(tree: Tree, table: SymbolTable) {
         return this;
+    }
+
+    compile(table: SymbolTable, generator: Generator3D) {
+        
     }
 
     get_node() {

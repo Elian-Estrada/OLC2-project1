@@ -23,6 +23,8 @@ var Continue = /** @class */ (function (_super) {
     Continue.prototype.interpret = function (tree, table) {
         return this;
     };
+    Continue.prototype.compile = function (table, generator) {
+    };
     Continue.prototype.get_node = function () {
         return new Cst_Node("Continue");
     };

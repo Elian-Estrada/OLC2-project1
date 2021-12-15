@@ -4,6 +4,7 @@ import SymbolTable from "../SymbolTable/SymbolTable.js";
 import {type} from "../SymbolTable/Type.js";
 import Exception from "../SymbolTable/Exception.js";
 import { Cst_Node } from "../Abstract/Cst_Node.js";
+import { Generator3D } from "../Generator/Generator3D.js";
 
 export class Parse extends Instruction {
 
@@ -33,6 +34,10 @@ export class Parse extends Instruction {
 
         else
             return new Exception("Semantic", "Data type not compatible", this.row, this.column);
+    }
+
+    compile(table: SymbolTable, generator: Generator3D) {
+        
     }
 
     get_node() {

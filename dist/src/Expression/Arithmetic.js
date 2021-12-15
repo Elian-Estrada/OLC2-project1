@@ -218,6 +218,8 @@ var Arithmetic = /** @class */ (function (_super) {
     Arithmetic.prototype.get_type = function () {
         return this.type;
     };
+    Arithmetic.prototype.compile = function (table, generator) {
+    };
     Arithmetic.prototype.get_node = function () {
         var node = new Cst_Node("Expression Arithmetic");
         if (this.exp2 !== null) {

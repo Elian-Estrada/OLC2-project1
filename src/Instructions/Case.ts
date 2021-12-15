@@ -2,6 +2,7 @@ import {Instruction} from "../Abstract/Instruction.js";
 import Tree from "../SymbolTable/Tree.js";
 import SymbolTable from "../SymbolTable/SymbolTable.js";
 import { Cst_Node } from "../Abstract/Cst_Node.js";
+import { Generator3D } from "../Generator/Generator3D.js";
 
 export class Case extends Instruction {
 
@@ -24,6 +25,10 @@ export class Case extends Instruction {
 
     public get_value() {
         return this.expr;
+    }
+
+    compile(table: SymbolTable, generator: Generator3D) {
+        
     }
 
     get_node() {

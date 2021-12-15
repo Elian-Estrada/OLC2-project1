@@ -75,6 +75,8 @@ var While = /** @class */ (function (_super) {
             return new Exception("Semantic", "" + error, this.row, this.column);
         }
     };
+    While.prototype.compile = function (table, generator) {
+    };
     While.prototype.get_node = function () {
         var node = new Cst_Node("While");
         node.add_child("while");

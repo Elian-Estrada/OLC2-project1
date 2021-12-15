@@ -1,5 +1,6 @@
 import { Cst_Node } from "../Abstract/Cst_Node.js";
 import { Instruction } from "../Abstract/Instruction.js";
+import { Generator3D } from "../Generator/Generator3D.js";
 import Exception from "../SymbolTable/Exception.js";
 import SymbolTable from "../SymbolTable/SymbolTable.js";
 import Tree from "../SymbolTable/Tree.js";
@@ -133,6 +134,10 @@ export class Access_array extends Instruction {
 
     get_type(){
         return this.type;
+    }
+
+    compile(table: SymbolTable, generator: Generator3D) {
+        
     }
 
     get_node() {

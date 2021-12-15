@@ -4,6 +4,7 @@ import Exception from "../SymbolTable/Exception.js";
 import Tree from "../SymbolTable/Tree.js";
 import SymbolTable from "../SymbolTable/SymbolTable.js";
 import { Cst_Node } from "../Abstract/Cst_Node.js";
+import { Generator3D } from "../Generator/Generator3D.js";
 
 export class Relational extends Instruction{
 
@@ -194,6 +195,10 @@ export class Relational extends Instruction{
 
     get_type(): type {
         return this.type;
+    }
+
+    compile(table: SymbolTable, generator: Generator3D) {
+        
     }
 
     get_node() {

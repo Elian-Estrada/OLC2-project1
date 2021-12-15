@@ -41,6 +41,8 @@ var Return = /** @class */ (function (_super) {
     Return.prototype.get_result = function () {
         return this.result;
     };
+    Return.prototype.compile = function (table, generator) {
+    };
     Return.prototype.get_node = function () {
         var node = new Cst_Node("Return");
         if (this.expr !== null) {

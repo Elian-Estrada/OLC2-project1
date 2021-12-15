@@ -38,6 +38,8 @@ var Parse = /** @class */ (function (_super) {
         else
             return new Exception("Semantic", "Data type not compatible", this.row, this.column);
     };
+    Parse.prototype.compile = function (table, generator) {
+    };
     Parse.prototype.get_node = function () {
         var node = new Cst_Node("Parse");
         node.add_child(this.data_type);

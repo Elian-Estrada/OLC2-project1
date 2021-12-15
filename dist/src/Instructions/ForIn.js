@@ -80,6 +80,8 @@ var ForIn = /** @class */ (function (_super) {
             }
         }
     };
+    ForIn.prototype.compile = function (table, generator) {
+    };
     ForIn.prototype.get_node = function () {
         var node = new Cst_Node("For-In");
         node.add_child("for");

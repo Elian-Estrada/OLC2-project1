@@ -7,6 +7,7 @@ import {Continue} from "./Continue.js";
 import {Break} from "./Break.js";
 import {Return} from "./Return.js";
 import { Cst_Node } from "../Abstract/Cst_Node.js";
+import { Generator3D } from "../Generator/Generator3D.js";
 
 export class While extends Instruction {
 
@@ -68,6 +69,10 @@ export class While extends Instruction {
             console.log(error);
             return new Exception("Semantic", "" + error, this.row, this.column);
         }
+    }
+
+    compile(table: SymbolTable, generator: Generator3D) {
+        
     }
 
     get_node() {

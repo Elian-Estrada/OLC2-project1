@@ -33,6 +33,8 @@ var Inc_Dec = /** @class */ (function (_super) {
         this.type = this.expression.get_type();
         return value;
     };
+    Inc_Dec.prototype.compile = function (table, generator) {
+    };
     Inc_Dec.prototype.get_node = function () {
         var node = new Cst_Node("Incremento_Decremento");
         node.add_childs_node(this.expression.get_node());

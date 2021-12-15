@@ -136,6 +136,8 @@ var Declaration_array = /** @class */ (function (_super) {
     Declaration_array.prototype.get_id = function () {
         return this.id;
     };
+    Declaration_array.prototype.compile = function (table, generator) {
+    };
     Declaration_array.prototype.get_node = function () {
         var node = new Cst_Node("Declaration Array");
         node.add_child(this.type_array);

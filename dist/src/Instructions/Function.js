@@ -84,6 +84,8 @@ var Function = /** @class */ (function (_super) {
     Function.prototype.get_params = function () {
         return this.params;
     };
+    Function.prototype.compile = function (table, generator) {
+    };
     Function.prototype.get_node = function () {
         var node = new Cst_Node("Function");
         node.add_child(this.name);

@@ -172,6 +172,8 @@ var Access_struct = /** @class */ (function (_super) {
     Access_struct.prototype.get_value = function () {
         return this.value;
     };
+    Access_struct.prototype.compile = function (table, generator) {
+    };
     Access_struct.prototype.get_node = function () {
         var node = new Cst_Node("Access_Struct");
         node.add_child(this.list_ids[0]);

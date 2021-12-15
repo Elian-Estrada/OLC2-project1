@@ -32,6 +32,8 @@ var Case = /** @class */ (function (_super) {
     Case.prototype.get_value = function () {
         return this.expr;
     };
+    Case.prototype.compile = function (table, generator) {
+    };
     Case.prototype.get_node = function () {
         var node = new Cst_Node("Case");
         node.add_child("case");

@@ -94,6 +94,8 @@ var If = /** @class */ (function (_super) {
             return new Exception("Semantic", "Expect a Boolean type expression. Not ".concat(this.expr.get_type().name), this.row, this.column);
         }
     };
+    If.prototype.compile = function (table, generator) {
+    };
     If.prototype.get_node = function () {
         var node = new Cst_Node("If");
         node.add_child("if");

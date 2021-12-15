@@ -6,6 +6,7 @@ import Exception from "../SymbolTable/Exception.js";
 import Symbol from "../SymbolTable/Symbol.js";
 import {Identifier} from "./Identifier.js";
 import { Cst_Node } from "../Abstract/Cst_Node.js";
+import { Generator3D } from "../Generator/Generator3D.js";
 
 export class Arithmetic extends Instruction {
 
@@ -229,6 +230,10 @@ export class Arithmetic extends Instruction {
 
     public get_type(): type | null {
         return this.type;
+    }
+    
+    compile(table: SymbolTable, generator: Generator3D) {
+        
     }
 
     get_node() {

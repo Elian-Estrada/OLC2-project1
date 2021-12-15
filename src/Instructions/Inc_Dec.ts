@@ -1,5 +1,6 @@
 import { Cst_Node } from "../Abstract/Cst_Node.js";
 import { Instruction } from "../Abstract/Instruction.js";
+import { Generator3D } from "../Generator/Generator3D.js";
 import Exception from "../SymbolTable/Exception.js";
 import Symbol from "../SymbolTable/Symbol.js";
 import SymbolTable from "../SymbolTable/SymbolTable.js";
@@ -27,6 +28,10 @@ export class Inc_Dec extends Instruction {
 
         this.type = this.expression.get_type();
         return value;
+    }
+
+    compile(table: SymbolTable, generator: Generator3D) {
+        
     }
 
     get_node() {

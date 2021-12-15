@@ -93,6 +93,8 @@ var Switch = /** @class */ (function (_super) {
             this.flag = true;
         }
     };
+    Switch.prototype.compile = function (table, generator) {
+    };
     Switch.prototype.get_node = function () {
         var node = new Cst_Node("Switch");
         node.add_child("switch");

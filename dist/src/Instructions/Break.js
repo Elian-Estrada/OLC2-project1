@@ -23,6 +23,8 @@ var Break = /** @class */ (function (_super) {
     Break.prototype.interpret = function (tree, table) {
         return this;
     };
+    Break.prototype.compile = function (table, generator) {
+    };
     Break.prototype.get_node = function () {
         return new Cst_Node("Break");
     };

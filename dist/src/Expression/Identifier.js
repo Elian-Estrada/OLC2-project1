@@ -44,6 +44,8 @@ var Identifier = /** @class */ (function (_super) {
     Identifier.prototype.get_value = function () {
         return this.value;
     };
+    Identifier.prototype.compile = function (table, generator) {
+    };
     Identifier.prototype.get_node = function () {
         var node = new Cst_Node("Identifier");
         node.add_child(this.id);

@@ -48,6 +48,8 @@ var Ternary = /** @class */ (function (_super) {
     Ternary.prototype.get_type = function () {
         return this.exp_if_false.get_type();
     };
+    Ternary.prototype.compile = function (table, generator) {
+    };
     Ternary.prototype.get_node = function () {
         var node = new Cst_Node("Ternary");
         node.add_child("(");

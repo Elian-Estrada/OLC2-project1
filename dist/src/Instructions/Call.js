@@ -211,6 +211,8 @@ var Call = /** @class */ (function (_super) {
     Call.prototype.get_id = function () {
         return this.name;
     };
+    Call.prototype.compile = function (table, generator) {
+    };
     Call.prototype.get_node = function () {
         var node = new Cst_Node("Call Function");
         node.add_child(this.name);

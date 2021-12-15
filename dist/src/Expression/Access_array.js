@@ -110,6 +110,8 @@ var Access_array = /** @class */ (function (_super) {
     Access_array.prototype.get_type = function () {
         return this.type;
     };
+    Access_array.prototype.compile = function (table, generator) {
+    };
     Access_array.prototype.get_node = function () {
         var node = new Cst_Node("Access Array");
         node.add_child(this.id);

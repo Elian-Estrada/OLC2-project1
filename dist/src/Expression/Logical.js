@@ -64,6 +64,8 @@ var Logical = /** @class */ (function (_super) {
     Logical.prototype.get_type = function () {
         return this.type;
     };
+    Logical.prototype.compile = function (table, generator) {
+    };
     Logical.prototype.get_node = function () {
         var node = new Cst_Node("Expression Logic");
         if (this.exp2 !== null) {

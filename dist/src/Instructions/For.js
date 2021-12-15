@@ -110,6 +110,8 @@ var For = /** @class */ (function (_super) {
             return new Exception("Semantic", "Expression Expected", this.row, this.column);
         }
     };
+    For.prototype.compile = function (table, generator) {
+    };
     For.prototype.get_node = function () {
         var node = new Cst_Node("For");
         node.add_child("for");

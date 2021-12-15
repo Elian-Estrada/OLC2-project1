@@ -2,6 +2,7 @@ import { Cst_Node } from "../Abstract/Cst_Node.js";
 import { Instruction } from "../Abstract/Instruction.js";
 import { Access_struct } from "../Expression/Access_struct.js";
 import { Identifier } from "../Expression/Identifier.js";
+import { Generator3D } from "../Generator/Generator3D.js";
 import Exception from "../SymbolTable/Exception.js";
 import Symbol from "../SymbolTable/Symbol.js";
 import SymbolTable from "../SymbolTable/SymbolTable.js";
@@ -114,6 +115,10 @@ export class Declaration extends Instruction {
 
     get_value(){
         return this.expression;
+    }
+
+    compile(table: SymbolTable, generator: Generator3D) {
+        
     }
 
     get_node() {

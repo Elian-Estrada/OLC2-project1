@@ -106,6 +106,8 @@ var Declaration = /** @class */ (function (_super) {
     Declaration.prototype.get_value = function () {
         return this.expression;
     };
+    Declaration.prototype.compile = function (table, generator) {
+    };
     Declaration.prototype.get_node = function () {
         var node = new Cst_Node("Declaration");
         node.add_child(this.type);

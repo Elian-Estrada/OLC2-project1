@@ -4,6 +4,7 @@ import SymbolTable from "../SymbolTable/SymbolTable.js";
 import {type} from "../SymbolTable/Type.js";
 import Exception from "../SymbolTable/Exception.js";
 import { Cst_Node } from "../Abstract/Cst_Node.js";
+import { Generator3D } from "../Generator/Generator3D.js";
 
 export class Ternary extends Instruction {
 
@@ -47,6 +48,10 @@ export class Ternary extends Instruction {
 
     public get_type(): type | null {
         return this.exp_if_false.get_type();
+    }
+
+    compile(table: SymbolTable, generator: Generator3D) {
+        
     }
 
     get_node() {

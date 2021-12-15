@@ -94,6 +94,8 @@ var StringText = /** @class */ (function (_super) {
     StringText.prototype.get_type = function () {
         return this.type;
     };
+    StringText.prototype.compile = function (table, generator) {
+    };
     StringText.prototype.get_node = function () {
         var node = new Cst_Node("Concat");
         node.add_childs_node(this.exp1.get_node());

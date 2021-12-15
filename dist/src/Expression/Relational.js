@@ -178,6 +178,8 @@ var Relational = /** @class */ (function (_super) {
     Relational.prototype.get_type = function () {
         return this.type;
     };
+    Relational.prototype.compile = function (table, generator) {
+    };
     Relational.prototype.get_node = function () {
         var node = new Cst_Node("Expression Relational");
         node.add_childs_node(this.exp1.get_node());

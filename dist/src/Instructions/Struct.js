@@ -66,6 +66,8 @@ var Struct = /** @class */ (function (_super) {
     Struct.prototype.get_id = function () {
         return this.id;
     };
+    Struct.prototype.compile = function (table, generator) {
+    };
     Struct.prototype.get_node = function () {
         var node = new Cst_Node("Struct");
         node.add_child("struct");

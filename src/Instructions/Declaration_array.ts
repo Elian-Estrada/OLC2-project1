@@ -1,5 +1,6 @@
 import { Cst_Node } from "../Abstract/Cst_Node.js";
 import { Instruction } from "../Abstract/Instruction.js";
+import { Generator3D } from "../Generator/Generator3D.js";
 import Exception from "../SymbolTable/Exception.js";
 import Symbol from "../SymbolTable/Symbol.js";
 import SymbolTable from "../SymbolTable/SymbolTable.js";
@@ -157,6 +158,10 @@ export class Declaration_array extends Instruction {
 
     get_id(){
         return this.id;
+    }
+
+    compile(table: SymbolTable, generator: Generator3D) {
+        
     }
 
     get_node() {

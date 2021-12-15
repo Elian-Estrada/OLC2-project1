@@ -11,6 +11,7 @@ import Symbol from "../SymbolTable/Symbol.js";
 import {Identifier} from "../Expression/Identifier.js";
 import {Declaration} from "./Declaration.js";
 import { Cst_Node } from "../Abstract/Cst_Node.js";
+import { Generator3D } from "../Generator/Generator3D.js";
 
 export class ForIn extends Instruction {
 
@@ -83,6 +84,10 @@ export class ForIn extends Instruction {
                 }
             }
         }
+    }
+
+    compile(table: SymbolTable, generator: Generator3D) {
+        
     }
 
     get_node() {

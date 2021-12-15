@@ -9,6 +9,7 @@ import {Continue} from "./Continue.js";
 import {Return} from "./Return.js";
 import {Case} from "./Case.js";
 import { Cst_Node } from "../Abstract/Cst_Node.js";
+import { Generator3D } from "../Generator/Generator3D.js";
 
 export class Switch extends Instruction {
 
@@ -92,6 +93,10 @@ export class Switch extends Instruction {
         if ( JSON.parse( String(flag) ) ) {
             this.flag = true;
         }
+    }
+
+    compile(table: SymbolTable, generator: Generator3D) {
+        
     }
 
     get_node() {

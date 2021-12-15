@@ -76,6 +76,8 @@ var DoWhile = /** @class */ (function (_super) {
             return new Exception("Semantic", "" + error, this.row, this.column);
         }
     };
+    DoWhile.prototype.compile = function (table, generator) {
+    };
     DoWhile.prototype.get_node = function () {
         var node = new Cst_Node("Do-While");
         node.add_child("do");
