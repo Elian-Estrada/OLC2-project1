@@ -45,12 +45,6 @@ var Print = /** @class */ (function (_super) {
         generator.printString();
         var paramTemp1 = generator.addTemp();
         generator.addAssignment(paramTemp1, "H");
-        /*for ( let item of value ) {
-            generator.setHeap('H', item.charCodeAt(0));
-            generator.nextHeap();
-        }
-        generator.setHeap('H', -1);
-        generator.nextHeap();*/
         var paramTemp2 = generator.addTemp();
         generator.addExpression(paramTemp2, 'P', table.get_size(), '+'); // T5 = P + 1;
         generator.addExpression(paramTemp2, paramTemp2, '1', '+');
@@ -63,13 +57,6 @@ var Print = /** @class */ (function (_super) {
     };
     Print.prototype.typeBoolean = function (value, generator) {
         var exit_label = generator.newLabel();
-        /*let true_label = generator.newLabel();
-        let false_label = generator.newLabel();*/
-        /*if ( JSON.parse(String(value)) ) {
-            generator.addGoTo(true_label);
-        } else {
-            generator.addGoTo(false_label);
-        }*/
         generator.setLabel(value.true_label);
         generator.printTrue();
         generator.addGoTo(exit_label);

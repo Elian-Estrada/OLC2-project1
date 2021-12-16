@@ -245,6 +245,8 @@ var Arithmetic = /** @class */ (function (_super) {
     Arithmetic.prototype.toString = function () {
         return String(this.value);
     };
+    Arithmetic.prototype.compile = function (table, generator) {
+    };
     return Arithmetic;
 }(Instruction));
 export { Arithmetic };

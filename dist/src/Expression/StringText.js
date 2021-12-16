@@ -17,6 +17,7 @@ import { Instruction } from "../Abstract/Instruction.js";
 import Exception from "../SymbolTable/Exception.js";
 import { String_operator, type } from "../SymbolTable/Type.js";
 import { Cst_Node } from "../Abstract/Cst_Node.js";
+import { Value } from "../Abstract/Value.js";
 var StringText = /** @class */ (function (_super) {
     __extends(StringText, _super);
     function StringText(exp1, exp2, operator, row, col) {
@@ -48,7 +49,7 @@ var StringText = /** @class */ (function (_super) {
             var temp_1 = generator.addTemp();
             generator.getStack(temp_1, 'P');
             generator.setEnv(table.get_size());
-            return;
+            return new Value(temp_1, type.STRING, true);
         }
     };
     StringText.prototype.interpret = function (tree, table) {

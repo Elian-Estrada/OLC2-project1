@@ -6,6 +6,7 @@ import {String_operator, type} from "../SymbolTable/Type.js";
 import { Cst_Node } from "../Abstract/Cst_Node.js";
 import { Generator3D } from "../Generator/Generator3D.js";
 import Symbol from "../SymbolTable/Symbol";
+import {Value} from "../Abstract/Value.js";
 
 export class StringText extends Instruction {
 
@@ -30,12 +31,12 @@ export class StringText extends Instruction {
 
             generator.newEnv(table.get_size());
             generator.callFunc('concatString');
-
             let temp = generator.addTemp();
+
             generator.getStack(temp, 'P');
             generator.setEnv(table.get_size());
 
-            return ;
+            return new Value(temp, type.STRING, true);
         }
     }
 

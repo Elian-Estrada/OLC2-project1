@@ -96,6 +96,49 @@ var Generator3D = /** @class */ (function () {
         this.concat_str = true;
         this.inNatives = true;
         this.addBeginFunc('concatString');
+        // Iniciar con las temporales
+        var t2 = this.addTemp();
+        var t3 = this.addTemp();
+        var t4 = this.addTemp();
+        var t5 = this.addTemp();
+        this.addExpression(t2, 'H', '', ''); // T2 = H
+        this.addExpression(t3, 'P', '1', '+'); // T3 = P + 1
+        this.getStack(t5, t3); // T5 = stack[T4]
+        this.addExpression(t4, 'P', '2', '+'); // T4 = P + 2
+        var L1 = this.newLabel();
+        var L2 = this.newLabel();
+        // Inicia codigo
+        this.setLabel(L1); // L1:
+        var t6 = this.addTemp();
+        this.getHeap(t6, t5); // T6 = heap[T5];
+        this.addIf(t6, '-1', '==', L2); // if(T6 == -1) goto L2;
+        this.setHeap('H', t6); // heap[H] = T6;
+        this.nextHeap(); // H = H + 1;
+        this.addExpression(t5, t5, '1', '+'); // T5 = T5 + 1;
+        this.addGoTo(L1); // goto L1;
+        this.setLabel(L2); // L2:
+        this.getStack(t5, t4); // T5 = stack[T5];
+        var L0 = this.newLabel();
+        var L3 = this.newLabel();
+        this.setLabel(L3); // L3:
+        this.getHeap(t6, t5); // T6 = heap[T5];
+        this.addIf(t6, '-1', '==', L0); // if(T6 == -1) goto L0
+        this.setHeap('H', t6); // heap[H] = T6;
+        this.nextHeap(); // H = H + 1;
+        this.addExpression(t5, t5, '1', '+'); // T5 = T5 + 1;
+        this.addGoTo(L3); // goto L3;
+        this.setLabel(L0); // L0:
+        this.setHeap('H', '-1'); // heap[H] = -1
+        this.nextHeap(); // H = H + 1;
+        this.setStack('P', t2); // stack[P] = t3;
+        // Termina codigo
+        this.addEndFunc();
+        this.inNatives = false;
+        this.get_freeTemp(t2);
+        this.get_freeTemp(t3);
+        this.get_freeTemp(t4);
+        this.get_freeTemp(t5);
+        this.get_freeTemp(t6);
     };
     Generator3D.prototype.printString = function () {
         if (this.print_string)

@@ -264,4 +264,7 @@ export class Arithmetic extends Instruction {
     toString(): String {
         return String(this.value);
     }
+
+    compile(table: SymbolTable, generator: Generator3D): any {
+    }
 }
