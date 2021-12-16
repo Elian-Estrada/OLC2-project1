@@ -19,6 +19,7 @@ import Exception from "../SymbolTable/Exception.js";
 import Symbol from "../SymbolTable/Symbol.js";
 import { Identifier } from "./Identifier.js";
 import { Cst_Node } from "../Abstract/Cst_Node.js";
+import { Value } from "../Abstract/Value.js";
 var Arithmetic = /** @class */ (function (_super) {
     __extends(Arithmetic, _super);
     function Arithmetic(exp1, exp2, operator, row, column) {
@@ -34,6 +35,30 @@ var Arithmetic = /** @class */ (function (_super) {
         };
         return _this;
     }
+    Arithmetic.prototype.compile = function (table, generator) {
+        var left = this.exp1.compile(table, generator);
+        var right = this.exp2.compile(table, generator);
+        var temp = generator.addTemp();
+        var operation = this.operator;
+        if ((left.type == type.INT || left.type == type.DOUBLE) &&
+            (right.type == type.INT || right.type == type.DOUBLE)) {
+            var label_true = generator.newLabel();
+            var label_false = generator.newLabel();
+            var label_exit = generator.newLabel();
+            generator.addIf(right.value, '0', '==', label_true);
+            generator.addGoTo(label_false);
+            generator.setLabel(label_true);
+            generator.printMathError();
+            generator.addExpression(temp, '0', '', '');
+            generator.addGoTo(label_exit);
+            generator.setLabel(label_false);
+            generator.addExpression(temp, left.value, right.value, operation);
+            var type_op = type.INT;
+            generator.setLabel(label_exit);
+            return new Value(temp, type_op, true);
+        }
+        return null;
+    };
     Arithmetic.prototype.interpret = function (tree, table) {
         var left = this.exp1.interpret(tree, table);
         if (left instanceof Exception)
@@ -218,8 +243,6 @@ var Arithmetic = /** @class */ (function (_super) {
     Arithmetic.prototype.get_type = function () {
         return this.type;
     };
-    Arithmetic.prototype.compile = function (table, generator) {
-    };
     Arithmetic.prototype.get_node = function () {
         var node = new Cst_Node("Expression Arithmetic");
         if (this.exp2 !== null) {
@@ -244,8 +267,6 @@ var Arithmetic = /** @class */ (function (_super) {
     };
     Arithmetic.prototype.toString = function () {
         return String(this.value);
-    };
-    Arithmetic.prototype.compile = function (table, generator) {
     };
     return Arithmetic;
 }(Instruction));

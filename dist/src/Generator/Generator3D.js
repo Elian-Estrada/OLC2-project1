@@ -274,6 +274,17 @@ var Generator3D = /** @class */ (function () {
         this.add_print("c", "char", 115);
         this.add_print("c", "char", 101);
     };
+    Generator3D.prototype.printMathError = function () {
+        this.add_print("c", "char", 77); // M
+        this.add_print("c", "char", 97); // a
+        this.add_print("c", "char", 116); // t
+        this.add_print("c", "char", 104); // h
+        this.add_print("c", "char", 69); // E
+        this.add_print("c", "char", 114); // r
+        this.add_print("c", "char", 114); // r
+        this.add_print("c", "char", 111); // o
+        this.add_print("c", "char", 114); // r
+    };
     Generator3D.prototype.get_TempsRecover = function () {
         return this.temps_recover;
     };

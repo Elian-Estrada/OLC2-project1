@@ -349,6 +349,18 @@ export class Generator3D {
         this.add_print("c", "char", 101);
     }
 
+    public printMathError() {
+        this.add_print("c", "char", 77) ;     // M
+        this.add_print("c", "char", 97) ;     // a
+        this.add_print("c", "char", 116);     // t
+        this.add_print("c", "char", 104);     // h
+        this.add_print("c", "char", 69) ;     // E
+        this.add_print("c", "char", 114);     // r
+        this.add_print("c", "char", 114);     // r
+        this.add_print("c", "char", 111);     // o
+        this.add_print("c", "char", 114);     // r
+    }
+
     public get_TempsRecover() {
         return this.temps_recover;
     }

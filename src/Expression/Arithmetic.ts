@@ -7,6 +7,7 @@ import Symbol from "../SymbolTable/Symbol.js";
 import {Identifier} from "./Identifier.js";
 import { Cst_Node } from "../Abstract/Cst_Node.js";
 import { Generator3D } from "../Generator/Generator3D.js";
+import {Value} from "../Abstract/Value.js";
 
 export class Arithmetic extends Instruction {
 
@@ -28,6 +29,40 @@ export class Arithmetic extends Instruction {
             true: true,
             false: false
         }
+    }
+
+    public compile(table: SymbolTable, generator: Generator3D): any {
+        let left = this.exp1.compile(table, generator);
+        let right = this.exp2.compile(table, generator);
+
+        let temp = generator.addTemp();
+        let operation = this.operator;
+
+        if ( (left.type == type.INT || left.type == type.DOUBLE) &&
+            (right.type == type.INT || right.type == type.DOUBLE)) {
+
+            let label_true = generator.newLabel();
+            let label_false = generator.newLabel();
+            let label_exit = generator.newLabel();
+
+            generator.addIf(right.value, '0', '==', label_true);
+            generator.addGoTo(label_false);
+
+            generator.setLabel(label_true);
+            generator.printMathError();
+            generator.addExpression(temp, '0', '', '');
+            generator.addGoTo(label_exit);
+
+            generator.setLabel(label_false);
+            generator.addExpression(temp, left.value, right.value, operation);
+            let type_op = type.INT;
+
+            generator.setLabel(label_exit);
+
+            return new Value(temp, type_op, true);
+        }
+
+        return null;
     }
 
     public interpret(tree: Tree, table: SymbolTable) {
@@ -232,10 +267,6 @@ export class Arithmetic extends Instruction {
         return this.type;
     }
     
-    compile(table: SymbolTable, generator: Generator3D) {
-        
-    }
-
     get_node() {
         let node = new Cst_Node("Expression Arithmetic");
 
@@ -263,8 +294,5 @@ export class Arithmetic extends Instruction {
 
     toString(): String {
         return String(this.value);
-    }
-
-    compile(table: SymbolTable, generator: Generator3D): any {
     }
 }

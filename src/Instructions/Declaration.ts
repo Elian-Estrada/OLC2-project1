@@ -27,7 +27,7 @@ export class Declaration extends Instruction {
         if ( value.get_type() === type.BOOL ) {
             this.valueBoolean(value, temp_pos, generator);
         } else if ( value.get_type() === type.INT || value.get_type() === type.DOUBLE )
-            generator.setStack(temp_pos, this.expression.value);
+            generator.setStack(temp_pos, value.value);
     }
 
     public valueBoolean(value: any, temp_pos: any, generator: Generator3D) {
