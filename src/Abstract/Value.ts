@@ -1,7 +1,7 @@
 
 export class Value {
 
-    private value: any;
+    public value: any;
     private type: any;
     private is_temp: boolean;
     private aux_type: string;

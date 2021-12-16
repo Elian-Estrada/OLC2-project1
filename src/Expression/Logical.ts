@@ -5,6 +5,8 @@ import Exception from "../SymbolTable/Exception.js";
 import SymbolTable from "../SymbolTable/SymbolTable.js";
 import Tree from "../SymbolTable/Tree.js";
 import { Logical_operator, type } from "../SymbolTable/Type.js";
+import {Generator3D} from "../Generator/Generator3D.js";
+import {Value} from "../Abstract/Value.js";
 
 export class Logical extends Instruction{
 
@@ -63,6 +65,38 @@ export class Logical extends Instruction{
             }
         }
 
+    }
+
+    compile(table: SymbolTable, generator: Generator3D): any {
+        let temp = generator.addTemp();
+        let operation = this.operator;
+
+        let type_op = null;
+        let val_return = null;
+        if ( this.operator === Logical_operator.AND ) {
+            let left = this.exp1.compile(table, generator);
+            type_op = type.BOOL;
+            val_return = new Value(temp, type_op, true);
+
+            if ( JSON.parse(this.exp1.value) && JSON.parse(this.exp2.value) ) {
+                // @ts-ignore
+                val_return.true_label = left.true_label;
+                val_return.false_label = left.false_label;
+            } else {
+                // @ts-ignore
+                val_return.true_label = left.false_label;
+                val_return.false_label = left.true_label;
+            }
+        }
+
+        // @ts-ignore
+        val_return.value = JSON.parse(this.exp1.value) && JSON.parse(this.exp2.value);
+        return val_return;
+    }
+
+    public checkLabels(generator: Generator3D, value: any) {
+        value.label_true = generator.newLabel();
+        value.label_false = generator.newLabel();
     }
 
     get_type(): type{

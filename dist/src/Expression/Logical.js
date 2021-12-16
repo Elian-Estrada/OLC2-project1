@@ -17,6 +17,7 @@ import { Cst_Node } from "../Abstract/Cst_Node.js";
 import { Instruction } from "../Abstract/Instruction.js";
 import Exception from "../SymbolTable/Exception.js";
 import { Logical_operator, type } from "../SymbolTable/Type.js";
+import { Value } from "../Abstract/Value.js";
 var Logical = /** @class */ (function (_super) {
     __extends(Logical, _super);
     function Logical(exp1, exp2, operator, row, column) {
@@ -60,6 +61,34 @@ var Logical = /** @class */ (function (_super) {
                 return new Exception("Semantic", "The type: ".concat(this.exp1.get_type(), " does not work whit operator: ").concat(this.operator), this.row, this.column);
             }
         }
+    };
+    Logical.prototype.compile = function (table, generator) {
+        var temp = generator.addTemp();
+        var operation = this.operator;
+        var type_op = null;
+        var val_return = null;
+        if (this.operator === Logical_operator.AND) {
+            var left = this.exp1.compile(table, generator);
+            type_op = type.BOOL;
+            val_return = new Value(temp, type_op, true);
+            if (JSON.parse(this.exp1.value) && JSON.parse(this.exp2.value)) {
+                // @ts-ignore
+                val_return.true_label = left.true_label;
+                val_return.false_label = left.false_label;
+            }
+            else {
+                // @ts-ignore
+                val_return.true_label = left.false_label;
+                val_return.false_label = left.true_label;
+            }
+        }
+        // @ts-ignore
+        val_return.value = JSON.parse(this.exp1.value) && JSON.parse(this.exp2.value);
+        return val_return;
+    };
+    Logical.prototype.checkLabels = function (generator, value) {
+        value.label_true = generator.newLabel();
+        value.label_false = generator.newLabel();
     };
     Logical.prototype.get_type = function () {
         return this.type;

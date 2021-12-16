@@ -42,10 +42,6 @@ export class Return extends Instruction {
         return this.result;
     }
 
-    compile(table: SymbolTable, generator: Generator3D) {
-        
-    }
-
     get_node() {
         let node = new Cst_Node("Return");
 
@@ -54,5 +50,9 @@ export class Return extends Instruction {
         }
         
         return node;
+    }
+
+    compile(table: SymbolTable, generator: Generator3D): any {
+        return;
     }
 }

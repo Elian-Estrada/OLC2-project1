@@ -18,6 +18,7 @@ var Generator3D = /** @class */ (function () {
         this.lower_case = false;
         this.concat_str = false;
         this.repetition_str = false;
+        this.compare_str = false;
         this.aux_errors = [];
         this.table = [];
         this.flag_math = false;
@@ -46,6 +47,7 @@ var Generator3D = /** @class */ (function () {
         this.lower_case = false;
         this.concat_str = false;
         this.repetition_str = false;
+        this.compare_str = false;
         this.aux_errors = [];
         this.table = [];
         this.flag_math = false;
@@ -172,6 +174,47 @@ var Generator3D = /** @class */ (function () {
         this.get_freeTemp(tempP);
         this.get_freeTemp(tempH);
         this.get_freeTemp(tempCmp);
+    };
+    Generator3D.prototype.compareString = function () {
+        if (this.compare_str)
+            return;
+        this.compare_str = true;
+        this.inNatives = true;
+        this.addBeginFunc('compareStr');
+        var t2 = this.addTemp();
+        this.addExpression(t2, 'P', '1', '+'); // P = P + 1
+        var t3 = this.addTemp();
+        this.getStack(t3, t2); // t3 = stack[t2]
+        this.addExpression(t2, t2, '1', '+'); // t2 = t2 + 1;
+        var t4 = this.addTemp();
+        this.getStack(t4, t2); // t4 = stack[t2]
+        var L0 = this.newLabel();
+        var L1 = this.newLabel();
+        var L2 = this.newLabel();
+        var L3 = this.newLabel();
+        this.setLabel(L1); // L1:
+        var t5 = this.addTemp();
+        this.getHeap(t5, t3); // t5 = heap[t3]
+        var t6 = this.addTemp();
+        this.getHeap(t6, t4); // t6 = heap[t4]
+        this.addIf(t5, t6, '!=', L3); // if(t5 != t6) goto L3
+        this.addIf(t5, '-1', '==', L2); // if (t5 != -1) goto L2
+        this.addExpression(t3, t3, '1', '+'); // t3 = t3 + 1
+        this.addExpression(t4, t4, '1', '+'); // t4 = t4 + 1
+        this.addGoTo(L1); // goto L1
+        this.setLabel(L2); // L2:
+        this.setStack('P', '1'); // stack[P] = 1
+        this.addGoTo(L0); // goto L0
+        this.setLabel(L3); // L3:
+        this.setStack('P', '0'); // stack[P] = 0
+        this.setLabel(L0); // L0:
+        this.addEndFunc();
+        this.inNatives = false;
+        this.get_freeTemp(t2);
+        this.get_freeTemp(t3);
+        this.get_freeTemp(t4);
+        this.get_freeTemp(t5);
+        this.get_freeTemp(t6);
     };
     Generator3D.prototype.getStack = function (place, pos) {
         this.get_freeTemp(pos);

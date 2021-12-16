@@ -41,23 +41,23 @@ export class Arithmetic extends Instruction {
         if ( (left.type == type.INT || left.type == type.DOUBLE) &&
             (right.type == type.INT || right.type == type.DOUBLE)) {
 
-            let label_true = generator.newLabel();
+            /*let label_true = generator.newLabel();
             let label_false = generator.newLabel();
-            let label_exit = generator.newLabel();
+            let label_exit = generator.newLabel();*/
 
-            generator.addIf(right.value, '0', '==', label_true);
+            /*generator.addIf(right.value, '0', '==', label_true);
             generator.addGoTo(label_false);
 
             generator.setLabel(label_true);
             generator.printMathError();
             generator.addExpression(temp, '0', '', '');
-            generator.addGoTo(label_exit);
+            generator.addGoTo(label_exit);*/
 
-            generator.setLabel(label_false);
+            // generator.setLabel(label_false);
             generator.addExpression(temp, left.value, right.value, operation);
             let type_op = type.INT;
 
-            generator.setLabel(label_exit);
+            // generator.setLabel(label_exit);
 
             return new Value(temp, type_op, true);
         }

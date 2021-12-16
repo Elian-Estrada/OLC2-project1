@@ -1,13 +1,123 @@
-import { Instruction } from "../Abstract/Instruction.js";
-import { type, Relational_operator } from "../SymbolTable/Type.js";
+import {Instruction} from "../Abstract/Instruction.js";
+import {Relational_operator, type} from "../SymbolTable/Type.js";
 import Exception from "../SymbolTable/Exception.js";
 import Tree from "../SymbolTable/Tree.js";
 import SymbolTable from "../SymbolTable/SymbolTable.js";
 import { Cst_Node } from "../Abstract/Cst_Node.js";
 import { Generator3D } from "../Generator/Generator3D.js";
+import {Value} from "../Abstract/Value.js";
 
-export class Relational extends Instruction{
+export class Relational extends Instruction {
+    compile(table: SymbolTable, generator: Generator3D) {
 
+        let left = this.exp1.compile(table, generator);
+        if ( left instanceof Exception )
+            return left;
+
+        let right = null;
+        let res = new Value(null, type.BOOL, false);
+        let operator = this.operator;
+
+        if ( left.type != type.BOOL ) {
+            right = this.exp2.compile(table, generator);
+
+            if ( left.type == type.INT ) {
+                switch ( right.type ) {
+                    case type.INT:
+                    case type.DOUBLE:
+                        this.checkLabels(generator, left);
+                        generator.addIf(left.value, right.value, operator, left.label_true);
+                        generator.addGoTo(left.label_false);
+                }
+            }
+
+            if ( left.type == type.STRING && right.type == type.STRING ) {
+                generator.compareString();
+                let param_temp = generator.addTemp();
+                generator.addExpression(param_temp, 'P', table.get_size(), '+');
+
+                generator.addExpression(param_temp, param_temp, '1', '+');
+                generator.setStack(param_temp, left.value);
+
+                generator.addExpression(param_temp, param_temp, '1', '+');
+                generator.setStack(param_temp, right.value);
+
+                generator.newEnv(table.get_size());
+                generator.callFunc('compareStr');
+
+                let temp = generator.addTemp();
+                generator.getStack(temp, 'P');
+                generator.setEnv(table.get_size());
+
+                let true_label = generator.newLabel();
+                let false_label = generator.newLabel();
+
+                if ( this.operator == Relational_operator.EQUAL ) {
+                    generator.addIf(temp, '0', '==', false_label);
+                    generator.addGoTo(true_label);
+
+                    let res = new Value(temp, type.BOOL, true);
+                    res.true_label = true_label;
+                    res.false_label = false_label;
+
+                    return res;
+                }
+
+                if ( this.operator == Relational_operator.UNEQUAL ) {
+                    generator.addIf(temp, '0', '!=', false_label);
+                    generator.addGoTo(true_label);
+
+                    let res = new Value(temp, type.BOOL, true);
+                    res.true_label = true_label;
+                    res.false_label = false_label;
+
+                    return res;
+                }
+            }
+        } else {
+            let goto_right = generator.newLabel();
+            let left_temp = generator.addTemp();
+
+            generator.setLabel(left.true_label);
+            generator.addExpression(left_temp, '1', '', '');
+            generator.addGoTo(goto_right);
+
+            generator.setLabel(left.false_label);
+            generator.addExpression(left_temp, '0', '', '');
+            generator.setLabel(goto_right);
+
+            let right = this.exp2.compile(table, generator);
+            if ( right.get_type() != type.BOOL ) {
+                generator.addError('Relational: Operator must be boolean', Number(this.row), Number(this.column));
+                return ;
+            }
+
+            let goto_end = generator.newLabel();
+            let right_temp = generator.addTemp();
+
+            generator.setLabel(right.true_label);
+            generator.addExpression(right_temp, '1', '', '');
+            generator.addGoTo(goto_end);
+
+            generator.setLabel(right.false_label);
+            generator.addExpression(right_temp, '0', '', '');
+
+            generator.setLabel(goto_end);
+
+            this.checkLabels(generator, left);
+            generator.addIf(left_temp, right_temp, this.operator, left.label_true);
+            generator.addGoTo(left.label_false);
+        }
+
+        res.true_label = left.label_true;
+        res.false_label = left.label_false;
+        return res;
+    }
+
+    public checkLabels(generator: Generator3D, value: any) {
+        value.label_true = generator.newLabel();
+        value.label_false = generator.newLabel();
+    }
 
     private exp1: any;
     private exp2: any;
@@ -195,10 +305,6 @@ export class Relational extends Instruction{
 
     get_type(): type {
         return this.type;
-    }
-
-    compile(table: SymbolTable, generator: Generator3D) {
-        
     }
 
     get_node() {

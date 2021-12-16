@@ -42,19 +42,20 @@ var Arithmetic = /** @class */ (function (_super) {
         var operation = this.operator;
         if ((left.type == type.INT || left.type == type.DOUBLE) &&
             (right.type == type.INT || right.type == type.DOUBLE)) {
-            var label_true = generator.newLabel();
-            var label_false = generator.newLabel();
-            var label_exit = generator.newLabel();
-            generator.addIf(right.value, '0', '==', label_true);
+            /*let label_true = generator.newLabel();
+            let label_false = generator.newLabel();
+            let label_exit = generator.newLabel();*/
+            /*generator.addIf(right.value, '0', '==', label_true);
             generator.addGoTo(label_false);
+
             generator.setLabel(label_true);
             generator.printMathError();
             generator.addExpression(temp, '0', '', '');
-            generator.addGoTo(label_exit);
-            generator.setLabel(label_false);
+            generator.addGoTo(label_exit);*/
+            // generator.setLabel(label_false);
             generator.addExpression(temp, left.value, right.value, operation);
             var type_op = type.INT;
-            generator.setLabel(label_exit);
+            // generator.setLabel(label_exit);
             return new Value(temp, type_op, true);
         }
         return null;
