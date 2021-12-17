@@ -10,6 +10,9 @@ var SymbolTable = /** @class */ (function () {
         this.name = name;
         this.prev = prev;
         this.table = new Map();
+        this.break_label = '';
+        this.continue_label = '';
+        this.return_label = '';
     }
     SymbolTable.prototype.set_table = function (symbol) {
         if (this.table.has(symbol.id)) {

@@ -20,6 +20,7 @@ import Symbol from "../SymbolTable/Symbol.js";
 import { Identifier } from "./Identifier.js";
 import { Cst_Node } from "../Abstract/Cst_Node.js";
 import { Value } from "../Abstract/Value.js";
+import { Primitive } from "./Primitive.js";
 var Arithmetic = /** @class */ (function (_super) {
     __extends(Arithmetic, _super);
     function Arithmetic(exp1, exp2, operator, row, column) {
@@ -37,26 +38,31 @@ var Arithmetic = /** @class */ (function (_super) {
     }
     Arithmetic.prototype.compile = function (table, generator) {
         var left = this.exp1.compile(table, generator);
-        var right = this.exp2.compile(table, generator);
-        var temp = generator.addTemp();
-        var operation = this.operator;
-        if ((left.type == type.INT || left.type == type.DOUBLE) &&
-            (right.type == type.INT || right.type == type.DOUBLE)) {
-            /*let label_true = generator.newLabel();
-            let label_false = generator.newLabel();
-            let label_exit = generator.newLabel();*/
-            /*generator.addIf(right.value, '0', '==', label_true);
-            generator.addGoTo(label_false);
-
-            generator.setLabel(label_true);
-            generator.printMathError();
-            generator.addExpression(temp, '0', '', '');
-            generator.addGoTo(label_exit);*/
-            // generator.setLabel(label_false);
-            generator.addExpression(temp, left.value, right.value, operation);
-            var type_op = type.INT;
-            // generator.setLabel(label_exit);
-            return new Value(temp, type_op, true);
+        if (this.exp2 !== null) {
+            var right = this.exp2.compile(table, generator);
+            var temp = generator.addTemp();
+            var operation = this.operator;
+            if ((left.type == type.INT || left.type == type.DOUBLE) &&
+                (right.type == type.INT || right.type == type.DOUBLE)) {
+                generator.addExpression(temp, left.value, right.value, operation);
+                var type_op = type.INT;
+                // generator.setLabel(label_exit);
+                return new Value(temp, type_op, true);
+            }
+        }
+        else {
+            if (this.operator === Arithmetic_operator.INC) {
+                var new_prim = new Primitive('1', type.INT, this.row, this.column);
+                var new_symbol = new Arithmetic(this.exp1, new_prim, Arithmetic_operator.ADDITION, this.row, this.column);
+                var new_val = new_symbol.compile(table, generator);
+                return new Value(new_val.value, type.INT, false);
+            }
+            else if (this.operator === Arithmetic_operator.DEC) {
+                var new_prim = new Primitive('1', type.INT, this.row, this.column);
+                var new_symbol = new Arithmetic(this.exp1, new_prim, Arithmetic_operator.SUBSTRACTION, this.row, this.column);
+                var new_val = new_symbol.compile(table, generator);
+                return new Value(new_val.value, type.INT, false);
+            }
         }
         return null;
     };

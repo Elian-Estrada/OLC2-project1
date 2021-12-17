@@ -30,7 +30,10 @@ var Print = /** @class */ (function (_super) {
     Print.prototype.compile = function (table, generator) {
         var res = this.expression.compile(table, generator);
         var valueShow = res.value;
-        if (res.get_type() === type.INT || res.get_type() === type.DOUBLE) {
+        if (res.get_type() === type.INT) {
+            generator.add_print("d", "int", valueShow);
+        }
+        else if (res.get_type() === type.DOUBLE) {
             generator.add_print("f", "double", valueShow);
         }
         else if (res.get_type() === type.STRING || res.get_type() === type.CHAR) {

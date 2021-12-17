@@ -12,12 +12,18 @@ export default class SymbolTable {
     private name: String;
     private table: Map<String, Symbol>;
     private prev: SymbolTable|undefined;
+    public break_label: string;
+    public continue_label: string;
+    public return_label: string;
 
     constructor(prev?: SymbolTable, name: String = "Global") {
         this.size = 0;
         this.name = name;
         this.prev = prev;
         this.table = new Map<String, Symbol>();
+        this.break_label = '';
+        this.continue_label = '';
+        this.return_label = '';
     }
 
     public set_table(symbol: Symbol){

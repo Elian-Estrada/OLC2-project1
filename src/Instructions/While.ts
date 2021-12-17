@@ -71,10 +71,6 @@ export class While extends Instruction {
         }
     }
 
-    compile(table: SymbolTable, generator: Generator3D) {
-        
-    }
-
     get_node() {
         let node = new Cst_Node("While");
 
@@ -94,5 +90,23 @@ export class While extends Instruction {
         node.add_child("}");
 
         return node;
+    }
+    
+    compile(table: SymbolTable, generator: Generator3D): any {
+        let continue_label = generator.newLabel();
+        generator.setLabel(continue_label);
+        let condition = this.expr.compile(table, generator);
+        let new_env = new SymbolTable(table, "While-Env-3D");
+        new_env.break_label = condition.false_label;
+        new_env.continue_label = continue_label;
+
+        generator.setLabel(condition.true_label);
+
+        for (let inst of this.instructions ) {
+            inst.compile(table, generator);
+            generator.addGoTo(continue_label);
+        }
+
+        generator.setLabel(condition.false_label);
     }
 }
