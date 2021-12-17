@@ -17,6 +17,7 @@ import { Instruction } from "../Abstract/Instruction.js";
 import { type, Relational_operator } from "../SymbolTable/Type.js";
 import Exception from "../SymbolTable/Exception.js";
 import { Cst_Node } from "../Abstract/Cst_Node.js";
+import { Access_struct } from "./Access_struct.js";
 var Relational = /** @class */ (function (_super) {
     __extends(Relational, _super);
     function Relational(exp1, exp2, operator, row, column) {
@@ -50,6 +51,12 @@ var Relational = /** @class */ (function (_super) {
             switch (this.operator) {
                 case Relational_operator.EQUAL:
                 case Relational_operator.UNEQUAL:
+                    if (this.exp1 instanceof Access_struct) {
+                        left = left.get_value();
+                    }
+                    if (this.exp2 instanceof Access_struct) {
+                        right = right.get_vale();
+                    }
                     switch (this.exp1.get_type()) {
                         case type.INT:
                         case type.DOUBLE:
@@ -96,9 +103,11 @@ var Relational = /** @class */ (function (_super) {
                         case type.STRUCT:
                             switch (this.exp2.get_type()) {
                                 case type.NULL:
-                                    return this.to_lower(left.get_value(), right, this.operator);
+                                    //return this.to_lower(left.get_value(), right, this.operator);
+                                    return this.to_lower(left, right, this.operator);
                                 case type.STRUCT:
-                                    return this.to_lower(left.get_value(), right.get_value(), this.operator);
+                                    //return this.to_lower(left.get_value(), right.get_value(), this.operator);
+                                    return this.to_lower(left, right, this.operator);
                                 default:
                                     return new Exception("Semantic", "The type: ".concat(this.exp2.get_type(), " cannot be operated whit type: ").concat(type.STRUCT), this.exp2.row, this.exp2.column);
                             }
@@ -107,7 +116,8 @@ var Relational = /** @class */ (function (_super) {
                                 case type.NULL:
                                     return this.to_lower(left, right, this.operator);
                                 case type.STRUCT:
-                                    return this.to_lower(left, right.get_value(), this.operator);
+                                    //return this.to_lower(left, right.get_value(), this.operator);
+                                    return this.to_lower(left, right, this.operator);
                                 case type.STRING:
                                     return this.to_lower(left, right, this.operator);
                                 case type.CHAR:

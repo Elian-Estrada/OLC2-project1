@@ -5,6 +5,7 @@ import Tree from "../SymbolTable/Tree.js";
 import SymbolTable from "../SymbolTable/SymbolTable.js";
 import { Cst_Node } from "../Abstract/Cst_Node.js";
 import { Generator3D } from "../Generator/Generator3D.js";
+import { Access_struct } from "./Access_struct.js";
 
 export class Relational extends Instruction{
 
@@ -54,6 +55,13 @@ export class Relational extends Instruction{
             switch(this.operator){
                 case Relational_operator.EQUAL:
                 case Relational_operator.UNEQUAL:
+                    if (this.exp1 instanceof Access_struct){
+                        left = left.get_value();
+                    }
+                    
+                    if (this.exp2 instanceof Access_struct){
+                        right = right.get_vale();
+                    }
 
                     switch(this.exp1.get_type()){
                         case type.INT:
@@ -101,12 +109,13 @@ export class Relational extends Instruction{
                                     return new Exception("Semantic", `The type: ${this.exp2.get_type()} cannot be operated whit type: ${type.ARRAY}`, this.row, this.column)
                             }
                         case type.STRUCT:
-                            
                             switch(this.exp2.get_type()){
                                 case type.NULL:
-                                    return this.to_lower(left.get_value(), right, this.operator);
+                                    //return this.to_lower(left.get_value(), right, this.operator);
+                                    return this.to_lower(left, right, this.operator);
                                 case type.STRUCT:
-                                    return this.to_lower(left.get_value(), right.get_value(), this.operator);
+                                    //return this.to_lower(left.get_value(), right.get_value(), this.operator);
+                                    return this.to_lower(left, right, this.operator);
                                 default:
                                     return new Exception("Semantic", `The type: ${this.exp2.get_type()} cannot be operated whit type: ${type.STRUCT}`, this.exp2.row, this.exp2.column);
                             }
@@ -115,7 +124,8 @@ export class Relational extends Instruction{
                                 case type.NULL:
                                     return this.to_lower(left, right, this.operator);
                                 case type.STRUCT:
-                                    return this.to_lower(left, right.get_value(), this.operator);
+                                    //return this.to_lower(left, right.get_value(), this.operator);
+                                    return this.to_lower(left, right, this.operator);
                                 case type.STRING:
                                     return this.to_lower(left, right, this.operator);
                                 case type.CHAR:

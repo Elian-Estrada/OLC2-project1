@@ -426,6 +426,12 @@ function_general
     | type IDENTIFIER PARLEFT list_params PARRIGHT CURLYLEFT instructions CURLYRIGHT {
         $$ = new Function($1, $2, $4, $7, @1.first_line, @1.first_column);
     }
+	| IDENTIFIER IDENTIFIER PARLEFT PARRIGHT CURLYLEFT instructions CURLYRIGHT {
+		$$ = new Function($1, $2, [], $7, this._$.first_line, this._$.first_column);
+	}
+	| IDENTIFIER IDENTIFIER PARLEFT list_params PARRIGHT CURLYLEFT instructions CURLYRIGHT {
+		$$ = new Function($1, $2, $4, $7, this._$.first_line, this._$.first_column);
+	}
 ;
 
 list_params
@@ -463,7 +469,7 @@ params
         $$ = { type: $1, name: $2, row: this._$.first_line, column: this._$.first_column };
     }
 	| type BRACKETLEFT BRACKETRIGHT IDENTIFIER  { $$ = { type: type.ARRAY, sub_type: $1, name: $4, row: this._$.first_line, column: this._$.first_column }; }
-	| IDENTIFIER IDENTIFIER						{ $$ = { type: type.STRUCT, struct: $1, name: $3, row: this._$.first_line, column: this._$.first_column}; }
+	| IDENTIFIER IDENTIFIER						{ $$ = { type: type.STRUCT, struct: $1, name: $2, row: this._$.first_line, column: this._$.first_column}; }
 ;
 
 

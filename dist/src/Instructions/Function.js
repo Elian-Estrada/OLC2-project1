@@ -62,8 +62,15 @@ var Function = /** @class */ (function (_super) {
                     // console.log("Hola")
                     return new Exception("Semantic", "Function should not return anything", instruction.row, instruction.column);
                 }
-                if (this.type != value.get_type()) {
-                    return new Exception("Semantic", "Function doesn't return same data type", instruction.row, instruction.column);
+                if (value.get_type() === type.STRUCT) {
+                    if (value.get_result().get_id() !== this.type) {
+                        return new Exception("Semantic", "Function doesn't return same data type", instruction.row, instruction.column);
+                    }
+                }
+                else {
+                    if (this.type != value.get_type()) {
+                        return new Exception("Semantic", "Function doesn't return same data type", instruction.row, instruction.column);
+                    }
                 }
                 return value.get_result();
             }

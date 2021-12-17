@@ -31,6 +31,7 @@ import Symbol from "../SymbolTable/Symbol.js";
 import { type } from "../SymbolTable/Type.js";
 import { Declaration_array } from "./Declaration_array.js";
 import { Cst_Node } from "../Abstract/Cst_Node.js";
+import { Access_struct } from "../Expression/Access_struct.js";
 var Call = /** @class */ (function (_super) {
     __extends(Call, _super);
     function Call(name, params, row, col) {
@@ -76,6 +77,9 @@ var Call = /** @class */ (function (_super) {
                         //     }
                         //     break;
                         // }
+                        if (expression.get_type() === type.STRUCT && val_expression instanceof Access_struct) {
+                            val_expression = val_expression.get_value();
+                        }
                         // console.log(ob_function.get_params()[count].type)
                         if (ob_function.get_params()[count].type == expression.get_type()) {
                             if (expression.get_type() === type.ARRAY) {
