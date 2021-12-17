@@ -63,11 +63,19 @@ var Logical = /** @class */ (function (_super) {
         }
     };
     Logical.prototype.compile = function (table, generator) {
+        if (this.exp1.get_type() != type.BOOL) {
+            generator.addError("Variable not boolean", Number(this.row), Number(this.column));
+            return;
+        }
         var left = this.exp1.compile(table, generator);
         if (left instanceof Exception)
             return left;
         var res = new Value(null, type.BOOL, false);
         if (this.exp2 !== null) {
+            if (this.exp2.get_type() !== type.BOOL) {
+                generator.addError("Variable not boolean", Number(this.row), Number(this.column));
+                return;
+            }
             var go_right = generator.newLabel();
             var left_temp = generator.addTemp();
             generator.setLabel(left.true_label);

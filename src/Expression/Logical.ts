@@ -68,6 +68,12 @@ export class Logical extends Instruction{
     }
 
     compile(table: SymbolTable, generator: Generator3D): any {
+
+        if( this.exp1.get_type() != type.BOOL ) {
+            generator.addError("Variable not boolean", Number(this.row), Number(this.column));
+            return;
+        }
+
         let left = this.exp1.compile(table, generator);
         if ( left instanceof Exception )
             return left;
@@ -75,6 +81,12 @@ export class Logical extends Instruction{
         let res = new Value(null, type.BOOL, false);
 
         if ( this.exp2 !== null ) {
+
+            if ( this.exp2.get_type() !== type.BOOL ) {
+                generator.addError("Variable not boolean", Number(this.row), Number(this.column));
+                return;
+            }
+
             let go_right = generator.newLabel();
             let left_temp = generator.addTemp();
 

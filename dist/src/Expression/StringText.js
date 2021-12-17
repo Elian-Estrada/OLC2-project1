@@ -34,7 +34,7 @@ var StringText = /** @class */ (function (_super) {
         var right = this.exp2.compile(table, generator);
         var temp = generator.addTemp();
         var operation = this.operator;
-        if (operation === "&") {
+        if (operation === String_operator.CONCAT) {
             generator.concatString();
             var paramTemp = generator.addTemp();
             generator.addExpression(paramTemp, 'P', table.get_size(), '+');
@@ -50,6 +50,21 @@ var StringText = /** @class */ (function (_super) {
             generator.getStack(temp_1, 'P');
             generator.setEnv(table.get_size());
             return new Value(temp_1, type.STRING, true);
+        }
+        else if (operation === String_operator.REPETITION) {
+            generator.repString();
+            var param_temp = generator.addTemp();
+            generator.addExpression(param_temp, 'P', table.get_size(), '+');
+            generator.addExpression(param_temp, param_temp, '1', '+');
+            generator.setStack(param_temp, left.value);
+            generator.addExpression(param_temp, param_temp, '1', '+');
+            generator.setStack(param_temp, right.value);
+            generator.newEnv(table.get_size());
+            generator.callFunc('repetitionStr');
+            var temp_2 = generator.addTemp();
+            generator.getStack(temp_2, 'P');
+            generator.setEnv(table.get_size());
+            return new Value(temp_2, type.STRING, true);
         }
     };
     StringText.prototype.interpret = function (tree, table) {

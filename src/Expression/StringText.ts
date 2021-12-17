@@ -16,7 +16,7 @@ export class StringText extends Instruction {
         let temp = generator.addTemp();
         let operation = this.operator;
 
-        if ( operation === "&" ) {
+        if ( operation === String_operator.CONCAT ) {
             generator.concatString();
             let paramTemp = generator.addTemp();
             generator.addExpression(paramTemp, 'P', table.get_size(), '+');
@@ -33,6 +33,26 @@ export class StringText extends Instruction {
             generator.callFunc('concatString');
             let temp = generator.addTemp();
 
+            generator.getStack(temp, 'P');
+            generator.setEnv(table.get_size());
+
+            return new Value(temp, type.STRING, true);
+        }
+        else if ( operation === String_operator.REPETITION ) {
+            generator.repString();
+            let param_temp = generator.addTemp();
+            generator.addExpression(param_temp, 'P', table.get_size(), '+');
+
+            generator.addExpression(param_temp, param_temp, '1', '+');
+            generator.setStack(param_temp, left.value);
+
+            generator.addExpression(param_temp, param_temp, '1', '+');
+            generator.setStack(param_temp, right.value);
+
+            generator.newEnv(table.get_size());
+            generator.callFunc('repetitionStr');
+
+            let temp = generator.addTemp();
             generator.getStack(temp, 'P');
             generator.setEnv(table.get_size());
 

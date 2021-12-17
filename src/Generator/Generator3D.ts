@@ -283,6 +283,71 @@ export class Generator3D {
         this.get_freeTemp(t6);
     }
 
+    public repString() {
+        if ( this.repetition_str )
+            return;
+        this.repetition_str = true;
+        this.inNatives = true;
+
+        this.addBeginFunc('repetitionStr');
+
+        // Start: 0 - return, 1 - string, 2 - int
+        let t0 = this.addTemp();
+        this.addExpression(t0, 'H', '', '');
+
+        // Primer parametro string
+        let t1 = this.addTemp();
+        let t2 = this.addTemp();
+        this.addExpression(t1, 'P', '1', '+');
+        this.getStack(t2, t1);
+
+        // Segundo parametro int
+        let t3 = this.addTemp();
+        this.addExpression(t1, 'P', '2', '+');
+        this.getStack(t3, t1);
+
+        let L0 = this.newLabel();
+        let L1 = this.newLabel();
+        let L2 = this.newLabel();
+
+        let counter = this.addTemp();
+        this.addExpression(counter, '0', '', '');
+        let t5 = this.addTemp();
+        this.addExpression(t5, t2, '', '');
+
+        this.setLabel(L0);
+        let t4 = this.addTemp();
+        this.getHeap(t4, t2);
+        this.addIf(t4, '-1', '==', L1);
+        this.setHeap('H', t4);
+        this.nextHeap();
+        this.addExpression(t2, t2, '1', '+');
+        this.addGoTo(L0);   // Regresa a L0
+
+        this.setLabel(L1);
+        this.addExpression(counter, counter, '1', '+');
+
+        // Reiniciamos el contador
+        this.addExpression(t2, t5, '', '');
+        this.addIf(counter, t3, '==', L2);
+        this.addGoTo(L0);
+
+        this.setLabel(L2);
+        this.setHeap('H', '-1');
+        this.nextHeap();
+        this.setStack('P', t0);
+
+        this.addEndFunc();
+        this.inNatives = false;
+        this.get_freeTemp(t0);
+        this.get_freeTemp(t1);
+        this.get_freeTemp(t2);
+        this.get_freeTemp(t3);
+        this.get_freeTemp(t4);
+        this.get_freeTemp(t5);
+        this.get_freeTemp(counter);
+    }
+
     public getStack(place: any, pos: any) {
         this.get_freeTemp(pos);
         this.codeIn(`${place} = stack[(int)${pos}];\n`);
