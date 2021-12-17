@@ -17,26 +17,32 @@ export class StringText extends Instruction {
         let operation = this.operator;
 
         if ( operation === String_operator.CONCAT ) {
-            generator.concatString();
-            let paramTemp = generator.addTemp();
-            generator.addExpression(paramTemp, 'P', table.get_size(), '+');
+            if ( this.exp1.get_type() === type.STRING && this.exp2.get_type() === type.STRING ) {
+                generator.concatString();
+                let paramTemp = generator.addTemp();
+                generator.addExpression(paramTemp, 'P', table.get_size(), '+');
 
-            // Valor izquierda
-            generator.addExpression(paramTemp, paramTemp, '1', '+');
-            generator.setStack(paramTemp, left.value);
+                // Valor izquierda
+                generator.addExpression(paramTemp, paramTemp, '1', '+');
+                generator.setStack(paramTemp, left.value);
 
-            // Valor derecha
-            generator.addExpression(paramTemp, paramTemp, '1', '+');
-            generator.setStack(paramTemp, right.value);
+                // Valor derecha
+                generator.addExpression(paramTemp, paramTemp, '1', '+');
+                generator.setStack(paramTemp, right.value);
 
-            generator.newEnv(table.get_size());
-            generator.callFunc('concatString');
-            let temp = generator.addTemp();
+                generator.newEnv(table.get_size());
+                generator.callFunc('concatString');
+                let temp = generator.addTemp();
 
-            generator.getStack(temp, 'P');
-            generator.setEnv(table.get_size());
+                generator.getStack(temp, 'P');
+                generator.setEnv(table.get_size());
 
-            return new Value(temp, type.STRING, true);
+                return new Value(temp, type.STRING, true);
+            } else {
+                generator.addExpression(temp, left.value, right.value, "+");
+                let type_ret = type.STRING;
+                return new Value(temp, type_ret, true);
+            }
         }
         else if ( operation === String_operator.REPETITION ) {
             generator.repString();

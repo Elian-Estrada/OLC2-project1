@@ -94,8 +94,6 @@ var If = /** @class */ (function (_super) {
             return new Exception("Semantic", "Expect a Boolean type expression. Not ".concat(this.expr.get_type().name), this.row, this.column);
         }
     };
-    If.prototype.compile = function (table, generator) {
-    };
     If.prototype.get_node = function () {
         var node = new Cst_Node("If");
         node.add_child("if");
@@ -125,6 +123,31 @@ var If = /** @class */ (function (_super) {
             node.add_childs_node(this.elseif.get_node());
         }
         return node;
+    };
+    If.prototype.compile = function (table, generator) {
+        var condition = this.expr.compile(table, generator);
+        if (condition.type !== type.BOOL) {
+            generator.addError("Condition is not a boolean value", Number(this.row), Number(this.column));
+            return;
+        }
+        generator.setLabel(condition.true_label);
+        for (var _i = 0, _a = this.instructions; _i < _a.length; _i++) {
+            var instr = _a[_i];
+            instr.compile(table, generator);
+        }
+        var label_exit_if = '';
+        if (this.else_instr !== null) {
+            label_exit_if = generator.newLabel();
+            generator.addGoTo(label_exit_if);
+        }
+        generator.setLabel(condition.false_label);
+        if (this.else_instr !== null) {
+            for (var _b = 0, _c = this.else_instr; _b < _c.length; _b++) {
+                var else_instr = _c[_b];
+                else_instr.compile(table, generator);
+                generator.setLabel(label_exit_if);
+            }
+        }
     };
     return If;
 }(Instruction));

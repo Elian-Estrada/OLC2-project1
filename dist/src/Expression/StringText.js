@@ -35,21 +35,28 @@ var StringText = /** @class */ (function (_super) {
         var temp = generator.addTemp();
         var operation = this.operator;
         if (operation === String_operator.CONCAT) {
-            generator.concatString();
-            var paramTemp = generator.addTemp();
-            generator.addExpression(paramTemp, 'P', table.get_size(), '+');
-            // Valor izquierda
-            generator.addExpression(paramTemp, paramTemp, '1', '+');
-            generator.setStack(paramTemp, left.value);
-            // Valor derecha
-            generator.addExpression(paramTemp, paramTemp, '1', '+');
-            generator.setStack(paramTemp, right.value);
-            generator.newEnv(table.get_size());
-            generator.callFunc('concatString');
-            var temp_1 = generator.addTemp();
-            generator.getStack(temp_1, 'P');
-            generator.setEnv(table.get_size());
-            return new Value(temp_1, type.STRING, true);
+            if (this.exp1.get_type() === type.STRING && this.exp2.get_type() === type.STRING) {
+                generator.concatString();
+                var paramTemp = generator.addTemp();
+                generator.addExpression(paramTemp, 'P', table.get_size(), '+');
+                // Valor izquierda
+                generator.addExpression(paramTemp, paramTemp, '1', '+');
+                generator.setStack(paramTemp, left.value);
+                // Valor derecha
+                generator.addExpression(paramTemp, paramTemp, '1', '+');
+                generator.setStack(paramTemp, right.value);
+                generator.newEnv(table.get_size());
+                generator.callFunc('concatString');
+                var temp_1 = generator.addTemp();
+                generator.getStack(temp_1, 'P');
+                generator.setEnv(table.get_size());
+                return new Value(temp_1, type.STRING, true);
+            }
+            else {
+                generator.addExpression(temp, left.value, right.value, "+");
+                var type_ret = type.STRING;
+                return new Value(temp, type_ret, true);
+            }
         }
         else if (operation === String_operator.REPETITION) {
             generator.repString();

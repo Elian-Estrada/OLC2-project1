@@ -90,10 +90,6 @@ export class If extends Instruction {
         }
     }
 
-    compile(table: SymbolTable, generator: Generator3D) {
-        
-    }
-
     get_node() {
         let node = new Cst_Node("If");
 
@@ -126,5 +122,33 @@ export class If extends Instruction {
         }
 
         return node;
+    }
+    
+    compile(table: SymbolTable, generator: Generator3D): any {
+        let condition = this.expr.compile(table, generator);
+
+        if ( condition.type !== type.BOOL ) {
+            generator.addError("Condition is not a boolean value", Number(this.row), Number(this.column));
+            return;
+        }
+
+        generator.setLabel(condition.true_label);
+        for ( let instr of this.instructions ) {
+            instr.compile(table, generator);
+        }
+
+        let label_exit_if = '';
+        if ( this.else_instr !== null ) {
+            label_exit_if = generator.newLabel();
+            generator.addGoTo(label_exit_if);
+        }
+
+        generator.setLabel(condition.false_label);
+        if ( this.else_instr !== null ) {
+            for ( let else_instr of this.else_instr ) {
+                else_instr.compile(table, generator);
+                generator.setLabel(label_exit_if);
+            }
+        }
     }
 }
