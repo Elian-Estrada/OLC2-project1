@@ -63,28 +63,46 @@ var Logical = /** @class */ (function (_super) {
         }
     };
     Logical.prototype.compile = function (table, generator) {
-        var temp = generator.addTemp();
-        var operation = this.operator;
-        var type_op = null;
-        var val_return = null;
-        if (this.operator === Logical_operator.AND) {
-            var left = this.exp1.compile(table, generator);
-            type_op = type.BOOL;
-            val_return = new Value(temp, type_op, true);
-            if (JSON.parse(this.exp1.value) && JSON.parse(this.exp2.value)) {
-                // @ts-ignore
-                val_return.true_label = left.true_label;
-                val_return.false_label = left.false_label;
+        var left = this.exp1.compile(table, generator);
+        if (left instanceof Exception)
+            return left;
+        var res = new Value(null, type.BOOL, false);
+        if (this.exp2 !== null) {
+            var go_right = generator.newLabel();
+            var left_temp = generator.addTemp();
+            generator.setLabel(left.true_label);
+            generator.addExpression(left_temp, '1', '', '');
+            generator.addGoTo(go_right);
+            generator.setLabel(left.false_label);
+            generator.addExpression(left_temp, '0', '', '');
+            generator.setLabel(go_right);
+            var right = this.exp2.compile(table, generator);
+            if (right.get_type() != type.BOOL) {
+                generator.addError('Relational: Operator must be boolean', Number(this.row), Number(this.column));
+                return;
             }
-            else {
-                // @ts-ignore
-                val_return.true_label = left.false_label;
-                val_return.false_label = left.true_label;
-            }
+            var goto_end = generator.newLabel();
+            var right_temp = generator.addTemp();
+            generator.setLabel(right.true_label);
+            generator.addExpression(right_temp, '1', '', '');
+            generator.addGoTo(goto_end);
+            generator.setLabel(right.false_label);
+            generator.addExpression(right_temp, '0', '', '');
+            generator.setLabel(goto_end);
+            this.checkLabels(generator, left);
+            generator.addIf(left_temp, right_temp, this.operator, left.label_true);
+            generator.addGoTo(left.label_false);
+            res.true_label = left.label_true;
+            res.false_label = left.label_false;
         }
-        // @ts-ignore
-        val_return.value = JSON.parse(this.exp1.value) && JSON.parse(this.exp2.value);
-        return val_return;
+        else {
+            var temp = left.true_label;
+            left.true_label = left.false_label;
+            left.false_label = temp;
+            res.true_label = left.true_label;
+            res.false_label = left.false_label;
+        }
+        return res;
     };
     Logical.prototype.checkLabels = function (generator, value) {
         value.label_true = generator.newLabel();

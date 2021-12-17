@@ -43,7 +43,7 @@ export class Primitive extends Instruction {
         if ( this.type === type.INT || this.type === type.DOUBLE ) {
             return new Value(this.value, this.type, false);
         }
-        else if ( this.type === type.STRING ) {
+        else if ( this.type === type.STRING || this.type == type.CHAR ) {
             let ret_temp = generator.addTemp();
             generator.addExpression(ret_temp, 'H', '', '');
 

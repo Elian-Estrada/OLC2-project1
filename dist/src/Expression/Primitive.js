@@ -46,7 +46,7 @@ var Primitive = /** @class */ (function (_super) {
         if (this.type === type.INT || this.type === type.DOUBLE) {
             return new Value(this.value, this.type, false);
         }
-        else if (this.type === type.STRING) {
+        else if (this.type === type.STRING || this.type == type.CHAR) {
             var ret_temp = generator.addTemp();
             generator.addExpression(ret_temp, 'H', '', '');
             for (var _i = 0, _a = String(this.value); _i < _a.length; _i++) {
