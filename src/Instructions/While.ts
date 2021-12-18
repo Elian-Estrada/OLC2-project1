@@ -96,17 +96,16 @@ export class While extends Instruction {
         let continue_label = generator.newLabel();
         generator.setLabel(continue_label);
         let condition = this.expr.compile(table, generator);
-        let new_env = new SymbolTable(table, "While-Env-3D");
+        /*let new_env = new SymbolTable(table, "While-Env-3D");
         new_env.break_label = condition.false_label;
-        new_env.continue_label = continue_label;
+        new_env.continue_label = continue_label;*/
 
         generator.setLabel(condition.true_label);
 
         for (let inst of this.instructions ) {
             inst.compile(table, generator);
-            generator.addGoTo(continue_label);
         }
-
+        generator.addGoTo(continue_label);
         generator.setLabel(condition.false_label);
     }
 }

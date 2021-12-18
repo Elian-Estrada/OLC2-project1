@@ -95,15 +95,15 @@ var While = /** @class */ (function (_super) {
         var continue_label = generator.newLabel();
         generator.setLabel(continue_label);
         var condition = this.expr.compile(table, generator);
-        var new_env = new SymbolTable(table, "While-Env-3D");
+        /*let new_env = new SymbolTable(table, "While-Env-3D");
         new_env.break_label = condition.false_label;
-        new_env.continue_label = continue_label;
+        new_env.continue_label = continue_label;*/
         generator.setLabel(condition.true_label);
         for (var _i = 0, _a = this.instructions; _i < _a.length; _i++) {
             var inst = _a[_i];
             inst.compile(table, generator);
-            generator.addGoTo(continue_label);
         }
+        generator.addGoTo(continue_label);
         generator.setLabel(condition.false_label);
     };
     return While;

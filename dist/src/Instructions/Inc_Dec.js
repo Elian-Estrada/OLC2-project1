@@ -16,7 +16,10 @@ var __extends = (this && this.__extends) || (function () {
 import { Cst_Node } from "../Abstract/Cst_Node.js";
 import { Instruction } from "../Abstract/Instruction.js";
 import Exception from "../SymbolTable/Exception.js";
-import { type } from "../SymbolTable/Type.js";
+import { Arithmetic_operator, type } from "../SymbolTable/Type.js";
+import { Primitive } from "../Expression/Primitive.js";
+import { Value } from "../Abstract/Value.js";
+import { Arithmetic } from "../Expression/Arithmetic.js";
 var Inc_Dec = /** @class */ (function (_super) {
     __extends(Inc_Dec, _super);
     function Inc_Dec(expression, row, column) {
@@ -33,12 +36,29 @@ var Inc_Dec = /** @class */ (function (_super) {
         this.type = this.expression.get_type();
         return value;
     };
-    Inc_Dec.prototype.compile = function (table, generator) {
-    };
     Inc_Dec.prototype.get_node = function () {
         var node = new Cst_Node("Incremento_Decremento");
         node.add_childs_node(this.expression.get_node());
         return node;
+    };
+    Inc_Dec.prototype.compile = function (table, generator) {
+        // let exp = this.expression.compile(table, generator);
+        if (this.expression.operator === Arithmetic_operator.INC) {
+            var new_prim = new Primitive('1', type.INT, this.row, this.column);
+            var new_symbol = new Arithmetic(this.expression.exp1, new_prim, Arithmetic_operator.ADDITION, this.row, this.column);
+            var new_val = new_symbol.compile(table, generator);
+            var value = table.get_table(this.expression.exp1.id);
+            // @ts-ignore
+            var temp_pos = value.pos;
+            generator.setStack(temp_pos, new_val.value);
+            return new Value(new_val.value, type.INT, false);
+        }
+        else if (this.expression === Arithmetic_operator.DEC) {
+            var new_prim = new Primitive('1', type.INT, this.row, this.column);
+            var new_symbol = new Arithmetic(this.expression.exp1, new_prim, Arithmetic_operator.SUBSTRACTION, this.row, this.column);
+            var new_val = new_symbol.compile(table, generator);
+            return new Value(new_val.value, type.INT, false);
+        }
     };
     return Inc_Dec;
 }(Instruction));
