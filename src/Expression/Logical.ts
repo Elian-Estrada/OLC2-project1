@@ -5,7 +5,6 @@ import Exception from "../SymbolTable/Exception.js";
 import SymbolTable from "../SymbolTable/SymbolTable.js";
 import Tree from "../SymbolTable/Tree.js";
 import { Logical_operator, type } from "../SymbolTable/Type.js";
-import {Generator3D} from "../Generator/Generator3D.js";
 import {Value} from "../Abstract/Value.js";
 
 export class Logical extends Instruction{
@@ -140,10 +139,6 @@ export class Logical extends Instruction{
 
     get_type(): type{
         return this.type;
-    }
-
-    compile(table: SymbolTable, generator: Generator3D) {
-        
     }
 
     get_node() {
