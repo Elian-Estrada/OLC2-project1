@@ -21,9 +21,9 @@
                 </div>
             </div>
         </div>
-        <div class="rows">
-            <div class="col l12 m6 s1">
-                <div class="container">
+        <div>
+            <div>
+                <div>
                     <div style="align-self: center;"></div>
                         <div id="ast"></div>
                     </div>
@@ -61,7 +61,7 @@
                 n3 -> n14;
                 n15 [label="2"]; n16 [label="{print('2')}"];
                 n14 -> n15; n14 -> n16;
-            }`);
+            }`, options);
 
             content.innerHTML = image;
             content.appendChild(image);

@@ -9,7 +9,7 @@ export class Return extends Instruction {
 
     private expr: any;
     private type: string | null;
-    private result: string | null;
+    private result: any | null;
 
     constructor(expr: any, row: number, col: number) {
         super(row, col);

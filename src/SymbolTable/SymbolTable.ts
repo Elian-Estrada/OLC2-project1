@@ -60,11 +60,11 @@ export default class SymbolTable {
         while(current_table !== undefined){
             if (current_table.table.has(symbol.id)){
                 let current_symbol: any = current_table.table.get(symbol.id);
+                
                 if (symbol.value === "null"){
                     switch(current_symbol.type){
                         case type.STRUCT:
-                            //symbol.environment = current_symbol.environment;
-                            current_symbol.value = symbol.value;
+                            current_symbol.value = {id: current_symbol.value.id, value: "null"};
                             return undefined;
                         case type.STRING:
                         case type.CHAR:
@@ -90,6 +90,17 @@ export default class SymbolTable {
                 } else if (current_symbol.type === symbol.type && current_symbol.value.id === symbol.value.id) {
                     current_symbol.value = symbol.value
                     return undefined;
+                } else if (symbol.value.type === current_symbol.type){
+
+                    if (current_symbol.value.id === symbol.type){
+                        current_symbol.value = symbol.value;
+                        return undefined;
+                    } else {
+                        return new Exception("Semantic", `The vairiable: ${current_symbol.id} isn't at type: ${symbol.type}`, symbol.row, symbol.column);
+                    }
+                    
+                } else if (current_symbol.value.id !== symbol.value.id){
+                    return new Exception("Semantic", `Cannot assign value of type: ${symbol.value.id} in a variable of type: ${current_symbol.value.id}`, symbol.row, symbol.column);
                 } else {
                     return new Exception("Semantic", `Cannot assign value of type: ${symbol.type} in a variable of type: ${current_table.table.get(symbol.id)?.type}`, symbol.row, symbol.column);
                 }

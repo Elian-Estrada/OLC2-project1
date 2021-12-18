@@ -43,8 +43,7 @@ var SymbolTable = /** @class */ (function () {
                 if (symbol.value === "null") {
                     switch (current_symbol.type) {
                         case type.STRUCT:
-                            //symbol.environment = current_symbol.environment;
-                            current_symbol.value = symbol.value;
+                            current_symbol.value = { id: current_symbol.value.id, value: "null" };
                             return undefined;
                         case type.STRING:
                         case type.CHAR:
@@ -72,6 +71,18 @@ var SymbolTable = /** @class */ (function () {
                 else if (current_symbol.type === symbol.type && current_symbol.value.id === symbol.value.id) {
                     current_symbol.value = symbol.value;
                     return undefined;
+                }
+                else if (symbol.value.type === current_symbol.type) {
+                    if (current_symbol.value.id === symbol.type) {
+                        current_symbol.value = symbol.value;
+                        return undefined;
+                    }
+                    else {
+                        return new Exception("Semantic", "The vairiable: ".concat(current_symbol.id, " isn't at type: ").concat(symbol.type), symbol.row, symbol.column);
+                    }
+                }
+                else if (current_symbol.value.id !== symbol.value.id) {
+                    return new Exception("Semantic", "Cannot assign value of type: ".concat(symbol.value.id, " in a variable of type: ").concat(current_symbol.value.id), symbol.row, symbol.column);
                 }
                 else {
                     return new Exception("Semantic", "Cannot assign value of type: ".concat(symbol.type, " in a variable of type: ").concat((_a = current_table.table.get(symbol.id)) === null || _a === void 0 ? void 0 : _a.type), symbol.row, symbol.column);

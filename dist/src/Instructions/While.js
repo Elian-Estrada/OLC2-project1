@@ -71,7 +71,6 @@ var While = /** @class */ (function (_super) {
             }
         }
         catch (error) {
-            console.log(error);
             return new Exception("Semantic", "" + error, this.row, this.column);
         }
     };

@@ -58,16 +58,21 @@ export class Function extends Instruction {
             }
 
             if ( value instanceof Return ) {
-                console.log(this.type)
                 if (this.type == type.VOID) {
                     // console.log("Hola")
                     return new Exception("Semantic", "Function should not return anything", instruction.row, instruction.column);
                 }
 
-                if (this.type != value.get_type()) {
-                    return new Exception("Semantic", "Function doesn't return same data type", instruction.row, instruction.column);
-                }
+                if (value.get_type() === type.STRUCT){
+                    if (value.get_result().get_id() !== this.type){
+                        return new Exception("Semantic", "Function doesn't return same data type", instruction.row, instruction.column);
+                    }
+                } else {
 
+                    if (this.type != value.get_type()) {
+                        return new Exception("Semantic", "Function doesn't return same data type", instruction.row, instruction.column);
+                    }
+                }
                 return value.get_result();
             }
         }
@@ -75,8 +80,7 @@ export class Function extends Instruction {
         if (this.type !== type.VOID){
             return new Exception("Semantic", `Function of type: ${this.type} expected one Return`, this.instructions[this.instructions.length - 1].row, this.instructions[this.instructions.length - 1].column);
         }
-
-        console.log(new_table);
+        
         return null;
     }
 
@@ -106,8 +110,22 @@ export class Function extends Instruction {
         let param;
         for(let item of this.params){
             param = new Cst_Node("Parameter");
-            param.add_child(item.type);
-            param.add_child(item.name);
+            switch(item.type){
+                case type.ARRAY:
+                    param.add_child(item.sub_type);
+                    param.add_child("[");
+                    param.add_child("]");
+                    param.add_child(item.id);
+                    break;
+                case type.STRUCT:
+                    param.add_child(item.struct);
+                    param.add_child(item.name);
+                    break;
+                default:
+                    param.add_child(item.type);
+                    param.add_child(item.name);
+                    break;
+            }
             params.add_childs_node(param);
         }
 
@@ -117,6 +135,8 @@ export class Function extends Instruction {
 
         let instructions = new Cst_Node("Instructions");
         for (let item of this.instructions){
+            console.log(item);
+            
             instructions.add_childs_node(item.get_node());
         }
 

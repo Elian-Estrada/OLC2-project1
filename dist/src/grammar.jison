@@ -128,8 +128,26 @@
 [ \r\t]+            {}
 \n                  {}
 
-\"[^\"]*\"				{ yytext = yytext.substr(1,yyleng-2); 	return 'STRING'; }
-"'"[^']"'"				{ yytext = yytext.substr(1, yyleng-2); 	return 'CHAR'; }
+/*\"[^\"]*\"				{ yytext = yytext.substr(1,yyleng-2); 	return 'STRING'; }
+"'"[^']"'"				{ yytext = yytext.substr(1, yyleng-2); 	return 'CHAR'; }*/
+\"(\\\'|\\\"|\\\\|\\n|\\t|[^\'\\\"])*?\"		{
+	yytext = yytext.substr(1, yyleng-2);
+	yytext = yytext.replace(/\\t/g, '\t');
+	yytext = yytext.replace(/\\n/g, '\n');
+	yytext = yytext.replace(/\\"/g, '\"');
+	yytext = yytext.replace(/\\'/g, "\'");
+	yytext = yytext.replace(/\\\\/g, '\\');
+																return 'STRING';
+}
+\'(\\\'|\\\"|\\t|\\n|\\\\|[^\'\\\"])?\'			{
+	yytext = yytext.substr(1, yyleng-2);
+	yytext = yytext.replace(/\\t/g, '\t');
+	yytext = yytext.replace(/\\n/g, '\n');
+	yytext = yytext.replace(/\\"/g, '\"');
+	yytext = yytext.replace(/\\'/g, "\'");
+	yytext = yytext.replace(/\\\\/g, '\\');
+																return 'CHAR';
+}
 [0-9]+"."[0-9]+\b                                          		return 'DOUBLE';
 [0-9]+\b                                                      	return 'INTEGER';
 ([a-zA-Z])[a-zA-Z0-9_]*	                                      	return 'IDENTIFIER';
@@ -426,6 +444,12 @@ function_general
     | type IDENTIFIER PARLEFT list_params PARRIGHT CURLYLEFT instructions CURLYRIGHT {
         $$ = new Function($1, $2, $4, $7, @1.first_line, @1.first_column);
     }
+	| IDENTIFIER IDENTIFIER PARLEFT PARRIGHT CURLYLEFT instructions CURLYRIGHT {
+		$$ = new Function($1, $2, [], $7, this._$.first_line, this._$.first_column);
+	}
+	| IDENTIFIER IDENTIFIER PARLEFT list_params PARRIGHT CURLYLEFT instructions CURLYRIGHT {
+		$$ = new Function($1, $2, $4, $7, this._$.first_line, this._$.first_column);
+	}
 ;
 
 list_params
@@ -460,8 +484,10 @@ params_call
 
 params
     : type IDENTIFIER {
-        $$ = { type: $1, name: $2 };
+        $$ = { type: $1, name: $2, row: this._$.first_line, column: this._$.first_column };
     }
+	| type BRACKETLEFT BRACKETRIGHT IDENTIFIER  { $$ = { type: type.ARRAY, sub_type: $1, name: $4, row: this._$.first_line, column: this._$.first_column }; }
+	| IDENTIFIER IDENTIFIER						{ $$ = { type: type.STRUCT, struct: $1, name: $2, row: this._$.first_line, column: this._$.first_column}; }
 ;
 
 

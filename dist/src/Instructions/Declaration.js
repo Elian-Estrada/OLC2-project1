@@ -70,14 +70,18 @@ var Declaration = /** @class */ (function (_super) {
                 if (this.expression.get_value().get_id() !== this.id[1]) {
                     return new Exception("Semantic", "The type: ".concat(value.id, " cannot be assignment to variable of type: ").concat(this.id[1]), this.expression.row, this.expression.column);
                 }
-                this.id.pop();
             }
             if (this.expression.get_type() === type.STRUCT && this.expression instanceof Access_struct) {
-                if (value.get_value().struct !== this.id[1]) {
-                    return new Exception("Semantic", "The type: ".concat(value.get_value().struct, " cannot be assignment to variable of type: ").concat(this.id[1]), this.expression.row, this.expression.column);
+                console.log(value.get_value());
+                if ( /*value.get_value().struct*/value.get_value() !== "null" && value.get_value().id !== this.id[1]) {
+                    return new Exception("Semantic", "The type: ".concat(value.get_value().get_id(), " cannot be assignment to variable of type: ").concat(this.id[1]), this.expression.row, this.expression.column);
                 }
-                value = value.get_value().value;
-                this.id.pop();
+                else if (value.get_value() === "null") {
+                    value = { id: this.id[1], value: "null" };
+                }
+                else {
+                    value = value.get_value();
+                }
             }
             if (type.STRUCT === this.expression.get_type() &&
                 !(this.expression instanceof Identifier || this.expression instanceof Access_struct)) {
@@ -85,10 +89,17 @@ var Declaration = /** @class */ (function (_super) {
                 if (struct !== this.expression.get_id()) {
                     return new Exception("Semantic", "The type: ".concat(this.expression.get_id(), " cannot be assignment to variable of type: ").concat(struct), this.expression.row, this.expression.column);
                 }
-                this.id.pop();
             }
-            if (this.expression.get_type() !== this.type) {
-                return new Exception("Semantic", "The type: ".concat(this.expression.get_type(), " cannot be assignment to variable of type: ").concat(this.type), this.expression.row, this.expression.column);
+            else if (this.expression.get_type() !== this.id[1]) {
+                if (this.type === type.STRUCT && this.expression.get_type() === type.NULL) {
+                    //No pasa nada :3
+                    value = { id: this.id[1], value: "null" };
+                }
+                else {
+                    if (this.expression.get_type() !== this.type) {
+                        return new Exception("Semantic", "The type: ".concat(this.expression.get_type(), " cannot be assignment to variable of type: ").concat(this.type), this.expression.row, this.expression.column);
+                    }
+                }
             }
         }
         else {
@@ -115,12 +126,21 @@ var Declaration = /** @class */ (function (_super) {
         }
         var errors = [];
         var result;
-        for (var _i = 0, _a = this.id; _i < _a.length; _i++) {
-            var item = _a[_i];
-            symbol = new Symbol(item, this.type, this.row, this.column, value);
+        if (this.type !== type.STRUCT) {
+            for (var _i = 0, _a = this.id; _i < _a.length; _i++) {
+                var item = _a[_i];
+                symbol = new Symbol(item, this.type, this.row, this.column, value);
+                result = table.set_table(symbol);
+                if (result instanceof Exception) {
+                    errors.push(result);
+                }
+            }
+        }
+        else {
+            symbol = new Symbol(this.id[0], this.type, this.row, this.column, value);
             result = table.set_table(symbol);
             if (result instanceof Exception) {
-                errors.push(result);
+                return result;
             }
         }
         if (errors.length !== 0) {

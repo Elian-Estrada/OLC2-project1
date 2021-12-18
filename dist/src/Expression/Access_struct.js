@@ -15,6 +15,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 import { Cst_Node } from "../Abstract/Cst_Node.js";
 import { Instruction } from "../Abstract/Instruction.js";
+import { Call } from "../Instructions/Call.js";
 import Exception from "../SymbolTable/Exception.js";
 import { type } from "../SymbolTable/Type.js";
 var Access_struct = /** @class */ (function (_super) {
@@ -25,6 +26,7 @@ var Access_struct = /** @class */ (function (_super) {
         _this.expression = expression;
         _this.positions = positions;
         _this.type = type.NULL;
+        _this.sub_type = type.NULL;
         _this.value = null;
         return _this;
     }
@@ -76,7 +78,7 @@ var Access_struct = /** @class */ (function (_super) {
                         && item.value !== "null") {
                         if (ids.length === 1 && exp === null) {
                             this.type = type.STRUCT;
-                            return item;
+                            return item.value;
                         }
                         else if (ids.length > 1) {
                             return this.for_attributes(ids.slice(1), item.value.get_attributes(), exp, tree, table);
@@ -92,6 +94,7 @@ var Access_struct = /** @class */ (function (_super) {
                         }
                         if (result instanceof Array) {
                             this.type = item.type;
+                            this.sub_type = item.sub_type;
                         }
                         else {
                             this.type = item.sub_type;
@@ -101,22 +104,31 @@ var Access_struct = /** @class */ (function (_super) {
                     else if (item.type !== type.ARRAY && this.positions !== null) {
                         return new Exception("Semantic", "The attribute: ".concat(item.id, " isn't ").concat(type.ARRAY), item.row, item.column);
                     }
+                    if (this.expression instanceof Call) {
+                        if (exp.id == item.struct) {
+                            item.value = exp;
+                            return null;
+                        }
+                        return new Exception("Semantic", "The attribute: ".concat(item.id, " isn't ").concat(exp.id), item.row, item.column);
+                    }
                     if (exp !== null && this.expression.get_type() === item.type) {
                         if (this.expression.get_type() === item.type && !(this.expression instanceof Access_struct)) {
                             item.value = exp;
                             return null;
                         }
                         if (this.expression instanceof Access_struct) {
-                            console.log(item.value);
-                            item.value = exp.get_value().value;
-                            console.log(item);
+                            //item.value = exp.get_value().value;
+                            item.value = exp.get_value();
                             return null;
                         }
                         return new Exception("Semantic", "The type: ".concat(this.expression.get_type(), " cannot assignment at attribute of type: ").concat(item.type), this.expression.row, this.expression.column);
                     }
                     this.type = item.type;
                     if (item.type === type.STRUCT) {
-                        return item;
+                        return item.value;
+                    }
+                    if (item.type === type.ARRAY) {
+                        this.sub_type = item.sub_type;
                     }
                     return item.value;
                 }
@@ -168,6 +180,9 @@ var Access_struct = /** @class */ (function (_super) {
     };
     Access_struct.prototype.get_type = function () {
         return this.type;
+    };
+    Access_struct.prototype.get_subtype = function () {
+        return this.sub_type;
     };
     Access_struct.prototype.get_value = function () {
         return this.value;

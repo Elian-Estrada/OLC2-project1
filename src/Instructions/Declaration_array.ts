@@ -78,7 +78,7 @@ export class Declaration_array extends Instruction {
                     set_value(value: Array<any>){
                         this.value = value;
                     },
-                    get_type_array(): any{
+                    get_type(): any{
                         return this.type;
                     },
                     get_id(): any{
@@ -152,7 +152,7 @@ export class Declaration_array extends Instruction {
         return this.type_array;
     }
 
-    get_type_array(){
+    get_type(){
         return this.type;
     }
 

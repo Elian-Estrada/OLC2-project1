@@ -242,9 +242,9 @@ export class Arithmetic extends Instruction {
                         }
 
                         this.type = this.exp1.get_type();
-                        this.value = symbol.value;
-
-                        return this.value;
+                        this.value = left;
+                        
+                        return left;
                     }
                 default:
                     return new Exception("Semantic", `Invalid operator: ${this.operator.toString()}`, this.row, this.column);
@@ -262,7 +262,7 @@ export class Arithmetic extends Instruction {
             case Arithmetic_operator.MODULS:
                 return String(op1 % op2);
             case Arithmetic_operator.DIVISION:
-                return String(op1 / op2);
+                return this.type === type.INT ? parseInt(String(op1 / op2)).toString() : String(op1 / op2);
             default:
                 return "";
         }

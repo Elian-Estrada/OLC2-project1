@@ -14,6 +14,7 @@ export class Access_array extends Instruction {
     private values: any; 
     private value: any;
     private type: type;
+    private sub_type: type;
 
     constructor(id: any, positions: Array<any>, expression: any, row: number, column: number) {
         super(row, column);
@@ -23,6 +24,7 @@ export class Access_array extends Instruction {
         this.values = [];
         this.value = null;
         this.type = type.NULL;
+        this.sub_type = type.NULL;
     }
 
     interpret(tree: Tree, table: SymbolTable){
@@ -33,7 +35,7 @@ export class Access_array extends Instruction {
             return array;
         }
 
-        if (array.get_type_array() !== type.ARRAY){
+        if (array.get_type() !== type.ARRAY){
             return new Exception("Semantic", `The variable: ${array.get_id()} isn't an Array`, array.row, array.column);
         }
 
@@ -63,6 +65,7 @@ export class Access_array extends Instruction {
 
         if (result instanceof Array){
             this.type = type.ARRAY;
+            this.sub_type = array.get_subtype();
             return this;
         } else {
             this.type = array.get_subtype();
@@ -74,9 +77,8 @@ export class Access_array extends Instruction {
 
         if (positions.length !== 0 && array !== undefined){
 
+            let pos = positions[0].interpret(tree, table);
             if (value === null){
-
-                let pos = positions[0].interpret(tree, table);
 
                 if (pos instanceof Exception){
                     return pos;
@@ -86,10 +88,10 @@ export class Access_array extends Instruction {
                     return new Exception("Semantic", `The index of array cannot be of type: ${positions[0].get_type()} expected type: ${type.INT}`, positions[0].row, positions[0].column);
                 }
 
-                return this.get_values(positions.slice(1), array[positions[0]], value, type_array, tree, table);
+                return this.get_values(positions.slice(1), array[pos], value, type_array, tree, table);
             }
 
-            if (positions.length === 1 && array[positions[0]] !== undefined){
+            if (positions.length === 1 && array[pos] !== undefined){
 
                 if (this.expression.get_type() !== type_array){
                     return new Exception("Semantic", `The type: ${this.expression.get_type()} cannot be assignated at array of type: ${type_array}`, this.expression.row, this.expression.column);
@@ -107,12 +109,12 @@ export class Access_array extends Instruction {
                         break;
                 }
 
-                array[positions[0]] = value;
+                array[pos] = value;
 
                 return null;
 
             } else if (positions.length !== 1){
-                return this.get_values(positions.slice(1), array[positions[0]], value, type_array, tree, table);
+                return this.get_values(positions.slice(1), array[pos], value, type_array, tree, table);
             } else {
                 return new Exception("Semantic", "The index out of range", this.positions[this.positions.length - 1].row, this.positions[this.positions.length - 1].column);    
             }
@@ -136,13 +138,17 @@ export class Access_array extends Instruction {
         return this.type;
     }
 
+    get_subtype(){
+        return this.sub_type;
+    }
+
     compile(table: SymbolTable, generator: Generator3D) {
         
     }
 
     get_node() {
         let node = new Cst_Node("Access Array");
-        node.add_child(this.id);
+        node.add_childs_node(this.id.get_node());
         
         let positions = new Cst_Node("Expressions Array");
 
