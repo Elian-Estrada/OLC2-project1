@@ -124,7 +124,6 @@ var Function = /** @class */ (function (_super) {
         var instructions = new Cst_Node("Instructions");
         for (var _b = 0, _c = this.instructions; _b < _c.length; _b++) {
             var item = _c[_b];
-            console.log(item);
             instructions.add_childs_node(item.get_node());
         }
         node.add_childs_node(instructions);

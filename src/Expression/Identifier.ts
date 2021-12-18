@@ -73,9 +73,9 @@ export class Identifier extends Instruction {
         generator.getStack(temp, temp_pos);
 
         // @ts-ignore
-        if ( value.get_type() !== type.BOOL ) {
+        if ( value.type !== type.BOOL ) {
             // @ts-ignore
-            return new Value(temp, value.get_type(), true);
+            return new Value(temp, value?.type, true);
         }
 
         this.checkLabels(generator, value);

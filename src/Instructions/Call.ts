@@ -59,7 +59,7 @@ export class Call extends Instruction {
 
                         let val_expression = expression.interpret(tree, table);
                         
-                        if ( val_expression instanceof Error )
+                        if ( val_expression instanceof Exception )
                             return val_expression;
 
                         // for ( let param of ob_function.get_params() ) {
@@ -91,7 +91,7 @@ export class Call extends Instruction {
                                 return table_res;
                         }
                         else {
-                            return new Exception("Semantic", `The type: ${expression.get_type()} is different to param type: ${ob_function.get_params()[count].get_type()}`, this.row, this.column);
+                            return new Exception("Semantic", `The type: ${expression.get_type()} is different to param type: ${ob_function.get_params()[count].type}`, this.row, this.column);
                         }
 
                         count += 1;

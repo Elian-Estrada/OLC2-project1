@@ -66,9 +66,9 @@ var Identifier = /** @class */ (function (_super) {
         var temp_pos = value.position;
         generator.getStack(temp, temp_pos);
         // @ts-ignore
-        if (value.get_type() !== type.BOOL) {
+        if (value.type !== type.BOOL) {
             // @ts-ignore
-            return new Value(temp, value.get_type(), true);
+            return new Value(temp, value === null || value === void 0 ? void 0 : value.type, true);
         }
         this.checkLabels(generator, value);
         // @ts-ignore

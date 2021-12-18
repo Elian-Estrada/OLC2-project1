@@ -33,7 +33,7 @@ export default class Symbol {
         this._id = v;
     }
     
-    public get_type() : type {
+    public get type() : type {
         return this._type;
     }
     public set type(v : type) {

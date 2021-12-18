@@ -20,10 +20,10 @@ var Symbol = /** @class */ (function () {
         enumerable: false,
         configurable: true
     });
-    Symbol.prototype.get_type = function () {
-        return this._type;
-    };
     Object.defineProperty(Symbol.prototype, "type", {
+        get: function () {
+            return this._type;
+        },
         set: function (v) {
             this._type = v;
         },

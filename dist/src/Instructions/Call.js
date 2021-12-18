@@ -68,7 +68,7 @@ var Call = /** @class */ (function (_super) {
                             continue;
                         }
                         var val_expression = expression.interpret(tree, table);
-                        if (val_expression instanceof Error)
+                        if (val_expression instanceof Exception)
                             return val_expression;
                         // for ( let param of ob_function.get_params() ) {
                         //     // console.log(expression.get_type())
@@ -94,7 +94,7 @@ var Call = /** @class */ (function (_super) {
                                 return table_res;
                         }
                         else {
-                            return new Exception("Semantic", "The type: ".concat(expression.get_type(), " is different to param type: ").concat(ob_function.get_params()[count].get_type()), this.row, this.column);
+                            return new Exception("Semantic", "The type: ".concat(expression.get_type(), " is different to param type: ").concat(ob_function.get_params()[count].type), this.row, this.column);
                         }
                         count += 1;
                     }

@@ -72,7 +72,6 @@ var Declaration = /** @class */ (function (_super) {
                 }
             }
             if (this.expression.get_type() === type.STRUCT && this.expression instanceof Access_struct) {
-                console.log(value.get_value());
                 if ( /*value.get_value().struct*/value.get_value() !== "null" && value.get_value().id !== this.id[1]) {
                     return new Exception("Semantic", "The type: ".concat(value.get_value().get_id(), " cannot be assignment to variable of type: ").concat(this.id[1]), this.expression.row, this.expression.column);
                 }
