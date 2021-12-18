@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Quetzaloto Languaje</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link
+          href="https://fonts.googleapis.com/icon?family=Material+Icons"
+          rel="stylesheet"
+  />
+  <link
+          rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
+  />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  <script src="codemirror-5.58.1/lib/codemirror.js"></script>
+  <script src="codemirror-5.58.1/mode/clike/clike.js"></script>
+  <link rel="stylesheet" href="codemirror-5.58.1/lib/codemirror.css" />
+  <link rel="stylesheet" href="codemirror-5.58.1/theme/moxer.css" />
+  <link rel="shortcut icon" href="https://pbs.twimg.com/media/ESglxTqXsAAbCiX.jpg" type="image/x-icon">
+</head>
+<body style="background-color: #212121;">
+<div>
+  <div>
+    <ul id="dropdown1" class="dropdown-content">
+      <li><a href="./graph.html" target="_blank"> CST </a></li>
+      <li class="divider"></li>
+      <li><a href="Index"> Error Report </a></li>
+      <li><a href="#!"> Symbol Table Report </a></li>
+    </ul>
+    <ul id="dp2" class="dropdown-content">
+      <li><a href="Bodega"> Nuevo </a></li>
+      <li><a href="listaBodega"> Abrir </a></li>
+      <li class="divider"></li>
+      <li><a href="Entrada"> Guradar... </a></li>
+      <li><a href="Salida"> Guradar Como... </a></li>
+    </ul>
+    <ul id="dropdown2" class="dropdown-content">
+      <li><a href="./graph.html" target="_blank"> CST </a></li>
+      <li class="divider"></li>
+      <li><a href="Index"> Error Report </a></li>
+      <li><a href="#!"> Symbol Table Report </a></li>
+    </ul>
+    <ul id="dp3" class="dropdown-content">
+      <li><a href="Bodega"> Nuevo </a></li>
+      <li><a href="listaBodega"> Abrir </a></li>
+      <li class="divider"></li>
+      <li><a href="Entrada"> Guradar... </a></li>
+      <li><a href="Salida"> Guradar Como... </a></li>
+    </ul>
+    <div class="navbar-fixed">
+      <nav>
+        <div class="nav-wrapper blue">
+          <a href="" class="brand-logo" style="margin-left: 20px;"> Compilers 2 </a>
+          <a href="#" data-target="mobile-demo" class="sidenav-trigger"
+          ><i class="material-icons"> menu </i></a
+          >
+          <ul class="right hide-on-med-and-down">
+            <li>
+              <a class="dropdown-trigger" href="#" data-target="dp2">
+                Menu <i class="material-icons right"> arrow_drop_down</i>
+              </a>
+            </li>
+            <!-- Dropdown Trigger -->
+            <li>
+              <a class="dropdown-trigger" href="#!" data-target="dropdown1">
+                Reports
+                <i class="material-icons right">arrow_drop_down</i></a
+              >
+            </li>
+          </ul>
+        </div>
+      </nav>
+    </div>
+    <ul class="sidenav" id="mobile-demo">
+      <li>
+        <a class="dropdown-trigger" href="#" data-target="dp3">
+          Menu <i class="material-icons right"> arrow_drop_down</i>
+        </a>
+      </li>
+      <!-- Dropdown Trigger -->
+      <li>
+        <a class="dropdown-trigger" href="#!" data-target="dropdown2">
+          Reports <i class="material-icons right">arrow_drop_down</i></a
+        >
+      </li>
+    </ul>
+  </div>
+</div>
+
+<div style="align-self: center">
+  <div class="container">
+    <div class="container">
+      <div style="text-align: center" class="card grey darken-3 z-depth-4">
+        <div class="container">
+          <h3 style="color: white; padding: 3%;">Equipo Dinamita</h3>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col s6">
+      <div>
+        <p class="white-text">Input Editor:</p>
+      </div>
+      <div id="test1" class="CodeMirror CodeMirror-focused" style="border: 5px solid #757575">
+        <textarea name="code" id="code" cols="30" rows="10"></textarea>
+      </div>
+    </div>
+    <div class="col s6">
+      <div>
+        <p class="white-text">Console output:</p>
+      </div>
+      <div class="CodeMirror" style=" border: 5px solid #757575 ">
+                <textarea
+                        name="pythonConsole"
+                        id="pythonConsole"
+                        cols="30"
+                        rows="10"
+                ></textarea>
+      </div>
+    </div>
+    
+    <div class="center">
+      <button id="btnAnalyze" class="btn-large waves-effect" style="margin-top: 15px; background-color: rgb(0, 122, 204);">Interpret</button>
+      <button id="btnCompile" class="btn-large waves-effect" style="margin-top: 15px; background-color: rgb(205, 31, 0);">Compile</button>
+    </div>
+
+    <div class="col s12">
+      <div>
+        <p class="white-text">Console 3D output:</p>
+      </div>
+      <div class="CodeMirror" style=" border: 5px solid #757575 ">
+                <textarea
+                        name="pythonConsole"
+                        id="pythonConsole2"
+                        cols="30"
+                        rows="10"
+                ></textarea>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    M.AutoInit();
+  });
+</script>
+<script> var exports = {}; </script>
+<script type="module" src="src/grammar.js"></script>
+<script type="module" src="index.js"></script>
+</body>
+</html>
