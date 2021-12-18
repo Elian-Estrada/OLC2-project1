@@ -23,10 +23,15 @@ var Continue = /** @class */ (function (_super) {
     Continue.prototype.interpret = function (tree, table) {
         return this;
     };
-    Continue.prototype.compile = function (table, generator) {
-    };
     Continue.prototype.get_node = function () {
         return new Cst_Node("Continue");
+    };
+    Continue.prototype.compile = function (table, generator) {
+        if (table.continue_label == '') {
+            generator.addError('Continue transfer statement is not into a cycle', Number(this.row), Number(this.column));
+            return;
+        }
+        generator.addGoTo(table.continue_label);
     };
     return Continue;
 }(Instruction));

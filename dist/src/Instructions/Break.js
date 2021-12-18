@@ -23,10 +23,15 @@ var Break = /** @class */ (function (_super) {
     Break.prototype.interpret = function (tree, table) {
         return this;
     };
-    Break.prototype.compile = function (table, generator) {
-    };
     Break.prototype.get_node = function () {
         return new Cst_Node("Break");
+    };
+    Break.prototype.compile = function (table, generator) {
+        if (table.break_label == '') {
+            generator.addError("Break transfer statement is not into a cycle", Number(this.row), Number(this.column));
+            return;
+        }
+        generator.addGoTo(table.break_label);
     };
     return Break;
 }(Instruction));

@@ -14,11 +14,16 @@ export class Continue extends Instruction {
         return this;
     }
 
-    compile(table: SymbolTable, generator: Generator3D) {
-        
-    }
-
     get_node() {
         return new Cst_Node("Continue");
+    }
+    
+    compile(table: SymbolTable, generator: Generator3D): any {
+        if ( table.continue_label == '' ) {
+            generator.addError('Continue transfer statement is not into a cycle', Number(this.row), Number(this.column));
+            return;
+        }
+
+        generator.addGoTo(table.continue_label);
     }
 }
