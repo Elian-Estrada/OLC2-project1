@@ -24,6 +24,7 @@ export class Continue extends Instruction {
             return;
         }
 
+        generator.addComment("----CONTINUE----");
         generator.addGoTo(table.continue_label);
     }
 }

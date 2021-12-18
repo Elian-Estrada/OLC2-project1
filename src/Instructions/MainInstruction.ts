@@ -60,6 +60,7 @@ export class MainInstruction extends Instruction {
     compile(table: SymbolTable, generator: Generator3D): any {
         /*let generator_aux = new Generator3D();
         let generator = generator_aux.get_instance();*/
+        generator.addComment("----COMPILE----");
 
         if ( this.instructions.length > 0 ) {
             for ( let item of this.instructions ) {

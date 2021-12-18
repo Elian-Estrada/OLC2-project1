@@ -37,6 +37,7 @@ var Arithmetic = /** @class */ (function (_super) {
         return _this;
     }
     Arithmetic.prototype.compile = function (table, generator) {
+        generator.addComment("----ARITHMETIC EXPRESSION----");
         var left = this.exp1.compile(table, generator);
         if (this.exp2 !== null) {
             var right = this.exp2.compile(table, generator);

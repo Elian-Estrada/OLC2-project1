@@ -28,6 +28,7 @@ var Print = /** @class */ (function (_super) {
         return _this;
     }
     Print.prototype.compile = function (table, generator) {
+        generator.addComment("----PRINT----");
         var res = this.expression.compile(table, generator);
         var valueShow = res.value;
         if (res.get_type() === type.INT) {

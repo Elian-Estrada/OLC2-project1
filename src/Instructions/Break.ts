@@ -24,6 +24,7 @@ export class Break extends Instruction {
             return;
         }
 
+        generator.addComment("----BREAK----");
         generator.addGoTo(table.break_label);
     }
 }

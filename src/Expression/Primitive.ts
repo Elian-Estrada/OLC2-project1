@@ -40,6 +40,7 @@ export class Primitive extends Instruction {
     }
 
     compile(table: SymbolTable, generator: Generator3D): any {
+        generator.addComment("----PRIMITIVE----");
         if ( this.type === type.INT || this.type === type.DOUBLE ) {
             return new Value(this.value, this.type, false);
         }

@@ -33,6 +33,13 @@ var For = /** @class */ (function (_super) {
         _this.counter = 0;
         return _this;
     }
+    For.prototype.compile = function (table, generator) {
+        generator.addComment("----FOR CYCLE----");
+        var value = this.condition.compile(table, generator);
+        if (value.type == type.STRING) {
+            var variable = this;
+        }
+    };
     For.prototype.interpret = function (tree, table) {
         if (!(typeof null in (this.init))
             || !(typeof null in (this.condition))
@@ -109,8 +116,6 @@ var For = /** @class */ (function (_super) {
         else {
             return new Exception("Semantic", "Expression Expected", this.row, this.column);
         }
-    };
-    For.prototype.compile = function (table, generator) {
     };
     For.prototype.get_node = function () {
         var node = new Cst_Node("For");

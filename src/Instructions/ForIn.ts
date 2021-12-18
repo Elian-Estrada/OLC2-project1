@@ -86,10 +86,6 @@ export class ForIn extends Instruction {
         }
     }
 
-    compile(table: SymbolTable, generator: Generator3D) {
-        
-    }
-
     get_node() {
         let node = new Cst_Node("For-In");
         node.add_child("for");
@@ -109,5 +105,10 @@ export class ForIn extends Instruction {
         node.add_child("}");
 
         return node;
+    }
+    
+    compile(table: SymbolTable, generator: Generator3D): any {
+        generator.addComment("----FOR-IN----");
+
     }
 }

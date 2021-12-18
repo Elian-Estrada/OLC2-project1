@@ -125,6 +125,7 @@ export class If extends Instruction {
     }
     
     compile(table: SymbolTable, generator: Generator3D): any {
+        generator.addComment("----IF-ELSE----");
         let condition = this.expr.compile(table, generator);
 
         if ( condition.type !== type.BOOL ) {

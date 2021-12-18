@@ -44,6 +44,7 @@ export class Inc_Dec extends Instruction {
     
     compile(table: SymbolTable, generator: Generator3D) {
         // let exp = this.expression.compile(table, generator);
+        generator.addComment("----INC-DEC----");
 
         if ( this.expression.operator === Arithmetic_operator.INC ) {
             let new_prim = new Primitive('1', type.INT, this.row, this.column);

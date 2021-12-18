@@ -53,6 +53,7 @@ export class Return extends Instruction {
     }
 
     compile(table: SymbolTable, generator: Generator3D): any {
+        generator.addComment("----RETURN----");
         return;
     }
 }

@@ -11,6 +11,7 @@ import {Value} from "../Abstract/Value.js";
 export class StringText extends Instruction {
 
     compile(table: SymbolTable, generator: Generator3D) {
+        generator.addComment("----STRING EXPRESSION----");
         let left = this.exp1.compile(table, generator);
         let right = this.exp2.compile(table, generator);
         let temp = generator.addTemp();

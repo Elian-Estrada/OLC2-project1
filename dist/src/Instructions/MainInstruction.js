@@ -63,6 +63,7 @@ var MainInstruction = /** @class */ (function (_super) {
     MainInstruction.prototype.compile = function (table, generator) {
         /*let generator_aux = new Generator3D();
         let generator = generator_aux.get_instance();*/
+        generator.addComment("----COMPILE----");
         if (this.instructions.length > 0) {
             for (var _i = 0, _a = this.instructions; _i < _a.length; _i++) {
                 var item = _a[_i];

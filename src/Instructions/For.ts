@@ -11,6 +11,15 @@ import { Cst_Node } from "../Abstract/Cst_Node.js";
 import { Generator3D } from "../Generator/Generator3D.js";
 
 export class For extends Instruction {
+    compile(table: SymbolTable, generator: Generator3D) {
+        generator.addComment("----FOR CYCLE----");
+
+        let value = this.condition.compile(table, generator);
+
+        if ( value.type == type.STRING ) {
+            let variable = this
+        }
+    }
 
     private init: Instruction;
     private condition: any;
@@ -115,10 +124,6 @@ export class For extends Instruction {
         } else {
             return new Exception("Semantic", "Expression Expected", this.row, this.column);
         }
-    }
-
-    compile(table: SymbolTable, generator: Generator3D) {
-        
     }
 
     get_node() {
