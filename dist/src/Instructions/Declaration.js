@@ -31,7 +31,6 @@ var Declaration = /** @class */ (function (_super) {
         return _this;
     }
     Declaration.prototype.compile = function (table, generator) {
-        generator.addComment("----DECLARATION----");
         var value = this.expression.compile(table, generator);
         var new_var = table.get_table(this.get_id()[0]);
         var new_symbol = null;

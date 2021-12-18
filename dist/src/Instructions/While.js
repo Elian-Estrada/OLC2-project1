@@ -91,7 +91,6 @@ var While = /** @class */ (function (_super) {
         return node;
     };
     While.prototype.compile = function (table, generator) {
-        generator.addComment("----WHILE----");
         var continue_label = generator.newLabel();
         generator.setLabel(continue_label);
         var condition = this.expr.compile(table, generator);

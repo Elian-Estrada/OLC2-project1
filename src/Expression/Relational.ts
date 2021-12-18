@@ -10,7 +10,6 @@ import { Access_struct } from "./Access_struct.js";
 
 export class Relational extends Instruction {
     compile(table: SymbolTable, generator: Generator3D) {
-        generator.addComment("----RELATIONAL EXPRESSION----");
         let left = this.exp1.compile(table, generator);
         if ( left instanceof Exception )
             return left;

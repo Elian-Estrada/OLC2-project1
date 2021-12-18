@@ -13,8 +13,6 @@ import {Struct} from "./Struct.js";
 export class Declaration extends Instruction {
     compile(table: SymbolTable, generator: Generator3D) {
 
-        generator.addComment("----DECLARATION----");
-
         let value = this.expression.compile(table, generator);
         let new_var = table.get_table(this.get_id()[0]);
         let new_symbol = null;

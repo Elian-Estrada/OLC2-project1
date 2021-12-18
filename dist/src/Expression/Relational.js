@@ -31,7 +31,6 @@ var Relational = /** @class */ (function (_super) {
         return _this;
     }
     Relational.prototype.compile = function (table, generator) {
-        generator.addComment("----RELATIONAL EXPRESSION----");
         var left = this.exp1.compile(table, generator);
         if (left instanceof Exception)
             return left;

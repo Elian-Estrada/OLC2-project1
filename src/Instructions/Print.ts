@@ -12,7 +12,6 @@ import {Primitive} from "../Expression/Primitive.js";
 export class Print extends Instruction {
 
     compile(table: SymbolTable, generator: Generator3D) {
-        generator.addComment("----PRINT----");
         let res = this.expression.compile(table, generator);
         let valueShow = res.value;
 

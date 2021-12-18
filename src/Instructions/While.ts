@@ -92,7 +92,6 @@ export class While extends Instruction {
     }
     
     compile(table: SymbolTable, generator: Generator3D): any {
-        generator.addComment("----WHILE----");
         let continue_label = generator.newLabel();
         generator.setLabel(continue_label);
         let condition = this.expr.compile(table, generator);

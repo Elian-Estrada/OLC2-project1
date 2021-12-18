@@ -33,7 +33,6 @@ export class Arithmetic extends Instruction {
     }
 
     public compile(table: SymbolTable, generator: Generator3D): any {
-        generator.addComment("----ARITHMETIC EXPRESSION----");
         let left = this.exp1.compile(table, generator);
 
         if ( this.exp2 !== null ) {

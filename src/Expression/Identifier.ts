@@ -59,7 +59,6 @@ export class Identifier extends Instruction {
     }
 
     compile(table: SymbolTable, generator: Generator3D): any {
-        generator.addComment("----IDENTIFIER----");
         let value = table.get_table(this.id);
         if ( value === null ) {
             // @ts-ignore
