@@ -128,8 +128,26 @@
 [ \r\t]+            {}
 \n                  {}
 
-\"[^\"]*\"				{ yytext = yytext.substr(1,yyleng-2); 	return 'STRING'; }
-"'"[^']"'"				{ yytext = yytext.substr(1, yyleng-2); 	return 'CHAR'; }
+/*\"[^\"]*\"				{ yytext = yytext.substr(1,yyleng-2); 	return 'STRING'; }
+"'"[^']"'"				{ yytext = yytext.substr(1, yyleng-2); 	return 'CHAR'; }*/
+\"(\\\'|\\\"|\\\\|\\n|\\t|[^\'\\\"])*?\"		{
+	yytext = yytext.substr(1, yyleng-2);
+	yytext = yytext.replace(/\\t/g, '\t');
+	yytext = yytext.replace(/\\n/g, '\n');
+	yytext = yytext.replace(/\\"/g, '\"');
+	yytext = yytext.replace(/\\'/g, "\'");
+	yytext = yytext.replace(/\\\\/g, '\\');
+																return 'STRING';
+}
+\'(\\\'|\\\"|\\t|\\n|\\\\|[^\'\\\"])?\'			{
+	yytext = yytext.substr(1, yyleng-2);
+	yytext = yytext.replace(/\\t/g, '\t');
+	yytext = yytext.replace(/\\n/g, '\n');
+	yytext = yytext.replace(/\\"/g, '\"');
+	yytext = yytext.replace(/\\'/g, "\'");
+	yytext = yytext.replace(/\\\\/g, '\\');
+																return 'CHAR';
+}
 [0-9]+"."[0-9]+\b                                          		return 'DOUBLE';
 [0-9]+\b                                                      	return 'INTEGER';
 ([a-zA-Z])[a-zA-Z0-9_]*	                                      	return 'IDENTIFIER';

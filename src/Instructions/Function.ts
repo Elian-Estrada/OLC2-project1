@@ -135,6 +135,8 @@ export class Function extends Instruction {
 
         let instructions = new Cst_Node("Instructions");
         for (let item of this.instructions){
+            console.log(item);
+            
             instructions.add_childs_node(item.get_node());
         }
 

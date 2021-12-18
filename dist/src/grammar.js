@@ -1231,9 +1231,25 @@ case 72:
 break;
 case 73:
 break;
-case 74: yy_.yytext = yy_.yytext.substr(1,yy_.yyleng-2); 	return 116; 
+case 74:
+	yy_.yytext = yy_.yytext.substr(1, yy_.yyleng-2);
+	yy_.yytext = yy_.yytext.replace(/\\t/g, '\t');
+	yy_.yytext = yy_.yytext.replace(/\\n/g, '\n');
+	yy_.yytext = yy_.yytext.replace(/\\"/g, '\"');
+	yy_.yytext = yy_.yytext.replace(/\\'/g, "\'");
+	yy_.yytext = yy_.yytext.replace(/\\\\/g, '\\');
+																return 116;
+
 break;
-case 75: yy_.yytext = yy_.yytext.substr(1, yy_.yyleng-2); 	return 117; 
+case 75:
+	yy_.yytext = yy_.yytext.substr(1, yy_.yyleng-2);
+	yy_.yytext = yy_.yytext.replace(/\\t/g, '\t');
+	yy_.yytext = yy_.yytext.replace(/\\n/g, '\n');
+	yy_.yytext = yy_.yytext.replace(/\\"/g, '\"');
+	yy_.yytext = yy_.yytext.replace(/\\'/g, "\'");
+	yy_.yytext = yy_.yytext.replace(/\\\\/g, '\\');
+																return 117;
+
 break;
 case 76:return 115;
 break;
@@ -1247,7 +1263,7 @@ case 80: errors.push(new Exception("Lexical", `Lexical error ${yy_.yytext}`, yy_
 break;
 }
 },
-rules: [/^(?:\s+)/,/^(?:\/\/.*)/,/^(?:[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/])/,/^(?:int\b)/,/^(?:null\b)/,/^(?:double\b)/,/^(?:boolean\b)/,/^(?:char\b)/,/^(?:String\b)/,/^(?:if\b)/,/^(?:else\b)/,/^(?:switch\b)/,/^(?:case\b)/,/^(?:default\b)/,/^(?:while\b)/,/^(?:for\b)/,/^(?:do\b)/,/^(?:in\b)/,/^(?:struct\b)/,/^(?:begin\b)/,/^(?:end\b)/,/^(?:break\b)/,/^(?:continue\b)/,/^(?:return\b)/,/^(?:void\b)/,/^(?:length\b)/,/^(?:toUppercase\b)/,/^(?:toLowercase\b)/,/^(?:caracterOfPosition\b)/,/^(?:subString\b)/,/^(?:parse\b)/,/^(?:pow\b)/,/^(?:sqrt\b)/,/^(?:sin\b)/,/^(?:cos\b)/,/^(?:tan\b)/,/^(?:print\b)/,/^(?:println\b)/,/^(?:main\b)/,/^(?:true\b)/,/^(?:false\b)/,/^(?::)/,/^(?:,)/,/^(?:\^)/,/^(?:#)/,/^(?:\()/,/^(?:\))/,/^(?:\.)/,/^(?:\[)/,/^(?:\])/,/^(?:;)/,/^(?:\{)/,/^(?:\})/,/^(?:\+\+)/,/^(?:--)/,/^(?:\+)/,/^(?:-)/,/^(?:\*)/,/^(?:\/)/,/^(?:%)/,/^(?:==)/,/^(?:!=)/,/^(?:<=)/,/^(?:>=)/,/^(?:<)/,/^(?:>)/,/^(?:\|\|)/,/^(?:&&)/,/^(?:!)/,/^(?:&)/,/^(?:=)/,/^(?:\?)/,/^(?:[ \r\t]+)/,/^(?:\n)/,/^(?:"[^\"]*")/,/^(?:'[^']')/,/^(?:[0-9]+\.[0-9]+\b)/,/^(?:[0-9]+\b)/,/^(?:([a-zA-Z])[a-zA-Z0-9_]*)/,/^(?:$)/,/^(?:.)/],
+rules: [/^(?:\s+)/,/^(?:\/\/.*)/,/^(?:[/][*][^*]*[*]+([^/*][^*]*[*]+)*[/])/,/^(?:int\b)/,/^(?:null\b)/,/^(?:double\b)/,/^(?:boolean\b)/,/^(?:char\b)/,/^(?:String\b)/,/^(?:if\b)/,/^(?:else\b)/,/^(?:switch\b)/,/^(?:case\b)/,/^(?:default\b)/,/^(?:while\b)/,/^(?:for\b)/,/^(?:do\b)/,/^(?:in\b)/,/^(?:struct\b)/,/^(?:begin\b)/,/^(?:end\b)/,/^(?:break\b)/,/^(?:continue\b)/,/^(?:return\b)/,/^(?:void\b)/,/^(?:length\b)/,/^(?:toUppercase\b)/,/^(?:toLowercase\b)/,/^(?:caracterOfPosition\b)/,/^(?:subString\b)/,/^(?:parse\b)/,/^(?:pow\b)/,/^(?:sqrt\b)/,/^(?:sin\b)/,/^(?:cos\b)/,/^(?:tan\b)/,/^(?:print\b)/,/^(?:println\b)/,/^(?:main\b)/,/^(?:true\b)/,/^(?:false\b)/,/^(?::)/,/^(?:,)/,/^(?:\^)/,/^(?:#)/,/^(?:\()/,/^(?:\))/,/^(?:\.)/,/^(?:\[)/,/^(?:\])/,/^(?:;)/,/^(?:\{)/,/^(?:\})/,/^(?:\+\+)/,/^(?:--)/,/^(?:\+)/,/^(?:-)/,/^(?:\*)/,/^(?:\/)/,/^(?:%)/,/^(?:==)/,/^(?:!=)/,/^(?:<=)/,/^(?:>=)/,/^(?:<)/,/^(?:>)/,/^(?:\|\|)/,/^(?:&&)/,/^(?:!)/,/^(?:&)/,/^(?:=)/,/^(?:\?)/,/^(?:[ \r\t]+)/,/^(?:\n)/,/^(?:"(\\'|\\"|\\\\|\\n|\\t|[^\'\\\"])*?")/,/^(?:'(\\'|\\"|\\t|\\n|\\\\|[^\'\\\"])?')/,/^(?:[0-9]+\.[0-9]+\b)/,/^(?:[0-9]+\b)/,/^(?:([a-zA-Z])[a-zA-Z0-9_]*)/,/^(?:$)/,/^(?:.)/],
 conditions: {"INITIAL":{"rules":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80],"inclusive":true}}
 });
 return lexer;

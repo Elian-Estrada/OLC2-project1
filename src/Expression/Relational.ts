@@ -59,6 +59,11 @@ export class Relational extends Instruction{
                         left = left.get_value();
                     }
                     
+                    if (left.value == "null"){
+                        
+                        left = left.value
+                    }
+                    
                     if (this.exp2 instanceof Access_struct){
                         right = right.get_vale();
                     }

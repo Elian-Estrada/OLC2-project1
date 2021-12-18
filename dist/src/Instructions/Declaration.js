@@ -35,7 +35,6 @@ var Declaration = /** @class */ (function (_super) {
         var value = null;
         if (this.expression != null) {
             value = this.expression.interpret(tree, table);
-            console.log(this.expression);
             if (value instanceof Exception) {
                 return value;
             }
@@ -45,10 +44,16 @@ var Declaration = /** @class */ (function (_super) {
                 }
             }
             if (this.expression.get_type() === type.STRUCT && this.expression instanceof Access_struct) {
-                if ( /*value.get_value().struct*/value.get_value().get_id() !== this.id[1]) {
+                console.log(value.get_value());
+                if ( /*value.get_value().struct*/value.get_value() !== "null" && value.get_value().id !== this.id[1]) {
                     return new Exception("Semantic", "The type: ".concat(value.get_value().get_id(), " cannot be assignment to variable of type: ").concat(this.id[1]), this.expression.row, this.expression.column);
                 }
-                value = value.get_value();
+                else if (value.get_value() === "null") {
+                    value = { id: this.id[1], value: "null" };
+                }
+                else {
+                    value = value.get_value();
+                }
             }
             if (type.STRUCT === this.expression.get_type() &&
                 !(this.expression instanceof Identifier || this.expression instanceof Access_struct)) {

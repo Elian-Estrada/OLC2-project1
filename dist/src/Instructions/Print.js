@@ -70,7 +70,6 @@ var Print = /** @class */ (function (_super) {
             }
         }
         var value = this.expression.interpret(tree, table);
-        //console.log(value);
         if (value instanceof Exception)
             return value;
         /*if ( value === null )

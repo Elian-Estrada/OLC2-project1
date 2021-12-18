@@ -69,7 +69,6 @@ export class Print extends Instruction {
             }
         }
         let value = this.expression.interpret(tree, table);
-        //console.log(value);
         
         if ( value instanceof Exception )
             return value;

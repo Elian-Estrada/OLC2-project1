@@ -36,14 +36,9 @@ var SymbolTable = /** @class */ (function () {
         while (current_table !== undefined) {
             if (current_table.table.has(symbol.id)) {
                 var current_symbol = current_table.table.get(symbol.id);
-                console.log(symbol);
-                console.log(current_symbol);
                 if (symbol.value === "null") {
                     switch (current_symbol.type) {
                         case type.STRUCT:
-                            //symbol.environment = current_symbol.environment;
-                            console.log(current_symbol);
-                            console.log(symbol);
                             current_symbol.value = { id: current_symbol.value.id, value: "null" };
                             return undefined;
                         case type.STRING:

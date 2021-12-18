@@ -46,8 +46,6 @@ var Assignment = /** @class */ (function (_super) {
             //value = value.get_value().value;
             value = value.get_value();
         }
-        console.log(this.expression);
-        console.log(value);
         var new_symbol = new Symbol(this.id, this.expression.get_type(), this.row, this.column, value);
         var result = table.update_table(new_symbol);
         if (result instanceof Exception) {
