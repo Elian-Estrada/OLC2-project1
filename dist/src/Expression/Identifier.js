@@ -54,7 +54,6 @@ var Identifier = /** @class */ (function (_super) {
         return String(this.value);
     };
     Identifier.prototype.compile = function (table, generator) {
-        generator.addComment("----IDENTIFIER----");
         var value = table.get_table(this.id);
         if (value === null) {
             // @ts-ignore

@@ -8,6 +8,7 @@ import {Break} from "./Break.js";
 import {Return} from "./Return.js";
 import { Cst_Node } from "../Abstract/Cst_Node.js";
 import { Generator3D } from "../Generator/Generator3D.js";
+import {Value} from "../Abstract/Value.js";
 
 export class If extends Instruction {
 
@@ -125,7 +126,6 @@ export class If extends Instruction {
     }
     
     compile(table: SymbolTable, generator: Generator3D): any {
-        generator.addComment("----IF-ELSE----");
         let condition = this.expr.compile(table, generator);
 
         if ( condition.type !== type.BOOL ) {
@@ -136,6 +136,11 @@ export class If extends Instruction {
         generator.setLabel(condition.true_label);
         for ( let instr of this.instructions ) {
             instr.compile(table, generator);
+        }
+
+        if ( this.elseif !== null ) {
+            generator.setLabel(condition.false_label);
+            this.elseif.compile(table, generator);
         }
 
         let label_exit_if = '';

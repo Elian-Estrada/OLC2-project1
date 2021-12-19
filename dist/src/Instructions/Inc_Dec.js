@@ -42,8 +42,6 @@ var Inc_Dec = /** @class */ (function (_super) {
         return node;
     };
     Inc_Dec.prototype.compile = function (table, generator) {
-        // let exp = this.expression.compile(table, generator);
-        generator.addComment("----INC-DEC----");
         if (this.expression.operator === Arithmetic_operator.INC) {
             var new_prim = new Primitive('1', type.INT, this.row, this.column);
             var new_symbol = new Arithmetic(this.expression.exp1, new_prim, Arithmetic_operator.ADDITION, this.row, this.column);

@@ -43,7 +43,6 @@ var Primitive = /** @class */ (function (_super) {
         return String(this.value);
     };
     Primitive.prototype.compile = function (table, generator) {
-        generator.addComment("----PRIMITIVE----");
         if (this.type === type.INT || this.type === type.DOUBLE) {
             return new Value(this.value, this.type, false);
         }

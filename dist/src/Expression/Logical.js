@@ -63,7 +63,6 @@ var Logical = /** @class */ (function (_super) {
         }
     };
     Logical.prototype.compile = function (table, generator) {
-        generator.addComment("----LOGICAL EXPRESSION----");
         if (this.exp1.get_type() != type.BOOL) {
             generator.addError("Variable not boolean", Number(this.row), Number(this.column));
             return;

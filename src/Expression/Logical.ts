@@ -67,7 +67,6 @@ export class Logical extends Instruction{
     }
 
     compile(table: SymbolTable, generator: Generator3D): any {
-        generator.addComment("----LOGICAL EXPRESSION----");
         if( this.exp1.get_type() != type.BOOL ) {
             generator.addError("Variable not boolean", Number(this.row), Number(this.column));
             return;

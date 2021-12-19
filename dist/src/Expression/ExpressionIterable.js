@@ -14,25 +14,26 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 import { Instruction } from "../Abstract/Instruction.js";
-import { Cst_Node } from "../Abstract/Cst_Node.js";
-var Continue = /** @class */ (function (_super) {
-    __extends(Continue, _super);
-    function Continue(row, col) {
-        return _super.call(this, row, col) || this;
+var ExpressionIterable = /** @class */ (function (_super) {
+    __extends(ExpressionIterable, _super);
+    function ExpressionIterable(exp1, exp2, row, col) {
+        var _this = _super.call(this, row, col) || this;
+        _this.exp1 = exp1;
+        _this.exp2 = exp2;
+        return _this;
     }
-    Continue.prototype.interpret = function (tree, table) {
-        return this;
+    ExpressionIterable.prototype.compile = function (table, generator) {
+        var val1 = this.exp1.compile(table, generator);
+        var val2 = this.exp2.compile(table, generator);
+        var lis_aux = [];
+        lis_aux.push(val1);
+        lis_aux.push(val2);
+        return lis_aux;
     };
-    Continue.prototype.get_node = function () {
-        return new Cst_Node("Continue");
+    ExpressionIterable.prototype.get_node = function () {
     };
-    Continue.prototype.compile = function (table, generator) {
-        if (table.continue_label == '') {
-            generator.addError('Continue transfer statement is not into a cycle', Number(this.row), Number(this.column));
-            return;
-        }
-        generator.addGoTo(table.continue_label);
+    ExpressionIterable.prototype.interpret = function (tree, table) {
     };
-    return Continue;
+    return ExpressionIterable;
 }(Instruction));
-export { Continue };
+export { ExpressionIterable };

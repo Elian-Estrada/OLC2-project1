@@ -9,16 +9,27 @@ import {Break} from "./Break.js";
 import {Return} from "./Return.js";
 import { Cst_Node } from "../Abstract/Cst_Node.js";
 import { Generator3D } from "../Generator/Generator3D.js";
+import {ExpressionIterable} from "../Expression/ExpressionIterable";
 
 export class For extends Instruction {
     compile(table: SymbolTable, generator: Generator3D) {
         generator.addComment("----FOR CYCLE----");
 
-        let value = this.condition.compile(table, generator);
+        this.init.compile(table, generator);
+        // @ts-ignore
+        table.get_table(this.init.id[0]);
+        let continue_label = generator.newLabel();
+        generator.setLabel(continue_label);
+        let condition = this.condition.compile(table, generator);
+        generator.setLabel(condition.true_label);
 
-        if ( value.type == type.STRING ) {
-            let variable = this
+        for ( let instructions of this.instructions ) {
+            instructions.compile(table, generator);
+            this.step.compile(table, generator);
         }
+
+        generator.addGoTo(continue_label);
+        generator.setLabel(condition.false_label);
     }
 
     private init: Instruction;

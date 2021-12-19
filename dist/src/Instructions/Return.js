@@ -49,7 +49,6 @@ var Return = /** @class */ (function (_super) {
         return node;
     };
     Return.prototype.compile = function (table, generator) {
-        generator.addComment("----RETURN----");
         return;
     };
     return Return;

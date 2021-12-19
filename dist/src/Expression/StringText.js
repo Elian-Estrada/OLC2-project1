@@ -30,7 +30,6 @@ var StringText = /** @class */ (function (_super) {
         return _this;
     }
     StringText.prototype.compile = function (table, generator) {
-        generator.addComment("----STRING EXPRESSION----");
         var left = this.exp1.compile(table, generator);
         var right = this.exp2.compile(table, generator);
         var temp = generator.addTemp();

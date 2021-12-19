@@ -31,7 +31,6 @@ var Break = /** @class */ (function (_super) {
             generator.addError("Break transfer statement is not into a cycle", Number(this.row), Number(this.column));
             return;
         }
-        generator.addComment("----BREAK----");
         generator.addGoTo(table.break_label);
     };
     return Break;
