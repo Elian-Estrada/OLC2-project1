@@ -22,6 +22,8 @@ export class MainInstruction extends Instruction {
         tree.set_symbol_table(new_table);
 
         for ( let item of this.instructions ) {
+            console.log(item);
+            
             if ( item instanceof Function ) {
                 let error = new Exception("Semantic", "The instruction func don't be into of method main", item.row, item.column);
                 tree.get_errors().push(error);

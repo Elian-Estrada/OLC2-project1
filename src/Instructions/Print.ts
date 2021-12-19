@@ -75,6 +75,7 @@ export class Print extends Instruction {
 
     public interpret(tree: Tree, table: SymbolTable) {
         for(let item of this.expression){
+            
             if (item instanceof Array){
                 //@ts-ignore
                 item = new Values_array(item, this.row, this.column);

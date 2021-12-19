@@ -16,32 +16,24 @@ var __extends = (this && this.__extends) || (function () {
 import { Function } from "../Instructions/Function.js";
 import Exception from "../SymbolTable/Exception.js";
 import { type } from "../SymbolTable/Type.js";
-var Pow = /** @class */ (function (_super) {
-    __extends(Pow, _super);
-    function Pow(exp1, exp2, type, name, params, instructions, row, col) {
+var Tan = /** @class */ (function (_super) {
+    __extends(Tan, _super);
+    function Tan(expression, type, name, params, instructions, row, col) {
         var _this = _super.call(this, type, name, params, instructions, row, col) || this;
-        _this.exp1 = exp1;
-        _this.exp2 = exp2;
+        _this.expression = expression;
         return _this;
     }
-    Pow.prototype.interpret = function (tree, table) {
-        var base = this.exp1.interpret(tree, table);
-        if (base instanceof Exception) {
-            return base;
+    Tan.prototype.interpret = function (tree, table) {
+        var value = this.expression.interpret(tree, table);
+        if (value instanceof Exception) {
+            return value;
         }
-        var pow = this.exp2.interpret(tree, table);
-        if (pow instanceof Exception) {
-            return pow;
+        if (this.expression.get_type() !== type.INT && this.expression.get_type() !== type.DOUBLE) {
+            return new Exception("Semantic", "The expression: ".concat(value, " can be only type: int|doulbe"), this.expression.row, this.expression.column);
         }
-        if (this.exp1.get_type() !== type.INT && this.exp1.get_type() !== type.DOUBLE) {
-            return new Exception("Semanitc", "The base: ".concat(base, " can only be of type int|double"), this.exp1.row, this.exp1.column);
-        }
-        if (this.exp2.get_type() !== type.INT) {
-            return new Exception("Semantic", "The pow: ".concat(pow, " can only be of type int"), this.exp2.row, this.exp2.column);
-        }
-        this.type = this.exp1.get_type();
-        return Math.pow(base, pow);
+        this.type = type.DOUBLE;
+        return Math.tan((value * Math.PI) / 180);
     };
-    return Pow;
+    return Tan;
 }(Function));
-export { Pow };
+export { Tan };

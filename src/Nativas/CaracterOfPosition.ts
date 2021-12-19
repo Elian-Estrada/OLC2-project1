@@ -9,9 +9,9 @@ import { Cst_Node } from "../Abstract/Cst_Node.js";
 export class CaracterOfPosition extends Function {
 
     private id: any;
-    private n: number;
+    private n: any;
 
-    constructor(id: any, n: number, type: string, name: string, params: Array<any>,
+    constructor(id: any, n: any, type: string, name: string, params: Array<any>,
                 instructions: Array<Instruction>, row: number, col: number) {
         super(type, name, params, instructions, row, col);
 
@@ -27,11 +27,21 @@ export class CaracterOfPosition extends Function {
         if ( this.id.get_type() !== type.STRING )
             return new Exception("Semantic", `The type ${id_founded.type} not valid for Length`, this.row, this.column);
 
-        if (this.n >= String(id_founded).length){
-            return new Exception("Semantic", `The position: ${this.n} out of range`, this.row, this.column);
+        let n = this.n.interpret(tree, table);
+
+        if (n instanceof Exception){
+            return n;
+        }
+
+        if (this.n.get_type() !== type.INT){
+            return new Exception("Semantic", `The expression can be only of type: int`, this.n.row, this.n.column);
+        }
+
+        if (n >= String(id_founded).length){
+            return new Exception("Semantic", `The position: ${n} out of range`, this.row, this.column);
         }
 
         this.type = type.CHAR;
-        return id_founded.charAt(this.n);
+        return id_founded.charAt(n);
     }
 }

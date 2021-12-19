@@ -18,6 +18,8 @@ export class Primitive extends Instruction {
     }
 
     interpret(tree: Tree, table: SymbolTable){
+        console.log(this.value);
+        
         return this.value;
     }
 

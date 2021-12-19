@@ -32,6 +32,7 @@ var MainInstruction = /** @class */ (function (_super) {
         tree.set_symbol_table(new_table);
         for (var _i = 0, _a = this.instructions; _i < _a.length; _i++) {
             var item = _a[_i];
+            console.log(item);
             if (item instanceof Function) {
                 var error = new Exception("Semantic", "The instruction func don't be into of method main", item.row, item.column);
                 tree.get_errors().push(error);

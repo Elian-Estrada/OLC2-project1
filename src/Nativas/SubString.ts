@@ -9,10 +9,10 @@ import { Cst_Node } from "../Abstract/Cst_Node.js";
 export class SubString extends Function {
 
     private id: any;
-    private from: number;
-    private to: number;
+    private from: any;
+    private to: any;
 
-    constructor(id: any, from: number, to: number, type: string, name: string, params: Array<any>,
+    constructor(id: any, from: any, to: any, type: string, name: string, params: Array<any>,
                 instructions: Array<Instruction>, row: number, col: number) {
         super(type, name, params, instructions, row, col);
 
@@ -29,14 +29,38 @@ export class SubString extends Function {
         if ( this.id.get_type() !== type.STRING )
             return new Exception("Semantic", `The type ${id_founded.type} not valid for Length`, this.row, this.column);
 
+        let from = this.from.interpret(tree, table);
+
+        if (from instanceof Exception){
+            return from;
+        }
+
+        if (this.from.get_type() !== type.INT){
+            return new Exception("Semantic", `The expression can be only of type: int`, this.from.row, this.from.column);
+        }
+
+        if (from > id_founded.length || from < 0){
+            return new Exception("Semantic", `The index: ${from} out of range`, this.from.row, this.from.column);
+        }
+
+        let to = this.to.interpret(tree, table);
+
+        if (to instanceof Exception){
+            return to;
+        }
+
+        if (this.to.get_type() !== type.INT){
+            return new Exception("Semantic", `The expression can be only of type: int`, this.to.row, this.to.column);
+        }
+
         // @ts-ignore
-        this.to = parseInt(this.to) + 1;
+        to = parseInt(to) + 1;
         
-        if (this.to > id_founded.length){
-            return new Exception("Semantic", `The index: ${this.to - 1} out of range`, this.row, this.column);
+        if (to > id_founded.length){
+            return new Exception("Semantic", `The index: ${to - 1} out of range`, this.row, this.column);
         }
 
         this.type = type.STRING;
-        return id_founded.substring(this.from, this.to);
+        return id_founded.substring(from, to);
     }
 }
