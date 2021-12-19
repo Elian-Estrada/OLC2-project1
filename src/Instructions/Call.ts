@@ -274,7 +274,17 @@ export class Call extends Instruction {
             // @ts-ignore
             generator.recoverTemps(table, size);
 
-            return new Value(temp, type.VOID, true);
+            let ret_val = new Value(temp, func.type, true);
+            if ( ret_val.get_type() == type.BOOL ) {
+                let temp_label = generator.newLabel();
+                let temp_label2 = generator.newLabel();
+                generator.addIf(temp, 1, '==', temp_label);
+                generator.addGoTo(temp_label2);
+                ret_val.true_label = temp_label;
+                ret_val.false_label = temp_label2;
+            }
+
+            return ret_val;
         }
     }
 

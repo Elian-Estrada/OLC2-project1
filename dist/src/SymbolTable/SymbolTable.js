@@ -13,6 +13,8 @@ var SymbolTable = /** @class */ (function () {
         this.break_label = '';
         this.continue_label = '';
         this.return_label = '';
+        this.type = '';
+        this.value_ret = '';
     }
     SymbolTable.prototype.set_table = function (symbol) {
         if (this.table.has(symbol.id)) {

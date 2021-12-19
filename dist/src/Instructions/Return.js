@@ -16,6 +16,7 @@ var __extends = (this && this.__extends) || (function () {
 import { Instruction } from "../Abstract/Instruction.js";
 import Exception from "../SymbolTable/Exception.js";
 import { Cst_Node } from "../Abstract/Cst_Node.js";
+import { type } from "../SymbolTable/Type.js";
 var Return = /** @class */ (function (_super) {
     __extends(Return, _super);
     function Return(expr, row, col) {
@@ -49,7 +50,25 @@ var Return = /** @class */ (function (_super) {
         return node;
     };
     Return.prototype.compile = function (table, generator) {
-        return;
+        if (this.expr != null) {
+            var value = this.expr.compile(table, generator);
+            if (value.type == type.BOOL) {
+                var temp_label = generator.newLabel();
+                generator.setLabel(value.true_label);
+                generator.setStack('P', '1');
+                generator.addGoTo(temp_label);
+                generator.setLabel(value.false_label);
+                generator.setStack('P', '0');
+                generator.setLabel(temp_label);
+                table.value_ret = value.value;
+            }
+            else {
+                generator.setStack('P', value.value);
+            }
+            generator.addGoTo(table.return_label);
+        }
+        else
+            return;
     };
     return Return;
 }(Instruction));

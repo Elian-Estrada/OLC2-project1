@@ -4,6 +4,7 @@ import SymbolTable from "../SymbolTable/SymbolTable.js";
 import Exception from "../SymbolTable/Exception.js";
 import { Cst_Node } from "../Abstract/Cst_Node.js";
 import { Generator3D } from "../Generator/Generator3D.js";
+import {type} from "../SymbolTable/Type.js";
 
 export class Return extends Instruction {
 
@@ -53,6 +54,26 @@ export class Return extends Instruction {
     }
 
     compile(table: SymbolTable, generator: Generator3D): any {
-        return;
+
+        if ( this.expr != null ) {
+            let value = this.expr.compile(table, generator);
+
+            if ( value.type == type.BOOL ) {
+                let temp_label = generator.newLabel();
+                generator.setLabel(value.true_label);
+                generator.setStack('P', '1');
+                generator.addGoTo(temp_label);
+
+                generator.setLabel(value.false_label);
+                generator.setStack('P', '0');
+                generator.setLabel(temp_label);
+                table.value_ret = value.value;
+            } else {
+                generator.setStack('P', value.value);
+            }
+
+            generator.addGoTo(table.return_label);
+        } else
+            return;
     }
 }

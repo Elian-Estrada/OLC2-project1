@@ -405,7 +405,7 @@ export class Generator3D {
         this.codeIn(`${pointer} = ${value};\n`);
     }
 
-    public addBeginFunc(id: string) {
+    public addBeginFunc(id: string, type: string = 'void') {
         if ( !this.inNatives )
             this.inFunc = true;
         this.codeIn(`void ${id} () {\n`, '');

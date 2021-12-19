@@ -317,7 +317,8 @@ var Generator3D = /** @class */ (function () {
     Generator3D.prototype.addAssignment = function (pointer, value) {
         this.codeIn("".concat(pointer, " = ").concat(value, ";\n"));
     };
-    Generator3D.prototype.addBeginFunc = function (id) {
+    Generator3D.prototype.addBeginFunc = function (id, type) {
+        if (type === void 0) { type = 'void'; }
         if (!this.inNatives)
             this.inFunc = true;
         this.codeIn("void ".concat(id, " () {\n"), '');

@@ -244,7 +244,16 @@ var Call = /** @class */ (function (_super) {
             generator.setEnv(table.get_size());
             // @ts-ignore
             generator.recoverTemps(table, size);
-            return new Value(temp, type.VOID, true);
+            var ret_val = new Value(temp, func.type, true);
+            if (ret_val.get_type() == type.BOOL) {
+                var temp_label = generator.newLabel();
+                var temp_label2 = generator.newLabel();
+                generator.addIf(temp, 1, '==', temp_label);
+                generator.addGoTo(temp_label2);
+                ret_val.true_label = temp_label;
+                ret_val.false_label = temp_label2;
+            }
+            return ret_val;
         }
     };
     Call.prototype.get_node = function () {

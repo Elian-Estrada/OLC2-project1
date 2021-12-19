@@ -97,8 +97,9 @@ export class Function extends Instruction {
 
     compile(table: SymbolTable, generator: Generator3D, tree: Tree) {
         let new_env = new SymbolTable(table, this.name);
+        new_env.type = this.type;
         let return_label = generator.newLabel();
-        new_env.return_label = generator.newLabel();
+        new_env.return_label = return_label;
         new_env.set_size(1);
 
         for ( let param of this.params ) {
@@ -108,7 +109,7 @@ export class Function extends Instruction {
         }
 
         generator.freeAllTemps();
-        generator.addBeginFunc(this.name);
+        generator.addBeginFunc(this.name, this.type);
 
         for (let i of this.instructions) {
             i.compile(new_env, generator, tree);

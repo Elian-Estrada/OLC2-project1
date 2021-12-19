@@ -27,8 +27,8 @@ var Print = /** @class */ (function (_super) {
         _this.flag = flag;
         return _this;
     }
-    Print.prototype.compile = function (table, generator) {
-        var res = this.expression.compile(table, generator);
+    Print.prototype.compile = function (table, generator, tree) {
+        var res = this.expression.compile(table, generator, tree);
         var valueShow = res.value;
         if (res.get_type() === type.INT) {
             generator.add_print("d", "int", valueShow);

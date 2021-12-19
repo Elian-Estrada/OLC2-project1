@@ -92,8 +92,9 @@ var Function = /** @class */ (function (_super) {
     };
     Function.prototype.compile = function (table, generator, tree) {
         var new_env = new SymbolTable(table, this.name);
+        new_env.type = this.type;
         var return_label = generator.newLabel();
-        new_env.return_label = generator.newLabel();
+        new_env.return_label = return_label;
         new_env.set_size(1);
         for (var _i = 0, _a = this.params; _i < _a.length; _i++) {
             var param = _a[_i];
@@ -102,7 +103,7 @@ var Function = /** @class */ (function (_super) {
             new_env.set_table(new_symbol);
         }
         generator.freeAllTemps();
-        generator.addBeginFunc(this.name);
+        generator.addBeginFunc(this.name, this.type);
         for (var _b = 0, _c = this.instructions; _b < _c.length; _b++) {
             var i = _c[_b];
             i.compile(new_env, generator, tree);
