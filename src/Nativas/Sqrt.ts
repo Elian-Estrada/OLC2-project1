@@ -16,8 +16,6 @@ export class Sqrt extends Function {
     }
 
     interpret(tree: Tree, table: SymbolTable) {
-        console.log(this.expression);
-        
         let value = this.expression.interpret(tree,table);
         
 

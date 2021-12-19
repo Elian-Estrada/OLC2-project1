@@ -59,6 +59,8 @@
 "toDouble"			return 'RTODOUBLE';
 "string"			return 'FSTRING';
 "typeof"			return 'RTYPEOF';
+"push"				return 'RPUSH';
+"pop"				return 'RPOP';
 
 /* Language Functions */
 "pow"               return 'RPOW';
@@ -214,6 +216,8 @@
 	import { Cos } from "./Nativas/Cos.js";
 	import { Tan } from "./Nativas/Tan.js";
 	import { Sqrt } from "./Nativas/Sqrt.js";
+	import { Push } from "./Nativas/Push.js";
+	import { Pop } from "./Nativas/Pop.js";
 %}
 
 %{
@@ -267,6 +271,8 @@ instruction
 	| struct ptcommP			{ $$ = $1; }
 	| native_strings ptcommP    { $$ = $1; }
 	| native_function ptcommP   { $$ = $1; }
+	| native_array_push ptcommP	{ $$ = $1; }
+	| native_array_pop ptcommP	{ $$ = $1; }
 	| assignment_struct ptcommP	{ $$ = $1; }
 	| error ptcommP             { errors.push(new Exception("Sintactic", `Sintactic error ${yytext}`, this._$.first_line, this._$.first_column)); }
 ;
@@ -655,6 +661,18 @@ native_arithmetic
 	}
 ;
 
+native_array_push
+	: IDENTIFIER DOT RPUSH PARLEFT expression PARRIGHT {
+		$$ = new Push(new Identifier($1, this._$.first_line, this._$.first_column), $5, null, "push", [], [], this._$.first_line, this._$.first_column);
+	}
+;
+
+native_array_pop
+	: IDENTIFIER DOT RPOP PARLEFT PARRIGHT {
+		$$ = new Pop(new Identifier($1, this._$.first_line, this._$.first_column), null, "pop", [], [], this._$.first_line, this._$.first_column);
+	}
+;
+
 expression
 	: SUBSIGN expression %prec UMENOS       { $$ = new Arithmetic($2, null, Arithmetic_operator.SUBSTRACTION, @1.first_line, @1.first_column); }
 	| expression PLUSSIGN expression        { $$ = new Arithmetic($1, $3, Arithmetic_operator.ADDITION, @1.first_line, @1.first_column); }
@@ -687,11 +705,12 @@ expression
 	| PARLEFT expression PARRIGHT           { $$ = $2; }
 	| prod_ternary                          { $$ = $1; }
 	| call_function                         { $$ = $1; }
-	| native_strings %prec FSTRING          { console.log($1); $$ = $1; }
+	| native_strings %prec FSTRING          { $$ = $1; }
 	| native_function %prec FCAST			{ $$ = $1; }
 	| native_parse %prec FCAST				{ $$ = $1; }
 	| native_arithmetic %prec FCAST			{ $$ = $1; }
 	| native_type							{ $$ = $1; }
+	| native_array_pop						{ $$ = $1; }
 	| access_struct							{ $$ = $1; }
 	| range									{ $$ = $1; }
 ;

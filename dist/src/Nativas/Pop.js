@@ -16,24 +16,24 @@ var __extends = (this && this.__extends) || (function () {
 import { Function } from "../Instructions/Function.js";
 import Exception from "../SymbolTable/Exception.js";
 import { type } from "../SymbolTable/Type.js";
-var Sqrt = /** @class */ (function (_super) {
-    __extends(Sqrt, _super);
-    function Sqrt(expression, type, name, params, instructions, row, col) {
+var Pop = /** @class */ (function (_super) {
+    __extends(Pop, _super);
+    function Pop(id, expression, type, name, params, instructions, row, col) {
         var _this = _super.call(this, type, name, params, instructions, row, col) || this;
-        _this.expression = expression;
+        _this.id = id;
         return _this;
     }
-    Sqrt.prototype.interpret = function (tree, table) {
-        var value = this.expression.interpret(tree, table);
-        if (value instanceof Exception) {
-            return value;
+    Pop.prototype.interpret = function (tree, table) {
+        var symbol = this.id.interpret(tree, table);
+        if (symbol instanceof Exception) {
+            return symbol;
         }
-        if (this.expression.get_type() !== type.INT && this.expression.get_type() !== type.DOUBLE) {
-            return new Exception("Semantic", "The expression: ".concat(value, " can be only type: int|doulbe"), this.expression.row, this.expression.column);
+        if (symbol.get_type() !== type.ARRAY) {
+            return new Exception("Semantic", "This function is only for arrays", this.id.row, this.id.column);
         }
-        this.type = type.DOUBLE;
-        return Math.sqrt(value);
+        this.type = symbol.get_subtype();
+        return symbol.get_value().pop();
     };
-    return Sqrt;
+    return Pop;
 }(Function));
-export { Sqrt };
+export { Pop };
