@@ -82,8 +82,8 @@ export class Print extends Instruction {
                 return new Exception("Semantic", "Error 'void' type not allowed here", this.row, this.column);
             }
         }
+        
         let value = this.expression.interpret(tree, table);
-        console.log(value);
         
         if ( value instanceof Exception )
             return value;

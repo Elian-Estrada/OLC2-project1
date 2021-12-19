@@ -29,6 +29,13 @@ export class SubString extends Function {
         if ( this.id.get_type() !== type.STRING )
             return new Exception("Semantic", `The type ${id_founded.type} not valid for Length`, this.row, this.column);
 
+        // @ts-ignore
+        this.to = parseInt(this.to) + 1;
+        
+        if (this.to > id_founded.length){
+            return new Exception("Semantic", `The index: ${this.to - 1} out of range`, this.row, this.column);
+        }
+
         this.type = type.STRING;
         return id_founded.substring(this.from, this.to);
     }

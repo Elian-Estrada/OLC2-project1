@@ -215,6 +215,7 @@
 %left 'MULTSIGN' 'DIVSIGN' 'MODSIGN'
 %right UMENOS
 %right 'INCSIGN' 'DECSIGN'
+%right 'FSTRING' 'FCAST'
 
 %start ini
 
@@ -237,7 +238,7 @@ instruction
 	| declaration_array ptcommP { $$ = $1; }
 	| assignment_array ptcommP	{ $$ = $1; }
 	| prod_print ptcommP 		{ $$ = $1; }
-	| inc_dec ptcommP			{ $$ = $1; }
+	| inc_dec ptcommP			{ $$FSTRING = $1; }
 	| prod_if                   { $$ = $1; }
 	| prod_loops                { $$ = $1; }
 	| prod_switch               { $$ = $1; }
@@ -553,19 +554,58 @@ native_strings
     : IDENTIFIER DOT RLENGTH PARLEFT PARRIGHT {
         $$ = new Length(new Identifier($1, @1.first_line, @1.first_column), null, "length", [], [], @1.first_line, @1.first_column);
     }
+	| STRING DOT RLENGTH PARLEFT PARRIGHT {
+		$$ = new Length(new Primitive($1, type.STRING, this._$.first_line, this._$.first_column), null, "length", [], [], this._$.first_line, this._$.first_column);
+	}
+	| values_array DOT RLENGTH PARLEFT PARRIGHT {
+		$$ = new Length(new Values_array($1, this._$.first_line, this._$.first_column), null, "length", [], [], this._$.first_line, this._$.first_column);
+	}
+	| IDENTIFIER list_brackets DOT RLENGTH PARLEFT PARRIGHT {
+		$$ = new Length(new Access_array(new Identifier($1, this._$.first_line, this._$.first_column), $2, null, this._$.first_line, this._$.first_column), null, "length", [], [], this._$.first_line, this._$.first_column);
+	}
     | IDENTIFIER DOT RUPPER PARLEFT PARRIGHT {
-        $$ = new ToUpperCase(new Identifier($1, @1.first_line, @1.first_column), null, "length", [], [], @1.first_line, @1.first_column);
+        $$ = new ToUpperCase(new Identifier($1, @1.first_line, @1.first_column), null, "ToUpperCase", [], [], @1.first_line, @1.first_column);
     }
+	| STRING DOT RUPPER PARLEFT PARRIGHT {
+		$$ = new ToUpperCase(new Primitive($1, type.STRING, this._$.first_line, this._$.first_column), null, "ToUpperCase", [], [], this._$.first_line, this._$.first_column);
+	}
     | IDENTIFIER DOT RLOWER PARLEFT PARRIGHT {
-        $$ = new ToLowerCase(new Identifier($1, @1.first_line, @1.first_column), null, "length", [], [], @1.first_line, @1.first_column);
+        $$ = new ToLowerCase(new Identifier($1, @1.first_line, @1.first_column), null, "ToLowerCase", [], [], @1.first_line, @1.first_column);
     }
+	| STRING DOT RLOWER PARLEFT PARRIGHT {
+		$$ = new ToLowerCase(new Primitive($1, type.STRING, this._$.first_line, this._$.first_column), null, "ToLowerCase", [], [], this._$.first_line, this._$.first_column);
+	}
     | IDENTIFIER DOT RCHAROF PARLEFT INTEGER PARRIGHT {
         $$ = new CaracterOfPosition(new Identifier($1, @1.first_line, @1.first_column), $5, null, "length", [], [], @1.first_line, @1.first_column);
     }
+	| STRING DOT RCHAROF PARLEFT INTEGER PARRIGHT {
+		$$ = new CaracterOfPosition(new Primitive($1, type.STRING, this._$.first_line, this._$.first_column), $5, "CharacterOfPosition", [], [], this._$.first_line, this._$.first_column);
+	}
     | IDENTIFIER DOT RSUBSTRING PARLEFT INTEGER COMMASIGN INTEGER PARRIGHT {
-        $$ = new SubString(new Identifier($1, @1.first_line, @1.first_column), $5, $7, null, "length", [], [], @1.first_line, @1.first_column)
+        $$ = new SubString(new Identifier($1, @1.first_line, @1.first_column), $5, $7, null, "substring", [], [], @1.first_line, @1.first_column)
     }
+	| STRING DOT RSUBSTRING PARLEFT INTEGER COMMASIGN INTEGER PARRIGHT {
+		$$ = new SubString(new Primitive($1, type.STRING, this._$.first_line, this._$.first_column), $5, $7, null, "substring", [], [], this._$.first_line, this._$.first_column);
+	}
 ;
+
+// native_strings
+// 	: expression_string DOT RLENGTH PARLEFT PARRIGHT {
+// 		$$ = new Length($1, null, "length", [], [], @1.first_line, @1.first_column);
+// 	}
+// 	| expression_string DOT RUPPER PARLEFT PARRIGHT {
+// 		$$ = new ToUpperCase($1, null, "ToUpperCase", [], [], @1.first_line, @1.first_column);
+// 	}
+// 	| expression_string DOT RLOWER PARLEFT PARRIGHT {
+// 		$$ = new ToLowerCase($1, null, "ToLowerCase", [], [], @1.first_line, @1.first_column);
+// 	}
+// 	| expression_string DOT RCHAROF PARLEFT INTEGER PARRIGHT {
+// 		$$ = new CaracterOfPosition($1, $5, null, "CaracterOfPosition", [], [], @1.first_line, @1.first_column);
+// 	}
+// 	| expression_string DOT RSUBSTRING PARLEFT INTEGER COMMASIGN INTEGER PARRIGHT {
+// 		$$ = new SubString($1, $5, $7, null, "length", [], [], @1.first_line, @1.first_column)
+// 	}
+// ;
 
 native_function
     : type DOT RPARSE PARLEFT expression PARRIGHT {
@@ -605,8 +645,8 @@ expression
 	| PARLEFT expression PARRIGHT           { $$ = $2; }
 	| prod_ternary                          { $$ = $1; }
 	| call_function                         { $$ = $1; }
-	| native_strings                        { $$ = $1; }
-	| native_function						{ $$ = $1; }
+	| native_strings %prec FSTRING          { $$ = $1; }
+	| native_function %prec FCAST			{ $$ = $1; }
 	| access_struct							{ $$ = $1; }
 	| range									{ $$ = $1; }
 ;

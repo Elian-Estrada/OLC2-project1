@@ -18,8 +18,8 @@ import Exception from "../SymbolTable/Exception.js";
 import { type } from "../SymbolTable/Type.js";
 var Length = /** @class */ (function (_super) {
     __extends(Length, _super);
-    function Length(id, type, name, params, instructions, row, col) {
-        var _this = _super.call(this, type, name, params, instructions, row, col) || this;
+    function Length(id, type_fun, name, params, instructions, row, col) {
+        var _this = _super.call(this, type_fun, name, params, instructions, row, col) || this;
         _this.id = id;
         return _this;
     }
@@ -27,9 +27,14 @@ var Length = /** @class */ (function (_super) {
         var id_founded = this.id.interpret(tree, table);
         if (id_founded === null)
             return new Exception("Semantic", "Identifier not found in the current context", this.row, this.column);
+        console.log(this.id.get_type());
+        console.log(id_founded);
         // console.log(this.id.get_type() == type.STRING)
-        if (this.id.get_type() !== type.STRING)
+        if (this.id.get_type() !== type.STRING && this.id.get_type() !== type.ARRAY)
             return new Exception("Semantic", "The type ".concat(id_founded.type, " not valid for Length"), this.row, this.column);
+        if (this.id.get_type() === type.ARRAY) {
+            id_founded = id_founded.get_value();
+        }
         this.type = type.INT;
         return id_founded.length;
     };

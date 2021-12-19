@@ -27,6 +27,10 @@ export class CaracterOfPosition extends Function {
         if ( this.id.get_type() !== type.STRING )
             return new Exception("Semantic", `The type ${id_founded.type} not valid for Length`, this.row, this.column);
 
+        if (this.n >= String(id_founded).length){
+            return new Exception("Semantic", `The position: ${this.n} out of range`, this.row, this.column);
+        }
+
         this.type = type.CHAR;
         return id_founded.charAt(this.n);
     }

@@ -30,6 +30,9 @@ var CaracterOfPosition = /** @class */ (function (_super) {
             return new Exception("Semantic", "Identifier not found in the current context", this.row, this.column);
         if (this.id.get_type() !== type.STRING)
             return new Exception("Semantic", "The type ".concat(id_founded.type, " not valid for Length"), this.row, this.column);
+        if (this.n >= String(id_founded).length) {
+            return new Exception("Semantic", "The position: ".concat(this.n, " out of range"), this.row, this.column);
+        }
         this.type = type.CHAR;
         return id_founded.charAt(this.n);
     };
