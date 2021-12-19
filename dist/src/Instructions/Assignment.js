@@ -67,16 +67,10 @@ var Assignment = /** @class */ (function (_super) {
         return node;
     };
     Assignment.prototype.compile = function (table, generator) {
-        /*generator.addComment("------START COMPILE VALUE OF VAR------");
-        let value = this.expression.compile(table, generator);
-        generator.addComment("------END COMPILE VALUE OF VAR------");
-
-        let new_var = table.get_table(this.get_id()[0]);
-        if ( new_var === null ) {
-            let in_heap = ( this.expression.get_type() === type.STRING || this.expression.get_type() === type.STRUCT || this.expression.get_type() === type.ARRAY );
-            let new_symbol = new Symbol(this.id[0], this.expression.get_type(), this.row, this.column, this.expression, undefined, in_heap);
-            table.set_table(new_symbol);
-        }*/
+        this.expression.compile(table, generator);
+        var new_var = table.get_table(this.get_id()[0]);
+        // @ts-ignore
+        table.update_table(new_var);
     };
     return Assignment;
 }(Instruction));

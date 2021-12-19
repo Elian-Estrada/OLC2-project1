@@ -35,10 +35,20 @@ var For = /** @class */ (function (_super) {
     }
     For.prototype.compile = function (table, generator) {
         generator.addComment("----FOR CYCLE----");
-        var value = this.condition.compile(table, generator);
-        if (value.type == type.STRING) {
-            var variable = this;
+        this.init.compile(table, generator);
+        // @ts-ignore
+        table.get_table(this.init.id[0]);
+        var continue_label = generator.newLabel();
+        generator.setLabel(continue_label);
+        var condition = this.condition.compile(table, generator);
+        generator.setLabel(condition.true_label);
+        for (var _i = 0, _a = this.instructions; _i < _a.length; _i++) {
+            var instructions = _a[_i];
+            instructions.compile(table, generator);
+            this.step.compile(table, generator);
         }
+        generator.addGoTo(continue_label);
+        generator.setLabel(condition.false_label);
     };
     For.prototype.interpret = function (tree, table) {
         if (!(typeof null in (this.init))

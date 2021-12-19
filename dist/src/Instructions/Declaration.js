@@ -20,6 +20,7 @@ import { Identifier } from "../Expression/Identifier.js";
 import Exception from "../SymbolTable/Exception.js";
 import Symbol from "../SymbolTable/Symbol.js";
 import { type } from "../SymbolTable/Type.js";
+import { Primitive } from "../Expression/Primitive.js";
 var Declaration = /** @class */ (function (_super) {
     __extends(Declaration, _super);
     function Declaration(id, type, row, column, expression) {
@@ -31,6 +32,34 @@ var Declaration = /** @class */ (function (_super) {
         return _this;
     }
     Declaration.prototype.compile = function (table, generator) {
+        if (this.expression == null) {
+            var new_exp = void 0;
+            switch (this.type) {
+                case type.INT:
+                    new_exp = new Primitive('0', type.INT, this.row, this.column);
+                    this.expression = new_exp;
+                    break;
+                case type.DOUBLE:
+                    new_exp = new Primitive('0.0', type.DOUBLE, this.row, this.column);
+                    this.expression = new_exp;
+                    break;
+                case type.STRING:
+                    new_exp = new Primitive('', type.STRING, this.row, this.column);
+                    this.expression = new_exp;
+                    break;
+                case type.CHAR:
+                    new_exp = new Primitive('', type.CHAR, this.row, this.column);
+                    this.expression = new_exp;
+                    break;
+                case type.BOOL:
+                    new_exp = new Primitive('true', type.STRING, this.row, this.column);
+                    this.expression = new_exp;
+                    break;
+                default:
+                    generator.addError("Iterator must be integer", Number(this.row), Number(this.column));
+                    return;
+            }
+        }
         var value = this.expression.compile(table, generator);
         var new_var = table.get_table(this.get_id()[0]);
         var new_symbol = null;
@@ -45,8 +74,7 @@ var Declaration = /** @class */ (function (_super) {
             this.valueBoolean(value, temp_pos, generator);
         }
         else
-            (value.get_type() === type.INT || value.get_type() === type.DOUBLE);
-        generator.setStack(temp_pos, value.value);
+            generator.setStack(temp_pos, value.value);
     };
     Declaration.prototype.valueBoolean = function (value, temp_pos, generator) {
         var temp_label = generator.newLabel();

@@ -1,18 +1,45 @@
-import { Cst_Node } from "../Abstract/Cst_Node.js";
-import { Instruction } from "../Abstract/Instruction.js";
-import { Access_struct } from "../Expression/Access_struct.js";
-import { Identifier } from "../Expression/Identifier.js";
-import { Generator3D } from "../Generator/Generator3D.js";
+import {Cst_Node} from "../Abstract/Cst_Node.js";
+import {Instruction} from "../Abstract/Instruction.js";
+import {Access_struct} from "../Expression/Access_struct.js";
+import {Identifier} from "../Expression/Identifier.js";
+import {Generator3D} from "../Generator/Generator3D.js";
 import Exception from "../SymbolTable/Exception.js";
 import Symbol from "../SymbolTable/Symbol.js";
 import SymbolTable from "../SymbolTable/SymbolTable.js";
 import Tree from "../SymbolTable/Tree.js";
 import {type} from "../SymbolTable/Type.js";
-import {Struct} from "./Struct.js";
+import {Primitive} from "../Expression/Primitive.js";
 
 export class Declaration extends Instruction {
     compile(table: SymbolTable, generator: Generator3D) {
-
+        if ( this.expression == null ) {
+            let new_exp;
+            switch (this.type) {
+                case type.INT:
+                    new_exp = new Primitive('0', type.INT, this.row, this.column);
+                    this.expression = new_exp;
+                    break;
+                case type.DOUBLE:
+                    new_exp = new Primitive('0.0', type.DOUBLE, this.row, this.column);
+                    this.expression = new_exp;
+                    break;
+                case type.STRING:
+                    new_exp = new Primitive('', type.STRING, this.row, this.column);
+                    this.expression = new_exp;
+                    break;
+                case type.CHAR:
+                    new_exp = new Primitive('', type.CHAR, this.row, this.column);
+                    this.expression = new_exp;
+                    break;
+                case type.BOOL:
+                    new_exp = new Primitive('true', type.STRING, this.row, this.column);
+                    this.expression = new_exp;
+                    break;
+                default:
+                    generator.addError("Iterator must be integer", Number(this.row), Number(this.column));
+                    return;
+            }
+        }
         let value = this.expression.compile(table, generator);
         let new_var = table.get_table(this.get_id()[0]);
         let new_symbol = null;
@@ -27,7 +54,7 @@ export class Declaration extends Instruction {
 
         if ( value.get_type() === type.BOOL ) {
             this.valueBoolean(value, temp_pos, generator);
-        } else ( value.get_type() === type.INT || value.get_type() === type.DOUBLE )
+        } else
             generator.setStack(temp_pos, value.value);
     }
 
