@@ -29,11 +29,18 @@ export class Parse extends Instruction {
         else if ( this.data_type === type.BOOL )
             return (value === "true");
 
-        else if ( this.data_type === type.CHAR )
+        else if ( this.data_type === type.CHAR ) {
+            if (value.length > 1){
+                return new Exception("Semantic", `${value} cannot parse to char`, this.exp.row, this.exp.column);
+            }
             return value.replace("", '');
-
+        }
         else
-            return new Exception("Semantic", "Data type not compatible", this.row, this.column);
+            return new Exception("Semantic", "Data type not compatible", this.exp.row, this.exp.column);
+    }
+
+    get_type(){
+        return this.data_type;
     }
 
     compile(table: SymbolTable, generator: Generator3D) {

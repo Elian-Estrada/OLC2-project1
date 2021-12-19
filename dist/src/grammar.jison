@@ -544,7 +544,7 @@ type
     | RBOOLEAN 	{ $$ = type.BOOL; }
     | RCHAR 	{ $$ = type.CHAR; }
     | RSTRING 	{ $$ = type.STRING; }
-	| RNULL		{ $$ = type.NULL; }
+	//| RNULL		{ $$ = type.NULL; }
 	| RVOID     { $$ = type.VOID; }
 ;
 
@@ -606,6 +606,7 @@ expression
 	| prod_ternary                          { $$ = $1; }
 	| call_function                         { $$ = $1; }
 	| native_strings                        { $$ = $1; }
+	| native_function						{ $$ = $1; }
 	| access_struct							{ $$ = $1; }
 	| range									{ $$ = $1; }
 ;
