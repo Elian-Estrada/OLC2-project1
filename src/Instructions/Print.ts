@@ -8,6 +8,7 @@ import {Generator3D} from "../Generator/Generator3D.js";
 import { Cst_Node } from "../Abstract/Cst_Node.js";
 import {Identifier} from "../Expression/Identifier.js";
 import {Primitive} from "../Expression/Primitive.js";
+import { Values_array } from "../Expression/Values_array.js";
 
 export class Print extends Instruction {
 
@@ -73,51 +74,62 @@ export class Print extends Instruction {
     }
 
     public interpret(tree: Tree, table: SymbolTable) {
-        if ( this.expression instanceof Call ) {
-            // console.log(this.expression)
-            // @ts-ignore
-            // console.log(this.expression.type)
-            // @ts-ignore
-            if ( this.expression.type === type.VOID ) {
-                return new Exception("Semantic", "Error 'void' type not allowed here", this.row, this.column);
+        for(let item of this.expression){
+            if (item instanceof Array){
+                //@ts-ignore
+                item = new Values_array(item, this.row, this.column);
+
             }
-        }
-        
-        let value = this.expression.interpret(tree, table);
-        
-        if ( value instanceof Exception )
-            return value;
-
-        /*if ( value === null )
-            return new Exception("Semantic", "Error 'void' type not allowed here", this.row, this.column);*/
-        
-        if ( this.expression.get_type() == type.ARRAY) {
             
-            value = JSON.stringify(value.get_value());
-            
-        } else if(value instanceof Array) {
-
-            value = JSON.stringify(value);
-
-        }else if (this.expression.get_type() === type.STRUCT && value !== "null"){
-            
-            if (/*this.expression.get_value().value*/ this.expression.get_value() === "null"){
-                //value = `${/*this.expression.get_value().struct*/}(null)`;
-                value = "null";
-            } else {
-                
-                value = this.print_struct(this.expression.get_value());
-                
+            if ( /*this.expression*/ item instanceof Call ) {
+                // console.log(this.expression)
+                // @ts-ignore
+                // console.log(this.expression.type)
+                // @ts-ignore
+                if ( /*this.expression.type*/ item.type === type.VOID ) {
+                    return new Exception("Semantic", "Error 'void' type not allowed here", this.row, this.column);
+                }
             }
+            
+            let value = /*this.expression*/item.interpret(tree, table);
+            
+            if ( value instanceof Exception )
+                return value;
+    
+            /*if ( value === null )
+                return new Exception("Semantic", "Error 'void' type not allowed here", this.row, this.column);*/
+            
+            if ( /*this.expression*/item.get_type() == type.ARRAY) {
+                
+                value = JSON.stringify(value.get_value());
+                
+            } else if(value instanceof Array) {
+                console.log(value);
+                
+                value = JSON.stringify(value);
+    
+            }else if (/*this.expression*/item.get_type() === type.STRUCT && value !== "null"){
+                
+                if (/*this.expression.get_value().value*/ /*this.expression*/item.get_value() === "null"){
+                    //value = `${/*this.expression.get_value().struct*/}(null)`;
+                    value = "null";
+                } else {
+                    
+                    value = this.print_struct(/*this.expression*/item.get_value());
+                    
+                }
+    
+            } else if(value.type === type.STRUCT){
+                value = this.print_struct(value);
+            }
+            else if ( /*this.expression*/item.get_type() == type.NULL ) {
+                return new Exception("Semantic", "Null Pointer Exception", this.row, this.column);
+            }
+            
+            tree.update_console(`${ value }`, false);
+        }
 
-        } else if(value.type === type.STRUCT){
-            value = this.print_struct(value);
-        }
-        else if ( this.expression.get_type() == type.NULL ) {
-            return new Exception("Semantic", "Null Pointer Exception", this.row, this.column);
-        }
-        
-        tree.update_console(`${ value }`, this.flag);
+        tree.update_console("", this.flag);
     }
 
     print_struct(struct: any){
@@ -164,7 +176,13 @@ export class Print extends Instruction {
         }
 
         node.add_child("(");
-        node.add_childs_node(this.expression.get_node());
+        for (let item of this.expression){
+            if (item instanceof Array){
+                //@ts-ignore
+                item = new Values_array(item, this.row, this.column);
+            }
+            node.add_childs_node(/*this.expression*/item.get_node());
+        }
         node.add_child(")");
         
 

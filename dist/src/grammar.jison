@@ -55,6 +55,10 @@
 "caracterOfPosition" return 'RCHAROF';
 "subString"         return 'RSUBSTRING';
 "parse"             return 'RPARSE';
+"toInt"				return 'RTOINT';
+"toDouble"			return 'RTODOUBLE';
+"string"			return 'FSTRING';
+"typeof"			return 'RTYPEOF';
 
 /* Language Functions */
 "pow"               return 'RPOW';
@@ -191,12 +195,17 @@
 	import Exception from "./SymbolTable/Exception.js";
 	import {MainInstruction} from "./Instructions/MainInstruction.js";
 	import { Struct } from "./Instructions/Struct.js";
+	
 	import { Length } from "./Nativas/Length.js";
 	import { ToUpperCase } from "./Nativas/ToUpperCase.js";
 	import { ToLowerCase } from "./Nativas/ToLowerCase.js";
 	import { CaracterOfPosition } from "./Nativas/CaracterOfPosition.js";
 	import { SubString } from "./Nativas/SubString.js";
 	import { Parse } from "./Nativas/Parse.js";
+	import { ToInt } from "./Nativas/ToInt.js";
+	import { ToDouble } from "./Nativas/ToDouble.js";
+	import { String } from "./Nativas/String.js";
+	import { TypeOf } from "./Nativas/TypeOf.js";
 %}
 
 %{
@@ -320,10 +329,10 @@ expression_range
 ;
 
 prod_print
-    : RPRINT PARLEFT expression PARRIGHT {
+    : RPRINT PARLEFT list_values_array PARRIGHT {
         $$ = new Print($3, @1.first_line, @1.first_column, false);
     }
-	| RPRINTLN PARLEFT expression PARRIGHT { $$ = new Print($3, @1.first_line, @1.first_column)}
+	| RPRINTLN PARLEFT list_values_array PARRIGHT { $$ = new Print($3, @1.first_line, @1.first_column)}
 ;
 
 inc_dec
@@ -589,28 +598,34 @@ native_strings
 	}
 ;
 
-// native_strings
-// 	: expression_string DOT RLENGTH PARLEFT PARRIGHT {
-// 		$$ = new Length($1, null, "length", [], [], @1.first_line, @1.first_column);
-// 	}
-// 	| expression_string DOT RUPPER PARLEFT PARRIGHT {
-// 		$$ = new ToUpperCase($1, null, "ToUpperCase", [], [], @1.first_line, @1.first_column);
-// 	}
-// 	| expression_string DOT RLOWER PARLEFT PARRIGHT {
-// 		$$ = new ToLowerCase($1, null, "ToLowerCase", [], [], @1.first_line, @1.first_column);
-// 	}
-// 	| expression_string DOT RCHAROF PARLEFT INTEGER PARRIGHT {
-// 		$$ = new CaracterOfPosition($1, $5, null, "CaracterOfPosition", [], [], @1.first_line, @1.first_column);
-// 	}
-// 	| expression_string DOT RSUBSTRING PARLEFT INTEGER COMMASIGN INTEGER PARRIGHT {
-// 		$$ = new SubString($1, $5, $7, null, "length", [], [], @1.first_line, @1.first_column)
-// 	}
-// ;
-
 native_function
     : type DOT RPARSE PARLEFT expression PARRIGHT {
           $$ = new Parse($1, $5, @1.first_line, @1.first_column);
     }
+;
+
+native_parse
+	: RTOINT PARLEFT expression PARRIGHT {
+		$$ = new ToInt($3, null, "toInt", [], [], this._$.first_line, this._$.first_column);
+	}
+	| RTODOUBLE PARLEFT expression PARRIGHT {
+		$$ = new ToDouble($3, null, "toDouble", [], [], this._$.first_line, this._$.first_column);
+	}
+	| FSTRING PARLEFT expression PARRIGHT {
+		$$ = new String($3, null, "string", [], [], this._$.first_line, this._$.first_column);
+	}
+	| FSTRING PARLEFT values_array PARRIGHT {
+		$$ = new String(new Values_array($3, this._$.first_line, this._$.first_column), null, "string", [], [], this._$.first_line, this._$.first_column);
+	}
+;
+
+native_type
+	: RTYPEOF PARLEFT expression PARRIGHT {
+		$$ = new TypeOf($3, null, "typeof", [], [], this._$.first_line, this._$.first_column);
+	}
+	| RTYPEOF PARLEFT values_array PARRIGHT {
+		$$ = new TypeOf(new Values_array($3, this._$.first_line, this._$.first_column), null, "typeof", [], [], this._$.first_line, this._$.first_column);
+	}
 ;
 
 expression
@@ -647,6 +662,8 @@ expression
 	| call_function                         { $$ = $1; }
 	| native_strings %prec FSTRING          { $$ = $1; }
 	| native_function %prec FCAST			{ $$ = $1; }
+	| native_parse %prec FCAST				{ $$ = $1; }
+	| native_type							{ $$ = $1; }
 	| access_struct							{ $$ = $1; }
 	| range									{ $$ = $1; }
 ;
