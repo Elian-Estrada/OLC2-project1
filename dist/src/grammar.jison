@@ -213,7 +213,7 @@
 %left 'PLUSSIGN' 'SUBSIGN', 'CONCAT', 'REPETITIONSIGN'
 %left 'MULTSIGN' 'DIVSIGN' 'MODSIGN'
 %right UMENOS
-%left 'INCSIGN' 'DECSIGN'
+%right 'INCSIGN' 'DECSIGN'
 
 %start ini
 
@@ -406,6 +406,9 @@ for_in
     : RFOR IDENTIFIER RIN expression CURLYLEFT instructions CURLYRIGHT {
         $$ = new ForIn($2, $4, $6, @1.first_line, @1.first_column);
     }
+	| RFOR IDENTIFIER RIN values_array CURLYLEFT instructions CURLYRIGHT {
+		$$ = new ForIn($2, new Values_array($4, this._$.first_line, this._$.first_column), $6, this._$.first_line, this._$.first_column);
+	}
 ;
 
 for_init

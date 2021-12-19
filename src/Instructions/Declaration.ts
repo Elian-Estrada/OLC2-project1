@@ -172,6 +172,10 @@ export class Declaration extends Instruction {
         return this.expression;
     }
 
+    get_type(){
+        return this.type;
+    }
+
     get_node() {
         let node = new Cst_Node("Declaration");
         node.add_child(this.type);

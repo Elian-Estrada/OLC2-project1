@@ -80,6 +80,9 @@ var Values_array = /** @class */ (function (_super) {
     Values_array.prototype.get_value = function () {
         return this.value;
     };
+    Values_array.prototype.set_value = function (v) {
+        this.value = v;
+    };
     Values_array.prototype.compile = function (table, generator) {
     };
     Values_array.prototype.get_node = function () {

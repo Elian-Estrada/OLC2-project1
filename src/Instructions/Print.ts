@@ -84,6 +84,7 @@ export class Print extends Instruction {
             }
         }
         let value = this.expression.interpret(tree, table);
+        console.log(value);
         
         if ( value instanceof Exception )
             return value;
@@ -91,11 +92,15 @@ export class Print extends Instruction {
         /*if ( value === null )
             return new Exception("Semantic", "Error 'void' type not allowed here", this.row, this.column);*/
         
-        if ( this.expression.get_type() == type.ARRAY ) {
+        if ( this.expression.get_type() == type.ARRAY) {
             
             value = JSON.stringify(value.get_value());
             
-        } else if (this.expression.get_type() === type.STRUCT && value !== "null"){
+        } else if(value instanceof Array) {
+
+            value = JSON.stringify(value);
+
+        }else if (this.expression.get_type() === type.STRUCT && value !== "null"){
             
             if (/*this.expression.get_value().value*/ this.expression.get_value() === "null"){
                 //value = `${/*this.expression.get_value().struct*/}(null)`;

@@ -68,6 +68,8 @@ var Arithmetic = /** @class */ (function (_super) {
         return null;
     };
     Arithmetic.prototype.interpret = function (tree, table) {
+        console.log(this.exp1);
+        console.log(this.exp2);
         var left = this.exp1.interpret(tree, table);
         if (left instanceof Exception)
             return left;
