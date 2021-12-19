@@ -47,7 +47,7 @@ var Print = /** @class */ (function (_super) {
     Print.prototype.typeString = function (value, table, generator) {
         generator.printString();
         var paramTemp1 = generator.addTemp();
-        generator.addAssignment(paramTemp1, "H");
+        // generator.addAssignment(paramTemp1, "H");
         var paramTemp2 = generator.addTemp();
         generator.addExpression(paramTemp2, 'P', table.get_size(), '+'); // T5 = P + 1;
         generator.addExpression(paramTemp2, paramTemp2, '1', '+');

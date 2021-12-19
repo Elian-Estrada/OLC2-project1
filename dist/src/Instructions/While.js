@@ -90,7 +90,7 @@ var While = /** @class */ (function (_super) {
         node.add_child("}");
         return node;
     };
-    While.prototype.compile = function (table, generator) {
+    While.prototype.compile = function (table, generator, tree) {
         var continue_label = generator.newLabel();
         generator.setLabel(continue_label);
         var condition = this.expr.compile(table, generator);
@@ -100,7 +100,7 @@ var While = /** @class */ (function (_super) {
         generator.setLabel(condition.true_label);
         for (var _i = 0, _a = this.instructions; _i < _a.length; _i++) {
             var inst = _a[_i];
-            inst.compile(table, generator);
+            inst.compile(table, generator, tree);
         }
         generator.addGoTo(continue_label);
         generator.setLabel(condition.false_label);

@@ -93,6 +93,7 @@ var Switch = /** @class */ (function (_super) {
         }
     };
     Switch.prototype.compile = function (table, generator) {
+        var condition = this.expr.compile(table, generator);
     };
     Switch.prototype.get_node = function () {
         var node = new Cst_Node("Switch");

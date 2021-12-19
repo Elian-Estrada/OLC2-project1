@@ -14,9 +14,9 @@ export class ExpressionIterable extends Instruction {
         this.exp2 = exp2;
     }
 
-    compile(table: SymbolTable, generator: Generator3D): any {
-        let val1 = this.exp1.compile(table, generator);
-        let val2 = this.exp2.compile(table, generator);
+    compile(table: SymbolTable, generator: Generator3D, tree: Tree): any {
+        let val1 = this.exp1.compile(table, generator, tree);
+        let val2 = this.exp2.compile(table, generator, tree);
         let lis_aux = [];
         lis_aux.push(val1);
         lis_aux.push(val2);

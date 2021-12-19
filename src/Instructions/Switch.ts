@@ -95,7 +95,7 @@ export class Switch extends Instruction {
     }
 
     compile(table: SymbolTable, generator: Generator3D) {
-        
+        let condition = this.expr.compile(table, generator);
     }
 
     get_node() {

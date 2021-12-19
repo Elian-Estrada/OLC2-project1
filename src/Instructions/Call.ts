@@ -9,6 +9,7 @@ import { Struct } from "./Struct.js";
 import { Cst_Node } from "../Abstract/Cst_Node.js";
 import { Generator3D } from "../Generator/Generator3D.js";
 import { Access_struct } from "../Expression/Access_struct.js";
+import {Value} from "../Abstract/Value.js";
 
 export class Call extends Instruction {
 
@@ -256,8 +257,25 @@ export class Call extends Instruction {
         return this.name;
     }
 
-    compile(table: SymbolTable, generator: Generator3D) {
-        
+    compile(table: SymbolTable, generator: Generator3D, tree: Tree) {
+        let func = tree.get_symbol_table();
+
+        if ( func != null ) {
+            let param_values = [];
+            let size = generator.keepTemps(table);
+            let temp = generator.addTemp();
+            generator.addExpression(temp, 'P', table.get_size() + 1, '+');
+            let aux = 0;
+
+            generator.newEnv(table.get_size());
+            generator.callFunc(func.get_name());
+            generator.getStack(temp, 'P');
+            generator.setEnv(table.get_size());
+            // @ts-ignore
+            generator.recoverTemps(table, size);
+
+            return new Value(temp, type.VOID, true);
+        }
     }
 
     get_node() {

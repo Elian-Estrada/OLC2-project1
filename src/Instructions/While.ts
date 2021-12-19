@@ -91,7 +91,7 @@ export class While extends Instruction {
         return node;
     }
     
-    compile(table: SymbolTable, generator: Generator3D): any {
+    compile(table: SymbolTable, generator: Generator3D, tree: Tree): any {
         let continue_label = generator.newLabel();
         generator.setLabel(continue_label);
         let condition = this.expr.compile(table, generator);
@@ -102,7 +102,7 @@ export class While extends Instruction {
         generator.setLabel(condition.true_label);
 
         for (let inst of this.instructions ) {
-            inst.compile(table, generator);
+            inst.compile(table, generator, tree);
         }
         generator.addGoTo(continue_label);
         generator.setLabel(condition.false_label);

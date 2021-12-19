@@ -101,6 +101,9 @@ var SymbolTable = /** @class */ (function () {
     SymbolTable.prototype.get_size = function () {
         return this.size;
     };
+    SymbolTable.prototype.set_size = function (size) {
+        this.size = size;
+    };
     return SymbolTable;
 }());
 export default SymbolTable;

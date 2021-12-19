@@ -435,8 +435,14 @@ export class Generator3D {
         if ( this.inNatives ) {
             if ( this.natives == "" )
                 this.natives = this.natives + "\n/*------NATIVES------*/\n"
+            this.natives = this.natives + tab + code;
+        }
+        else if ( this.inFunc ) {
+            if ( this.funcs == "" )
+                this.funcs = this.funcs + "\n/*-----FUNCTIONS-----*/\n";
             this.funcs = this.funcs + tab + code;
-        } else
+        }
+        else
             this.code = this.code + "\t" + code;
     }
 
@@ -479,7 +485,49 @@ export class Generator3D {
         this.add_print("c", "char", 114);     // r
     }
 
+    public freeAllTemps() {
+        this.temps_recover = {};
+    }
+
     public get_TempsRecover() {
         return this.temps_recover;
+    }
+
+    public keepTemps(env: SymbolTable) {
+        let size = 0;
+        if ( Object.keys(this.temps_recover).length > 0 ) {
+            let temp = this.addTemp();
+            this.get_freeTemp(temp);
+
+            this.addExpression(temp, 'P', env.get_size(), '+');
+            for ( let value in this.temps_recover ) {
+                size += 1;
+                this.setStack(temp, value, false);
+                if ( size != Object.keys(this.temps_recover).length ) {
+                    this.addExpression(temp, temp, '1', '+');
+                }
+            }
+        }
+        let pos = env.get_size();
+        env.set_size(pos + size);
+        return pos;
+    }
+
+    public recoverTemps(env: SymbolTable, pos: number) {
+        if ( Object.keys(this.recoverTemps).length > 0 ) {
+            let temp = this.addTemp();
+            this.get_freeTemp(temp);
+            let size = 0;
+
+            this.addExpression(temp, 'P', pos, '+');
+            for ( let value in this.temps_recover ) {
+                size += 1;
+                this.getStack(value, temp);
+                if ( size != Object.keys(this.recoverTemps).length ) {
+                    this.addExpression(temp, temp, '1', '+');
+                }
+                env.set_size(pos);
+            }
+        }
     }
 }

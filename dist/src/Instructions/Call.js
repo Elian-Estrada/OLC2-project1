@@ -32,6 +32,7 @@ import { type } from "../SymbolTable/Type.js";
 import { Declaration_array } from "./Declaration_array.js";
 import { Cst_Node } from "../Abstract/Cst_Node.js";
 import { Access_struct } from "../Expression/Access_struct.js";
+import { Value } from "../Abstract/Value.js";
 var Call = /** @class */ (function (_super) {
     __extends(Call, _super);
     function Call(name, params, row, col) {
@@ -229,7 +230,22 @@ var Call = /** @class */ (function (_super) {
     Call.prototype.get_id = function () {
         return this.name;
     };
-    Call.prototype.compile = function (table, generator) {
+    Call.prototype.compile = function (table, generator, tree) {
+        var func = tree.get_symbol_table();
+        if (func != null) {
+            var param_values = [];
+            var size = generator.keepTemps(table);
+            var temp = generator.addTemp();
+            generator.addExpression(temp, 'P', table.get_size() + 1, '+');
+            var aux = 0;
+            generator.newEnv(table.get_size());
+            generator.callFunc(func.get_name());
+            generator.getStack(temp, 'P');
+            generator.setEnv(table.get_size());
+            // @ts-ignore
+            generator.recoverTemps(table, size);
+            return new Value(temp, type.VOID, true);
+        }
     };
     Call.prototype.get_node = function () {
         var node = new Cst_Node("Call Function");

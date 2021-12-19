@@ -6,10 +6,9 @@ import {Break} from "./Break.js";
 import {Return} from "./Return.js";
 import {Continue} from "./Continue.js";
 import {type} from "../SymbolTable/Type.js";
-import {If} from "./If.js";
+import {Cst_Node} from "../Abstract/Cst_Node.js";
+import {Generator3D} from "../Generator/Generator3D.js";
 import Symbol from "../SymbolTable/Symbol.js";
-import { Cst_Node } from "../Abstract/Cst_Node.js";
-import { Generator3D } from "../Generator/Generator3D.js";
 
 export class Function extends Instruction {
 
@@ -96,8 +95,32 @@ export class Function extends Instruction {
         return this.params;
     }
 
-    compile(table: SymbolTable, generator: Generator3D) {
-        
+    compile(table: SymbolTable, generator: Generator3D, tree: Tree) {
+        let new_env = new SymbolTable(table, this.name);
+        let return_label = generator.newLabel();
+        new_env.return_label = generator.newLabel();
+        new_env.set_size(1);
+
+        for ( let param of this.params ) {
+            let in_heap = ( param.get_type() == type.STRING || param.get_type() == type.STRUCT );
+            let new_symbol = new Symbol(param.id, param.type, this.row, this.column, param.value, "", in_heap);
+            new_env.set_table(new_symbol);
+        }
+
+        generator.freeAllTemps();
+        generator.addBeginFunc(this.name);
+
+        for (let i of this.instructions) {
+            i.compile(new_env, generator, tree);
+        }
+
+        if ( this.type != null )
+            generator.setLabel(return_label);
+
+        generator.addEndFunc();
+        generator.freeAllTemps();
+
+        tree.set_symbol_table(new_env);
     }
 
     get_node() {

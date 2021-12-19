@@ -123,4 +123,8 @@ export default class SymbolTable {
     get_size() {
         return this.size;
     }
+
+    set_size(size: number) {
+        this.size = size;
+    }
 }

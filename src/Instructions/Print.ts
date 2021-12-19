@@ -34,7 +34,7 @@ export class Print extends Instruction {
         generator.printString();
 
         let paramTemp1 = generator.addTemp();
-        generator.addAssignment(paramTemp1, "H");
+        // generator.addAssignment(paramTemp1, "H");
 
         let paramTemp2 = generator.addTemp();
         generator.addExpression(paramTemp2, 'P', table.get_size(), '+'); // T5 = P + 1;
