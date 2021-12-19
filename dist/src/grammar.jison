@@ -169,6 +169,7 @@
 	import { Values_array } from "./Expression/Values_array.js";
 	import { Access_array } from "./Expression/Access_array.js";
 	import { Access_struct } from "./Expression/Access_struct.js";
+	import { Range } from "./Expression/Range.js";
 
 	import { Declaration } from "./Instructions/Declaration.js";
 	import { Declaration_array } from "./Instructions/Declaration_array.js";
@@ -213,7 +214,7 @@
 %left 'PLUSSIGN' 'SUBSIGN', 'CONCAT', 'REPETITIONSIGN'
 %left 'MULTSIGN' 'DIVSIGN' 'MODSIGN'
 %right UMENOS
-%left 'INCSIGN' 'DECSIGN'
+%right 'INCSIGN' 'DECSIGN'
 
 %start ini
 
@@ -303,6 +304,18 @@ list_brackets
 
 brackets
 	: BRACKETLEFT expression BRACKETRIGHT	{ $$ = $2; }
+;
+
+range
+	: IDENTIFIER BRACKETLEFT expression_range TWOPOINTS expression_range BRACKETRIGHT {
+		$$ = new Range(new Identifier($1, this._$.first_line, this._$.first_column), $3, $5, this._$.first_line, this._$.first_column);
+	}
+;
+
+expression_range
+	: expression		{ $$ = $1 }
+	| RBEGIN			{ $$ = $1 }
+	| REND				{ $$ = $1 }
 ;
 
 prod_print
@@ -406,6 +419,9 @@ for_in
     : RFOR IDENTIFIER RIN expression CURLYLEFT instructions CURLYRIGHT {
         $$ = new ForIn($2, $4, $6, @1.first_line, @1.first_column);
     }
+	| RFOR IDENTIFIER RIN values_array CURLYLEFT instructions CURLYRIGHT {
+		$$ = new ForIn($2, new Values_array($4, this._$.first_line, this._$.first_column), $6, this._$.first_line, this._$.first_column);
+	}
 ;
 
 for_init
@@ -591,6 +607,7 @@ expression
 	| call_function                         { $$ = $1; }
 	| native_strings                        { $$ = $1; }
 	| access_struct							{ $$ = $1; }
+	| range									{ $$ = $1; }
 ;
 
 boolean

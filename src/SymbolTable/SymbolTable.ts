@@ -60,6 +60,9 @@ export default class SymbolTable {
         while(current_table !== undefined){
             if (current_table.table.has(symbol.id)){
                 let current_symbol: any = current_table.table.get(symbol.id);
+                console.log(symbol);
+                console.log(current_symbol);
+                
                 
                 if (symbol.value === "null"){
                     switch(current_symbol.type){

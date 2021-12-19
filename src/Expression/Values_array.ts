@@ -92,6 +92,10 @@ export class Values_array extends Instruction{
         return this.value;
     }
 
+    set_value(v: any){
+        this.value = v;
+    }
+
     compile(table: SymbolTable, generator: Generator3D) {
         
     }
