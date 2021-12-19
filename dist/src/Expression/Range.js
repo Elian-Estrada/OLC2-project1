@@ -115,6 +115,22 @@ var Range = /** @class */ (function (_super) {
     };
     Range.prototype.get_node = function () {
         var node = new Cst_Node("Range");
+        node.add_child(this.id.get_id());
+        node.add_child("[");
+        if (this.start === "begin") {
+            node.add_child("begin");
+        }
+        else {
+            node.add_childs_node(this.start.get_node());
+        }
+        node.add_child(":");
+        if (this.end === "end") {
+            node.add_child("end");
+        }
+        else {
+            node.add_childs_node(this.end.get_node());
+        }
+        node.add_child("]");
         return node;
     };
     return Range;
