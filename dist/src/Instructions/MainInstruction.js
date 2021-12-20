@@ -20,6 +20,14 @@ import { Function } from "./Function.js";
 import { Continue } from "./Continue.js";
 import { Break } from "./Break.js";
 import { Cst_Node } from "../Abstract/Cst_Node.js";
+import { Push } from "../Nativas/Push.js";
+import { Pop } from "../Nativas/Pop.js";
+import { ToUpperCase } from "../Nativas/ToUpperCase.js";
+import { ToLowerCase } from "../Nativas/ToLowerCase.js";
+import { Length } from "../Nativas/Length.js";
+import { CaracterOfPosition } from "../Nativas/CaracterOfPosition.js";
+import { SubString } from "../Nativas/SubString.js";
+import { Parse } from "../Nativas/Parse.js";
 var MainInstruction = /** @class */ (function (_super) {
     __extends(MainInstruction, _super);
     function MainInstruction(instructions, row, col) {
@@ -33,7 +41,15 @@ var MainInstruction = /** @class */ (function (_super) {
         for (var _i = 0, _a = this.instructions; _i < _a.length; _i++) {
             var item = _a[_i];
             console.log(item);
-            if (item instanceof Function) {
+            if (item instanceof Function
+                && !(item instanceof Push)
+                && !(item instanceof Pop)
+                && !(item instanceof ToUpperCase)
+                && !(item instanceof ToLowerCase)
+                && !(item instanceof Length)
+                && !(item instanceof CaracterOfPosition)
+                && !(item instanceof SubString)
+                && !(item instanceof Parse)) {
                 var error = new Exception("Semantic", "The instruction func don't be into of method main", item.row, item.column);
                 tree.get_errors().push(error);
                 tree.update_console(error.toString());

@@ -7,6 +7,14 @@ import {Continue} from "./Continue.js";
 import {Break} from "./Break.js";
 import {Generator3D} from "../Generator/Generator3D.js";
 import { Cst_Node } from "../Abstract/Cst_Node.js";
+import { Push } from "../Nativas/Push.js";
+import { Pop } from "../Nativas/Pop.js";
+import { ToUpperCase } from "../Nativas/ToUpperCase.js";
+import { ToLowerCase } from "../Nativas/ToLowerCase.js";
+import { Length } from "../Nativas/Length.js";
+import { CaracterOfPosition } from "../Nativas/CaracterOfPosition.js";
+import { SubString } from "../Nativas/SubString.js";
+import { Parse } from "../Nativas/Parse.js";
 
 export class MainInstruction extends Instruction {
 
@@ -24,7 +32,16 @@ export class MainInstruction extends Instruction {
         for ( let item of this.instructions ) {
             console.log(item);
             
-            if ( item instanceof Function ) {
+            if ( item instanceof Function 
+                && !(item instanceof Push)
+                && !(item instanceof Pop)
+                && !(item instanceof ToUpperCase)
+                && !(item instanceof ToLowerCase)
+                && !(item instanceof Length)
+                && !(item instanceof CaracterOfPosition)
+                && !(item instanceof SubString)
+                && !(item instanceof Parse)
+                ) {
                 let error = new Exception("Semantic", "The instruction func don't be into of method main", item.row, item.column);
                 tree.get_errors().push(error);
                 tree.update_console(error.toString());
