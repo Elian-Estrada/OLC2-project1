@@ -50,7 +50,13 @@ function codeToAnalyze() {
     myCodeMirror2.setValue("");
     // @ts-ignore
     var res = main.lexicalAnalysis(bufferStream);
-    updateCodeMirror(res, myCodeMirror2);
+    console.log(res);
+    try {
+        updateCodeMirror(res, myCodeMirror2);
+    } catch (error){
+        console.log(error);
+    }
+    
 }
 btnCompile === null || btnCompile === void 0 ? void 0 : btnCompile.addEventListener('click', function () {
     bufferStream = myCodeMirror.getValue();

@@ -251,7 +251,7 @@ ini
 
 instructions
 	: instructions instruction          { $1.push($2); $$ = $1; }
-	| instruction                       { $$ = [$1]; }
+	| instruction                       { if($1 === null) { $$ = []; } else { $$ = [$1]; } }
 ;
 
 instruction
@@ -260,7 +260,7 @@ instruction
 	| declaration_array ptcommP { $$ = $1; }
 	| assignment_array ptcommP	{ $$ = $1; }
 	| prod_print ptcommP 		{ $$ = $1; }
-	| inc_dec ptcommP			{ $$FSTRING = $1; }
+	| inc_dec ptcommP			{ $$ = $1; }
 	| prod_if                   { $$ = $1; }
 	| prod_loops                { $$ = $1; }
 	| prod_switch               { $$ = $1; }
@@ -274,7 +274,10 @@ instruction
 	| native_array_push ptcommP	{ $$ = $1; }
 	| native_array_pop ptcommP	{ $$ = $1; }
 	| assignment_struct ptcommP	{ $$ = $1; }
-	| error ptcommP             { errors.push(new Exception("Sintactic", `Sintactic error ${yytext}`, this._$.first_line, this._$.first_column)); }
+	| error SEMICOLON           { console.log("Entro al error", yytext);
+		errors.push(new Exception("Sintactic", `Sintactic error ${yytext}`, this._$.first_line, this._$.first_column));
+		$$ = null;
+	}
 ;
 
 ptcommP
