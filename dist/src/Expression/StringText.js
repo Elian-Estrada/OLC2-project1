@@ -53,9 +53,41 @@ var StringText = /** @class */ (function (_super) {
                 return new Value(temp_1, type.STRING, true);
             }
             else {
-                generator.addExpression(temp, left.value, right.value, "+");
-                var type_ret = type.STRING;
-                return new Value(temp, type_ret, true);
+                generator.NumberToString();
+                generator.concatString();
+                var paramTemp = generator.addTemp();
+                generator.addExpression(paramTemp, 'P', 0, '+'); // t11 = P + 0
+                generator.addExpression(paramTemp, paramTemp, '1', '+'); // t11 = t11 + 1
+                if (this.exp2.get_type() !== type.STRING) {
+                    generator.setStack(paramTemp, right.value); // stack[t11]=4
+                }
+                else {
+                    generator.setStack(paramTemp, left.value); // stack[t11]=4
+                }
+                generator.addExpression('P', 'P', 0, '+'); // P = P + 0
+                generator.callFunc('toString'); // toString()
+                var paramTemp2 = generator.addTemp();
+                generator.getStack(paramTemp2, 'P'); // t12 = stack[P]
+                generator.addExpression('P', 'P', 0, '-'); // P = P - 0
+                var new_temp = generator.addTemp();
+                generator.addExpression(new_temp, 'P', 0, '+');
+                generator.addExpression(new_temp, new_temp, '1', '+');
+                if (this.exp2.get_type() !== type.STRING) {
+                    generator.setStack(new_temp, left.value);
+                    generator.addExpression(new_temp, new_temp, '1', '+');
+                    generator.setStack(new_temp, paramTemp2);
+                }
+                else {
+                    generator.setStack(new_temp, paramTemp2);
+                    generator.addExpression(new_temp, new_temp, '1', '+');
+                    generator.setStack(new_temp, right.value);
+                }
+                generator.addExpression('P', 'P', 0, '+');
+                generator.callFunc('concatString');
+                var new_temp2 = generator.addTemp();
+                generator.getStack(new_temp2, 'P');
+                generator.addExpression('P', 'P', 0, '-');
+                return new Value(new_temp2, type.STRING, true);
             }
         }
         else if (operation === String_operator.REPETITION) {
