@@ -4,7 +4,7 @@ import Exception from "./Exception.js";
 import Symbol from "./Symbol.js";
 import {type} from './Type.js';
 
-export let variables = [];
+export let variables: Array<any> = [];
 
 export default class SymbolTable {
 
@@ -12,6 +12,7 @@ export default class SymbolTable {
     private name: String;
     private table: Map<String, Symbol>;
     private prev: SymbolTable|undefined;
+    private static varaibles = [];
     public break_label: string;
     public continue_label: string;
     public return_label: string;
@@ -35,6 +36,25 @@ export default class SymbolTable {
         this.table.set(symbol.id, symbol);
         this.size += 1;
         symbol.position = this.size;
+
+        let flag = true;
+
+        for (let i = 0; i< variables.length; i++){
+            if(variables[i].id === symbol.id 
+            && variables[i].type === symbol.type
+            && variables[i].row === symbol.row
+            && variables[i].column === symbol.column
+            //&& item.value === symbol.value
+            && variables[i].environment === symbol.environment){
+                flag = false;
+                variables[i] = symbol;
+                break;
+            }
+        }
+
+        if (flag){
+            variables.push(symbol);
+        }
 
         return undefined;
     }
@@ -133,5 +153,9 @@ export default class SymbolTable {
 
     get_size() {
         return this.size;
+    }
+
+    clean_variables(){
+        variables = [];
     }
 }

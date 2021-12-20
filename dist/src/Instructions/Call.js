@@ -48,7 +48,7 @@ var Call = /** @class */ (function (_super) {
             var ob_function = tree.get_function(this.name);
             var struct_1 = JSON.parse(JSON.stringify(tree.get_struct(this.name)));
             if (ob_function !== null && ob_function !== undefined) {
-                var new_table = new SymbolTable(tree.get_global_table(), "Function-".concat(this.name, "-").concat(this.row, "-").concat(this.column));
+                var new_table = new SymbolTable(tree.get_global_table(), "Function-".concat(this.name));
                 if (ob_function.get_params().length == this.params.length) {
                     var count = 0;
                     var table_res = null;

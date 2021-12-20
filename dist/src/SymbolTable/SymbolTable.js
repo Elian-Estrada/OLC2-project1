@@ -22,6 +22,22 @@ var SymbolTable = /** @class */ (function () {
         this.table.set(symbol.id, symbol);
         this.size += 1;
         symbol.position = this.size;
+        var flag = true;
+        for (var i = 0; i < variables.length; i++) {
+            if (variables[i].id === symbol.id
+                && variables[i].type === symbol.type
+                && variables[i].row === symbol.row
+                && variables[i].column === symbol.column
+                //&& item.value === symbol.value
+                && variables[i].environment === symbol.environment) {
+                flag = false;
+                variables[i] = symbol;
+                break;
+            }
+        }
+        if (flag) {
+            variables.push(symbol);
+        }
         return undefined;
     };
     SymbolTable.prototype.get_table = function (id) {
@@ -109,6 +125,10 @@ var SymbolTable = /** @class */ (function () {
     SymbolTable.prototype.get_size = function () {
         return this.size;
     };
+    SymbolTable.prototype.clean_variables = function () {
+        variables = [];
+    };
+    SymbolTable.varaibles = [];
     return SymbolTable;
 }());
 export default SymbolTable;

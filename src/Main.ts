@@ -3,6 +3,7 @@ import { grammar, errors, clean_errors } from "./grammar.js";
 import { Instruction } from "./Abstract/Instruction.js";
 import Tree from "./SymbolTable/Tree.js";
 import SymbolTable from "./SymbolTable/SymbolTable.js";
+import { variables } from "./SymbolTable/SymbolTable.js";
 import Exception from "./SymbolTable/Exception.js";
 import {Function} from "./Instructions/Function.js";
 import {Declaration} from "./Instructions/Declaration.js";
@@ -36,6 +37,8 @@ export class Main {
 
         let tree: Tree = new Tree(instructions);
         let global_table: SymbolTable = new SymbolTable(undefined, undefined);
+        global_table.clean_variables();
+
         tree.set_global_table(global_table);
 
         for ( let error of errors ) {
@@ -173,10 +176,12 @@ export class Main {
 
         console.log(tree.get_instructions());
         console.log(tree.get_global_table());
+        console.log(variables);
         console.log(tree.get_errors());
         console.log(tree.get_all_structs());
         
         localStorage.setItem("errors", JSON.stringify(tree.get_errors()));
+        localStorage.setItem("symbol", JSON.stringify(variables));
         
         let init = new Cst_Node("Root");
         let inst = new Cst_Node("Instructions");
