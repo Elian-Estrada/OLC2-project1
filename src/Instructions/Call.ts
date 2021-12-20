@@ -9,6 +9,7 @@ import { Struct } from "./Struct.js";
 import { Cst_Node } from "../Abstract/Cst_Node.js";
 import { Generator3D } from "../Generator/Generator3D.js";
 import { Access_struct } from "../Expression/Access_struct.js";
+import {Value} from "../Abstract/Value.js";
 
 export class Call extends Instruction {
 
@@ -256,8 +257,49 @@ export class Call extends Instruction {
         return this.name;
     }
 
-    compile(table: SymbolTable, generator: Generator3D) {
-        
+    compile(table: SymbolTable, generator: Generator3D, tree: Tree) {
+        let func = tree.get_symbol_table();
+
+        if ( func != null ) {
+            let param_values = [];
+            let size = generator.keepTemps(table);
+
+            for ( let param of this.params ) {
+                param_values.push(param.compile(table, generator, tree));
+            }
+
+            let temp = generator.addTemp();
+            generator.addExpression(temp, 'P', table.get_size() + 1, '+');
+            let aux = 0;
+
+            for ( let param of param_values ) {
+                aux = aux + 1;
+                generator.setStack(temp, param.value);
+
+                if ( aux != param_values.length ) {
+                    generator.addExpression(temp, temp, '1', '+');
+                }
+            }
+
+            generator.newEnv(table.get_size());
+            generator.callFunc(func.get_name());
+            generator.getStack(temp, 'P');
+            generator.setEnv(table.get_size());
+            // @ts-ignore
+            generator.recoverTemps(table, size);
+
+            let ret_val = new Value(temp, func.type, true);
+            if ( ret_val.get_type() == type.BOOL ) {
+                let temp_label = generator.newLabel();
+                let temp_label2 = generator.newLabel();
+                generator.addIf(temp, 1, '==', temp_label);
+                generator.addGoTo(temp_label2);
+                ret_val.true_label = temp_label;
+                ret_val.false_label = temp_label2;
+            }
+
+            return ret_val;
+        }
     }
 
     get_node() {

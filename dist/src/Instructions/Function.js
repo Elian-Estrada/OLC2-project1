@@ -21,6 +21,7 @@ import { Return } from "./Return.js";
 import { Continue } from "./Continue.js";
 import { type } from "../SymbolTable/Type.js";
 import { Cst_Node } from "../Abstract/Cst_Node.js";
+import Symbol from "../SymbolTable/Symbol.js";
 var Function = /** @class */ (function (_super) {
     __extends(Function, _super);
     function Function(type, name, params, instructions, row, col) {
@@ -89,7 +90,29 @@ var Function = /** @class */ (function (_super) {
     Function.prototype.get_params = function () {
         return this.params;
     };
-    Function.prototype.compile = function (table, generator) {
+    Function.prototype.compile = function (table, generator, tree) {
+        var new_env = new SymbolTable(table, this.name);
+        new_env.type = this.type;
+        var return_label = generator.newLabel();
+        new_env.return_label = return_label;
+        new_env.set_size(1);
+        for (var _i = 0, _a = this.params; _i < _a.length; _i++) {
+            var param = _a[_i];
+            var in_heap = (param.type == type.STRING || param.type == type.STRUCT);
+            var new_symbol = new Symbol(param.name, param.type, this.row, this.column, param.value, "", in_heap);
+            new_env.set_table(new_symbol);
+        }
+        generator.freeAllTemps();
+        generator.addBeginFunc(this.name, this.type);
+        for (var _b = 0, _c = this.instructions; _b < _c.length; _b++) {
+            var i = _c[_b];
+            i.compile(new_env, generator, tree);
+        }
+        if (this.type != null)
+            generator.setLabel(return_label);
+        generator.addEndFunc();
+        generator.freeAllTemps();
+        tree.set_symbol_table(new_env);
     };
     Function.prototype.get_node = function () {
         var node = new Cst_Node("Function");

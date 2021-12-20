@@ -59,7 +59,7 @@ var MainInstruction = /** @class */ (function (_super) {
             }
         }
     };
-    MainInstruction.prototype.compile = function (table, generator) {
+    MainInstruction.prototype.compile = function (table, generator, tree) {
         /*let generator_aux = new Generator3D();
         let generator = generator_aux.get_instance();*/
         generator.addComment("----COMPILE----");
@@ -71,7 +71,7 @@ var MainInstruction = /** @class */ (function (_super) {
                     generator.add_print("c", "char", 10);
                 }
                 else {
-                    item.compile(table, generator);
+                    item.compile(table, generator, tree);
                 }
             }
         }

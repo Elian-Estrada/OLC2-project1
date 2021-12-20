@@ -317,7 +317,8 @@ var Generator3D = /** @class */ (function () {
     Generator3D.prototype.addAssignment = function (pointer, value) {
         this.codeIn("".concat(pointer, " = ").concat(value, ";\n"));
     };
-    Generator3D.prototype.addBeginFunc = function (id) {
+    Generator3D.prototype.addBeginFunc = function (id, type) {
+        if (type === void 0) { type = 'void'; }
         if (!this.inNatives)
             this.inFunc = true;
         this.codeIn("void ".concat(id, " () {\n"), '');
@@ -343,6 +344,11 @@ var Generator3D = /** @class */ (function () {
         if (this.inNatives) {
             if (this.natives == "")
                 this.natives = this.natives + "\n/*------NATIVES------*/\n";
+            this.natives = this.natives + tab + code;
+        }
+        else if (this.inFunc) {
+            if (this.funcs == "")
+                this.funcs = this.funcs + "\n/*-----FUNCTIONS-----*/\n";
             this.funcs = this.funcs + tab + code;
         }
         else
@@ -381,8 +387,45 @@ var Generator3D = /** @class */ (function () {
         this.add_print("c", "char", 111); // o
         this.add_print("c", "char", 114); // r
     };
+    Generator3D.prototype.freeAllTemps = function () {
+        this.temps_recover = {};
+    };
     Generator3D.prototype.get_TempsRecover = function () {
         return this.temps_recover;
+    };
+    Generator3D.prototype.keepTemps = function (env) {
+        var size = 0;
+        if (Object.keys(this.temps_recover).length > 0) {
+            var temp = this.addTemp();
+            this.get_freeTemp(temp);
+            this.addExpression(temp, 'P', env.get_size(), '+');
+            for (var value in this.temps_recover) {
+                size += 1;
+                this.setStack(temp, value, false);
+                if (size != Object.keys(this.temps_recover).length) {
+                    this.addExpression(temp, temp, '1', '+');
+                }
+            }
+        }
+        var pos = env.get_size();
+        env.set_size(pos + size);
+        return pos;
+    };
+    Generator3D.prototype.recoverTemps = function (env, pos) {
+        if (Object.keys(this.recoverTemps).length > 0) {
+            var temp = this.addTemp();
+            this.get_freeTemp(temp);
+            var size = 0;
+            this.addExpression(temp, 'P', pos, '+');
+            for (var value in this.temps_recover) {
+                size += 1;
+                this.getStack(value, temp);
+                if (size != Object.keys(this.recoverTemps).length) {
+                    this.addExpression(temp, temp, '1', '+');
+                }
+                env.set_size(pos);
+            }
+        }
     };
     return Generator3D;
 }());

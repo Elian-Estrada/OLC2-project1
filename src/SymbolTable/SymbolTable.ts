@@ -15,6 +15,8 @@ export default class SymbolTable {
     public break_label: string;
     public continue_label: string;
     public return_label: string;
+    public type: string;
+    public value_ret: string;
 
     constructor(prev?: SymbolTable, name: String = "Global") {
         this.size = 0;
@@ -24,6 +26,8 @@ export default class SymbolTable {
         this.break_label = '';
         this.continue_label = '';
         this.return_label = '';
+        this.type = '';
+        this.value_ret = '';
     }
 
     public set_table(symbol: Symbol){
@@ -125,5 +129,9 @@ export default class SymbolTable {
 
     get_size() {
         return this.size;
+    }
+
+    set_size(size: number) {
+        this.size = size;
     }
 }

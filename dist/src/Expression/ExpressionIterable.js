@@ -22,9 +22,9 @@ var ExpressionIterable = /** @class */ (function (_super) {
         _this.exp2 = exp2;
         return _this;
     }
-    ExpressionIterable.prototype.compile = function (table, generator) {
-        var val1 = this.exp1.compile(table, generator);
-        var val2 = this.exp2.compile(table, generator);
+    ExpressionIterable.prototype.compile = function (table, generator, tree) {
+        var val1 = this.exp1.compile(table, generator, tree);
+        var val2 = this.exp2.compile(table, generator, tree);
         var lis_aux = [];
         lis_aux.push(val1);
         lis_aux.push(val2);

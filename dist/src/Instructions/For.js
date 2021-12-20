@@ -33,9 +33,9 @@ var For = /** @class */ (function (_super) {
         _this.counter = 0;
         return _this;
     }
-    For.prototype.compile = function (table, generator) {
+    For.prototype.compile = function (table, generator, tree) {
         generator.addComment("----FOR CYCLE----");
-        this.init.compile(table, generator);
+        this.init.compile(table, generator, tree);
         // @ts-ignore
         table.get_table(this.init.id[0]);
         var continue_label = generator.newLabel();
@@ -44,8 +44,8 @@ var For = /** @class */ (function (_super) {
         generator.setLabel(condition.true_label);
         for (var _i = 0, _a = this.instructions; _i < _a.length; _i++) {
             var instructions = _a[_i];
-            instructions.compile(table, generator);
-            this.step.compile(table, generator);
+            instructions.compile(table, generator, tree);
+            this.step.compile(table, generator, tree);
         }
         generator.addGoTo(continue_label);
         generator.setLabel(condition.false_label);

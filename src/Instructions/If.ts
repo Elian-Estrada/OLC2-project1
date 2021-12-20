@@ -125,7 +125,7 @@ export class If extends Instruction {
         return node;
     }
     
-    compile(table: SymbolTable, generator: Generator3D): any {
+    compile(table: SymbolTable, generator: Generator3D, tree: Tree): any {
         let condition = this.expr.compile(table, generator);
 
         if ( condition.type !== type.BOOL ) {
@@ -135,12 +135,12 @@ export class If extends Instruction {
 
         generator.setLabel(condition.true_label);
         for ( let instr of this.instructions ) {
-            instr.compile(table, generator);
+            instr.compile(table, generator, tree);
         }
 
         if ( this.elseif !== null ) {
             generator.setLabel(condition.false_label);
-            this.elseif.compile(table, generator);
+            this.elseif.compile(table, generator, tree);
         }
 
         let label_exit_if = '';
@@ -152,7 +152,7 @@ export class If extends Instruction {
         generator.setLabel(condition.false_label);
         if ( this.else_instr !== null ) {
             for ( let else_instr of this.else_instr ) {
-                else_instr.compile(table, generator);
+                else_instr.compile(table, generator, tree);
                 generator.setLabel(label_exit_if);
             }
         }

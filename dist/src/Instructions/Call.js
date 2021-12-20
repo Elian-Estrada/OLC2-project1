@@ -32,6 +32,7 @@ import { type } from "../SymbolTable/Type.js";
 import { Declaration_array } from "./Declaration_array.js";
 import { Cst_Node } from "../Abstract/Cst_Node.js";
 import { Access_struct } from "../Expression/Access_struct.js";
+import { Value } from "../Abstract/Value.js";
 var Call = /** @class */ (function (_super) {
     __extends(Call, _super);
     function Call(name, params, row, col) {
@@ -229,7 +230,43 @@ var Call = /** @class */ (function (_super) {
     Call.prototype.get_id = function () {
         return this.name;
     };
-    Call.prototype.compile = function (table, generator) {
+    Call.prototype.compile = function (table, generator, tree) {
+        var func = tree.get_symbol_table();
+        if (func != null) {
+            var param_values = [];
+            var size = generator.keepTemps(table);
+            for (var _i = 0, _a = this.params; _i < _a.length; _i++) {
+                var param = _a[_i];
+                param_values.push(param.compile(table, generator, tree));
+            }
+            var temp = generator.addTemp();
+            generator.addExpression(temp, 'P', table.get_size() + 1, '+');
+            var aux = 0;
+            for (var _b = 0, param_values_1 = param_values; _b < param_values_1.length; _b++) {
+                var param = param_values_1[_b];
+                aux = aux + 1;
+                generator.setStack(temp, param.value);
+                if (aux != param_values.length) {
+                    generator.addExpression(temp, temp, '1', '+');
+                }
+            }
+            generator.newEnv(table.get_size());
+            generator.callFunc(func.get_name());
+            generator.getStack(temp, 'P');
+            generator.setEnv(table.get_size());
+            // @ts-ignore
+            generator.recoverTemps(table, size);
+            var ret_val = new Value(temp, func.type, true);
+            if (ret_val.get_type() == type.BOOL) {
+                var temp_label = generator.newLabel();
+                var temp_label2 = generator.newLabel();
+                generator.addIf(temp, 1, '==', temp_label);
+                generator.addGoTo(temp_label2);
+                ret_val.true_label = temp_label;
+                ret_val.false_label = temp_label2;
+            }
+            return ret_val;
+        }
     };
     Call.prototype.get_node = function () {
         var node = new Cst_Node("Call Function");

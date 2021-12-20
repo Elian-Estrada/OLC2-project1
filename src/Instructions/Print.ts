@@ -11,8 +11,8 @@ import {Primitive} from "../Expression/Primitive.js";
 
 export class Print extends Instruction {
 
-    compile(table: SymbolTable, generator: Generator3D) {
-        let res = this.expression.compile(table, generator);
+    compile(table: SymbolTable, generator: Generator3D, tree: Tree) {
+        let res = this.expression.compile(table, generator, tree);
         let valueShow = res.value;
 
         if ( res.get_type() === type.INT ) {
@@ -34,7 +34,7 @@ export class Print extends Instruction {
         generator.printString();
 
         let paramTemp1 = generator.addTemp();
-        generator.addAssignment(paramTemp1, "H");
+        // generator.addAssignment(paramTemp1, "H");
 
         let paramTemp2 = generator.addTemp();
         generator.addExpression(paramTemp2, 'P', table.get_size(), '+'); // T5 = P + 1;

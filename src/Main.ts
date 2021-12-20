@@ -208,7 +208,7 @@ export class Main {
         tree.set_global_table(global_table);
 
         for ( let instruction of tree.get_instructions() ){
-            res = instruction.compile(global_table, generator);
+            res = instruction.compile(global_table, generator, tree);
         }
 
         return res;

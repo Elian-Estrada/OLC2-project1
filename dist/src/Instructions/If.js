@@ -124,7 +124,7 @@ var If = /** @class */ (function (_super) {
         }
         return node;
     };
-    If.prototype.compile = function (table, generator) {
+    If.prototype.compile = function (table, generator, tree) {
         var condition = this.expr.compile(table, generator);
         if (condition.type !== type.BOOL) {
             generator.addError("Condition is not a boolean value", Number(this.row), Number(this.column));
@@ -133,11 +133,11 @@ var If = /** @class */ (function (_super) {
         generator.setLabel(condition.true_label);
         for (var _i = 0, _a = this.instructions; _i < _a.length; _i++) {
             var instr = _a[_i];
-            instr.compile(table, generator);
+            instr.compile(table, generator, tree);
         }
         if (this.elseif !== null) {
             generator.setLabel(condition.false_label);
-            this.elseif.compile(table, generator);
+            this.elseif.compile(table, generator, tree);
         }
         var label_exit_if = '';
         if (this.else_instr !== null) {
@@ -148,7 +148,7 @@ var If = /** @class */ (function (_super) {
         if (this.else_instr !== null) {
             for (var _b = 0, _c = this.else_instr; _b < _c.length; _b++) {
                 var else_instr = _c[_b];
-                else_instr.compile(table, generator);
+                else_instr.compile(table, generator, tree);
                 generator.setLabel(label_exit_if);
             }
         }

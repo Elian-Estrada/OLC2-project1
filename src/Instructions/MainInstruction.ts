@@ -55,7 +55,7 @@ export class MainInstruction extends Instruction {
         }
     }
 
-    compile(table: SymbolTable, generator: Generator3D): any {
+    compile(table: SymbolTable, generator: Generator3D, tree: Tree): any {
         /*let generator_aux = new Generator3D();
         let generator = generator_aux.get_instance();*/
         generator.addComment("----COMPILE----");
@@ -66,7 +66,7 @@ export class MainInstruction extends Instruction {
                 if ( item === ';' ) {
                     generator.add_print("c", "char", 10);
                 } else {
-                    item.compile(table, generator);
+                    item.compile(table, generator, tree);
                 }
             }
         }
