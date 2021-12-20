@@ -50,34 +50,34 @@ var Function = /** @class */ (function (_super) {
             }
             var error = null;
             if (value instanceof Break) {
-                error = new Exception("Semantic", "Instruction Break out of loop", instruction.row, instruction.column);
+                error = new Exception("Semantic", "Instruction Break out of loop", instruction.row, instruction.column, new_table.get_name());
                 tree.get_errors().push(error);
                 // tree.get_update(error);
             }
             if (value instanceof Continue) {
-                error = new Exception("Semantic", "Instruction Continue out of loop", instruction.row, instruction.column);
+                error = new Exception("Semantic", "Instruction Continue out of loop", instruction.row, instruction.column, new_table.get_name());
                 tree.get_errors().push(error);
             }
             if (value instanceof Return) {
                 console.log(value);
                 if (this.type == type.VOID && value.get_result() !== null) {
-                    return new Exception("Semantic", "Function should not return anything", instruction.row, instruction.column);
+                    return new Exception("Semantic", "Function should not return anything", instruction.row, instruction.column, new_table.get_name());
                 }
                 if (value.get_type() === type.STRUCT && value.get_result() !== "null") {
                     if (value.get_result().get_id() !== this.type) {
-                        return new Exception("Semantic", "Function doesn't return same data type", instruction.row, instruction.column);
+                        return new Exception("Semantic", "Function doesn't return same data type", instruction.row, instruction.column, new_table.get_name());
                     }
                 }
                 else if (value.get_result() !== "null") {
                     if (this.type != value.get_type()) {
-                        return new Exception("Semantic", "Function doesn't return same data type", instruction.row, instruction.column);
+                        return new Exception("Semantic", "Function doesn't return same data type", instruction.row, instruction.column, new_table.get_name());
                     }
                 }
                 return value.get_result();
             }
         }
         if (this.type !== type.VOID) {
-            return new Exception("Semantic", "Function of type: ".concat(this.type, " expected one Return"), this.instructions[this.instructions.length - 1].row, this.instructions[this.instructions.length - 1].column);
+            return new Exception("Semantic", "Function of type: ".concat(this.type, " expected one Return"), this.instructions[this.instructions.length - 1].row, this.instructions[this.instructions.length - 1].column, new_table.get_name());
         }
         return null;
     };

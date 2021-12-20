@@ -95,14 +95,14 @@ export class Declaration extends Instruction {
             if (this.expression instanceof Identifier && this.expression.get_type() === type.STRUCT) {
 
                 if (this.expression.get_value().get_id() !== this.id[1]) {
-                    return new Exception("Semantic", `The type: ${value.id} cannot be assignment to variable of type: ${this.id[1]}`, this.expression.row, this.expression.column);
+                    return new Exception("Semantic", `The type: ${value.id} cannot be assignment to variable of type: ${this.id[1]}`, this.expression.row, this.expression.column, table.get_name());
                 }
             }
 
             if (this.expression.get_type() === type.STRUCT && this.expression instanceof Access_struct) {
                 
                 if (/*value.get_value().struct*/value.get_value() !== "null" && value.get_value().id !== this.id[1]) {
-                    return new Exception("Semantic", `The type: ${value.get_value().get_id()} cannot be assignment to variable of type: ${this.id[1]}`, this.expression.row, this.expression.column);
+                    return new Exception("Semantic", `The type: ${value.get_value().get_id()} cannot be assignment to variable of type: ${this.id[1]}`, this.expression.row, this.expression.column, table.get_name());
                 } else if (value.get_value() === "null"){
                     value = {id: this.id[1], value: "null"};
                 } else {
@@ -116,7 +116,7 @@ export class Declaration extends Instruction {
                 let struct = this.id[1];
 
                 if (struct !== this.expression.get_id()) {
-                    return new Exception("Semantic", `The type: ${this.expression.get_id()} cannot be assignment to variable of type: ${struct}`, this.expression.row, this.expression.column);
+                    return new Exception("Semantic", `The type: ${this.expression.get_id()} cannot be assignment to variable of type: ${struct}`, this.expression.row, this.expression.column, table.get_name());
                 }
 
             } else if (this.expression.get_type() !== this.id[1]) {
@@ -130,7 +130,7 @@ export class Declaration extends Instruction {
 
                     if (this.expression.get_type() !== this.type) {
 
-                        return new Exception("Semantic", `The type: ${this.expression.get_type()} cannot be assignment to variable of type: ${this.type}`, this.expression.row, this.expression.column);
+                        return new Exception("Semantic", `The type: ${this.expression.get_type()} cannot be assignment to variable of type: ${this.type}`, this.expression.row, this.expression.column, table.get_name());
                     }
                 }
             }
@@ -158,7 +158,6 @@ export class Declaration extends Instruction {
             }
         }
 
-        let errors = [];
         let result;
 
         if (this.type !== type.STRUCT) {
@@ -168,7 +167,8 @@ export class Declaration extends Instruction {
                 result = table.set_table(symbol);
 
                 if (result instanceof Exception) {
-                    errors.push(result);
+                    tree.get_errors().push(result);
+                    tree.update_console(result.toString());
                 }
             }
         } else {
@@ -179,10 +179,6 @@ export class Declaration extends Instruction {
             if (result instanceof Exception) {
                 return result;
             }
-        }
-
-        if (errors.length !== 0) {
-            return errors;
         }
 
         return null;

@@ -24,10 +24,10 @@ export class SubString extends Function {
     interpret(tree: Tree, table: SymbolTable): any {
         let id_founded = this.id.interpret(tree, table);
         if ( id_founded === null )
-            return new Exception("Semantic", "Identifier not found in the current context", this.row, this.column);
+            return new Exception("Semantic", "Identifier not found in the current context", this.row, this.column, table.get_name());
 
         if ( this.id.get_type() !== type.STRING )
-            return new Exception("Semantic", `The type ${id_founded.type} not valid for Length`, this.row, this.column);
+            return new Exception("Semantic", `The type ${id_founded.type} not valid for Length`, this.row, this.column, table.get_name());
 
         let from = this.from.interpret(tree, table);
 
@@ -36,11 +36,11 @@ export class SubString extends Function {
         }
 
         if (this.from.get_type() !== type.INT){
-            return new Exception("Semantic", `The expression can be only of type: int`, this.from.row, this.from.column);
+            return new Exception("Semantic", `The expression can be only of type: int`, this.from.row, this.from.column, table.get_name());
         }
 
         if (from > id_founded.length || from < 0){
-            return new Exception("Semantic", `The index: ${from} out of range`, this.from.row, this.from.column);
+            return new Exception("Semantic", `The index: ${from} out of range`, this.from.row, this.from.column, table.get_name());
         }
 
         let to = this.to.interpret(tree, table);
@@ -50,14 +50,14 @@ export class SubString extends Function {
         }
 
         if (this.to.get_type() !== type.INT){
-            return new Exception("Semantic", `The expression can be only of type: int`, this.to.row, this.to.column);
+            return new Exception("Semantic", `The expression can be only of type: int`, this.to.row, this.to.column, table.get_name());
         }
 
         // @ts-ignore
         to = parseInt(to) + 1;
         
         if (to > id_founded.length){
-            return new Exception("Semantic", `The index: ${to - 1} out of range`, this.row, this.column);
+            return new Exception("Semantic", `The index: ${to - 1} out of range`, this.row, this.column, table.get_name());
         }
 
         this.type = type.STRING;

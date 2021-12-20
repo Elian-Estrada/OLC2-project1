@@ -4,13 +4,15 @@ export default class Exception {
     private description: String;
     private row: Number;
     private column: Number;
+    private environment: String | undefined;
 
-    constructor(type: String, description: String, row: Number, column: Number){
+    constructor(type: String, description: String, row: Number, column: Number, environment?: String){
 
         this.type = type;
         this.description = description;
         this.row = row;
         this.column = column;
+        this.environment = environment;
 
     }
 
@@ -31,8 +33,12 @@ export default class Exception {
         return this.column;
     }
 
+    public getEnvironment(): String | undefined {
+        return this.environment;
+    }
+
     public toString(): String{
-        return `--> ${this.getType()} - ${this.getDescription()} in [${this.getRow()}, ${this.getColumn()}]`;
+        return `--> ${this.getType()} - ${this.getDescription()} in ${this.getEnvironment()} on [${this.getRow()}, ${this.getColumn()}]`;
     }
 
 }

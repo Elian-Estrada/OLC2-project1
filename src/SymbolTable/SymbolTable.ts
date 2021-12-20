@@ -28,7 +28,7 @@ export default class SymbolTable {
 
     public set_table(symbol: Symbol){
         if (this.table.has(symbol.id)){
-            return new Exception("Semantic", `The variable ${symbol.id} already definited`, symbol.row, symbol.column);
+            return new Exception("Semantic", `The variable ${symbol.id} already definited`, symbol.row, symbol.column, this.name);
         }
 
         symbol.environment = this.name;
@@ -74,7 +74,7 @@ export default class SymbolTable {
                             current_symbol.value = symbol.value;
                             return undefined;
                         default:
-                            return new Exception("Semantic", `The type: ${type.NULL} cannot assignment to variable of type: ${current_symbol.type}`, symbol.row, symbol.column);
+                            return new Exception("Semantic", `The type: ${type.NULL} cannot assignment to variable of type: ${current_symbol.type}`, symbol.row, symbol.column, this.name);
                     }
                 }
 
@@ -92,7 +92,7 @@ export default class SymbolTable {
                                 current_symbol.value.set_value(symbol.value.get_value());
                                 return undefined;
                             }else {
-                                return new Exception("Semantic", `Cannot assign value of type: ${symbol.value.get_subtype()} in a variable of type: ${current_symbol.value.get_subtype()}`, symbol.row, symbol.column);
+                                return new Exception("Semantic", `Cannot assign value of type: ${symbol.value.get_subtype()} in a variable of type: ${current_symbol.value.get_subtype()}`, symbol.row, symbol.column, this.name);
                             }
                         }
                     }
@@ -107,20 +107,20 @@ export default class SymbolTable {
                         current_symbol.value = symbol.value;
                         return undefined;
                     } else {
-                        return new Exception("Semantic", `The vairiable: ${current_symbol.id} isn't at type: ${symbol.type}`, symbol.row, symbol.column);
+                        return new Exception("Semantic", `The vairiable: ${current_symbol.id} isn't at type: ${symbol.type}`, symbol.row, symbol.column, this.name);
                     }
                     
                 } else if (current_symbol.value.id !== symbol.value.id){
-                    return new Exception("Semantic", `Cannot assign value of type: ${symbol.value.id} in a variable of type: ${current_symbol.value.id}`, symbol.row, symbol.column);
+                    return new Exception("Semantic", `Cannot assign value of type: ${symbol.value.id} in a variable of type: ${current_symbol.value.id}`, symbol.row, symbol.column, this.name);
                 } else {
-                    return new Exception("Semantic", `Cannot assign value of type: ${symbol.type} in a variable of type: ${current_table.table.get(symbol.id)?.type}`, symbol.row, symbol.column);
+                    return new Exception("Semantic", `Cannot assign value of type: ${symbol.type} in a variable of type: ${current_table.table.get(symbol.id)?.type}`, symbol.row, symbol.column, this.name);
                 }
             }
             
             current_table = current_table.prev;
         }
 
-        return new Exception("Semantic", `The id: ${symbol.id} doesn't exist in current context`, symbol.row, symbol.column);
+        return new Exception("Semantic", `The id: ${symbol.id} doesn't exist in current context`, symbol.row, symbol.column, this.name);
     }
 
     increment_size () {

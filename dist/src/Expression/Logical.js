@@ -49,7 +49,7 @@ var Logical = /** @class */ (function (_super) {
                 }
             }
             else {
-                return new Exception("Semantic", "This operators only work whit type boolean", this.row, this.column);
+                return new Exception("Semantic", "This operators only work whit type boolean", this.row, this.column, table.get_name());
             }
         }
         else {
@@ -58,7 +58,7 @@ var Logical = /** @class */ (function (_super) {
                 return this.value;
             }
             else {
-                return new Exception("Semantic", "The type: ".concat(this.exp1.get_type(), " does not work whit operator: ").concat(this.operator), this.row, this.column);
+                return new Exception("Semantic", "The type: ".concat(this.exp1.get_type(), " does not work whit operator: ").concat(this.operator), this.row, this.column, table.get_name());
             }
         }
     };

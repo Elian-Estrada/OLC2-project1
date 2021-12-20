@@ -111,7 +111,7 @@ var For = /** @class */ (function (_super) {
                         }
                     }
                     else {
-                        return new Exception("Semantic", "Expect a Boolean type expression", this.row, this.column);
+                        return new Exception("Semantic", "Expect a Boolean type expression", this.row, this.column, new_table === null ? table.get_name() : new_table === null || new_table === void 0 ? void 0 : new_table.get_name());
                     }
                     this.counter += 1;
                 }
@@ -120,11 +120,11 @@ var For = /** @class */ (function (_super) {
                 }
             }
             catch (error) {
-                return new Exception("Semantic", "" + error, this.row, this.column);
+                return new Exception("Semantic", "" + error, this.row, this.column, table.get_name());
             }
         }
         else {
-            return new Exception("Semantic", "Expression Expected", this.row, this.column);
+            return new Exception("Semantic", "Expression Expected", this.row, this.column, table.get_name());
         }
     };
     For.prototype.get_node = function () {

@@ -62,7 +62,7 @@ var While = /** @class */ (function (_super) {
                     }
                 }
                 else {
-                    return new Exception("Semantic", "Expect a Boolean type expression. Not ".concat(this.expr.get_type().name), this.row, this.column);
+                    return new Exception("Semantic", "Expect a Boolean type expression. Not ".concat(this.expr.get_type().name), this.row, this.column, table.get_name());
                 }
                 this.counter += 1;
             }
@@ -71,7 +71,7 @@ var While = /** @class */ (function (_super) {
             }
         }
         catch (error) {
-            return new Exception("Semantic", "" + error, this.row, this.column);
+            return new Exception("Semantic", "" + error, this.row, this.column, table.get_name());
         }
     };
     While.prototype.get_node = function () {

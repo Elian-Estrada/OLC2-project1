@@ -34,10 +34,10 @@ var Pow = /** @class */ (function (_super) {
             return pow;
         }
         if (this.exp1.get_type() !== type.INT && this.exp1.get_type() !== type.DOUBLE) {
-            return new Exception("Semanitc", "The base: ".concat(base, " can only be of type int|double"), this.exp1.row, this.exp1.column);
+            return new Exception("Semanitc", "The base: ".concat(base, " can only be of type int|double"), this.exp1.row, this.exp1.column, table.get_name());
         }
         if (this.exp2.get_type() !== type.INT) {
-            return new Exception("Semantic", "The pow: ".concat(pow, " can only be of type int"), this.exp2.row, this.exp2.column);
+            return new Exception("Semantic", "The pow: ".concat(pow, " can only be of type int"), this.exp2.row, this.exp2.column, table.get_name());
         }
         this.type = this.exp1.get_type();
         return Math.pow(base, pow);

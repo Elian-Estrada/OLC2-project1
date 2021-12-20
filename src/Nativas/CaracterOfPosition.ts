@@ -22,10 +22,10 @@ export class CaracterOfPosition extends Function {
     interpret(tree: Tree, table: SymbolTable): any {
         let id_founded = this.id.interpret(tree, table);
         if ( id_founded === null )
-            return new Exception("Semantic", "Identifier not found in the current context", this.row, this.column);
+            return new Exception("Semantic", "Identifier not found in the current context", this.row, this.column, table.get_name());
 
         if ( this.id.get_type() !== type.STRING )
-            return new Exception("Semantic", `The type ${id_founded.type} not valid for Length`, this.row, this.column);
+            return new Exception("Semantic", `The type ${id_founded.type} not valid for Length`, this.row, this.column, table.get_name());
 
         let n = this.n.interpret(tree, table);
 
@@ -34,11 +34,11 @@ export class CaracterOfPosition extends Function {
         }
 
         if (this.n.get_type() !== type.INT){
-            return new Exception("Semantic", `The expression can be only of type: int`, this.n.row, this.n.column);
+            return new Exception("Semantic", `The expression can be only of type: int`, this.n.row, this.n.column, table.get_name());
         }
 
         if (n >= String(id_founded).length){
-            return new Exception("Semantic", `The position: ${n} out of range`, this.row, this.column);
+            return new Exception("Semantic", `The position: ${n} out of range`, this.row, this.column, table.get_name());
         }
 
         this.type = type.CHAR;

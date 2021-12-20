@@ -16,7 +16,7 @@ var SymbolTable = /** @class */ (function () {
     }
     SymbolTable.prototype.set_table = function (symbol) {
         if (this.table.has(symbol.id)) {
-            return new Exception("Semantic", "The variable ".concat(symbol.id, " already definited"), symbol.row, symbol.column);
+            return new Exception("Semantic", "The variable ".concat(symbol.id, " already definited"), symbol.row, symbol.column, this.name);
         }
         symbol.environment = this.name;
         this.table.set(symbol.id, symbol);
@@ -52,7 +52,7 @@ var SymbolTable = /** @class */ (function () {
                             current_symbol.value = symbol.value;
                             return undefined;
                         default:
-                            return new Exception("Semantic", "The type: ".concat(type.NULL, " cannot assignment to variable of type: ").concat(current_symbol.type), symbol.row, symbol.column);
+                            return new Exception("Semantic", "The type: ".concat(type.NULL, " cannot assignment to variable of type: ").concat(current_symbol.type), symbol.row, symbol.column, this.name);
                     }
                 }
                 if (current_symbol.value === "null") {
@@ -69,7 +69,7 @@ var SymbolTable = /** @class */ (function () {
                                 return undefined;
                             }
                             else {
-                                return new Exception("Semantic", "Cannot assign value of type: ".concat(symbol.value.get_subtype(), " in a variable of type: ").concat(current_symbol.value.get_subtype()), symbol.row, symbol.column);
+                                return new Exception("Semantic", "Cannot assign value of type: ".concat(symbol.value.get_subtype(), " in a variable of type: ").concat(current_symbol.value.get_subtype()), symbol.row, symbol.column, this.name);
                             }
                         }
                     }
@@ -86,19 +86,19 @@ var SymbolTable = /** @class */ (function () {
                         return undefined;
                     }
                     else {
-                        return new Exception("Semantic", "The vairiable: ".concat(current_symbol.id, " isn't at type: ").concat(symbol.type), symbol.row, symbol.column);
+                        return new Exception("Semantic", "The vairiable: ".concat(current_symbol.id, " isn't at type: ").concat(symbol.type), symbol.row, symbol.column, this.name);
                     }
                 }
                 else if (current_symbol.value.id !== symbol.value.id) {
-                    return new Exception("Semantic", "Cannot assign value of type: ".concat(symbol.value.id, " in a variable of type: ").concat(current_symbol.value.id), symbol.row, symbol.column);
+                    return new Exception("Semantic", "Cannot assign value of type: ".concat(symbol.value.id, " in a variable of type: ").concat(current_symbol.value.id), symbol.row, symbol.column, this.name);
                 }
                 else {
-                    return new Exception("Semantic", "Cannot assign value of type: ".concat(symbol.type, " in a variable of type: ").concat((_a = current_table.table.get(symbol.id)) === null || _a === void 0 ? void 0 : _a.type), symbol.row, symbol.column);
+                    return new Exception("Semantic", "Cannot assign value of type: ".concat(symbol.type, " in a variable of type: ").concat((_a = current_table.table.get(symbol.id)) === null || _a === void 0 ? void 0 : _a.type), symbol.row, symbol.column, this.name);
                 }
             }
             current_table = current_table.prev;
         }
-        return new Exception("Semantic", "The id: ".concat(symbol.id, " doesn't exist in current context"), symbol.row, symbol.column);
+        return new Exception("Semantic", "The id: ".concat(symbol.id, " doesn't exist in current context"), symbol.row, symbol.column, this.name);
     };
     SymbolTable.prototype.increment_size = function () {
         this.size += 1;

@@ -52,7 +52,7 @@ export class Logical extends Instruction{
                 }
 
             } else {
-                return new Exception("Semantic", "This operators only work whit type boolean", this.row, this.column);
+                return new Exception("Semantic", "This operators only work whit type boolean", this.row, this.column, table.get_name());
             }
 
         } else {
@@ -60,7 +60,7 @@ export class Logical extends Instruction{
                 this.value = String(! JSON.parse(left)).toLowerCase();
                 return this.value;
             } else {
-                return new Exception("Semantic", `The type: ${this.exp1.get_type()} does not work whit operator: ${this.operator}`, this.row, this.column);
+                return new Exception("Semantic", `The type: ${this.exp1.get_type()} does not work whit operator: ${this.operator}`, this.row, this.column, table.get_name());
             }
         }
 

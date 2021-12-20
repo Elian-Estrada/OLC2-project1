@@ -61,7 +61,7 @@ export class ForIn extends Instruction {
                         
                         break;
                     default:
-                        return new Exception("Semantic", `The instruction For-in only accept on string or array`, this.secondExp.row, this.secondExp.column);
+                        return new Exception("Semantic", `The instruction For-in only accept on string or array`, this.secondExp.row, this.secondExp.column, new_table.get_name());
                 }
                 
                 // @ts-ignore

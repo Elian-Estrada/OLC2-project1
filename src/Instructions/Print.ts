@@ -88,7 +88,7 @@ export class Print extends Instruction {
                 // console.log(this.expression.type)
                 // @ts-ignore
                 if ( /*this.expression.type*/ item.type === type.VOID ) {
-                    return new Exception("Semantic", "Error 'void' type not allowed here", this.row, this.column);
+                    return new Exception("Semantic", "Error 'void' type not allowed here", this.row, this.column, table.get_name());
                 }
             }
             
@@ -124,7 +124,7 @@ export class Print extends Instruction {
                 value = this.print_struct(value);
             }
             else if ( /*this.expression*/item.get_type() == type.NULL ) {
-                return new Exception("Semantic", "Null Pointer Exception", this.row, this.column);
+                return new Exception("Semantic", "Null Pointer Exception", this.row, this.column, table.get_name());
             }
             
             tree.update_console(`${ value }`, false);
