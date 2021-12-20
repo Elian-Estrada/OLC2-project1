@@ -263,9 +263,23 @@ export class Call extends Instruction {
         if ( func != null ) {
             let param_values = [];
             let size = generator.keepTemps(table);
+
+            for ( let param of this.params ) {
+                param_values.push(param.compile(table, generator, tree));
+            }
+
             let temp = generator.addTemp();
             generator.addExpression(temp, 'P', table.get_size() + 1, '+');
             let aux = 0;
+
+            for ( let param of param_values ) {
+                aux = aux + 1;
+                generator.setStack(temp, param.value);
+
+                if ( aux != param_values.length ) {
+                    generator.addExpression(temp, temp, '1', '+');
+                }
+            }
 
             generator.newEnv(table.get_size());
             generator.callFunc(func.get_name());

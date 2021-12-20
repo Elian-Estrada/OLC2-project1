@@ -61,8 +61,17 @@ var Identifier = /** @class */ (function (_super) {
             return;
         }
         var temp = generator.addTemp();
+        var temp_pos = null;
         // @ts-ignore
-        var temp_pos = value.position;
+        if (value.value != undefined) {
+            // @ts-ignore
+            temp_pos = value.position;
+        }
+        else {
+            temp_pos = generator.addTemp();
+            // @ts-ignore
+            generator.addExpression(temp_pos, 'P', value.position - 1, '+');
+        }
         generator.getStack(temp, temp_pos);
         // @ts-ignore
         if (value.type !== type.BOOL) {

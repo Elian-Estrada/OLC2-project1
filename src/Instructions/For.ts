@@ -9,7 +9,6 @@ import {Break} from "./Break.js";
 import {Return} from "./Return.js";
 import { Cst_Node } from "../Abstract/Cst_Node.js";
 import { Generator3D } from "../Generator/Generator3D.js";
-import {ExpressionIterable} from "../Expression/ExpressionIterable";
 
 export class For extends Instruction {
     compile(table: SymbolTable, generator: Generator3D, tree: Tree) {

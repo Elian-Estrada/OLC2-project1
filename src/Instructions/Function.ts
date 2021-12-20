@@ -103,8 +103,8 @@ export class Function extends Instruction {
         new_env.set_size(1);
 
         for ( let param of this.params ) {
-            let in_heap = ( param.get_type() == type.STRING || param.get_type() == type.STRUCT );
-            let new_symbol = new Symbol(param.id, param.type, this.row, this.column, param.value, "", in_heap);
+            let in_heap = ( param.type == type.STRING || param.type == type.STRUCT );
+            let new_symbol = new Symbol(param.name, param.type, this.row, this.column, param.value, "", in_heap);
             new_env.set_table(new_symbol);
         }
 

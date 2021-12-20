@@ -235,9 +235,21 @@ var Call = /** @class */ (function (_super) {
         if (func != null) {
             var param_values = [];
             var size = generator.keepTemps(table);
+            for (var _i = 0, _a = this.params; _i < _a.length; _i++) {
+                var param = _a[_i];
+                param_values.push(param.compile(table, generator, tree));
+            }
             var temp = generator.addTemp();
             generator.addExpression(temp, 'P', table.get_size() + 1, '+');
             var aux = 0;
+            for (var _b = 0, param_values_1 = param_values; _b < param_values_1.length; _b++) {
+                var param = param_values_1[_b];
+                aux = aux + 1;
+                generator.setStack(temp, param.value);
+                if (aux != param_values.length) {
+                    generator.addExpression(temp, temp, '1', '+');
+                }
+            }
             generator.newEnv(table.get_size());
             generator.callFunc(func.get_name());
             generator.getStack(temp, 'P');

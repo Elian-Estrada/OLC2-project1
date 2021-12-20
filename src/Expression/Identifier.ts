@@ -67,8 +67,16 @@ export class Identifier extends Instruction {
         }
 
         let temp = generator.addTemp();
+        let temp_pos = null;
         // @ts-ignore
-        let temp_pos = value.position;
+        if ( value.value != undefined ) {
+            // @ts-ignore
+            temp_pos = value.position;
+        } else {
+            temp_pos = generator.addTemp();
+            // @ts-ignore
+            generator.addExpression(temp_pos, 'P', value.position-1, '+');
+        }
         generator.getStack(temp, temp_pos);
 
         // @ts-ignore

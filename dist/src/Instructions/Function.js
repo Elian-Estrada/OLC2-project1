@@ -98,8 +98,8 @@ var Function = /** @class */ (function (_super) {
         new_env.set_size(1);
         for (var _i = 0, _a = this.params; _i < _a.length; _i++) {
             var param = _a[_i];
-            var in_heap = (param.get_type() == type.STRING || param.get_type() == type.STRUCT);
-            var new_symbol = new Symbol(param.id, param.type, this.row, this.column, param.value, "", in_heap);
+            var in_heap = (param.type == type.STRING || param.type == type.STRUCT);
+            var new_symbol = new Symbol(param.name, param.type, this.row, this.column, param.value, "", in_heap);
             new_env.set_table(new_symbol);
         }
         generator.freeAllTemps();
