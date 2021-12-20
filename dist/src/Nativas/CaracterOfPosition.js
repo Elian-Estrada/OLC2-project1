@@ -27,18 +27,18 @@ var CaracterOfPosition = /** @class */ (function (_super) {
     CaracterOfPosition.prototype.interpret = function (tree, table) {
         var id_founded = this.id.interpret(tree, table);
         if (id_founded === null)
-            return new Exception("Semantic", "Identifier not found in the current context", this.row, this.column);
+            return new Exception("Semantic", "Identifier not found in the current context", this.row, this.column, table.get_name());
         if (this.id.get_type() !== type.STRING)
-            return new Exception("Semantic", "The type ".concat(id_founded.type, " not valid for Length"), this.row, this.column);
+            return new Exception("Semantic", "The type ".concat(id_founded.type, " not valid for Length"), this.row, this.column, table.get_name());
         var n = this.n.interpret(tree, table);
         if (n instanceof Exception) {
             return n;
         }
         if (this.n.get_type() !== type.INT) {
-            return new Exception("Semantic", "The expression can be only of type: int", this.n.row, this.n.column);
+            return new Exception("Semantic", "The expression can be only of type: int", this.n.row, this.n.column, table.get_name());
         }
         if (n >= String(id_founded).length) {
-            return new Exception("Semantic", "The position: ".concat(n, " out of range"), this.row, this.column);
+            return new Exception("Semantic", "The position: ".concat(n, " out of range"), this.row, this.column, table.get_name());
         }
         this.type = type.CHAR;
         return id_founded.charAt(n);

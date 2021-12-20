@@ -68,19 +68,19 @@ var Main = /** @class */ (function () {
                         }
                         var error = null;
                         if (instruction instanceof Break) {
-                            error = new Exception("Semantic", "Instruction Break is loop or switch instruction", instruction.row, instruction.column);
+                            error = new Exception("Semantic", "Instruction Break is loop or switch instruction", instruction.row, instruction.column, global_table.get_name());
                             tree.get_errors().push(error);
                             tree.update_console(error.toString());
                             continue;
                         }
                         if (instruction instanceof Continue) {
-                            error = new Exception("Semantic", "Instruction Continue is loop instruction", instruction.row, instruction.column);
+                            error = new Exception("Semantic", "Instruction Continue is loop instruction", instruction.row, instruction.column, global_table.get_name());
                             tree.get_errors().push(error);
                             tree.update_console(error.toString());
                             continue;
                         }
                         if (instruction instanceof Return) {
-                            error = new Exception("Semantic", "Instruction Return is loop instruction", instruction.row, instruction.column);
+                            error = new Exception("Semantic", "Instruction Return is loop instruction", instruction.row, instruction.column, global_table.get_name());
                             tree.get_errors().push(error);
                             tree.update_console(error.toString());
                         }
@@ -93,7 +93,7 @@ var Main = /** @class */ (function () {
                     if (instruction instanceof MainInstruction) {
                         count += 1;
                         if (count > 1) {
-                            var error = new Exception("Semantic", "The main method is already defined", instruction.row, instruction.column);
+                            var error = new Exception("Semantic", "The main method is already defined", instruction.row, instruction.column, global_table.get_name());
                             tree.get_errors().push(error);
                             tree.update_console(error.toString());
                             break;
@@ -108,13 +108,13 @@ var Main = /** @class */ (function () {
                             var value = instruction.interpret(tree, global_table);
                             var error = void 0;
                             if (instruction instanceof Break) {
-                                error = new Exception("Semantic", "Instruction Break is loop or switch instruction", instruction.row, instruction.column);
+                                error = new Exception("Semantic", "Instruction Break is loop or switch instruction", instruction.row, instruction.column, global_table.get_name());
                                 tree.get_errors().push(error);
                                 tree.update_console(error.toString());
                                 continue;
                             }
                             if (instruction instanceof Continue) {
-                                error = new Exception("Semantic", "Instruction Continue is loop instruction", instruction.row, instruction.column);
+                                error = new Exception("Semantic", "Instruction Continue is loop instruction", instruction.row, instruction.column, global_table.get_name());
                                 tree.get_errors().push(error);
                                 tree.update_console(error.toString());
                                 continue;
@@ -129,7 +129,7 @@ var Main = /** @class */ (function () {
                     var instruction = _h[_g];
                     if (!(instruction instanceof MainInstruction || instruction instanceof Declaration
                         || instruction instanceof Assignment || instruction instanceof Function || instruction instanceof Struct)) {
-                        var error = new Exception("Semantic", "Instruction outside main", instruction.row, instruction.column);
+                        var error = new Exception("Semantic", "Instruction outside main", instruction.row, instruction.column, global_table.get_name());
                         tree.get_errors().push(error);
                         tree.update_console(error.toString());
                     }

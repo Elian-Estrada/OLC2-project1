@@ -29,7 +29,7 @@ var Cos = /** @class */ (function (_super) {
             return value;
         }
         if (this.expression.get_type() !== type.INT && this.expression.get_type() !== type.DOUBLE) {
-            return new Exception("Semantic", "The expression: ".concat(value, " can be only type: int|doulbe"), this.expression.row, this.expression.column);
+            return new Exception("Semantic", "The expression: ".concat(value, " can be only type: int|doulbe"), this.expression.row, this.expression.column, table.get_name());
         }
         this.type = type.DOUBLE;
         return Math.cos((value * Math.PI) / 180);

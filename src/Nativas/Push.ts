@@ -32,9 +32,9 @@ export class Push extends Function {
         }
 
         if(symbol.get_type() === type.ARRAY && symbol.get_subtype() !== this.expression.get_type()){
-            return new Exception("Semantic", `The type: ${this.expression.get_type()} cannot be assignment to array of type: ${symbol.get_subtype()}`, this.expression.row, this.expression.column);
+            return new Exception("Semantic", `The type: ${this.expression.get_type()} cannot be assignment to array of type: ${symbol.get_subtype()}`, this.expression.row, this.expression.column, table.get_name());
         } else if (symbol.get_type() !== type.ARRAY) {
-            return new Exception("Semantic", `This function is only for arrays`, this.id.row, this.id.column);
+            return new Exception("Semantic", `This function is only for arrays`, this.id.row, this.id.column, table.get_name());
         }
 
         switch(this.expression.get_type()){

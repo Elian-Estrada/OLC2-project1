@@ -22,11 +22,11 @@ export class Length extends Function {
     public interpret(tree: Tree, table: SymbolTable): any {
         let id_founded = this.id.interpret(tree, table);
         if ( id_founded === null )
-            return new Exception("Semantic", "Identifier not found in the current context", this.row, this.column);
+            return new Exception("Semantic", "Identifier not found in the current context", this.row, this.column, table.get_name());
         
         // console.log(this.id.get_type() == type.STRING)
         if ( this.id.get_type() !== type.STRING && this.id.get_type() !== type.ARRAY)
-            return new Exception("Semantic", `The type ${id_founded.type} not valid for Length`, this.row, this.column);
+            return new Exception("Semantic", `The type ${id_founded.type} not valid for Length`, this.row, this.column, table.get_name());
 
         if (this.id.get_type() === type.ARRAY){
             id_founded = id_founded.get_value();

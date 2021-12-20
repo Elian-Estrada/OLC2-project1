@@ -41,7 +41,7 @@ export class MainInstruction extends Instruction {
                 && !(item instanceof SubString)
                 && !(item instanceof Parse)
                 ) {
-                let error = new Exception("Semantic", "The instruction func don't be into of method main", item.row, item.column);
+                let error = new Exception("Semantic", "The instruction func don't be into of method main", item.row, item.column, new_table.get_name());
                 tree.get_errors().push(error);
                 tree.update_console(error.toString());
             }
@@ -60,13 +60,13 @@ export class MainInstruction extends Instruction {
             }
 
             if ( instruction instanceof Break ) {
-                let error = new Exception("Semantic", "The instruction Break is loop instruction", item.row, item.column);
+                let error = new Exception("Semantic", "The instruction Break is loop instruction", item.row, item.column, new_table.get_name());
                 tree.get_errors().push(error);
                 tree.update_console(error.toString());
             }
 
             if ( instruction instanceof Continue ) {
-                let error = new Exception("Semantic", "The instruction Continue is loop instruction", item.row, item.column);
+                let error = new Exception("Semantic", "The instruction Continue is loop instruction", item.row, item.column, new_table.get_name());
                 tree.get_errors().push(error);
                 tree.update_console(error.toString());
             }

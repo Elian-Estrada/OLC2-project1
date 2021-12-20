@@ -59,10 +59,10 @@ var Declaration_array = /** @class */ (function (_super) {
                 return array;
             }
             if (!(array instanceof Declaration_array)) {
-                return new Exception("Semantic", "Assignated only arrays", this.row, this.column);
+                return new Exception("Semantic", "Assignated only arrays", this.row, this.column, table.get_name());
             }
             if (this.type_array !== array.get_subtype()) {
-                return new Exception("Semantic", "The type: ".concat(array.get_subtype(), " cannot assignated to array of type: ").concat(this.type_array), this.row, this.column);
+                return new Exception("Semantic", "The type: ".concat(array.get_subtype(), " cannot assignated to array of type: ").concat(this.type_array), this.row, this.column, table.get_name());
             }
             var value = void 0;
             if (this.flag) {
@@ -106,7 +106,7 @@ var Declaration_array = /** @class */ (function (_super) {
         else {
             var value = list_expression.interpret(tree, table);
             if (this.type_array !== list_expression.get_type()) {
-                return new Exception("Semantic", "The type: ".concat(list_expression.get_type(), " cannot assignet at array of type: ").concat(this.type_array), list_expression.row, list_expression.column);
+                return new Exception("Semantic", "The type: ".concat(list_expression.get_type(), " cannot assignet at array of type: ").concat(this.type_array), list_expression.row, list_expression.column, table.get_name());
             }
             switch (list_expression.get_type()) {
                 case type.INT:

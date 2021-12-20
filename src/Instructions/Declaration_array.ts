@@ -54,12 +54,12 @@ export class Declaration_array extends Instruction {
             }
 
             if (!(array instanceof Declaration_array)){
-                return new Exception("Semantic", `Assignated only arrays`, this.row, this.column);
+                return new Exception("Semantic", `Assignated only arrays`, this.row, this.column, table.get_name());
             }
             
             if (this.type_array !== array.get_subtype()){
                 
-                return new Exception("Semantic", `The type: ${array.get_subtype()} cannot assignated to array of type: ${this.type_array}`, this.row, this.column);
+                return new Exception("Semantic", `The type: ${array.get_subtype()} cannot assignated to array of type: ${this.type_array}`, this.row, this.column, table.get_name());
             }
 
             let value;
@@ -122,7 +122,7 @@ export class Declaration_array extends Instruction {
             let value = list_expression.interpret(tree, table);
 
             if (this.type_array !== list_expression.get_type()){
-                return new Exception("Semantic", `The type: ${list_expression.get_type()} cannot assignet at array of type: ${this.type_array}`, list_expression.row, list_expression.column);
+                return new Exception("Semantic", `The type: ${list_expression.get_type()} cannot assignet at array of type: ${this.type_array}`, list_expression.row, list_expression.column, table.get_name());
             }
 
             switch(list_expression.get_type()){

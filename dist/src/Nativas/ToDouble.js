@@ -30,7 +30,7 @@ var ToDouble = /** @class */ (function (_super) {
             return value;
         }
         if (this.expression.get_type() !== type.INT) {
-            return new Exception("Semantic", "The param: ".concat(value, " isn't of type int"), this.expression.row, this.expression.column);
+            return new Exception("Semantic", "The param: ".concat(value, " isn't of type int"), this.expression.row, this.expression.column, table.get_name());
         }
         this.type = type.DOUBLE;
         return value + ".0";

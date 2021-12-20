@@ -49,7 +49,7 @@ var MainInstruction = /** @class */ (function (_super) {
                 && !(item instanceof CaracterOfPosition)
                 && !(item instanceof SubString)
                 && !(item instanceof Parse)) {
-                var error = new Exception("Semantic", "The instruction func don't be into of method main", item.row, item.column);
+                var error = new Exception("Semantic", "The instruction func don't be into of method main", item.row, item.column, new_table.get_name());
                 tree.get_errors().push(error);
                 tree.update_console(error.toString());
             }
@@ -64,12 +64,12 @@ var MainInstruction = /** @class */ (function (_super) {
                 tree.update_console(instruction.toString());
             }
             if (instruction instanceof Break) {
-                var error = new Exception("Semantic", "The instruction Break is loop instruction", item.row, item.column);
+                var error = new Exception("Semantic", "The instruction Break is loop instruction", item.row, item.column, new_table.get_name());
                 tree.get_errors().push(error);
                 tree.update_console(error.toString());
             }
             if (instruction instanceof Continue) {
-                var error = new Exception("Semantic", "The instruction Continue is loop instruction", item.row, item.column);
+                var error = new Exception("Semantic", "The instruction Continue is loop instruction", item.row, item.column, new_table.get_name());
                 tree.get_errors().push(error);
                 tree.update_console(error.toString());
             }

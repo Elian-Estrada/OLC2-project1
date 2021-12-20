@@ -194,7 +194,7 @@ export class Relational extends Instruction {
                                 case type.CHAR:
                                     return this.to_lower(parseFloat(left), right.charCodeAt(), this.operator);
                                 default:
-                                    return new Exception("Semantic", `The type: ${this.exp2.get_type()} cannot be operated whit type: ${this.exp1.get_type()}`, this.row, this.column);
+                                    return new Exception("Semantic", `The type: ${this.exp2.get_type()} cannot be operated whit type: ${this.exp1.get_type()}`, this.row, this.column, table.get_name());
                             }
                         case type.CHAR:
                             
@@ -205,28 +205,28 @@ export class Relational extends Instruction {
                                 case type.CHAR:
                                     return this.to_lower(left, right, this.operator);
                                 default:
-                                    return new Exception("Semantic", `The type: ${this.exp2.get_type()} cannot be operated whit type: ${this.exp1.get_type()}`, this.row, this.column);
+                                    return new Exception("Semantic", `The type: ${this.exp2.get_type()} cannot be operated whit type: ${this.exp1.get_type()}`, this.row, this.column, table.get_name());
                             }
                         case type.STRING:
                             switch(this.exp2.get_type()){
                                 case type.STRING:
                                     return this.to_lower(left, right, this.operator);
                                 default:
-                                    return new Exception("Semantic", `The type: ${this.exp2.get_type()} cannot be operated whit type: ${type.STRING}`, this.row, this.column);
+                                    return new Exception("Semantic", `The type: ${this.exp2.get_type()} cannot be operated whit type: ${type.STRING}`, this.row, this.column, table.get_name());
                             }
                         case type.BOOL:
                             switch(this.exp2.get_type()){
                                 case type.BOOL:
                                     return this.to_lower(JSON.parse(left), JSON.parse(right), this.operator);
                                 default:
-                                    return new Exception("Semantic", `The type: ${this.exp2.get_type()} cannot be operated whit type: ${type.BOOL}`, this.row, this.column);
+                                    return new Exception("Semantic", `The type: ${this.exp2.get_type()} cannot be operated whit type: ${type.BOOL}`, this.row, this.column, table.get_name());
                             }
                         case type.ARRAY:
                             switch(this.exp2.get_type()){
                                 case type.ARRAY:
                                     return this.to_lower(left, right, this.operator);
                                 default:
-                                    return new Exception("Semantic", `The type: ${this.exp2.get_type()} cannot be operated whit type: ${type.ARRAY}`, this.row, this.column)
+                                    return new Exception("Semantic", `The type: ${this.exp2.get_type()} cannot be operated whit type: ${type.ARRAY}`, this.row, this.column, table.get_name())
                             }
                         case type.STRUCT:
                             switch(this.exp2.get_type()){
@@ -237,7 +237,7 @@ export class Relational extends Instruction {
                                     //return this.to_lower(left.get_value(), right.get_value(), this.operator);
                                     return this.to_lower(left, right, this.operator);
                                 default:
-                                    return new Exception("Semantic", `The type: ${this.exp2.get_type()} cannot be operated whit type: ${type.STRUCT}`, this.exp2.row, this.exp2.column);
+                                    return new Exception("Semantic", `The type: ${this.exp2.get_type()} cannot be operated whit type: ${type.STRUCT}`, this.exp2.row, this.exp2.column, table.get_name());
                             }
                         case type.NULL:
                             switch(this.exp2.get_type()){
@@ -251,10 +251,10 @@ export class Relational extends Instruction {
                                 case type.CHAR:
                                     return this.to_lower(left, right, this.operator);
                                 default:
-                                    return new Exception("Semantic", `The type: ${this.exp2.get_type()} cannot be operated whit type: ${type.NULL}`, this.exp2.row, this.exp2.column);
+                                    return new Exception("Semantic", `The type: ${this.exp2.get_type()} cannot be operated whit type: ${type.NULL}`, this.exp2.row, this.exp2.column, table.get_name());
                             }
                         default:
-                            return new Exception("Semantic", `The type: ${this.exp1.get_type()} cannot be operated whit operator: ${this.operator}`, this.exp1.row, this.exp2.row);
+                            return new Exception("Semantic", `The type: ${this.exp1.get_type()} cannot be operated whit operator: ${this.operator}`, this.exp1.row, this.exp2.row, table.get_name());
 
                     }
                 case Relational_operator.GREATER:
@@ -272,7 +272,7 @@ export class Relational extends Instruction {
                                 case type.CHAR:
                                     return this.to_lower(parseFloat(left), right.charCodeAt(), this.operator);
                                 default:
-                                    return new Exception("Semantic", `The type: ${this.exp2.get_type()} cannot be operated whit type: ${this.exp1.get_type()}`, this.row, this.column);    
+                                    return new Exception("Semantic", `The type: ${this.exp2.get_type()} cannot be operated whit type: ${this.exp1.get_type()}`, this.row, this.column, table.get_name());    
                             }
                         case type.CHAR:
                             switch(this.exp2.get_type()){
@@ -282,15 +282,15 @@ export class Relational extends Instruction {
                                 case type.CHAR:
                                     return this.to_lower(left, right, this.operator);
                                 default:
-                                    return new Exception("Semantic", `The type: ${this.exp2.get_type()} cannot be operated whit type: ${this.exp1.get_type()}`, this.row, this.column);
+                                    return new Exception("Semantic", `The type: ${this.exp2.get_type()} cannot be operated whit type: ${this.exp1.get_type()}`, this.row, this.column, table.get_name());
                             }
                         default:
-                            return new Exception("Semantic", `The type: ${this.exp1.get_type()} cannot be operated whit operator: ${this.operator}`, this.row, this.column);
+                            return new Exception("Semantic", `The type: ${this.exp1.get_type()} cannot be operated whit operator: ${this.operator}`, this.row, this.column, table.get_name());
                     }
             }
 
         } else {
-            return new Exception("Semantic", "Expression Expected", this.row, this.column);
+            return new Exception("Semantic", "Expression Expected", this.row, this.column, table.get_name());
         }
 
     }

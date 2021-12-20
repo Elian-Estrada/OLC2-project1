@@ -25,7 +25,7 @@ export class ToDouble extends Function {
         }
 
         if (this.expression.get_type() !== type.INT){
-            return new Exception("Semantic", `The param: ${value} isn't of type int`, this.expression.row, this.expression.column);
+            return new Exception("Semantic", `The param: ${value} isn't of type int`, this.expression.row, this.expression.column, table.get_name());
         }
 
         this.type = type.DOUBLE;

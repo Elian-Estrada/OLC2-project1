@@ -25,7 +25,7 @@ export class ToInt extends Function{
         }
 
         if (this.expression.get_type() !== type.DOUBLE){
-            return new Exception("Semantic", `The param: ${value} isn't of type double`, this.expression.row, this.expression.column);
+            return new Exception("Semantic", `The param: ${value} isn't of type double`, this.expression.row, this.expression.column, table.get_name());
         }
 
         this.type = type.INT;

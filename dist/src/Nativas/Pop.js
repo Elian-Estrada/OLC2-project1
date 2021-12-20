@@ -29,7 +29,7 @@ var Pop = /** @class */ (function (_super) {
             return symbol;
         }
         if (symbol.get_type() !== type.ARRAY) {
-            return new Exception("Semantic", "This function is only for arrays", this.id.row, this.id.column);
+            return new Exception("Semantic", "This function is only for arrays", this.id.row, this.id.column, table.get_name());
         }
         this.type = symbol.get_subtype();
         return symbol.get_value().pop();

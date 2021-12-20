@@ -35,12 +35,12 @@ var Parse = /** @class */ (function (_super) {
             return (value === "true");
         else if (this.data_type === type.CHAR) {
             if (value.length > 1) {
-                return new Exception("Semantic", "".concat(value, " cannot parse to char"), this.exp.row, this.exp.column);
+                return new Exception("Semantic", "".concat(value, " cannot parse to char"), this.exp.row, this.exp.column, table.get_name());
             }
             return value.replace("", '');
         }
         else
-            return new Exception("Semantic", "Data type not compatible", this.exp.row, this.exp.column);
+            return new Exception("Semantic", "Data type not compatible", this.exp.row, this.exp.column, table.get_name());
     };
     Parse.prototype.get_type = function () {
         return this.data_type;
