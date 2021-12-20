@@ -155,6 +155,7 @@ var Main = /** @class */ (function () {
         console.log(tree.get_global_table());
         console.log(tree.get_errors());
         console.log(tree.get_all_structs());
+        localStorage.setItem("errors", JSON.stringify(tree.get_errors()));
         var init = new Cst_Node("Root");
         var inst = new Cst_Node("Instructions");
         for (var _j = 0, _k = tree.get_instructions(); _j < _k.length; _j++) {

@@ -176,6 +176,7 @@ export class Main {
         console.log(tree.get_errors());
         console.log(tree.get_all_structs());
         
+        localStorage.setItem("errors", JSON.stringify(tree.get_errors()));
         
         let init = new Cst_Node("Root");
         let inst = new Cst_Node("Instructions");
