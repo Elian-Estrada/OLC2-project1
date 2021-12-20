@@ -4,6 +4,7 @@ import SymbolTable from "../SymbolTable/SymbolTable.js";
 import Exception from "../SymbolTable/Exception.js";
 import { Cst_Node } from "../Abstract/Cst_Node.js";
 import { Generator3D } from "../Generator/Generator3D.js";
+import { type } from "../SymbolTable/Type.js";
 
 export class Return extends Instruction {
 
@@ -20,8 +21,12 @@ export class Return extends Instruction {
 
     public interpret(tree: Tree, table: SymbolTable): any {
 
-        if ( this.expr == null )
-            return "void";
+        if ( this.expr == null ){
+            //return "void";
+            this.type = type.VOID;
+            this.result = null;
+            return this;
+        }
 
         let value = this.expr.interpret(tree, table);
 

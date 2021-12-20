@@ -26,7 +26,6 @@ var String = /** @class */ (function (_super) {
     }
     String.prototype.interpret = function (tree, table) {
         var value = this.expression.interpret(tree, table);
-        console.log(value);
         if (value instanceof Exception) {
             return value;
         }
@@ -40,7 +39,6 @@ var String = /** @class */ (function (_super) {
             value = JSON.stringify(value);
         }
         this.type = type.STRING;
-        console.log(value);
         return value;
     };
     String.prototype.print_struct = function (struct) {

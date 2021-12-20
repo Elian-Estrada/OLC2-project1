@@ -23,9 +23,6 @@ export class Length extends Function {
         let id_founded = this.id.interpret(tree, table);
         if ( id_founded === null )
             return new Exception("Semantic", "Identifier not found in the current context", this.row, this.column);
-        console.log(this.id.get_type());
-        console.log(id_founded);
-        
         
         // console.log(this.id.get_type() == type.STRING)
         if ( this.id.get_type() !== type.STRING && this.id.get_type() !== type.ARRAY)

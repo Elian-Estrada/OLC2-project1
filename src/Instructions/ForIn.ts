@@ -54,8 +54,6 @@ export class ForIn extends Instruction {
                         new_var = new Declaration([this.firsExp.toString()], this.secondExp.get_type(), this.row, this.column, null);
                         break;
                     case type.ARRAY:
-                        console.log(value_iterable);
-                        
                         // @ts-ignore
                         new_var = new Declaration([this.firsExp.toString()], value_iterable.get_subtype(), this.row, this.column, null);
                         value_iterable = value_iterable.get_value();

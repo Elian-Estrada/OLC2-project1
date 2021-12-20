@@ -29,8 +29,6 @@ var TypeOf = /** @class */ (function (_super) {
         if (value instanceof Exception) {
             return value;
         }
-        console.log(value.type);
-        console.log(this.expression);
         if (value.type === type.STRUCT && value.value !== "null") {
             if (value instanceof Access_struct) {
                 value = value.get_value().id;

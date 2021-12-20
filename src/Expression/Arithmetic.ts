@@ -70,10 +70,6 @@ export class Arithmetic extends Instruction {
     }
 
     public interpret(tree: Tree, table: SymbolTable) {
-        console.log(this.exp1);
-        console.log(this.exp2);
-        
-        
         let left = this.exp1.interpret(tree, table);
 
         if ( left instanceof Exception )

@@ -19,7 +19,6 @@ export class String extends Function {
     interpret(tree: Tree, table: SymbolTable) {
         
         let value = this.expression.interpret(tree, table);
-        console.log(value);
         
         if (value instanceof Exception){
             return value;
@@ -36,7 +35,6 @@ export class String extends Function {
         }
 
         this.type = type.STRING;
-        console.log(value);
         
         return value;
 

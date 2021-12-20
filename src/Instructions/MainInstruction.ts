@@ -30,7 +30,6 @@ export class MainInstruction extends Instruction {
         tree.set_symbol_table(new_table);
 
         for ( let item of this.instructions ) {
-            console.log(item);
             
             if ( item instanceof Function 
                 && !(item instanceof Push)

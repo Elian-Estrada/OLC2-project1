@@ -95,9 +95,7 @@ var Range = /** @class */ (function (_super) {
             if (end > value.length || end < 0) {
                 return new Exception("Semantic", "The index: ".concat(end, " out of range"), this.end.row, this.end.column);
             }
-            console.log(value);
             value = value.slice(start, end);
-            console.log(value);
         }
         this.value = value;
         return this;

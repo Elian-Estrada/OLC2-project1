@@ -164,7 +164,9 @@ export class Relational extends Instruction {
             switch(this.operator){
                 case Relational_operator.EQUAL:
                 case Relational_operator.UNEQUAL:
-                    if (this.exp1 instanceof Access_struct){
+
+                    if (this.exp1.get_type() === type.STRUCT && this.exp1 instanceof Access_struct){
+                        
                         left = left.get_value();
                     }
                     
@@ -173,8 +175,12 @@ export class Relational extends Instruction {
                         left = left.value
                     }
                     
-                    if (this.exp2 instanceof Access_struct){
+                    if (this.exp2.get_type() === type.STRUCT && this.exp2 instanceof Access_struct){
                         right = right.get_vale();
+                    }
+
+                    if (right.value == "null"){
+                        right = right.get_value();
                     }
 
                     switch(this.exp1.get_type()){

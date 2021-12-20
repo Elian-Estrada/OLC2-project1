@@ -77,6 +77,14 @@ export default class SymbolTable {
                             return new Exception("Semantic", `The type: ${type.NULL} cannot assignment to variable of type: ${current_symbol.type}`, symbol.row, symbol.column);
                     }
                 }
+
+                if (current_symbol.value === "null"){
+                    if (current_symbol.type === type.STRUCT){
+                        current_symbol.value = symbol.value;
+                        return undefined;
+                    }
+                }
+
                 if (current_symbol.type === symbol.type && current_symbol.type !== type.STRUCT){
                     if (current_symbol.value instanceof Declaration_array){
                         if (symbol.value instanceof Values_array){

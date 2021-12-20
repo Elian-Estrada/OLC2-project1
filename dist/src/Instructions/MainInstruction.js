@@ -40,7 +40,6 @@ var MainInstruction = /** @class */ (function (_super) {
         tree.set_symbol_table(new_table);
         for (var _i = 0, _a = this.instructions; _i < _a.length; _i++) {
             var item = _a[_i];
-            console.log(item);
             if (item instanceof Function
                 && !(item instanceof Push)
                 && !(item instanceof Pop)

@@ -37,7 +37,7 @@ export class Call extends Instruction {
                     let count = 0;
                     let table_res = null;
                     for ( let expression of this.params ) {
-
+                        
                         if (expression instanceof Array){
                             let param = ob_function.get_params()[count];
                             if(param.type !== type.ARRAY){

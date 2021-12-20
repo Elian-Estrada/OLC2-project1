@@ -23,9 +23,6 @@ export class TypeOf extends Function {
         if (value instanceof Exception){
             return value;
         }
-        console.log(value.type);
-        console.log(this.expression);
-        
         
         if (value.type === type.STRUCT && value.value !== "null"){
             if (value instanceof Access_struct){

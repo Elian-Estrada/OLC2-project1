@@ -28,8 +28,6 @@ var Sin = /** @class */ (function (_super) {
         if (value instanceof Exception) {
             return value;
         }
-        console.log(value);
-        console.log(this.expression);
         if (this.expression.get_type() !== type.INT && this.expression.get_type() !== type.DOUBLE) {
             return new Exception("Semantic", "The expression: ".concat(value, " can be only type: int|double"), this.expression.row, this.expression.column);
         }
