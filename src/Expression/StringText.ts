@@ -13,7 +13,7 @@ export class StringText extends Instruction {
     compile(table: SymbolTable, generator: Generator3D) {
         let left = this.exp1.compile(table, generator);
         let right = this.exp2.compile(table, generator);
-        let temp = generator.addTemp();
+        // let temp = generator.addTemp();
         let operation = this.operator;
 
         if ( operation === String_operator.CONCAT ) {
@@ -42,7 +42,7 @@ export class StringText extends Instruction {
                 generator.NumberToString();
                 generator.concatString();
                 let paramTemp = generator.addTemp();
-                generator.addExpression(paramTemp, 'P', 0, '+');        // t11 = P + 0
+                generator.addExpression(paramTemp, 'P', table.get_size(), '+');        // t11 = P + 0
                 generator.addExpression(paramTemp, paramTemp, '1', '+');     // t11 = t11 + 1
 
                 if ( this.exp2.get_type() !== type.STRING ) {
@@ -51,14 +51,14 @@ export class StringText extends Instruction {
                     generator.setStack(paramTemp, left.value);                             // stack[t11]=4
                 }
 
-                generator.addExpression('P', 'P', 0, '+');         // P = P + 0
+                generator.addExpression('P', 'P', table.get_size(), '+');         // P = P + 0
                 generator.callFunc('toString');                                     // toString()
                 let paramTemp2 = generator.addTemp();
                 generator.getStack(paramTemp2, 'P');                                // t12 = stack[P]
-                generator.addExpression('P', 'P', 0, '-');          // P = P - 0
+                generator.addExpression('P', 'P', table.get_size(), '-');          // P = P - 0
 
                 let new_temp = generator.addTemp();
-                generator.addExpression(new_temp, 'P', 0, '+');
+                generator.addExpression(new_temp, 'P', table.get_size(), '+');
                 generator.addExpression(new_temp, new_temp, '1', '+');
 
                 if ( this.exp2.get_type() !== type.STRING ) {
@@ -71,12 +71,12 @@ export class StringText extends Instruction {
                     generator.setStack(new_temp, right.value);
                 }
 
-                generator.addExpression('P', 'P', 0, '+');
+                generator.addExpression('P', 'P', table.get_size(), '+');
                 generator.callFunc('concatString');
 
                 let new_temp2 = generator.addTemp();
                 generator.getStack(new_temp2, 'P');
-                generator.addExpression('P', 'P', 0, '-');
+                generator.addExpression('P', 'P', table.get_size(), '-');
 
                 return new Value(new_temp2, type.STRING, true);
             }

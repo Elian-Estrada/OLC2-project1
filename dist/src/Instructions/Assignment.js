@@ -67,10 +67,12 @@ var Assignment = /** @class */ (function (_super) {
         return node;
     };
     Assignment.prototype.compile = function (table, generator) {
-        this.expression.compile(table, generator);
-        var new_var = table.get_table(this.get_id()[0]);
+        var val = this.expression.compile(table, generator);
+        var new_var = table.get_table(this.get_id());
         // @ts-ignore
         table.update_table(new_var);
+        // @ts-ignore
+        generator.setStack(new_var.position, val.value, true);
     };
     return Assignment;
 }(Instruction));

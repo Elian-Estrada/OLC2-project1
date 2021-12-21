@@ -76,7 +76,7 @@ var Generator3D = /** @class */ (function () {
         return header;
     };
     Generator3D.prototype.get_code = function () {
-        return "".concat(this.initial_header()).concat(this.natives, "\n").concat(this.funcs, "\n/*------MAIN------*/\n void main() { \n\tP = 0; H = 0;\n ").concat(this.code, "\n\t return; \n }");
+        return "".concat(this.initial_header()).concat(this.natives, "\n").concat(this.funcs, "\n/*------MAIN------*/\n void main() { \n\tP = 1; H = 0;\n ").concat(this.code, "\n\t return; \n }");
     };
     Generator3D.prototype.get_freeTemp = function (temp) {
         if (temp in this.temps_recover) { // @ts-ignore

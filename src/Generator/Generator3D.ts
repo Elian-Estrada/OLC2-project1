@@ -111,7 +111,7 @@ export class Generator3D {
     }
 
     public get_code() {
-        return `${this.initial_header()}${this.natives}\n${this.funcs}\n/*------MAIN------*/\n void main() { \n\tP = 0; H = 0;\n ${this.code}\n\t return; \n }`;
+        return `${this.initial_header()}${this.natives}\n${this.funcs}\n/*------MAIN------*/\n void main() { \n\tP = 1; H = 0;\n ${this.code}\n\t return; \n }`;
     }
 
     public get_freeTemp(temp: any) {
@@ -417,7 +417,7 @@ export class Generator3D {
         this.get_freeTemp(pos);
         if (freeValue)
             this.get_freeTemp(value);
-        this.codeIn(`stack[(int)${pos}] = ${value};\n`)
+        this.codeIn(`stack[(int)${pos}] = ${value};\n`);
     }
 
     public getHeap(place: any, pos: any) {

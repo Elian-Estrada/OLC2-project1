@@ -39,7 +39,7 @@ var Relational = /** @class */ (function (_super) {
         var operator = this.operator;
         if (left.type != type.BOOL) {
             right = this.exp2.compile(table, generator);
-            if (left.type == type.INT) {
+            if (left.type == type.INT || left.type == type.DOUBLE) {
                 switch (right.type) {
                     case type.INT:
                     case type.DOUBLE:

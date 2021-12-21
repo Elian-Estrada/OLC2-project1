@@ -64,6 +64,17 @@ export class Arithmetic extends Instruction {
                 let new_val = new_symbol.compile(table, generator);
                 return new Value(new_val.value, type.INT, false);
             }
+            else if ( this.operator === Arithmetic_operator.SUBSTRACTION ) {
+                let value = '';
+                switch ( this.exp1.get_type() ) {
+                    case type.INT:
+                        value = String(-parseInt(left.value));
+                        break;
+                    case type.DOUBLE:
+                        value =  String(-parseFloat(left.value));
+                }
+                return new Value(value, this.exp1.get_type(), false);
+            }
         }
 
         return null;
