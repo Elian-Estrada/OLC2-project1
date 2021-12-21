@@ -29,8 +29,8 @@ import { Instruction } from "../Abstract/Instruction.js";
 import Exception from "../SymbolTable/Exception.js";
 import Symbol from "../SymbolTable/Symbol.js";
 import { type } from "../SymbolTable/Type.js";
-import { Primitive } from "../Expression/Primitive";
-import { Value } from "../Abstract/Value";
+import { Primitive } from "../Expression/Primitive.js";
+import { Value } from "../Abstract/Value.js";
 var Declaration_array = /** @class */ (function (_super) {
     __extends(Declaration_array, _super);
     function Declaration_array(id, type_array, expression, list_extpression, row, column, flag) {
