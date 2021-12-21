@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error Reports</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+</head>
+
+<body class="container" style="background-color: #212121; color:white">
+    <div class="container">
+        <div class="container">
+            <div style="text-align: center" class="card grey darken-3 z-depth-4">
+                <h3 style="color: white; padding: 3%;">Errors Report</h3>
+            </div>
+        </div>
+    </div>
+    <ul class="collapsible">
+        <li class="active">
+            <div class="collapsible-header grey darken-2">Lexical Errors</div>
+            <div class="collapsible-body">
+                <table class="striped">
+                    <thead>
+                        <tr>
+                            <th>No. </th>
+                            <th> Description </th>
+                            <th> Row </th>
+                            <th> Column </th>
+                        </tr>
+                    </thead>
+                    <tbody id="lerr">
+                    </tbody>
+                </table>
+            </div>
+        </li>
+        <li class="active">
+            <div class="collapsible-header grey darken-2">Sintactic Error</div>
+            <div class="collapsible-body">
+                <table class="striped">
+                    <thead>
+                        <tr>
+                            <th> No. </th>
+                            <th> Description </th>
+                            <th> Row </th>
+                            <th> Column </th>
+                        </tr>
+                    </thead>
+                    <tbody id="sinerr">
+                    </tbody>
+                </table>
+            </div>
+        </li>
+        <li class="active">
+            <div class="collapsible-header grey darken-2">Semantic Errors</div>
+            <div class="collapsible-body">
+                <table class="striped">
+                    <thead>
+                        <tr>
+                            <th> No. </th>
+                            <th> Description </th>
+                            <th> Environment </th>
+                            <th> Ror </th>
+                            <th> Column </th>
+                        </tr>
+                    </thead>
+                    <tbody id="semerr">
+                    </tbody>
+                </table>
+            </div>
+        </li>
+    </ul>
+    <script>
+        M.AutoInit();
+    </script>
+    <script src="./errors.js"></script>
+</body>
+
+</html>

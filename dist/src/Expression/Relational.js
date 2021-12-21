@@ -137,14 +137,17 @@ var Relational = /** @class */ (function (_super) {
             switch (this.operator) {
                 case Relational_operator.EQUAL:
                 case Relational_operator.UNEQUAL:
-                    if (this.exp1 instanceof Access_struct) {
+                    if (this.exp1.get_type() === type.STRUCT && this.exp1 instanceof Access_struct) {
                         left = left.get_value();
                     }
                     if (left.value == "null") {
                         left = left.value;
                     }
-                    if (this.exp2 instanceof Access_struct) {
+                    if (this.exp2.get_type() === type.STRUCT && this.exp2 instanceof Access_struct) {
                         right = right.get_vale();
+                    }
+                    if (right.value == "null") {
+                        right = right.get_value();
                     }
                     switch (this.exp1.get_type()) {
                         case type.INT:
@@ -156,7 +159,7 @@ var Relational = /** @class */ (function (_super) {
                                 case type.CHAR:
                                     return this.to_lower(parseFloat(left), right.charCodeAt(), this.operator);
                                 default:
-                                    return new Exception("Semantic", "The type: ".concat(this.exp2.get_type(), " cannot be operated whit type: ").concat(this.exp1.get_type()), this.row, this.column);
+                                    return new Exception("Semantic", "The type: ".concat(this.exp2.get_type(), " cannot be operated whit type: ").concat(this.exp1.get_type()), this.row, this.column, table.get_name());
                             }
                         case type.CHAR:
                             switch (this.exp2.get_type()) {
@@ -166,28 +169,28 @@ var Relational = /** @class */ (function (_super) {
                                 case type.CHAR:
                                     return this.to_lower(left, right, this.operator);
                                 default:
-                                    return new Exception("Semantic", "The type: ".concat(this.exp2.get_type(), " cannot be operated whit type: ").concat(this.exp1.get_type()), this.row, this.column);
+                                    return new Exception("Semantic", "The type: ".concat(this.exp2.get_type(), " cannot be operated whit type: ").concat(this.exp1.get_type()), this.row, this.column, table.get_name());
                             }
                         case type.STRING:
                             switch (this.exp2.get_type()) {
                                 case type.STRING:
                                     return this.to_lower(left, right, this.operator);
                                 default:
-                                    return new Exception("Semantic", "The type: ".concat(this.exp2.get_type(), " cannot be operated whit type: ").concat(type.STRING), this.row, this.column);
+                                    return new Exception("Semantic", "The type: ".concat(this.exp2.get_type(), " cannot be operated whit type: ").concat(type.STRING), this.row, this.column, table.get_name());
                             }
                         case type.BOOL:
                             switch (this.exp2.get_type()) {
                                 case type.BOOL:
                                     return this.to_lower(JSON.parse(left), JSON.parse(right), this.operator);
                                 default:
-                                    return new Exception("Semantic", "The type: ".concat(this.exp2.get_type(), " cannot be operated whit type: ").concat(type.BOOL), this.row, this.column);
+                                    return new Exception("Semantic", "The type: ".concat(this.exp2.get_type(), " cannot be operated whit type: ").concat(type.BOOL), this.row, this.column, table.get_name());
                             }
                         case type.ARRAY:
                             switch (this.exp2.get_type()) {
                                 case type.ARRAY:
                                     return this.to_lower(left, right, this.operator);
                                 default:
-                                    return new Exception("Semantic", "The type: ".concat(this.exp2.get_type(), " cannot be operated whit type: ").concat(type.ARRAY), this.row, this.column);
+                                    return new Exception("Semantic", "The type: ".concat(this.exp2.get_type(), " cannot be operated whit type: ").concat(type.ARRAY), this.row, this.column, table.get_name());
                             }
                         case type.STRUCT:
                             switch (this.exp2.get_type()) {
@@ -198,7 +201,7 @@ var Relational = /** @class */ (function (_super) {
                                     //return this.to_lower(left.get_value(), right.get_value(), this.operator);
                                     return this.to_lower(left, right, this.operator);
                                 default:
-                                    return new Exception("Semantic", "The type: ".concat(this.exp2.get_type(), " cannot be operated whit type: ").concat(type.STRUCT), this.exp2.row, this.exp2.column);
+                                    return new Exception("Semantic", "The type: ".concat(this.exp2.get_type(), " cannot be operated whit type: ").concat(type.STRUCT), this.exp2.row, this.exp2.column, table.get_name());
                             }
                         case type.NULL:
                             switch (this.exp2.get_type()) {
@@ -212,10 +215,10 @@ var Relational = /** @class */ (function (_super) {
                                 case type.CHAR:
                                     return this.to_lower(left, right, this.operator);
                                 default:
-                                    return new Exception("Semantic", "The type: ".concat(this.exp2.get_type(), " cannot be operated whit type: ").concat(type.NULL), this.exp2.row, this.exp2.column);
+                                    return new Exception("Semantic", "The type: ".concat(this.exp2.get_type(), " cannot be operated whit type: ").concat(type.NULL), this.exp2.row, this.exp2.column, table.get_name());
                             }
                         default:
-                            return new Exception("Semantic", "The type: ".concat(this.exp1.get_type(), " cannot be operated whit operator: ").concat(this.operator), this.exp1.row, this.exp2.row);
+                            return new Exception("Semantic", "The type: ".concat(this.exp1.get_type(), " cannot be operated whit operator: ").concat(this.operator), this.exp1.row, this.exp2.row, table.get_name());
                     }
                 case Relational_operator.GREATER:
                 case Relational_operator.GREATEREQUAL:
@@ -231,7 +234,7 @@ var Relational = /** @class */ (function (_super) {
                                 case type.CHAR:
                                     return this.to_lower(parseFloat(left), right.charCodeAt(), this.operator);
                                 default:
-                                    return new Exception("Semantic", "The type: ".concat(this.exp2.get_type(), " cannot be operated whit type: ").concat(this.exp1.get_type()), this.row, this.column);
+                                    return new Exception("Semantic", "The type: ".concat(this.exp2.get_type(), " cannot be operated whit type: ").concat(this.exp1.get_type()), this.row, this.column, table.get_name());
                             }
                         case type.CHAR:
                             switch (this.exp2.get_type()) {
@@ -241,15 +244,15 @@ var Relational = /** @class */ (function (_super) {
                                 case type.CHAR:
                                     return this.to_lower(left, right, this.operator);
                                 default:
-                                    return new Exception("Semantic", "The type: ".concat(this.exp2.get_type(), " cannot be operated whit type: ").concat(this.exp1.get_type()), this.row, this.column);
+                                    return new Exception("Semantic", "The type: ".concat(this.exp2.get_type(), " cannot be operated whit type: ").concat(this.exp1.get_type()), this.row, this.column, table.get_name());
                             }
                         default:
-                            return new Exception("Semantic", "The type: ".concat(this.exp1.get_type(), " cannot be operated whit operator: ").concat(this.operator), this.row, this.column);
+                            return new Exception("Semantic", "The type: ".concat(this.exp1.get_type(), " cannot be operated whit operator: ").concat(this.operator), this.row, this.column, table.get_name());
                     }
             }
         }
         else {
-            return new Exception("Semantic", "Expression Expected", this.row, this.column);
+            return new Exception("Semantic", "Expression Expected", this.row, this.column, table.get_name());
         }
     };
     Relational.prototype.to_lower = function (op1, op2, operator) {

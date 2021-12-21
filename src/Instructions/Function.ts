@@ -35,9 +35,9 @@ export class Function extends Instruction {
         for ( let instruction of this.instructions ) {
             let value = instruction.interpret(tree, new_table);
 
-            if ( value === "void" )
+            if ( value === "void" ){
                 return;
-
+            }
             if ( value instanceof Exception ) {
                 tree.get_errors().push(value);
                 tree.update_console(value.toString());
@@ -45,31 +45,31 @@ export class Function extends Instruction {
 
             let error = null;
             if ( value instanceof Break ) {
-                error = new Exception("Semantic", "Instruction Break out of loop", instruction.row, instruction.column);
+                error = new Exception("Semantic", "Instruction Break out of loop", instruction.row, instruction.column, new_table.get_name());
                 tree.get_errors().push(error);
                 // tree.get_update(error);
             }
 
             if ( value instanceof Continue ) {
-                // console.log("Hola")
-                error = new Exception("Semantic", "Instruction Continue out of loop", instruction.row, instruction.column);
+                error = new Exception("Semantic", "Instruction Continue out of loop", instruction.row, instruction.column, new_table.get_name());
                 tree.get_errors().push(error);
             }
 
             if ( value instanceof Return ) {
-                if (this.type == type.VOID) {
-                    // console.log("Hola")
-                    return new Exception("Semantic", "Function should not return anything", instruction.row, instruction.column);
+                
+                if (this.type == type.VOID && value.get_result() !== null) {
+                    return new Exception("Semantic", "Function should not return anything", instruction.row, instruction.column, new_table.get_name());
                 }
 
-                if (value.get_type() === type.STRUCT){
+                if (value.get_type() === type.STRUCT && value.get_result() !== "null"){
+                    
                     if (value.get_result().get_id() !== this.type){
-                        return new Exception("Semantic", "Function doesn't return same data type", instruction.row, instruction.column);
+                        return new Exception("Semantic", "Function doesn't return same data type", instruction.row, instruction.column, new_table.get_name());
                     }
-                } else {
+                } else if (value.get_result() !== "null") {
 
                     if (this.type != value.get_type()) {
-                        return new Exception("Semantic", "Function doesn't return same data type", instruction.row, instruction.column);
+                        return new Exception("Semantic", "Function doesn't return same data type", instruction.row, instruction.column, new_table.get_name());
                     }
                 }
                 return value.get_result();
@@ -77,7 +77,7 @@ export class Function extends Instruction {
         }
 
         if (this.type !== type.VOID){
-            return new Exception("Semantic", `Function of type: ${this.type} expected one Return`, this.instructions[this.instructions.length - 1].row, this.instructions[this.instructions.length - 1].column);
+            return new Exception("Semantic", `Function of type: ${this.type} expected one Return`, this.instructions[this.instructions.length - 1].row, this.instructions[this.instructions.length - 1].column, new_table.get_name());
         }
         
         return null;

@@ -36,7 +36,7 @@ var Access_array = /** @class */ (function (_super) {
             return array;
         }
         if (array.get_type() !== type.ARRAY) {
-            return new Exception("Semantic", "The variable: ".concat(array.get_id(), " isn't an Array"), array.row, array.column);
+            return new Exception("Semantic", "The variable: ".concat(array.get_id(), " isn't an Array"), array.row, array.column, table.get_name());
         }
         var exp = null;
         if (this.expression !== null) {
@@ -72,13 +72,13 @@ var Access_array = /** @class */ (function (_super) {
                     return pos;
                 }
                 if (positions[0].get_type() !== type.INT) {
-                    return new Exception("Semantic", "The index of array cannot be of type: ".concat(positions[0].get_type(), " expected type: ").concat(type.INT), positions[0].row, positions[0].column);
+                    return new Exception("Semantic", "The index of array cannot be of type: ".concat(positions[0].get_type(), " expected type: ").concat(type.INT), positions[0].row, positions[0].column, table.get_name());
                 }
                 return this.get_values(positions.slice(1), array[pos], value, type_array, tree, table);
             }
             if (positions.length === 1 && array[pos] !== undefined) {
                 if (this.expression.get_type() !== type_array) {
-                    return new Exception("Semantic", "The type: ".concat(this.expression.get_type(), " cannot be assignated at array of type: ").concat(type_array), this.expression.row, this.expression.column);
+                    return new Exception("Semantic", "The type: ".concat(this.expression.get_type(), " cannot be assignated at array of type: ").concat(type_array), this.expression.row, this.expression.column, table.get_name());
                 }
                 switch (this.expression.get_type()) {
                     case type.INT:
@@ -98,11 +98,11 @@ var Access_array = /** @class */ (function (_super) {
                 return this.get_values(positions.slice(1), array[pos], value, type_array, tree, table);
             }
             else {
-                return new Exception("Semantic", "The index out of range", this.positions[this.positions.length - 1].row, this.positions[this.positions.length - 1].column);
+                return new Exception("Semantic", "The index out of range", this.positions[this.positions.length - 1].row, this.positions[this.positions.length - 1].column, table.get_name());
             }
         }
         if (array === undefined) {
-            return new Exception("Semantic", "The index out of range", this.positions[this.positions.length - 1].row, this.positions[this.positions.length - 1].column);
+            return new Exception("Semantic", "The index out of range", this.positions[this.positions.length - 1].row, this.positions[this.positions.length - 1].column, table.get_name());
         }
         return array;
     };

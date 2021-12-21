@@ -82,10 +82,6 @@ export class Arithmetic extends Instruction {
     }
 
     public interpret(tree: Tree, table: SymbolTable) {
-        console.log(this.exp1);
-        console.log(this.exp2);
-        
-        
         let left = this.exp1.interpret(tree, table);
 
         if ( left instanceof Exception )
@@ -123,7 +119,7 @@ export class Arithmetic extends Instruction {
                                 this.value = String(parseFloat(left) + right.charCodeAt(0));
                                 break;
                             default:
-                                return new Exception("Semantic", `The type ${this.exp2.get_type().toString()} \n cannot be operated with type: INTEGER`, this.row, this.column);
+                                return new Exception("Semantic", `The type ${this.exp2.get_type().toString()} \n cannot be operated with type: INTEGER`, this.row, this.column, table.get_name());
                         }
                     }
 
@@ -148,7 +144,7 @@ export class Arithmetic extends Instruction {
                     else if ( this.exp1.get_type() === type.STRING ||
                                 this.exp1.get_type() === type.BOOL ||
                                 this.exp1.get_type() === type.NULL ) {
-                        return new Exception("Semantic", `The type ${this.exp2.get_type().toString()} \n cannot  be operated with type: ${this.exp1.get_type().toString()}`, this.row, this.column);
+                        return new Exception("Semantic", `The type ${this.exp2.get_type().toString()} \n cannot  be operated with type: ${this.exp1.get_type().toString()}`, this.row, this.column, table.get_name());
                     }
             }
 
@@ -160,7 +156,7 @@ export class Arithmetic extends Instruction {
                     if ( this.exp1.get_type() === type.INT ) {
                         switch ( this.exp2.get_type() ) {
                             case type.INT:
-                                this.type = type.INT;
+                                this.type = this.operator === Arithmetic_operator.DIVISION ? type.DOUBLE : type.INT;
                                 this.value = this.operation(parseInt(left), parseInt(right), this.operator);
                                 break;
                             case type.DOUBLE:
@@ -172,7 +168,7 @@ export class Arithmetic extends Instruction {
                                 this.value = this.operation(parseInt(left), right.charCodeAt(0), this.operator);
                                 break;
                             default:
-                                return new Exception("Semantic", `The type ${this.exp2.get_type().toString()} \n cannot be operated with type: INTEGER`, this.row, this.column);
+                                return new Exception("Semantic", `The type ${this.exp2.get_type().toString()} \n cannot be operated with type: INTEGER`, this.row, this.column, table.get_name());
                         }
                     }
 
@@ -188,7 +184,7 @@ export class Arithmetic extends Instruction {
                                 this.value = this.operation(parseFloat(left), right.charCodeAt(0), this.operator);
                                 break;
                             default:
-                                return new Exception("Semantic", `The type ${this.exp2.get_type().toString()} \n cannot be operated with type: DOUBLE`, this.row, this.column);
+                                return new Exception("Semantic", `The type ${this.exp2.get_type().toString()} \n cannot be operated with type: DOUBLE`, this.row, this.column, table.get_name());
                         }
                     }
 
@@ -207,7 +203,7 @@ export class Arithmetic extends Instruction {
                                 this.value = this.operation(left.charCodeAt(0), right.charCodeAt(0), this.operator);
                                 break;
                             default:
-                                return new Exception("Semantic", `The type ${this.exp2.get_type().toString()} \n cannot be operated with type: CHAR`, this.row, this.column);
+                                return new Exception("Semantic", `The type ${this.exp2.get_type().toString()} \n cannot be operated with type: CHAR`, this.row, this.column, table.get_name());
                         }
                     }
             }
@@ -227,7 +223,7 @@ export class Arithmetic extends Instruction {
                             this.value = String(- parseFloat(left));
                             break
                         default:
-                            return new Exception("Semantic", `The type ${this.exp2.get_type().toString()} \n cannot be operated with operator -`, this.row, this.column);
+                            return new Exception("Semantic", `The type ${this.exp2.get_type().toString()} \n cannot be operated with operator -`, this.row, this.column, table.get_name());
                     }
                     break;
                 case Arithmetic_operator.INC:
@@ -241,7 +237,7 @@ export class Arithmetic extends Instruction {
                                 left = parseFloat(left);
                                 break;
                             default:
-                                return new Exception("Semantic", `The type: ${this.exp1.get_type()} \n cannot be operated whit operator: ${this.operator}`, this.row, this.column);
+                                return new Exception("Semantic", `The type: ${this.exp1.get_type()} \n cannot be operated whit operator: ${this.operator}`, this.row, this.column, table.get_name());
                         }
 
                         if (this.operator === Arithmetic_operator.INC){
@@ -262,7 +258,7 @@ export class Arithmetic extends Instruction {
                         return left;
                     }
                 default:
-                    return new Exception("Semantic", `Invalid operator: ${this.operator.toString()}`, this.row, this.column);
+                    return new Exception("Semantic", `Invalid operator: ${this.operator.toString()}`, this.row, this.column, table.get_name());
             }
         }
         return this.value;
@@ -287,6 +283,10 @@ export class Arithmetic extends Instruction {
         return this.type;
     }
     
+    set_type(type: type){
+        this.type = type;
+    }
+
     get_node() {
         let node = new Cst_Node("Expression Arithmetic");
 

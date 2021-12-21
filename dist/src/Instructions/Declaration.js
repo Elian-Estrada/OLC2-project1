@@ -98,12 +98,12 @@ var Declaration = /** @class */ (function (_super) {
             }
             if (this.expression instanceof Identifier && this.expression.get_type() === type.STRUCT) {
                 if (this.expression.get_value().get_id() !== this.id[1]) {
-                    return new Exception("Semantic", "The type: ".concat(value.id, " cannot be assignment to variable of type: ").concat(this.id[1]), this.expression.row, this.expression.column);
+                    return new Exception("Semantic", "The type: ".concat(value.id, " cannot be assignment to variable of type: ").concat(this.id[1]), this.expression.row, this.expression.column, table.get_name());
                 }
             }
             if (this.expression.get_type() === type.STRUCT && this.expression instanceof Access_struct) {
                 if ( /*value.get_value().struct*/value.get_value() !== "null" && value.get_value().id !== this.id[1]) {
-                    return new Exception("Semantic", "The type: ".concat(value.get_value().get_id(), " cannot be assignment to variable of type: ").concat(this.id[1]), this.expression.row, this.expression.column);
+                    return new Exception("Semantic", "The type: ".concat(value.get_value().get_id(), " cannot be assignment to variable of type: ").concat(this.id[1]), this.expression.row, this.expression.column, table.get_name());
                 }
                 else if (value.get_value() === "null") {
                     value = { id: this.id[1], value: "null" };
@@ -116,7 +116,7 @@ var Declaration = /** @class */ (function (_super) {
                 !(this.expression instanceof Identifier || this.expression instanceof Access_struct)) {
                 var struct = this.id[1];
                 if (struct !== this.expression.get_id()) {
-                    return new Exception("Semantic", "The type: ".concat(this.expression.get_id(), " cannot be assignment to variable of type: ").concat(struct), this.expression.row, this.expression.column);
+                    return new Exception("Semantic", "The type: ".concat(this.expression.get_id(), " cannot be assignment to variable of type: ").concat(struct), this.expression.row, this.expression.column, table.get_name());
                 }
             }
             else if (this.expression.get_type() !== this.id[1]) {
@@ -125,8 +125,15 @@ var Declaration = /** @class */ (function (_super) {
                     value = { id: this.id[1], value: "null" };
                 }
                 else {
+                    console.log(this.expression);
+                    if ((this.expression.get_type() === type.DOUBLE || this.expression.get_type() === type.INT)
+                        && (this.type === type.DOUBLE)) {
+                        console.log(this.expression);
+                        this.expression.set_type(this.type);
+                        value = String(parseFloat(value));
+                    }
                     if (this.expression.get_type() !== this.type) {
-                        return new Exception("Semantic", "The type: ".concat(this.expression.get_type(), " cannot be assignment to variable of type: ").concat(this.type), this.expression.row, this.expression.column);
+                        return new Exception("Semantic", "The type: ".concat(this.expression.get_type(), " cannot be assignment to variable of type: ").concat(this.type), this.expression.row, this.expression.column, table.get_name());
                     }
                 }
             }
@@ -153,7 +160,6 @@ var Declaration = /** @class */ (function (_super) {
                     break;
             }
         }
-        var errors = [];
         var result;
         if (this.type !== type.STRUCT) {
             for (var _i = 0, _a = this.id; _i < _a.length; _i++) {
@@ -161,7 +167,8 @@ var Declaration = /** @class */ (function (_super) {
                 symbol = new Symbol(item, this.type, this.row, this.column, value);
                 result = table.set_table(symbol);
                 if (result instanceof Exception) {
-                    errors.push(result);
+                    tree.get_errors().push(result);
+                    tree.update_console(result.toString());
                 }
             }
         }
@@ -171,9 +178,6 @@ var Declaration = /** @class */ (function (_super) {
             if (result instanceof Exception) {
                 return result;
             }
-        }
-        if (errors.length !== 0) {
-            return errors;
         }
         return null;
     };

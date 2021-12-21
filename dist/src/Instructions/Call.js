@@ -58,7 +58,7 @@ var Call = /** @class */ (function (_super) {
                         if (expression instanceof Array) {
                             var param = ob_function.get_params()[count];
                             if (param.type !== type.ARRAY) {
-                                return new Exception("Semantic", "The type: ".concat(type.ARRAY, " is different at parameter of type: ").concat(param.type), param.row, param.column);
+                                return new Exception("Semantic", "The type: ".concat(type.ARRAY, " is different at parameter of type: ").concat(param.type), param.row, param.column, new_table.get_name());
                             }
                             var array = new Declaration_array(param.name, param.sub_type, null, expression, param.row, param.column);
                             var result = array.interpret(tree, new_table);
@@ -86,7 +86,7 @@ var Call = /** @class */ (function (_super) {
                             if (expression.get_type() === type.ARRAY) {
                                 var type_func = ob_function.get_params()[count].sub_type;
                                 if (type_func !== val_expression.get_subtype())
-                                    return new Exception("Semantic", "The type: ".concat(val_expression.get_type(), " is different to param type: ").concat(type_func), ob_function.get_params()[count].row, ob_function.get_params()[count].column);
+                                    return new Exception("Semantic", "The type: ".concat(val_expression.get_type(), " is different to param type: ").concat(type_func), ob_function.get_params()[count].row, ob_function.get_params()[count].column, new_table.get_name());
                             }
                             var name_func = String(ob_function.get_params()[count].name);
                             var symbol = new Symbol(name_func, expression.get_type(), this.row, this.column, val_expression);
@@ -95,7 +95,7 @@ var Call = /** @class */ (function (_super) {
                                 return table_res;
                         }
                         else {
-                            return new Exception("Semantic", "The type: ".concat(expression.get_type(), " is different to param type: ").concat(ob_function.get_params()[count].type), this.row, this.column);
+                            return new Exception("Semantic", "The type: ".concat(expression.get_type(), " is different to param type: ").concat(ob_function.get_params()[count].type), this.row, this.column, new_table.get_name());
                         }
                         count += 1;
                     }
@@ -116,7 +116,7 @@ var Call = /** @class */ (function (_super) {
                         return this.id;
                     } });
                 if (struct_1.get_attributes().length !== this.params.length) {
-                    return new Exception("Semantic", "".concat(struct_1.get_attributes().length, " parameters were expected and ").concat(this.params.length, " came"), this.row, this.column);
+                    return new Exception("Semantic", "".concat(struct_1.get_attributes().length, " parameters were expected and ").concat(this.params.length, " came"), this.row, this.column, table.get_name());
                 }
                 var result = this.params.forEach(function (item, i) {
                     if (item instanceof Array) {
@@ -131,7 +131,7 @@ var Call = /** @class */ (function (_super) {
                             }
                         }
                         else {
-                            var error = new Exception("Semantic", "The attribute: ".concat(struct_1 === null || struct_1 === void 0 ? void 0 : struct_1.get_attributes()[i].id, " isn't an array."), _this.row, _this.column);
+                            var error = new Exception("Semantic", "The attribute: ".concat(struct_1 === null || struct_1 === void 0 ? void 0 : struct_1.get_attributes()[i].id, " isn't an array."), _this.row, _this.column, table.get_name());
                             tree.get_errors().push(error);
                             tree.update_console(error.toString());
                         }
@@ -147,7 +147,7 @@ var Call = /** @class */ (function (_super) {
                             if ((struct_1 === null || struct_1 === void 0 ? void 0 : struct_1.get_attributes()[i].type) === type.ARRAY) {
                                 var result_2;
                                 if (struct_1.get_attributes()[i].sub_type !== value.get_subtype()) {
-                                    result_2 = new Exception("Semantic", "The type: ".concat(value.get_subtype(), " cannot assignet at array of type: ").concat(struct_1.get_attributes()[i].sub_type), item.row, item.column);
+                                    result_2 = new Exception("Semantic", "The type: ".concat(value.get_subtype(), " cannot assignet at array of type: ").concat(struct_1.get_attributes()[i].sub_type), item.row, item.column, table.get_name());
                                 }
                                 if (result_2 instanceof Exception) {
                                     tree.get_errors().push(result_2);
@@ -157,21 +157,21 @@ var Call = /** @class */ (function (_super) {
                                 struct_1.get_attributes()[i].value = value.get_value();
                             }
                             else {
-                                var error = new Exception("Semantic", "The attribute: ".concat(struct_1 === null || struct_1 === void 0 ? void 0 : struct_1.get_attributes()[i].id, " isn't an array."), _this.row, _this.column);
+                                var error = new Exception("Semantic", "The attribute: ".concat(struct_1 === null || struct_1 === void 0 ? void 0 : struct_1.get_attributes()[i].id, " isn't an array."), _this.row, _this.column, table.get_name());
                                 tree.get_errors().push(error);
                                 tree.update_console(error.toString());
                             }
                         }
                         else {
                             if (struct_1.get_attributes()[i].type !== item.get_type() && struct_1.get_attributes()[i].type !== type.STRUCT) {
-                                var error = new Exception("Semantic", "The type: ".concat(item.get_type(), " cannot assignet at attribute of type: ").concat(struct_1.get_attributes()[i].type), item.row, item.column);
+                                var error = new Exception("Semantic", "The type: ".concat(item.get_type(), " cannot assignet at attribute of type: ").concat(struct_1.get_attributes()[i].type), item.row, item.column, table.get_name());
                                 tree.get_errors().push(error);
                                 tree.update_console(error.toString());
                                 return;
                             }
                             else if (struct_1.get_attributes()[i].type === type.STRUCT) {
                                 if (item.type !== type.NULL && struct_1.get_attributes()[i].struct !== value.get_id()) {
-                                    var error = new Exception("Semantic", "The type: ".concat(value.get_id(), " cannot assignet at attribute of type: ").concat(struct_1.get_attributes()[i].struct), item.row, item.column);
+                                    var error = new Exception("Semantic", "The type: ".concat(value.get_id(), " cannot assignet at attribute of type: ").concat(struct_1.get_attributes()[i].struct), item.row, item.column, table.get_name());
                                     tree.get_errors().push(error);
                                     tree.update_console(error.toString());
                                     return;
@@ -186,7 +186,7 @@ var Call = /** @class */ (function (_super) {
                 return this.value;
             }
             else {
-                return new Exception("Semantic", "The function ".concat(this.name, " doesn't exists"), this.row, this.column);
+                return new Exception("Semantic", "The function ".concat(this.name, " doesn't exists"), this.row, this.column, table.get_name());
             }
         }
         catch (error) {
@@ -209,7 +209,7 @@ var Call = /** @class */ (function (_super) {
         else {
             var value = list_expression.interpret(tree, table);
             if (type_array !== list_expression.get_type()) {
-                return new Exception("Semantic", "The type: ".concat(list_expression.get_type(), " cannot assignet at array of type: ").concat(type_array), list_expression.row, list_expression.column);
+                return new Exception("Semantic", "The type: ".concat(list_expression.get_type(), " cannot assignet at array of type: ").concat(type_array), list_expression.row, list_expression.column, table.get_name());
             }
             switch (list_expression.get_type()) {
                 case type.INT:

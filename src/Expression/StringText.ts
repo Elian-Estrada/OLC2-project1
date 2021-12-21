@@ -143,7 +143,7 @@ export class StringText extends Instruction {
                                 this.type = type.STRING;
                                 this.value = left.toString() + right.toString();
                             } else
-                                return new Exception("Semantic", `The type: ${this.exp1.get_type()} \n cannot be concatenated whit type: ${this.exp2.get_type()}`, this.row, this.column);
+                                return new Exception("Semantic", `The type: ${this.exp1.get_type()} \n cannot be concatenated whit type: ${this.exp2.get_type()}`, this.row, this.column, table.get_name());
                             break;
                     }
 
@@ -160,7 +160,7 @@ export class StringText extends Instruction {
                                 this.value = left.toString() + right.toString();
                                 break;
                             default:
-                                return new Exception("Semantic", `The type ${this.exp2.get_type().toString()} cannot be operated with type: STRING`, this.row, this.column);
+                                return new Exception("Semantic", `The type ${this.exp2.get_type().toString()} cannot be operated with type: STRING`, this.row, this.column, table.get_name());
                         }
                     }
                     break;
@@ -169,7 +169,7 @@ export class StringText extends Instruction {
                         this.type = type.STRING;
                         this.value = left.repeat(right);
                     } else {
-                        return new Exception("Semantic", `This operation cannot be performed`, this.row, this.column);
+                        return new Exception("Semantic", `This operation cannot be performed`, this.row, this.column, table.get_name());
                     }
                     break;
             }

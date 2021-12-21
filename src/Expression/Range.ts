@@ -37,7 +37,7 @@ export class Range extends Instruction {
             value = id.get_value();
             this.sub_type = id.get_subtype();
         } else {
-            return new Exception("Semantic", `This expressión only accepted type: ${type.ARRAY}`, this.id.row, this.id.column);
+            return new Exception("Semantic", `This expressión only accepted type: ${type.ARRAY}`, this.id.row, this.id.column, table.get_name());
         }
 
         if (this.start === "begin" && this.end === "end"){
@@ -50,13 +50,13 @@ export class Range extends Instruction {
             }
 
             if (this.end.get_type() !== type.INT){
-                return new Exception("Semantic", `The index must be of type: ${type.INT}`, this.end.row, this.end.column);
+                return new Exception("Semantic", `The index must be of type: ${type.INT}`, this.end.row, this.end.column, table.get_name());
             }
 
             end = parseInt(end) + 1;
 
             if (end > value.length || end < 0){
-                return new Exception("Semantic", `The index: ${end} out of range`, this.end.row, this.end.column);
+                return new Exception("Semantic", `The index: ${end} out of range`, this.end.row, this.end.column, table.get_name());
             }
 
             value = value.slice(0, end);
@@ -68,13 +68,13 @@ export class Range extends Instruction {
             }
 
             if (this.start.get_type() !== type.INT){
-                return new Exception("Semantic", `The index must be of type: ${type.INT}`, this.start.row, this.start.column);
+                return new Exception("Semantic", `The index must be of type: ${type.INT}`, this.start.row, this.start.column, table.get_name());
             }
 
             start = parseInt(start);
 
             if (start < 0 || start > value.length){
-                return new Exception("Semantic", `The index ${start} out of range`, this.start.row, this.start.colum);
+                return new Exception("Semantic", `The index ${start} out of range`, this.start.row, this.start.colum, table.get_name());
             }
 
             value = value.slice(start, value.length);
@@ -92,30 +92,26 @@ export class Range extends Instruction {
             }
 
             if (this.start.get_type() !== type.INT){
-                return new Exception("Semantic", `The index must be of type: ${type.INT}`, this.start.row, this.start.column);
+                return new Exception("Semantic", `The index must be of type: ${type.INT}`, this.start.row, this.start.column, table.get_name());
             }
 
             if (this.end.get_type() !== type.INT){
-                return new Exception("Semantic", `The index must be of type: ${type.INT}`, this.end.row, this.end.column);
+                return new Exception("Semantic", `The index must be of type: ${type.INT}`, this.end.row, this.end.column, table.get_name());
             }
 
             start = parseInt(start);
 
             if (start < 0 || start > value.length){
-                return new Exception("Semantic", `The index ${start} out of range`, this.start.row, this.start.colum);
+                return new Exception("Semantic", `The index ${start} out of range`, this.start.row, this.start.colum, table.get_name());
             }
 
             end = parseInt(end) + 1;
 
             if (end > value.length || end < 0){
-                return new Exception("Semantic", `The index: ${end} out of range`, this.end.row, this.end.column);
+                return new Exception("Semantic", `The index: ${end} out of range`, this.end.row, this.end.column, table.get_name());
             }
-
-            console.log(value);
             
             value = value.slice(start, end);
-
-            console.log(value);
             
         }
 

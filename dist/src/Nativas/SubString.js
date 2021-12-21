@@ -28,11 +28,33 @@ var SubString = /** @class */ (function (_super) {
     SubString.prototype.interpret = function (tree, table) {
         var id_founded = this.id.interpret(tree, table);
         if (id_founded === null)
-            return new Exception("Semantic", "Identifier not found in the current context", this.row, this.column);
+            return new Exception("Semantic", "Identifier not found in the current context", this.row, this.column, table.get_name());
         if (this.id.get_type() !== type.STRING)
-            return new Exception("Semantic", "The type ".concat(id_founded.type, " not valid for Length"), this.row, this.column);
+            return new Exception("Semantic", "The type ".concat(id_founded.type, " not valid for Length"), this.row, this.column, table.get_name());
+        var from = this.from.interpret(tree, table);
+        if (from instanceof Exception) {
+            return from;
+        }
+        if (this.from.get_type() !== type.INT) {
+            return new Exception("Semantic", "The expression can be only of type: int", this.from.row, this.from.column, table.get_name());
+        }
+        if (from > id_founded.length || from < 0) {
+            return new Exception("Semantic", "The index: ".concat(from, " out of range"), this.from.row, this.from.column, table.get_name());
+        }
+        var to = this.to.interpret(tree, table);
+        if (to instanceof Exception) {
+            return to;
+        }
+        if (this.to.get_type() !== type.INT) {
+            return new Exception("Semantic", "The expression can be only of type: int", this.to.row, this.to.column, table.get_name());
+        }
+        // @ts-ignore
+        to = parseInt(to) + 1;
+        if (to > id_founded.length) {
+            return new Exception("Semantic", "The index: ".concat(to - 1, " out of range"), this.row, this.column, table.get_name());
+        }
         this.type = type.STRING;
-        return id_founded.substring(this.from, this.to);
+        return id_founded.substring(from, to);
     };
     return SubString;
 }(Function));

@@ -26,7 +26,7 @@ export class Identifier extends Instruction {
         
 
         if (symbol == undefined){
-            return new Exception("Semantic", `The id: ${this.id} doesn't exist in current context`, this.row, this.column);
+            return new Exception("Semantic", `The id: ${this.id} doesn't exist in current context`, this.row, this.column, table.get_name());
         }
 
         this.type = symbol.type;

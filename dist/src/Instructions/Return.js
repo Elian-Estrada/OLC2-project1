@@ -27,8 +27,12 @@ var Return = /** @class */ (function (_super) {
         return _this;
     }
     Return.prototype.interpret = function (tree, table) {
-        if (this.expr == null)
-            return "void";
+        if (this.expr == null) {
+            //return "void";
+            this.type = type.VOID;
+            this.result = null;
+            return this;
+        }
         var value = this.expr.interpret(tree, table);
         if (value instanceof Exception)
             return value;

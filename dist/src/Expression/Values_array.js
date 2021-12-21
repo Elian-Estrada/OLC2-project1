@@ -56,7 +56,7 @@ var Values_array = /** @class */ (function (_super) {
                 this.type_array = list_expression.get_type();
             }
             if (this.type_array !== list_expression.get_type()) {
-                return new Exception("Semantic", "The type: ".concat(list_expression.get_type(), " isn't like to: ").concat(this.type_array), list_expression.row, list_expression.column);
+                return new Exception("Semantic", "The type: ".concat(list_expression.get_type(), " isn't like to: ").concat(this.type_array), list_expression.row, list_expression.column, table.get_name());
             }
             switch (list_expression.get_type()) {
                 case type.INT:
@@ -76,6 +76,9 @@ var Values_array = /** @class */ (function (_super) {
     };
     Values_array.prototype.get_subtype = function () {
         return this.type_array;
+    };
+    Values_array.prototype.set_subtype = function (type) {
+        this.type_array = type;
     };
     Values_array.prototype.get_value = function () {
         return this.value;

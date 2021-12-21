@@ -31,11 +31,11 @@ export class Access_struct extends Instruction{
         let struct = table.get_table(this.list_ids[0]);
 
         if (struct === undefined){
-            return new Exception("Semantic", `The variable: ${this.list_ids[0]} doesn't in the current context`, this.row, this.column);
+            return new Exception("Semantic", `The variable: ${this.list_ids[0]} doesn't in the current context`, this.row, this.column, table.get_name());
         }
 
         if (struct.type !== type.STRUCT){
-            return new Exception("Semantic", `The variable: ${struct.id} isn't struct`, struct.row, struct.column);
+            return new Exception("Semantic", `The variable: ${struct.id} isn't struct`, struct.row, struct.column, table.get_name());
         }
 
         let exp:any = null;
@@ -115,7 +115,7 @@ export class Access_struct extends Instruction{
 
                         return result;
                     } else if (item.type !== type.ARRAY && this.positions !== null){
-                        return new Exception("Semantic", `The attribute: ${item.id} isn't ${type.ARRAY}`, item.row, item.column);
+                        return new Exception("Semantic", `The attribute: ${item.id} isn't ${type.ARRAY}`, item.row, item.column, table.get_name());
                     }
 
                     if (this.expression instanceof Call){
@@ -125,7 +125,7 @@ export class Access_struct extends Instruction{
                             return null;
                         } 
 
-                        return new Exception("Semantic", `The attribute: ${item.id} isn't ${exp.id}`, item.row, item.column);
+                        return new Exception("Semantic", `The attribute: ${item.id} isn't ${exp.id}`, item.row, item.column, table.get_name());
                     }
                     
                     if (exp !== null && this.expression.get_type() === item.type){
@@ -142,7 +142,7 @@ export class Access_struct extends Instruction{
                             return null;
                         }
 
-                        return new Exception("Semantic", `The type: ${this.expression.get_type()} cannot assignment at attribute of type: ${item.type}`, this.expression.row, this.expression.column);
+                        return new Exception("Semantic", `The type: ${this.expression.get_type()} cannot assignment at attribute of type: ${item.type}`, this.expression.row, this.expression.column, table.get_name());
                     }
 
                     this.type = item.type;
@@ -159,7 +159,7 @@ export class Access_struct extends Instruction{
                 }
             }
 
-            return new Exception("Semantic", `The attribute: ${ids[0]} doesn't exist`, this.row, this.column);
+            return new Exception("Semantic", `The attribute: ${ids[0]} doesn't exist`, this.row, this.column, table.get_name());
         }
         
     }
@@ -177,7 +177,7 @@ export class Access_struct extends Instruction{
                 }
 
                 if (positions[0].get_type() !== type.INT){
-                    return new Exception("Semantic", `The index of array cannot be of type: ${positions[0].get_type()} expected type: ${type.INT}`, positions[0].row, positions[0].column);
+                    return new Exception("Semantic", `The index of array cannot be of type: ${positions[0].get_type()} expected type: ${type.INT}`, positions[0].row, positions[0].column, table.get_name());
                 }
 
                 return this.get_values(positions.slice(1), array[positions[0]], value, type_array, tree, table);
@@ -186,7 +186,7 @@ export class Access_struct extends Instruction{
             if (positions.length === 1 && array[positions[0]] !== undefined){
 
                 if (this.expression.get_type() !== type_array){
-                    return new Exception("Semantic", `The type: ${this.expression.get_type()} cannot be assignated at array of type: ${type_array}`, this.expression.row, this.expression.column);
+                    return new Exception("Semantic", `The type: ${this.expression.get_type()} cannot be assignated at array of type: ${type_array}`, this.expression.row, this.expression.column, table.get_name());
                 }
 
                 switch(this.expression.get_type()){
@@ -208,13 +208,13 @@ export class Access_struct extends Instruction{
             } else if (positions.length !== 1){
                 return this.get_values(positions.slice(1), array[positions[0]], value, type_array, tree, table);
             } else {
-                return new Exception("Semantic", "The index out of range", this.positions[this.positions.length - 1].row, this.positions[this.positions.length - 1].column);    
+                return new Exception("Semantic", "The index out of range", this.positions[this.positions.length - 1].row, this.positions[this.positions.length - 1].column, table.get_name());    
             }
 
         }
 
         if (array === undefined){
-            return new Exception("Semantic", "The index out of range", this.positions[this.positions.length - 1].row, this.positions[this.positions.length - 1].column);
+            return new Exception("Semantic", "The index out of range", this.positions[this.positions.length - 1].row, this.positions[this.positions.length - 1].column, table.get_name());
         }
 
         return array;

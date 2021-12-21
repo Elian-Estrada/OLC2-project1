@@ -55,6 +55,13 @@
 "caracterOfPosition" return 'RCHAROF';
 "subString"         return 'RSUBSTRING';
 "parse"             return 'RPARSE';
+"toInt"				return 'RTOINT';
+"toDouble"			return 'RTODOUBLE';
+"string"			return 'FSTRING';
+"typeof"			return 'RTYPEOF';
+"push"				return 'RPUSH';
+"pop"				return 'RPOP';
+"graficar_ts"		return 'RGRAPH'
 
 /* Language Functions */
 "pow"               return 'RPOW';
@@ -71,7 +78,7 @@
 "false"				return 'RFALSE';
 
 /* ---------------------------------------- Tokens ---------------------------------------- */
-/* Special Characters */
+/* Special Characters */´
 ":"                 return 'TWOPOINTS';
 ","					return 'COMMASIGN';
 "^"                 return 'REPETITIONSIGN';
@@ -130,13 +137,15 @@
 
 /*\"[^\"]*\"				{ yytext = yytext.substr(1,yyleng-2); 	return 'STRING'; }
 "'"[^']"'"				{ yytext = yytext.substr(1, yyleng-2); 	return 'CHAR'; }*/
-\"(\\\'|\\\"|\\\\|\\n|\\t|[^\'\\\"])*?\"		{
+\"(\\\'|\\\"|\\\\|\\n|\\t|[^\'\\\"\n])*?\"		{
 	yytext = yytext.substr(1, yyleng-2);
 	yytext = yytext.replace(/\\t/g, '\t');
 	yytext = yytext.replace(/\\n/g, '\n');
 	yytext = yytext.replace(/\\"/g, '\"');
 	yytext = yytext.replace(/\\'/g, "\'");
 	yytext = yytext.replace(/\\\\/g, '\\');
+	/*yytext = yytext.split("$");
+	yytext = new Interpolation(yytext, yylloc.first_line, yylloc.first_column);*/
 																return 'STRING';
 }
 \'(\\\'|\\\"|\\t|\\n|\\\\|[^\'\\\"])?\'			{
@@ -170,6 +179,7 @@
 	import { Access_array } from "./Expression/Access_array.js";
 	import { Access_struct } from "./Expression/Access_struct.js";
 	import { Range } from "./Expression/Range.js";
+	import { Interpolation } from "./Expression/Interpolation.js"
 
 	import { Declaration } from "./Instructions/Declaration.js";
 	import { Declaration_array } from "./Instructions/Declaration_array.js";
@@ -191,12 +201,25 @@
 	import Exception from "./SymbolTable/Exception.js";
 	import {MainInstruction} from "./Instructions/MainInstruction.js";
 	import { Struct } from "./Instructions/Struct.js";
+	
 	import { Length } from "./Nativas/Length.js";
 	import { ToUpperCase } from "./Nativas/ToUpperCase.js";
 	import { ToLowerCase } from "./Nativas/ToLowerCase.js";
 	import { CaracterOfPosition } from "./Nativas/CaracterOfPosition.js";
 	import { SubString } from "./Nativas/SubString.js";
 	import { Parse } from "./Nativas/Parse.js";
+	import { ToInt } from "./Nativas/ToInt.js";
+	import { ToDouble } from "./Nativas/ToDouble.js";
+	import { String } from "./Nativas/String.js";
+	import { TypeOf } from "./Nativas/TypeOf.js";
+	import { Pow } from "./Nativas/Pow.js";
+	import { Sin } from "./Nativas/Sin.js";
+	import { Cos } from "./Nativas/Cos.js";
+	import { Tan } from "./Nativas/Tan.js";
+	import { Sqrt } from "./Nativas/Sqrt.js";
+	import { Push } from "./Nativas/Push.js";
+	import { Pop } from "./Nativas/Pop.js";
+	import { Graficar_ts } from "./Nativas/Graficar_ts.js";
 %}
 
 %{
@@ -210,11 +233,13 @@
 %left 'OR'
 %left 'AND'
 %right UNOT
-%nonassoc 'EQUALIZATIONSIGN' 'DIFFSIGN' 'LESSEQUAL' 'GREATEREQUAL' 'SMALLERTHAN' 'GREATERTHAN', 'VALUEIFTRUE'
+%left 'EQUALIZATIONSIGN' 'DIFFSIGN' 'LESSEQUAL' 'GREATEREQUAL' 'SMALLERTHAN' 'GREATERTHAN', 'VALUEIFTRUE'
 %left 'PLUSSIGN' 'SUBSIGN', 'CONCAT', 'REPETITIONSIGN'
 %left 'MULTSIGN' 'DIVSIGN' 'MODSIGN'
 %right UMENOS
 %right 'INCSIGN' 'DECSIGN'
+%right 'FCAST'
+%left 'FSTRING'
 
 %start ini
 
@@ -228,7 +253,7 @@ ini
 
 instructions
 	: instructions instruction          { $1.push($2); $$ = $1; }
-	| instruction                       { $$ = [$1]; }
+	| instruction                       { if($1 === null) { $$ = []; } else { $$ = [$1]; } }
 ;
 
 instruction
@@ -248,8 +273,14 @@ instruction
 	| struct ptcommP			{ $$ = $1; }
 	| native_strings ptcommP    { $$ = $1; }
 	| native_function ptcommP   { $$ = $1; }
+	| native_array_push ptcommP	{ $$ = $1; }
+	| native_array_pop ptcommP	{ $$ = $1; }
+	| native_ts	ptcommP			{ $$ = $1; }
 	| assignment_struct ptcommP	{ $$ = $1; }
-	| error ptcommP             { errors.push(new Exception("Sintactic", `Sintactic error ${yytext}`, this._$.first_line, this._$.first_column)); }
+	| error SEMICOLON           { console.log("Entro al error", yytext);
+		errors.push(new Exception("Sintactic", `Sintactic error ${yytext}`, this._$.first_line, this._$.first_column));
+		$$ = null;
+	}
 ;
 
 ptcommP
@@ -319,10 +350,10 @@ expression_range
 ;
 
 prod_print
-    : RPRINT PARLEFT expression PARRIGHT {
+    : RPRINT PARLEFT list_values_array PARRIGHT {
         $$ = new Print($3, @1.first_line, @1.first_column, false);
     }
-	| RPRINTLN PARLEFT expression PARRIGHT { $$ = new Print($3, @1.first_line, @1.first_column)}
+	| RPRINTLN PARLEFT list_values_array PARRIGHT { $$ = new Print($3, @1.first_line, @1.first_column)}
 ;
 
 inc_dec
@@ -544,7 +575,7 @@ type
     | RBOOLEAN 	{ $$ = type.BOOL; }
     | RCHAR 	{ $$ = type.CHAR; }
     | RSTRING 	{ $$ = type.STRING; }
-	| RNULL		{ $$ = type.NULL; }
+	//| RNULL		{ $$ = type.NULL; }
 	| RVOID     { $$ = type.VOID; }
 ;
 
@@ -553,24 +584,105 @@ native_strings
     : IDENTIFIER DOT RLENGTH PARLEFT PARRIGHT {
         $$ = new Length(new Identifier($1, @1.first_line, @1.first_column), null, "length", [], [], @1.first_line, @1.first_column);
     }
+	| STRING DOT RLENGTH PARLEFT PARRIGHT {
+		$$ = new Length(new Primitive($1, type.STRING, this._$.first_line, this._$.first_column), null, "length", [], [], this._$.first_line, this._$.first_column);
+	}
+	| values_array DOT RLENGTH PARLEFT PARRIGHT {
+		$$ = new Length(new Values_array($1, this._$.first_line, this._$.first_column), null, "length", [], [], this._$.first_line, this._$.first_column);
+	}
+	| IDENTIFIER list_brackets DOT RLENGTH PARLEFT PARRIGHT {
+		$$ = new Length(new Access_array(new Identifier($1, this._$.first_line, this._$.first_column), $2, null, this._$.first_line, this._$.first_column), null, "length", [], [], this._$.first_line, this._$.first_column);
+	}
     | IDENTIFIER DOT RUPPER PARLEFT PARRIGHT {
-        $$ = new ToUpperCase(new Identifier($1, @1.first_line, @1.first_column), null, "length", [], [], @1.first_line, @1.first_column);
+        $$ = new ToUpperCase(new Identifier($1, @1.first_line, @1.first_column), null, "ToUpperCase", [], [], @1.first_line, @1.first_column);
     }
+	| STRING DOT RUPPER PARLEFT PARRIGHT {
+		$$ = new ToUpperCase(new Primitive($1, type.STRING, this._$.first_line, this._$.first_column), null, "ToUpperCase", [], [], this._$.first_line, this._$.first_column);
+	}
     | IDENTIFIER DOT RLOWER PARLEFT PARRIGHT {
-        $$ = new ToLowerCase(new Identifier($1, @1.first_line, @1.first_column), null, "length", [], [], @1.first_line, @1.first_column);
+        $$ = new ToLowerCase(new Identifier($1, @1.first_line, @1.first_column), null, "ToLowerCase", [], [], @1.first_line, @1.first_column);
     }
-    | IDENTIFIER DOT RCHAROF PARLEFT INTEGER PARRIGHT {
+	| STRING DOT RLOWER PARLEFT PARRIGHT {
+		$$ = new ToLowerCase(new Primitive($1, type.STRING, this._$.first_line, this._$.first_column), null, "ToLowerCase", [], [], this._$.first_line, this._$.first_column);
+	}
+    | IDENTIFIER DOT RCHAROF PARLEFT expression PARRIGHT {
         $$ = new CaracterOfPosition(new Identifier($1, @1.first_line, @1.first_column), $5, null, "length", [], [], @1.first_line, @1.first_column);
     }
-    | IDENTIFIER DOT RSUBSTRING PARLEFT INTEGER COMMASIGN INTEGER PARRIGHT {
-        $$ = new SubString(new Identifier($1, @1.first_line, @1.first_column), $5, $7, null, "length", [], [], @1.first_line, @1.first_column)
+	| STRING DOT RCHAROF PARLEFT expression PARRIGHT {
+		$$ = new CaracterOfPosition(new Primitive($1, type.STRING, this._$.first_line, this._$.first_column), $5, "CharacterOfPosition", [], [], this._$.first_line, this._$.first_column);
+	}
+    | IDENTIFIER DOT RSUBSTRING PARLEFT expression COMMASIGN expression PARRIGHT {
+        $$ = new SubString(new Identifier($1, @1.first_line, @1.first_column), $5, $7, null, "substring", [], [], @1.first_line, @1.first_column)
     }
+	| STRING DOT RSUBSTRING PARLEFT expression COMMASIGN expression PARRIGHT {
+		$$ = new SubString(new Primitive($1, type.STRING, this._$.first_line, this._$.first_column), $5, $7, null, "substring", [], [], this._$.first_line, this._$.first_column);
+	}
 ;
 
 native_function
     : type DOT RPARSE PARLEFT expression PARRIGHT {
           $$ = new Parse($1, $5, @1.first_line, @1.first_column);
     }
+;
+
+native_parse
+	: RTOINT PARLEFT expression PARRIGHT {
+		$$ = new ToInt($3, null, "toInt", [], [], this._$.first_line, this._$.first_column);
+	}
+	| RTODOUBLE PARLEFT expression PARRIGHT {
+		$$ = new ToDouble($3, null, "toDouble", [], [], this._$.first_line, this._$.first_column);
+	}
+	| FSTRING PARLEFT expression PARRIGHT {
+		$$ = new String($3, null, "string", [], [], this._$.first_line, this._$.first_column);
+	}
+	| FSTRING PARLEFT values_array PARRIGHT {
+		$$ = new String(new Values_array($3, this._$.first_line, this._$.first_column), null, "string", [], [], this._$.first_line, this._$.first_column);
+	}
+;
+
+native_type
+	: RTYPEOF PARLEFT expression PARRIGHT {
+		$$ = new TypeOf($3, null, "typeof", [], [], this._$.first_line, this._$.first_column);
+	}
+	| RTYPEOF PARLEFT values_array PARRIGHT {
+		$$ = new TypeOf(new Values_array($3, this._$.first_line, this._$.first_column), null, "typeof", [], [], this._$.first_line, this._$.first_column);
+	}
+;
+
+native_arithmetic
+	: RPOW PARLEFT expression COMMASIGN expression PARRIGHT {
+		$$ = new Pow($3, $5, null, "pow", [], [], this._$.first_line, this._$.first_column);
+	}
+	| RSIN PARLEFT expression PARRIGHT {
+		$$ = new Sin($3, null, "sin", [], [], this._$.first_line, this._$.first_column);
+	}
+	| RCOS PARLEFT expression PARRIGHT {
+		$$ = new Cos($3, null, "cos", [], [], this._$.first_line, this._$.first_column);
+	}
+	| RTAN PARLEFT expression PARRIGHT {
+		$$ = new Tan($3, null, "tan", [], [], this._$.first_line, this._$.first_column);
+	}
+	| RSQRT PARLEFT expression PARRIGHT {
+		$$ = new Sqrt($3, null, "sqrt", [], [], this._$.first_line, this._$.first_column);
+	}
+;
+
+native_array_push
+	: IDENTIFIER DOT RPUSH PARLEFT expression PARRIGHT {
+		$$ = new Push(new Identifier($1, this._$.first_line, this._$.first_column), $5, null, "push", [], [], this._$.first_line, this._$.first_column);
+	}
+;
+
+native_array_pop
+	: IDENTIFIER DOT RPOP PARLEFT PARRIGHT {
+		$$ = new Pop(new Identifier($1, this._$.first_line, this._$.first_column), null, "pop", [], [], this._$.first_line, this._$.first_column);
+	}
+;
+
+native_ts 
+	: RGRAPH PARLEFT PARRIGHT {
+		$$ = new Graficar_ts(null, "graficar_ts", [], [], this._$.first_line, this._$.first_column);
+	}
 ;
 
 expression
@@ -605,7 +717,12 @@ expression
 	| PARLEFT expression PARRIGHT           { $$ = $2; }
 	| prod_ternary                          { $$ = $1; }
 	| call_function                         { $$ = $1; }
-	| native_strings                        { $$ = $1; }
+	| native_strings %prec FSTRING          { $$ = $1; }
+	| native_function %prec FCAST			{ $$ = $1; }
+	| native_parse %prec FCAST				{ $$ = $1; }
+	| native_arithmetic %prec FCAST			{ $$ = $1; }
+	| native_type							{ $$ = $1; }
+	| native_array_pop						{ $$ = $1; }
 	| access_struct							{ $$ = $1; }
 	| range									{ $$ = $1; }
 ;

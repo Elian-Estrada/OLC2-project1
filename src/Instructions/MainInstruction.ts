@@ -7,6 +7,15 @@ import {Continue} from "./Continue.js";
 import {Break} from "./Break.js";
 import {Generator3D} from "../Generator/Generator3D.js";
 import { Cst_Node } from "../Abstract/Cst_Node.js";
+import { Push } from "../Nativas/Push.js";
+import { Pop } from "../Nativas/Pop.js";
+import { ToUpperCase } from "../Nativas/ToUpperCase.js";
+import { ToLowerCase } from "../Nativas/ToLowerCase.js";
+import { Length } from "../Nativas/Length.js";
+import { CaracterOfPosition } from "../Nativas/CaracterOfPosition.js";
+import { SubString } from "../Nativas/SubString.js";
+import { Parse } from "../Nativas/Parse.js";
+import { Graficar_ts } from "../Nativas/Graficar_ts.js";
 
 export class MainInstruction extends Instruction {
 
@@ -22,8 +31,19 @@ export class MainInstruction extends Instruction {
         tree.set_symbol_table(new_table);
 
         for ( let item of this.instructions ) {
-            if ( item instanceof Function ) {
-                let error = new Exception("Semantic", "The instruction func don't be into of method main", item.row, item.column);
+            
+            if ( item instanceof Function 
+                && !(item instanceof Push)
+                && !(item instanceof Pop)
+                && !(item instanceof ToUpperCase)
+                && !(item instanceof ToLowerCase)
+                && !(item instanceof Length)
+                && !(item instanceof CaracterOfPosition)
+                && !(item instanceof SubString)
+                && !(item instanceof Parse)
+                && !(item instanceof Graficar_ts)
+                ) {
+                let error = new Exception("Semantic", "The instruction func don't be into of method main", item.row, item.column, new_table.get_name());
                 tree.get_errors().push(error);
                 tree.update_console(error.toString());
             }
@@ -42,13 +62,13 @@ export class MainInstruction extends Instruction {
             }
 
             if ( instruction instanceof Break ) {
-                let error = new Exception("Semantic", "The instruction Break is loop instruction", item.row, item.column);
+                let error = new Exception("Semantic", "The instruction Break is loop instruction", item.row, item.column, new_table.get_name());
                 tree.get_errors().push(error);
                 tree.update_console(error.toString());
             }
 
             if ( instruction instanceof Continue ) {
-                let error = new Exception("Semantic", "The instruction Continue is loop instruction", item.row, item.column);
+                let error = new Exception("Semantic", "The instruction Continue is loop instruction", item.row, item.column, new_table.get_name());
                 tree.get_errors().push(error);
                 tree.update_console(error.toString());
             }

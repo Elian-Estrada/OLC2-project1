@@ -30,7 +30,7 @@ var Identifier = /** @class */ (function (_super) {
     Identifier.prototype.interpret = function (tree, table) {
         var symbol = table.get_table(this.id);
         if (symbol == undefined) {
-            return new Exception("Semantic", "The id: ".concat(this.id, " doesn't exist in current context"), this.row, this.column);
+            return new Exception("Semantic", "The id: ".concat(this.id, " doesn't exist in current context"), this.row, this.column, table.get_name());
         }
         this.type = symbol.type;
         this.value = symbol.value;

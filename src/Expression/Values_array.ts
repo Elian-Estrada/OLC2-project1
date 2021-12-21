@@ -62,7 +62,7 @@ export class Values_array extends Instruction{
             }
 
             if (this.type_array !== list_expression.get_type()){
-                return new Exception("Semantic", `The type: ${list_expression.get_type()} isn't like to: ${this.type_array}`, list_expression.row, list_expression.column);
+                return new Exception("Semantic", `The type: ${list_expression.get_type()} isn't like to: ${this.type_array}`, list_expression.row, list_expression.column, table.get_name());
             }
 
             switch(list_expression.get_type()){
@@ -86,6 +86,10 @@ export class Values_array extends Instruction{
 
     get_subtype(){
         return this.type_array;
+    }
+
+    set_subtype(type: type){
+        this.type_array = type;
     }
 
     get_value(){

@@ -128,7 +128,7 @@ var StringText = /** @class */ (function (_super) {
                                 this.value = left.toString() + right.toString();
                             }
                             else
-                                return new Exception("Semantic", "The type: ".concat(this.exp1.get_type(), " \n cannot be concatenated whit type: ").concat(this.exp2.get_type()), this.row, this.column);
+                                return new Exception("Semantic", "The type: ".concat(this.exp1.get_type(), " \n cannot be concatenated whit type: ").concat(this.exp2.get_type()), this.row, this.column, table.get_name());
                             break;
                     }
                     if (this.exp1.get_type() == type.STRING) {
@@ -144,7 +144,7 @@ var StringText = /** @class */ (function (_super) {
                                 this.value = left.toString() + right.toString();
                                 break;
                             default:
-                                return new Exception("Semantic", "The type ".concat(this.exp2.get_type().toString(), " cannot be operated with type: STRING"), this.row, this.column);
+                                return new Exception("Semantic", "The type ".concat(this.exp2.get_type().toString(), " cannot be operated with type: STRING"), this.row, this.column, table.get_name());
                         }
                     }
                     break;
@@ -154,7 +154,7 @@ var StringText = /** @class */ (function (_super) {
                         this.value = left.repeat(right);
                     }
                     else {
-                        return new Exception("Semantic", "This operation cannot be performed", this.row, this.column);
+                        return new Exception("Semantic", "This operation cannot be performed", this.row, this.column, table.get_name());
                     }
                     break;
             }

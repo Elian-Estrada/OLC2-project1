@@ -64,7 +64,7 @@ var DoWhile = /** @class */ (function (_super) {
                     }
                 }
                 else {
-                    return new Exception("Semantic", "Expect a Boolean type expression. Not ".concat(this.expr.get_type().name), this.row, this.column);
+                    return new Exception("Semantic", "Expect a Boolean type expression. Not ".concat(this.expr.get_type().name), this.row, this.column, table.get_name());
                 }
                 this.counter += 1;
             }
@@ -73,7 +73,7 @@ var DoWhile = /** @class */ (function (_super) {
             }
         }
         catch (error) {
-            return new Exception("Semantic", "" + error, this.row, this.column);
+            return new Exception("Semantic", "" + error, this.row, this.column, table.get_name());
         }
     };
     DoWhile.prototype.compile = function (table, generator) {

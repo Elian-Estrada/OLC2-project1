@@ -87,7 +87,7 @@ export class If extends Instruction {
                 }
             }
         } else {
-            return new Exception("Semantic", `Expect a Boolean type expression. Not ${this.expr.get_type().name}`, this.row, this.column);
+            return new Exception("Semantic", `Expect a Boolean type expression. Not ${this.expr.get_type().name}`, this.row, this.column, table.get_name());
         }
     }
 

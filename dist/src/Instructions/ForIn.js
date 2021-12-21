@@ -52,14 +52,13 @@ var ForIn = /** @class */ (function (_super) {
                         new_var = new Declaration([this.firsExp.toString()], this.secondExp.get_type(), this.row, this.column, null);
                         break;
                     case type.ARRAY:
-                        console.log(value_iterable);
                         // @ts-ignore
                         new_var = new Declaration([this.firsExp.toString()], value_iterable.get_subtype(), this.row, this.column, null);
                         value_iterable = value_iterable.get_value();
                         //new_var = new Declaration_array(this.firsExp.toString(), value_iterable.get_subtype(), null, [], this.secondExp.row, this.secondExp.column);
                         break;
                     default:
-                        return new Exception("Semantic", "The instruction For-in only accept on string or array", this.secondExp.row, this.secondExp.column);
+                        return new Exception("Semantic", "The instruction For-in only accept on string or array", this.secondExp.row, this.secondExp.column, new_table.get_name());
                 }
                 // @ts-ignore
                 var res_dec = new_var.interpret(tree, new_table);

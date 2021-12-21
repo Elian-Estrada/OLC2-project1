@@ -21,8 +21,12 @@ export class Return extends Instruction {
 
     public interpret(tree: Tree, table: SymbolTable): any {
 
-        if ( this.expr == null )
-            return "void";
+        if ( this.expr == null ){
+            //return "void";
+            this.type = type.VOID;
+            this.result = null;
+            return this;
+        }
 
         let value = this.expr.interpret(tree, table);
 
