@@ -130,7 +130,8 @@ var Main = /** @class */ (function () {
                 for (var _g = 0, _h = tree.get_instructions(); _g < _h.length; _g++) {
                     var instruction = _h[_g];
                     if (!(instruction instanceof MainInstruction || instruction instanceof Declaration
-                        || instruction instanceof Assignment || instruction instanceof Function || instruction instanceof Struct)) {
+                        || instruction instanceof Assignment || instruction instanceof Function || instruction instanceof Struct
+                        || instruction instanceof Declaration_array)) {
                         var error = new Exception("Semantic", "Instruction outside main", instruction.row, instruction.column, global_table.get_name());
                         tree.get_errors().push(error);
                         tree.update_console(error.toString());
@@ -155,7 +156,6 @@ var Main = /** @class */ (function () {
         }
         console.log(tree.get_instructions());
         console.log(tree.get_global_table());
-        console.log(variables);
         console.log(tree.get_errors());
         console.log(tree.get_all_structs());
         localStorage.setItem("errors", JSON.stringify(tree.get_errors()));

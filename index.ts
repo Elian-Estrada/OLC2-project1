@@ -69,7 +69,11 @@ function codeToAnalyze() {
     myCodeMirror2.setValue("");
     // @ts-ignore
     let res: string = main.lexicalAnalysis(bufferStream);
-    updateCodeMirror(res, myCodeMirror2);
+    try {
+        updateCodeMirror(res, myCodeMirror2);
+    } catch (error){
+        console.log(error);
+    }
 }
 
 btnCompile?.addEventListener('click', () => {

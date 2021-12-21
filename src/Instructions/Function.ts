@@ -37,8 +37,6 @@ export class Function extends Instruction {
             let value = instruction.interpret(tree, new_table);
 
             if ( value === "void" ){
-                console.log("Entra");
-                
                 return;
             }
             if ( value instanceof Exception ) {
@@ -59,7 +57,6 @@ export class Function extends Instruction {
             }
 
             if ( value instanceof Return ) {
-                console.log(value);
                 
                 if (this.type == type.VOID && value.get_result() !== null) {
                     return new Exception("Semantic", "Function should not return anything", instruction.row, instruction.column, new_table.get_name());

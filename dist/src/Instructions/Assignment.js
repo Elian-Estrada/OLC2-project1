@@ -30,6 +30,7 @@ var Assignment = /** @class */ (function (_super) {
     }
     Assignment.prototype.interpret = function (tree, table) {
         var value = this.expression.interpret(tree, table);
+        console.log(value);
         if (value instanceof Exception) {
             return value;
         }

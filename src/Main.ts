@@ -150,7 +150,8 @@ export class Main {
                 /* Fourth run for instruction outside main */
                 for ( let instruction of tree.get_instructions() ) {
                     if ( !(instruction instanceof MainInstruction || instruction instanceof Declaration
-                        || instruction instanceof Assignment || instruction instanceof Function || instruction instanceof Struct) ) {
+                        || instruction instanceof Assignment || instruction instanceof Function || instruction instanceof Struct 
+                        || instruction instanceof Declaration_array) ) {
                         let error = new Exception("Semantic", "Instruction outside main", instruction.row, instruction.column, global_table.get_name());
                         tree.get_errors().push(error);
                         tree.update_console(error.toString());
@@ -176,7 +177,6 @@ export class Main {
 
         console.log(tree.get_instructions());
         console.log(tree.get_global_table());
-        console.log(variables);
         console.log(tree.get_errors());
         console.log(tree.get_all_structs());
         

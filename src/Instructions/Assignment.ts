@@ -2,6 +2,7 @@ import { Cst_Node } from "../Abstract/Cst_Node.js";
 import { Instruction } from "../Abstract/Instruction.js";
 import { Access_struct } from "../Expression/Access_struct.js";
 import { Identifier } from "../Expression/Identifier.js";
+import { Values_array } from "../Expression/Values_array.js";
 import { Generator3D } from "../Generator/Generator3D.js";
 import Exception from "../SymbolTable/Exception.js";
 import Symbol from "../SymbolTable/Symbol.js";
@@ -23,6 +24,8 @@ export class Assignment extends Instruction{
     interpret(tree: Tree, table: SymbolTable){
 
         let value = this.expression.interpret(tree, table);
+        console.log(value);
+        
 
         if (value instanceof Exception){
             return value;

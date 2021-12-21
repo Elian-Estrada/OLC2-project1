@@ -56,8 +56,6 @@ var SymbolTable = /** @class */ (function () {
         while (current_table !== undefined) {
             if (current_table.table.has(symbol.id)) {
                 var current_symbol = current_table.table.get(symbol.id);
-                console.log(symbol);
-                console.log(current_symbol);
                 if (symbol.value === "null") {
                     switch (current_symbol.type) {
                         case type.STRUCT:
@@ -80,7 +78,8 @@ var SymbolTable = /** @class */ (function () {
                 if (current_symbol.type === symbol.type && current_symbol.type !== type.STRUCT) {
                     if (current_symbol.value instanceof Declaration_array) {
                         if (symbol.value instanceof Values_array) {
-                            if (current_symbol.value.get_subtype() === symbol.value.get_subtype()) {
+                            console.log(symbol.value.get_value().length);
+                            if (current_symbol.value.get_subtype() === symbol.value.get_subtype() || symbol.value.get_value().length === 0) {
                                 current_symbol.value.set_value(symbol.value.get_value());
                                 return undefined;
                             }

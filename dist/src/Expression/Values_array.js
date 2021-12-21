@@ -77,6 +77,9 @@ var Values_array = /** @class */ (function (_super) {
     Values_array.prototype.get_subtype = function () {
         return this.type_array;
     };
+    Values_array.prototype.set_subtype = function (type) {
+        this.type_array = type;
+    };
     Values_array.prototype.get_value = function () {
         return this.value;
     };

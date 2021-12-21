@@ -41,7 +41,6 @@ var Function = /** @class */ (function (_super) {
             var instruction = _c[_b];
             var value = instruction.interpret(tree, new_table);
             if (value === "void") {
-                console.log("Entra");
                 return;
             }
             if (value instanceof Exception) {
@@ -59,7 +58,6 @@ var Function = /** @class */ (function (_super) {
                 tree.get_errors().push(error);
             }
             if (value instanceof Return) {
-                console.log(value);
                 if (this.type == type.VOID && value.get_result() !== null) {
                     return new Exception("Semantic", "Function should not return anything", instruction.row, instruction.column, new_table.get_name());
                 }

@@ -94,7 +94,6 @@ var Print = /** @class */ (function (_super) {
                 value = JSON.stringify(value.get_value());
             }
             else if (value instanceof Array) {
-                console.log(value);
                 value = JSON.stringify(value);
             }
             else if ( /*this.expression*/item.get_type() === type.STRUCT && value !== "null") {
