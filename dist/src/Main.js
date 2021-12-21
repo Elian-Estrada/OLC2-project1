@@ -3,6 +3,7 @@ import { grammar, errors, clean_errors } from "./grammar.js";
 import Tree from "./SymbolTable/Tree.js";
 import SymbolTable from "./SymbolTable/SymbolTable.js";
 import { variables } from "./SymbolTable/SymbolTable.js";
+import { clear_count } from "./Nativas/Graficar_ts.js";
 import Exception from "./SymbolTable/Exception.js";
 import { Function } from "./Instructions/Function.js";
 import { Declaration } from "./Instructions/Declaration.js";
@@ -27,6 +28,7 @@ var Main = /** @class */ (function () {
         // @ts-ignore
         var instructions;
         clean_errors();
+        clear_count();
         instructions = grammar.parse(bufferStream);
         // console.log(instructions)
         var tree = new Tree(instructions);

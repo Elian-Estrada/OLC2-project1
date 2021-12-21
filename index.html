@@ -13,6 +13,7 @@
           href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css"
   />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script src="./dist/codemirror-5.58.1/lib/codemirror.js"></script>
   <script src="./dist/codemirror-5.58.1/mode/clike/clike.js"></script>
   <link rel="stylesheet" href="./dist/codemirror-5.58.1/lib/codemirror.css" />
@@ -141,7 +142,15 @@
     </div>
   </div>
 </div>
-
+<!-- Modal Structure -->
+<div id="modal1" class="modal is-active">
+  <div class="modal-content">
+    <div id="table0"></div>
+  </div>
+  <div class="modal-footer">
+    <a href="#!" class="modal-close waves-effect waves-green btn-flat">Agree</a>
+  </div>
+</div>
 <script>
   document.addEventListener("DOMContentLoaded", function () {
     M.AutoInit();
@@ -150,5 +159,6 @@
 <script> var exports = {}; </script>
 <script type="module" src="./dist/src/grammar.js"></script>
 <script type="module" src="./dist/index.js"></script>
+<script type="module" src="./dist/src/Nativas/Graficar_ts.js"></script>
 </body>
 </html>

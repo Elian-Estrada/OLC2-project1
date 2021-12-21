@@ -154,7 +154,19 @@ export default class SymbolTable {
         return this.size;
     }
 
+    get_table_total(){
+        return this.table;
+    }
+
+    get_prev() {
+        return this.prev;
+    }
+
     clean_variables(){
         variables = [];
+    }
+
+    get_variables(){
+        return variables;
     }
 }

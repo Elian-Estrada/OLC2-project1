@@ -124,8 +124,17 @@ var SymbolTable = /** @class */ (function () {
     SymbolTable.prototype.get_size = function () {
         return this.size;
     };
+    SymbolTable.prototype.get_table_total = function () {
+        return this.table;
+    };
+    SymbolTable.prototype.get_prev = function () {
+        return this.prev;
+    };
     SymbolTable.prototype.clean_variables = function () {
         variables = [];
+    };
+    SymbolTable.prototype.get_variables = function () {
+        return variables;
     };
     SymbolTable.varaibles = [];
     return SymbolTable;

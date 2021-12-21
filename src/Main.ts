@@ -4,6 +4,7 @@ import { Instruction } from "./Abstract/Instruction.js";
 import Tree from "./SymbolTable/Tree.js";
 import SymbolTable from "./SymbolTable/SymbolTable.js";
 import { variables } from "./SymbolTable/SymbolTable.js";
+import { clear_count } from "./Nativas/Graficar_ts.js";
 import Exception from "./SymbolTable/Exception.js";
 import {Function} from "./Instructions/Function.js";
 import {Declaration} from "./Instructions/Declaration.js";
@@ -31,6 +32,7 @@ export class Main {
         let instructions: Array<Instruction>;
         
         clean_errors();
+        clear_count();
 
         instructions = grammar.parse(bufferStream);
         // console.log(instructions)

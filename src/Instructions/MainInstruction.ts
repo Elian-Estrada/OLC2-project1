@@ -15,6 +15,7 @@ import { Length } from "../Nativas/Length.js";
 import { CaracterOfPosition } from "../Nativas/CaracterOfPosition.js";
 import { SubString } from "../Nativas/SubString.js";
 import { Parse } from "../Nativas/Parse.js";
+import { Graficar_ts } from "../Nativas/Graficar_ts.js";
 
 export class MainInstruction extends Instruction {
 
@@ -40,6 +41,7 @@ export class MainInstruction extends Instruction {
                 && !(item instanceof CaracterOfPosition)
                 && !(item instanceof SubString)
                 && !(item instanceof Parse)
+                && !(item instanceof Graficar_ts)
                 ) {
                 let error = new Exception("Semantic", "The instruction func don't be into of method main", item.row, item.column, new_table.get_name());
                 tree.get_errors().push(error);
