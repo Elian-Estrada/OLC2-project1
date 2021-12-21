@@ -6,6 +6,9 @@ import Symbol from "../SymbolTable/Symbol.js";
 import SymbolTable from "../SymbolTable/SymbolTable.js";
 import Tree from "../SymbolTable/Tree.js";
 import { type } from "../SymbolTable/Type.js";
+import {Access_array} from "../Expression/Access_array";
+import {Primitive} from "../Expression/Primitive";
+import {Value} from "../Abstract/Value";
 
 export class Declaration_array extends Instruction {
 
@@ -161,7 +164,32 @@ export class Declaration_array extends Instruction {
     }
 
     compile(table: SymbolTable, generator: Generator3D) {
-        
+        generator.addComment("-----KEEP ARRAY-----");
+        let temp = generator.addTemp();
+        let temp_move = generator.addTemp();
+
+        generator.addExpression(temp, 'H', '', '');
+        generator.addExpression(temp_move, 'H', '', '');
+        generator.addExpression('H', 'H', table.get_size() + 1, '+');
+        generator.setHeap(temp_move, table.get_size());
+
+        generator.addExpression(temp_move, temp_move, '1', '+');
+
+        for ( let expr of this.list_expression ) {
+            let value = expr.compile(table, generator);
+
+            if ( value instanceof Primitive )
+                this.type = value.get_type();
+
+            generator.setHeap(temp_move, value.value);
+            generator.addExpression(temp_move, temp_move, '1', '+');
+        }
+
+        generator.addComment("----END ARRAY-----");
+        let val_ret = new Value(temp, type.ARRAY, true);
+        val_ret.type_array = this.type;
+
+        return val_ret;
     }
 
     get_node() {

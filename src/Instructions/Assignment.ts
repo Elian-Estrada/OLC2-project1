@@ -75,9 +75,11 @@ export class Assignment extends Instruction{
     }
     
     compile(table: SymbolTable, generator: Generator3D): any {
-        this.expression.compile(table, generator);
-        let new_var = table.get_table(this.get_id()[0]);
+        let val = this.expression.compile(table, generator);
+        let new_var = table.get_table(this.get_id());
         // @ts-ignore
         table.update_table(new_var);
+        // @ts-ignore
+        generator.setStack(new_var.position, val.value, true);
     }
 }

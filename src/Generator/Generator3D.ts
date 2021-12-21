@@ -22,6 +22,7 @@ export class Generator3D {
     private concat_str: boolean;
     private repetition_str: boolean;
     private compare_str: boolean;
+    private to_str: boolean;
     private aux_errors: Array<any>;
     private table: Array<any>;
     private flag_math: boolean;
@@ -45,6 +46,7 @@ export class Generator3D {
         this.concat_str = false;
         this.repetition_str = false;
         this.compare_str = false;
+        this.to_str = false;
         this.aux_errors = [];
         this.table = [];
         this.flag_math = false;
@@ -76,6 +78,7 @@ export class Generator3D {
         this.concat_str = false;
         this.repetition_str = false;
         this.compare_str = false;
+        this.to_str = false;
         this.aux_errors = [];
         this.table = [];
         this.flag_math = false;
@@ -86,12 +89,8 @@ export class Generator3D {
     public initial_header() {
         let header = "/*------HEADER------*/\n";
 
-        if ( this.flag_math ) {
-            header += `#include <stdio.h>\n
-        #include <math.h>\n`;
-        } else {
-            header += "#include <stdio.h>\n";
-        }
+        header += "#include <stdio.h>\n"
+        header += "#include <math.h>\n";
 
         header += "float heap[30101999];\n";
         header += "float stack[30101999];\n";
@@ -112,7 +111,7 @@ export class Generator3D {
     }
 
     public get_code() {
-        return `${this.initial_header()}${this.natives}\n${this.funcs}\n/*------MAIN------*/\n void main() { \n\tP = 0; H = 0;\n ${this.code}\n\t return; \n }`;
+        return `${this.initial_header()}${this.natives}\n${this.funcs}\n/*------MAIN------*/\n void main() { \n\tP = 1; H = 0;\n ${this.code}\n\t return; \n }`;
     }
 
     public get_freeTemp(temp: any) {
@@ -129,6 +128,10 @@ export class Generator3D {
 
     public addError(message: string, line: number, column: number) {
         this.errors.push(new Exception("Semantic", "Id not existent", line, column));
+    }
+
+    public addOperationMod(res: string, left: string, right: string) {
+        this.codeIn(`${res}=fmod(${left}, ${right});\n`);
     }
 
     public concatString() {
@@ -348,6 +351,67 @@ export class Generator3D {
         this.get_freeTemp(counter);
     }
 
+    public NumberToString() {
+        if ( this.to_str )
+            return;
+        this.to_str = true;
+        this.inNatives = true;
+
+        let t2 = this.addTemp();
+        let t3 = this.addTemp();
+        let t4 = this.addTemp();
+        let t5 = this.addTemp();
+
+        let L0 = this.newLabel();
+        let L1 = this.newLabel();
+        let L2 = this.newLabel();
+        let L3 = this.newLabel();
+
+        this.addBeginFunc('toString');
+        this.setHeap('H', -1);
+        this.addExpression('H', 'H', 1, '+');
+        this.addExpression(t2, 'P', 1, '+');
+        this.getStack(t4, t2);
+        this.addIf(t4, 0, '>=', L1);
+        this.addExpression(t4, 0, t4, '-');
+        this.setLabel(L1);
+        this.modOp(t3, t4, 10);
+        this.addExpression(t3, t3, 48, '+');
+        this.addExpression(t4, `(int)${t4}`, 10, '/');
+        this.setHeap('H', t3);
+        this.nextHeap();
+        this.addIf(t4, 0, '!=', L1);
+        this.addAssignment(t5, 'H');
+        this.addExpression(t2, 'P', 1, '+');
+        this.getStack(t4, t2);
+        this.addIf(t4, 0, '>=', L2);
+        this.setHeap('H', 45);
+        this.addExpression('H', 'H', 1, '+');
+        this.setLabel(L2);
+        this.addAssignment(t2, t5);
+        this.setLabel(L3);
+        this.addExpression(t2, t2, 1, '-');
+        this.getHeap(t3, t2);
+        this.setHeap('H', t3);
+        this.addExpression('H', 'H', 1, '+');
+        this.addIf(t3, -1, '!=', L3);
+        this.setLabel(L0);
+        this.setStack('P', t5);
+        this.addEndFunc();
+
+        this.inNatives = false;
+        this.get_freeTemp(t2);
+        this.get_freeTemp(t3);
+        this.get_freeTemp(t4);
+        this.get_freeTemp(t5);
+    }
+
+    public modOp(res: any, temp: any, num: number) {
+        this.get_freeTemp(res);
+        this.get_freeTemp(temp);
+        this.codeIn(`${res} = (int)fmod(${temp}, ${num});\n`);
+    }
+
     public getStack(place: any, pos: any) {
         this.get_freeTemp(pos);
         this.codeIn(`${place} = stack[(int)${pos}];\n`);
@@ -357,7 +421,7 @@ export class Generator3D {
         this.get_freeTemp(pos);
         if (freeValue)
             this.get_freeTemp(value);
-        this.codeIn(`stack[(int)${pos}] = ${value};\n`)
+        this.codeIn(`stack[(int)${pos}] = ${value};\n`);
     }
 
     public getHeap(place: any, pos: any) {

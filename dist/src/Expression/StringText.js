@@ -32,7 +32,7 @@ var StringText = /** @class */ (function (_super) {
     StringText.prototype.compile = function (table, generator) {
         var left = this.exp1.compile(table, generator);
         var right = this.exp2.compile(table, generator);
-        var temp = generator.addTemp();
+        // let temp = generator.addTemp();
         var operation = this.operator;
         if (operation === String_operator.CONCAT) {
             if (this.exp1.get_type() === type.STRING && this.exp2.get_type() === type.STRING) {
@@ -47,15 +47,47 @@ var StringText = /** @class */ (function (_super) {
                 generator.setStack(paramTemp, right.value);
                 generator.newEnv(table.get_size());
                 generator.callFunc('concatString');
-                var temp_1 = generator.addTemp();
-                generator.getStack(temp_1, 'P');
+                var temp = generator.addTemp();
+                generator.getStack(temp, 'P');
                 generator.setEnv(table.get_size());
-                return new Value(temp_1, type.STRING, true);
+                return new Value(temp, type.STRING, true);
             }
             else {
-                generator.addExpression(temp, left.value, right.value, "+");
-                var type_ret = type.STRING;
-                return new Value(temp, type_ret, true);
+                generator.NumberToString();
+                generator.concatString();
+                var paramTemp = generator.addTemp();
+                generator.addExpression(paramTemp, 'P', table.get_size(), '+'); // t11 = P + 0
+                generator.addExpression(paramTemp, paramTemp, '1', '+'); // t11 = t11 + 1
+                if (this.exp2.get_type() !== type.STRING) {
+                    generator.setStack(paramTemp, right.value); // stack[t11]=4
+                }
+                else {
+                    generator.setStack(paramTemp, left.value); // stack[t11]=4
+                }
+                generator.addExpression('P', 'P', table.get_size(), '+'); // P = P + 0
+                generator.callFunc('toString'); // toString()
+                var paramTemp2 = generator.addTemp();
+                generator.getStack(paramTemp2, 'P'); // t12 = stack[P]
+                generator.addExpression('P', 'P', table.get_size(), '-'); // P = P - 0
+                var new_temp = generator.addTemp();
+                generator.addExpression(new_temp, 'P', table.get_size(), '+');
+                generator.addExpression(new_temp, new_temp, '1', '+');
+                if (this.exp2.get_type() !== type.STRING) {
+                    generator.setStack(new_temp, left.value);
+                    generator.addExpression(new_temp, new_temp, '1', '+');
+                    generator.setStack(new_temp, paramTemp2);
+                }
+                else {
+                    generator.setStack(new_temp, paramTemp2);
+                    generator.addExpression(new_temp, new_temp, '1', '+');
+                    generator.setStack(new_temp, right.value);
+                }
+                generator.addExpression('P', 'P', table.get_size(), '+');
+                generator.callFunc('concatString');
+                var new_temp2 = generator.addTemp();
+                generator.getStack(new_temp2, 'P');
+                generator.addExpression('P', 'P', table.get_size(), '-');
+                return new Value(new_temp2, type.STRING, true);
             }
         }
         else if (operation === String_operator.REPETITION) {
@@ -68,10 +100,10 @@ var StringText = /** @class */ (function (_super) {
             generator.setStack(param_temp, right.value);
             generator.newEnv(table.get_size());
             generator.callFunc('repetitionStr');
-            var temp_2 = generator.addTemp();
-            generator.getStack(temp_2, 'P');
+            var temp = generator.addTemp();
+            generator.getStack(temp, 'P');
             generator.setEnv(table.get_size());
-            return new Value(temp_2, type.STRING, true);
+            return new Value(temp, type.STRING, true);
         }
     };
     StringText.prototype.interpret = function (tree, table) {

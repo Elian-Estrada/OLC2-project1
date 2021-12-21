@@ -3,6 +3,7 @@ var btnAnalyze = document.getElementById('btnAnalyze');
 var btnCompile = document.getElementById('btnCompile');
 var bufferStream;
 var myCodeMirror;
+var main;
 // @ts-ignore
 myCodeMirror = CodeMirror.fromTextArea(document.getElementById("code"), {
     lineNumbers: true,
@@ -11,7 +12,7 @@ myCodeMirror = CodeMirror.fromTextArea(document.getElementById("code"), {
     theme: "moxer",
     mode: "text/x-java",
 });
-myCodeMirror.setValue("void main(){\n\n  return;\n}");
+myCodeMirror.setValue("void main(){\n  return;\n}");
 // @ts-ignore
 var myCodeMirror2 = CodeMirror.fromTextArea(document.getElementById("pythonConsole"), {
     lineNumbers: false,
@@ -46,7 +47,7 @@ window.addEventListener('keydown', function (e) {
 function codeToAnalyze() {
     bufferStream = myCodeMirror.getValue();
     // console.log(bufferStream);
-    var main = new Main();
+    main = new Main();
     myCodeMirror2.setValue("");
     // @ts-ignore
     var res = main.lexicalAnalysis(bufferStream);
@@ -54,7 +55,7 @@ function codeToAnalyze() {
 }
 btnCompile === null || btnCompile === void 0 ? void 0 : btnCompile.addEventListener('click', function () {
     bufferStream = myCodeMirror.getValue();
-    var main = new Main();
+    // let main = new Main();
     myCodeMirror3.setValue("");
     var res = main.compile(bufferStream);
     updateCodeMirror(res, myCodeMirror3);

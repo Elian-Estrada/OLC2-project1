@@ -116,6 +116,9 @@ var Access_array = /** @class */ (function (_super) {
         return this.sub_type;
     };
     Access_array.prototype.compile = function (table, generator) {
+        generator.addComment("-----ARRAY-----");
+        var temp = generator.addTemp();
+        var temp_move = generator.addTemp();
     };
     Access_array.prototype.get_node = function () {
         var node = new Cst_Node("Access Array");

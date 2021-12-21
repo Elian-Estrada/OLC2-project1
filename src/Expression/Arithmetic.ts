@@ -44,11 +44,12 @@ export class Arithmetic extends Instruction {
             if ( (left.type == type.INT || left.type == type.DOUBLE) &&
                 (right.type == type.INT || right.type == type.DOUBLE)) {
 
-                generator.addExpression(temp, left.value, right.value, operation);
-                let type_op = type.INT;
-
-                // generator.setLabel(label_exit);
-
+                if ( operation === Arithmetic_operator.MODULS ) {
+                    generator.addOperationMod(temp, left.value, right.value);
+                } else {
+                    generator.addExpression(temp, left.value, right.value, operation);
+                }
+                let type_op = this.type;
                 return new Value(temp, type_op, true);
             }
         } else {
@@ -63,6 +64,17 @@ export class Arithmetic extends Instruction {
                 let new_symbol = new Arithmetic(this.exp1, new_prim, Arithmetic_operator.SUBSTRACTION, this.row, this.column);
                 let new_val = new_symbol.compile(table, generator);
                 return new Value(new_val.value, type.INT, false);
+            }
+            else if ( this.operator === Arithmetic_operator.SUBSTRACTION ) {
+                let value = '';
+                switch ( this.exp1.get_type() ) {
+                    case type.INT:
+                        value = String(-parseInt(left.value));
+                        break;
+                    case type.DOUBLE:
+                        value =  String(-parseFloat(left.value));
+                }
+                return new Value(value, this.exp1.get_type(), false);
             }
         }
 

@@ -19,6 +19,7 @@ var Generator3D = /** @class */ (function () {
         this.concat_str = false;
         this.repetition_str = false;
         this.compare_str = false;
+        this.to_str = false;
         this.aux_errors = [];
         this.table = [];
         this.flag_math = false;
@@ -48,6 +49,7 @@ var Generator3D = /** @class */ (function () {
         this.concat_str = false;
         this.repetition_str = false;
         this.compare_str = false;
+        this.to_str = false;
         this.aux_errors = [];
         this.table = [];
         this.flag_math = false;
@@ -56,12 +58,8 @@ var Generator3D = /** @class */ (function () {
     };
     Generator3D.prototype.initial_header = function () {
         var header = "/*------HEADER------*/\n";
-        if (this.flag_math) {
-            header += "#include <stdio.h>\n\n        #include <math.h>\n";
-        }
-        else {
-            header += "#include <stdio.h>\n";
-        }
+        header += "#include <stdio.h>\n";
+        header += "#include <math.h>\n";
         header += "float heap[30101999];\n";
         header += "float stack[30101999];\n";
         header += "float P;\n";
@@ -78,7 +76,7 @@ var Generator3D = /** @class */ (function () {
         return header;
     };
     Generator3D.prototype.get_code = function () {
-        return "".concat(this.initial_header()).concat(this.natives, "\n").concat(this.funcs, "\n/*------MAIN------*/\n void main() { \n\tP = 0; H = 0;\n ").concat(this.code, "\n\t return; \n }");
+        return "".concat(this.initial_header()).concat(this.natives, "\n").concat(this.funcs, "\n/*------MAIN------*/\n void main() { \n\tP = 1; H = 0;\n ").concat(this.code, "\n\t return; \n }");
     };
     Generator3D.prototype.get_freeTemp = function (temp) {
         if (temp in this.temps_recover) { // @ts-ignore
@@ -91,6 +89,9 @@ var Generator3D = /** @class */ (function () {
     };
     Generator3D.prototype.addError = function (message, line, column) {
         this.errors.push(new Exception("Semantic", "Id not existent", line, column));
+    };
+    Generator3D.prototype.addOperationMod = function (res, left, right) {
+        this.codeIn("".concat(res, "=fmod(").concat(left, ", ").concat(right, ");\n"));
     };
     Generator3D.prototype.concatString = function () {
         if (this.concat_str)
@@ -268,6 +269,61 @@ var Generator3D = /** @class */ (function () {
         this.get_freeTemp(t4);
         this.get_freeTemp(t5);
         this.get_freeTemp(counter);
+    };
+    Generator3D.prototype.NumberToString = function () {
+        if (this.to_str)
+            return;
+        this.to_str = true;
+        this.inNatives = true;
+        var t2 = this.addTemp();
+        var t3 = this.addTemp();
+        var t4 = this.addTemp();
+        var t5 = this.addTemp();
+        var L0 = this.newLabel();
+        var L1 = this.newLabel();
+        var L2 = this.newLabel();
+        var L3 = this.newLabel();
+        this.addBeginFunc('toString');
+        this.setHeap('H', -1);
+        this.addExpression('H', 'H', 1, '+');
+        this.addExpression(t2, 'P', 1, '+');
+        this.getStack(t4, t2);
+        this.addIf(t4, 0, '>=', L1);
+        this.addExpression(t4, 0, t4, '-');
+        this.setLabel(L1);
+        this.modOp(t3, t4, 10);
+        this.addExpression(t3, t3, 48, '+');
+        this.addExpression(t4, "(int)".concat(t4), 10, '/');
+        this.setHeap('H', t3);
+        this.nextHeap();
+        this.addIf(t4, 0, '!=', L1);
+        this.addAssignment(t5, 'H');
+        this.addExpression(t2, 'P', 1, '+');
+        this.getStack(t4, t2);
+        this.addIf(t4, 0, '>=', L2);
+        this.setHeap('H', 45);
+        this.addExpression('H', 'H', 1, '+');
+        this.setLabel(L2);
+        this.addAssignment(t2, t5);
+        this.setLabel(L3);
+        this.addExpression(t2, t2, 1, '-');
+        this.getHeap(t3, t2);
+        this.setHeap('H', t3);
+        this.addExpression('H', 'H', 1, '+');
+        this.addIf(t3, -1, '!=', L3);
+        this.setLabel(L0);
+        this.setStack('P', t5);
+        this.addEndFunc();
+        this.inNatives = false;
+        this.get_freeTemp(t2);
+        this.get_freeTemp(t3);
+        this.get_freeTemp(t4);
+        this.get_freeTemp(t5);
+    };
+    Generator3D.prototype.modOp = function (res, temp, num) {
+        this.get_freeTemp(res);
+        this.get_freeTemp(temp);
+        this.codeIn("".concat(res, " = (int)fmod(").concat(temp, ", ").concat(num, ");\n"));
     };
     Generator3D.prototype.getStack = function (place, pos) {
         this.get_freeTemp(pos);
