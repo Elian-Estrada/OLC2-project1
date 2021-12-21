@@ -44,11 +44,12 @@ export class Arithmetic extends Instruction {
             if ( (left.type == type.INT || left.type == type.DOUBLE) &&
                 (right.type == type.INT || right.type == type.DOUBLE)) {
 
-                generator.addExpression(temp, left.value, right.value, operation);
-                let type_op = type.INT;
-
-                // generator.setLabel(label_exit);
-
+                if ( operation === Arithmetic_operator.MODULS ) {
+                    generator.addOperationMod(temp, left.value, right.value);
+                } else {
+                    generator.addExpression(temp, left.value, right.value, operation);
+                }
+                let type_op = this.type;
                 return new Value(temp, type_op, true);
             }
         } else {

@@ -130,6 +130,10 @@ export class Generator3D {
         this.errors.push(new Exception("Semantic", "Id not existent", line, column));
     }
 
+    public addOperationMod(res: string, left: string, right: string) {
+        this.codeIn(`${res}=fmod(${left}, ${right});\n`);
+    }
+
     public concatString() {
         if ( this.concat_str )
             return;
