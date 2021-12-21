@@ -34,6 +34,9 @@ var Primitive = /** @class */ (function (_super) {
     Primitive.prototype.get_type = function () {
         return this.type;
     };
+    Primitive.prototype.set_type = function (type) {
+        this.type = type;
+    };
     Primitive.prototype.get_node = function () {
         var node = new Cst_Node("Primitive");
         node.add_child(this.value);

@@ -271,6 +271,10 @@ export class Arithmetic extends Instruction {
         return this.type;
     }
     
+    set_type(type: type){
+        this.type = type;
+    }
+
     get_node() {
         let node = new Cst_Node("Expression Arithmetic");
 

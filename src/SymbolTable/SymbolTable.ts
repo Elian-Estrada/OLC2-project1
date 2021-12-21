@@ -101,7 +101,7 @@ export default class SymbolTable {
                         return undefined;
                     }
                 }
-
+                
                 if (current_symbol.type === symbol.type && current_symbol.type !== type.STRUCT){
                     if (current_symbol.value instanceof Declaration_array){
                         if (symbol.value instanceof Values_array){
