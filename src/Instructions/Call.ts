@@ -58,7 +58,6 @@ export class Call extends Instruction {
                         }
 
                         let val_expression = expression.interpret(tree, table);
-                        
                         if ( val_expression instanceof Exception )
                             return val_expression;
 

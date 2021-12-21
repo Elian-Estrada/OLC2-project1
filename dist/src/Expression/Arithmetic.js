@@ -133,7 +133,7 @@ var Arithmetic = /** @class */ (function (_super) {
                     if (this.exp1.get_type() === type.INT) {
                         switch (this.exp2.get_type()) {
                             case type.INT:
-                                this.type = type.INT;
+                                this.type = this.operator === Arithmetic_operator.DIVISION ? type.DOUBLE : type.INT;
                                 this.value = this.operation(parseInt(left), parseInt(right), this.operator);
                                 break;
                             case type.DOUBLE:
