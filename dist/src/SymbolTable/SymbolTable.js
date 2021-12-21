@@ -22,6 +22,22 @@ var SymbolTable = /** @class */ (function () {
         this.table.set(symbol.id, symbol);
         this.size += 1;
         symbol.position = this.size;
+        var flag = true;
+        for (var i = 0; i < variables.length; i++) {
+            if (variables[i].id === symbol.id
+                && variables[i].type === symbol.type
+                && variables[i].row === symbol.row
+                && variables[i].column === symbol.column
+                //&& item.value === symbol.value
+                && variables[i].environment === symbol.environment) {
+                flag = false;
+                variables[i] = symbol;
+                break;
+            }
+        }
+        if (flag) {
+            variables.push(symbol);
+        }
         return undefined;
     };
     SymbolTable.prototype.get_table = function (id) {
@@ -40,8 +56,6 @@ var SymbolTable = /** @class */ (function () {
         while (current_table !== undefined) {
             if (current_table.table.has(symbol.id)) {
                 var current_symbol = current_table.table.get(symbol.id);
-                console.log(symbol);
-                console.log(current_symbol);
                 if (symbol.value === "null") {
                     switch (current_symbol.type) {
                         case type.STRUCT:
@@ -64,7 +78,8 @@ var SymbolTable = /** @class */ (function () {
                 if (current_symbol.type === symbol.type && current_symbol.type !== type.STRUCT) {
                     if (current_symbol.value instanceof Declaration_array) {
                         if (symbol.value instanceof Values_array) {
-                            if (current_symbol.value.get_subtype() === symbol.value.get_subtype()) {
+                            console.log(symbol.value.get_value().length);
+                            if (current_symbol.value.get_subtype() === symbol.value.get_subtype() || symbol.value.get_value().length === 0) {
                                 current_symbol.value.set_value(symbol.value.get_value());
                                 return undefined;
                             }
@@ -109,6 +124,19 @@ var SymbolTable = /** @class */ (function () {
     SymbolTable.prototype.get_size = function () {
         return this.size;
     };
+    SymbolTable.prototype.get_table_total = function () {
+        return this.table;
+    };
+    SymbolTable.prototype.get_prev = function () {
+        return this.prev;
+    };
+    SymbolTable.prototype.clean_variables = function () {
+        variables = [];
+    };
+    SymbolTable.prototype.get_variables = function () {
+        return variables;
+    };
+    SymbolTable.varaibles = [];
     return SymbolTable;
 }());
 export default SymbolTable;

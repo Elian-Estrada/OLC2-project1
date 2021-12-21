@@ -32,7 +32,7 @@ export class Call extends Instruction {
 
             if ( ob_function !== null && ob_function !== undefined){
 
-                let new_table = new SymbolTable(tree.get_global_table(), `Function-${this.name}-${this.row}-${this.column}`);
+                let new_table = new SymbolTable(tree.get_global_table(), `Function-${this.name}`);
                 if ( ob_function.get_params().length == this.params.length ) {
                     let count = 0;
                     let table_res = null;
@@ -58,7 +58,6 @@ export class Call extends Instruction {
                         }
 
                         let val_expression = expression.interpret(tree, table);
-                        
                         if ( val_expression instanceof Exception )
                             return val_expression;
 

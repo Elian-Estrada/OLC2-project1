@@ -3,6 +3,8 @@ import { grammar, errors, clean_errors } from "./grammar.js";
 import { Instruction } from "./Abstract/Instruction.js";
 import Tree from "./SymbolTable/Tree.js";
 import SymbolTable from "./SymbolTable/SymbolTable.js";
+import { variables } from "./SymbolTable/SymbolTable.js";
+import { clear_count } from "./Nativas/Graficar_ts.js";
 import Exception from "./SymbolTable/Exception.js";
 import {Function} from "./Instructions/Function.js";
 import {Declaration} from "./Instructions/Declaration.js";
@@ -30,12 +32,15 @@ export class Main {
         let instructions: Array<Instruction>;
         
         clean_errors();
+        clear_count();
 
         instructions = grammar.parse(bufferStream);
         // console.log(instructions)
 
         let tree: Tree = new Tree(instructions);
         let global_table: SymbolTable = new SymbolTable(undefined, undefined);
+        global_table.clean_variables();
+
         tree.set_global_table(global_table);
 
         for ( let error of errors ) {
@@ -147,7 +152,8 @@ export class Main {
                 /* Fourth run for instruction outside main */
                 for ( let instruction of tree.get_instructions() ) {
                     if ( !(instruction instanceof MainInstruction || instruction instanceof Declaration
-                        || instruction instanceof Assignment || instruction instanceof Function || instruction instanceof Struct) ) {
+                        || instruction instanceof Assignment || instruction instanceof Function || instruction instanceof Struct 
+                        || instruction instanceof Declaration_array) ) {
                         let error = new Exception("Semantic", "Instruction outside main", instruction.row, instruction.column, global_table.get_name());
                         tree.get_errors().push(error);
                         tree.update_console(error.toString());
@@ -177,6 +183,7 @@ export class Main {
         console.log(tree.get_all_structs());
         
         localStorage.setItem("errors", JSON.stringify(tree.get_errors()));
+        localStorage.setItem("symbol", JSON.stringify(variables));
         
         let init = new Cst_Node("Root");
         let inst = new Cst_Node("Instructions");

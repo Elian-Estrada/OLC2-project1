@@ -61,6 +61,7 @@
 "typeof"			return 'RTYPEOF';
 "push"				return 'RPUSH';
 "pop"				return 'RPOP';
+"graficar_ts"		return 'RGRAPH'
 
 /* Language Functions */
 "pow"               return 'RPOW';
@@ -218,6 +219,7 @@
 	import { Sqrt } from "./Nativas/Sqrt.js";
 	import { Push } from "./Nativas/Push.js";
 	import { Pop } from "./Nativas/Pop.js";
+	import { Graficar_ts } from "./Nativas/Graficar_ts.js";
 %}
 
 %{
@@ -231,7 +233,7 @@
 %left 'OR'
 %left 'AND'
 %right UNOT
-%nonassoc 'EQUALIZATIONSIGN' 'DIFFSIGN' 'LESSEQUAL' 'GREATEREQUAL' 'SMALLERTHAN' 'GREATERTHAN', 'VALUEIFTRUE'
+%left 'EQUALIZATIONSIGN' 'DIFFSIGN' 'LESSEQUAL' 'GREATEREQUAL' 'SMALLERTHAN' 'GREATERTHAN', 'VALUEIFTRUE'
 %left 'PLUSSIGN' 'SUBSIGN', 'CONCAT', 'REPETITIONSIGN'
 %left 'MULTSIGN' 'DIVSIGN' 'MODSIGN'
 %right UMENOS
@@ -273,6 +275,7 @@ instruction
 	| native_function ptcommP   { $$ = $1; }
 	| native_array_push ptcommP	{ $$ = $1; }
 	| native_array_pop ptcommP	{ $$ = $1; }
+	| native_ts	ptcommP			{ $$ = $1; }
 	| assignment_struct ptcommP	{ $$ = $1; }
 	| error SEMICOLON           { console.log("Entro al error", yytext);
 		errors.push(new Exception("Sintactic", `Sintactic error ${yytext}`, this._$.first_line, this._$.first_column));
@@ -673,6 +676,12 @@ native_array_push
 native_array_pop
 	: IDENTIFIER DOT RPOP PARLEFT PARRIGHT {
 		$$ = new Pop(new Identifier($1, this._$.first_line, this._$.first_column), null, "pop", [], [], this._$.first_line, this._$.first_column);
+	}
+;
+
+native_ts 
+	: RGRAPH PARLEFT PARRIGHT {
+		$$ = new Graficar_ts(null, "graficar_ts", [], [], this._$.first_line, this._$.first_column);
 	}
 ;
 

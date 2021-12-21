@@ -127,6 +127,16 @@ export class Declaration extends Instruction {
                     value = {id: this.id[1], value: "null"};
 
                 } else {
+                    console.log(this.expression);
+                    
+                    if ((this.expression.get_type() === type.DOUBLE || this.expression.get_type() === type.INT) 
+                        && (this.type === type.DOUBLE)) {
+                            console.log(this.expression);
+                            
+                            this.expression.set_type(this.type);
+                            
+                            value = String(parseFloat(value));
+                    }
 
                     if (this.expression.get_type() !== this.type) {
 

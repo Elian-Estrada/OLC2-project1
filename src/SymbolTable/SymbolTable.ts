@@ -4,7 +4,7 @@ import Exception from "./Exception.js";
 import Symbol from "./Symbol.js";
 import {type} from './Type.js';
 
-export let variables = [];
+export let variables: Array<any> = [];
 
 export default class SymbolTable {
 
@@ -12,6 +12,7 @@ export default class SymbolTable {
     private name: String;
     private table: Map<String, Symbol>;
     private prev: SymbolTable|undefined;
+    private static varaibles = [];
     public break_label: string;
     public continue_label: string;
     public return_label: string;
@@ -35,6 +36,25 @@ export default class SymbolTable {
         this.table.set(symbol.id, symbol);
         this.size += 1;
         symbol.position = this.size;
+
+        let flag = true;
+
+        for (let i = 0; i< variables.length; i++){
+            if(variables[i].id === symbol.id 
+            && variables[i].type === symbol.type
+            && variables[i].row === symbol.row
+            && variables[i].column === symbol.column
+            //&& item.value === symbol.value
+            && variables[i].environment === symbol.environment){
+                flag = false;
+                variables[i] = symbol;
+                break;
+            }
+        }
+
+        if (flag){
+            variables.push(symbol);
+        }
 
         return undefined;
     }
@@ -60,9 +80,6 @@ export default class SymbolTable {
         while(current_table !== undefined){
             if (current_table.table.has(symbol.id)){
                 let current_symbol: any = current_table.table.get(symbol.id);
-                console.log(symbol);
-                console.log(current_symbol);
-                
                 
                 if (symbol.value === "null"){
                     switch(current_symbol.type){
@@ -84,11 +101,13 @@ export default class SymbolTable {
                         return undefined;
                     }
                 }
-
+                
                 if (current_symbol.type === symbol.type && current_symbol.type !== type.STRUCT){
                     if (current_symbol.value instanceof Declaration_array){
                         if (symbol.value instanceof Values_array){
-                            if (current_symbol.value.get_subtype() === symbol.value.get_subtype()){
+                            console.log(symbol.value.get_value().length);
+                            
+                            if (current_symbol.value.get_subtype() === symbol.value.get_subtype() || symbol.value.get_value().length === 0){
                                 current_symbol.value.set_value(symbol.value.get_value());
                                 return undefined;
                             }else {
@@ -133,5 +152,21 @@ export default class SymbolTable {
 
     get_size() {
         return this.size;
+    }
+
+    get_table_total(){
+        return this.table;
+    }
+
+    get_prev() {
+        return this.prev;
+    }
+
+    clean_variables(){
+        variables = [];
+    }
+
+    get_variables(){
+        return variables;
     }
 }

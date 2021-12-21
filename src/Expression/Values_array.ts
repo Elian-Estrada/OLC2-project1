@@ -88,6 +88,10 @@ export class Values_array extends Instruction{
         return this.type_array;
     }
 
+    set_subtype(type: type){
+        this.type_array = type;
+    }
+
     get_value(){
         return this.value;
     }
