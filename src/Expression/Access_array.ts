@@ -143,7 +143,9 @@ export class Access_array extends Instruction {
     }
 
     compile(table: SymbolTable, generator: Generator3D) {
-        
+        generator.addComment("-----ARRAY-----");
+        let temp = generator.addTemp();
+        let temp_move = generator.addTemp();
     }
 
     get_node() {

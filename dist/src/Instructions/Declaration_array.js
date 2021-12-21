@@ -29,6 +29,8 @@ import { Instruction } from "../Abstract/Instruction.js";
 import Exception from "../SymbolTable/Exception.js";
 import Symbol from "../SymbolTable/Symbol.js";
 import { type } from "../SymbolTable/Type.js";
+import { Primitive } from "../Expression/Primitive";
+import { Value } from "../Abstract/Value";
 var Declaration_array = /** @class */ (function (_super) {
     __extends(Declaration_array, _super);
     function Declaration_array(id, type_array, expression, list_extpression, row, column, flag) {
@@ -137,6 +139,26 @@ var Declaration_array = /** @class */ (function (_super) {
         return this.id;
     };
     Declaration_array.prototype.compile = function (table, generator) {
+        generator.addComment("-----KEEP ARRAY-----");
+        var temp = generator.addTemp();
+        var temp_move = generator.addTemp();
+        generator.addExpression(temp, 'H', '', '');
+        generator.addExpression(temp_move, 'H', '', '');
+        generator.addExpression('H', 'H', table.get_size() + 1, '+');
+        generator.setHeap(temp_move, table.get_size());
+        generator.addExpression(temp_move, temp_move, '1', '+');
+        for (var _i = 0, _a = this.list_expression; _i < _a.length; _i++) {
+            var expr = _a[_i];
+            var value = expr.compile(table, generator);
+            if (value instanceof Primitive)
+                this.type = value.get_type();
+            generator.setHeap(temp_move, value.value);
+            generator.addExpression(temp_move, temp_move, '1', '+');
+        }
+        generator.addComment("----END ARRAY-----");
+        var val_ret = new Value(temp, type.ARRAY, true);
+        val_ret.type_array = this.type;
+        return val_ret;
     };
     Declaration_array.prototype.get_node = function () {
         var node = new Cst_Node("Declaration Array");

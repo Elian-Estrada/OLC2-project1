@@ -8,7 +8,7 @@ export class Value {
     public true_label: string;
     public false_label: string;
     private values_array: Array<any>;
-    private type_array: any;
+    public type_array: any;
 
     constructor(value: any, type: any, is_temp: boolean, aux_type = "") {
         this.value = value;
