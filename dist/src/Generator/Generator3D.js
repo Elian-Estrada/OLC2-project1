@@ -523,6 +523,12 @@ var Generator3D = /** @class */ (function () {
     Generator3D.prototype.tanOf = function (res, exp) {
         this.codeIn("".concat(res, "=tan(").concat(exp, ");\n"));
     };
+    Generator3D.prototype.toInt = function (res, exp) {
+        this.codeIn("".concat(res, "=(int)").concat(exp, ";\n"));
+    };
+    Generator3D.prototype.toDouble = function (res, exp) {
+        this.codeIn("".concat(res, "=(double)").concat(exp, ";\n"));
+    };
     Generator3D.prototype.recoverTemps = function (env, pos) {
         if (Object.keys(this.temps_recover).length > 0) {
             var temp = this.addTemp();

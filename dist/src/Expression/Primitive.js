@@ -45,7 +45,7 @@ var Primitive = /** @class */ (function (_super) {
     Primitive.prototype.toString = function () {
         return String(this.value);
     };
-    Primitive.prototype.compile = function (table, generator) {
+    Primitive.prototype.compile = function (table, generator, tree) {
         if (this.type === type.INT || this.type === type.DOUBLE) {
             return new Value(this.value, this.type, false);
         }

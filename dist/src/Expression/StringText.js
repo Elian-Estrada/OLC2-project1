@@ -18,6 +18,7 @@ import Exception from "../SymbolTable/Exception.js";
 import { String_operator, type } from "../SymbolTable/Type.js";
 import { Cst_Node } from "../Abstract/Cst_Node.js";
 import { Value } from "../Abstract/Value.js";
+import { Primitive } from "./Primitive.js";
 var StringText = /** @class */ (function (_super) {
     __extends(StringText, _super);
     function StringText(exp1, exp2, operator, row, col) {
@@ -25,17 +26,17 @@ var StringText = /** @class */ (function (_super) {
         _this.operator = operator;
         _this.exp1 = exp1;
         _this.exp2 = exp2;
+        // @ts-ignore
         _this.value = "";
         _this.type = null;
         return _this;
     }
     StringText.prototype.compile = function (table, generator, tree) {
-        var left = this.exp1.compile(table, generator, tree);
-        var right = this.exp2.compile(table, generator, tree);
-        // let temp = generator.addTemp();
         var operation = this.operator;
         if (operation === String_operator.CONCAT) {
             if (this.exp1.get_type() === type.STRING && this.exp2.get_type() === type.STRING) {
+                var left = this.exp1.compile(table, generator, tree);
+                var right = this.exp2.compile(table, generator, tree);
                 generator.concatString();
                 var paramTemp = generator.addTemp();
                 generator.addExpression(paramTemp, 'P', table.get_size(), '+');
@@ -52,7 +53,15 @@ var StringText = /** @class */ (function (_super) {
                 generator.setEnv(table.get_size());
                 return new Value(temp, type.STRING, true);
             }
+            else if (this.exp1.get_type() === type.BOOL || this.exp2.get_type() === type.BOOL) {
+                var new_val = this.exp1.toString() + this.exp2.value.toString();
+                var new_prim = new Primitive(new_val, type.STRING, this.row, this.column);
+                var exp = new_prim.compile(table, generator, tree);
+                return new Value(exp.value, type.STRING, true);
+            }
             else {
+                var left = this.exp1.compile(table, generator, tree);
+                var right = this.exp2.compile(table, generator, tree);
                 generator.NumberToString();
                 generator.concatString();
                 var paramTemp = generator.addTemp();
@@ -91,6 +100,8 @@ var StringText = /** @class */ (function (_super) {
             }
         }
         else if (operation === String_operator.REPETITION) {
+            var left = this.exp1.compile(table, generator, tree);
+            var right = this.exp2.compile(table, generator, tree);
             generator.repString();
             var param_temp = generator.addTemp();
             generator.addExpression(param_temp, 'P', table.get_size(), '+');
@@ -164,10 +175,13 @@ var StringText = /** @class */ (function (_super) {
     StringText.prototype.operation = function (op1, op2, op) {
         switch (op) {
             case String_operator.CONCAT:
+                // @ts-ignore
                 return String(op1 + op2);
             case String_operator.REPETITION:
+                // @ts-ignore
                 return String(op1.repeat(op2));
             default:
+                // @ts-ignore
                 return "";
         }
     };
@@ -182,6 +196,7 @@ var StringText = /** @class */ (function (_super) {
         return node;
     };
     StringText.prototype.toString = function () {
+        // @ts-ignore
         return String(this.value);
     };
     return StringText;

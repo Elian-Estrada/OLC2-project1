@@ -43,7 +43,7 @@ export class Primitive extends Instruction {
         return String(this.value);
     }
 
-    compile(table: SymbolTable, generator: Generator3D): any {
+    compile(table: SymbolTable, generator: Generator3D, tree: Tree): any {
         if ( this.type === type.INT || this.type === type.DOUBLE ) {
             return new Value(this.value, this.type, false);
         }

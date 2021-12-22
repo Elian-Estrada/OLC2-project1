@@ -1,10 +1,13 @@
-import { Cst_Node } from "../Abstract/Cst_Node.js";
-import { Instruction } from "../Abstract/Instruction.js";
-import { Function } from "../Instructions/Function.js";
+import {Cst_Node} from "../Abstract/Cst_Node.js";
+import {Instruction} from "../Abstract/Instruction.js";
+import {Function} from "../Instructions/Function.js";
 import Exception from "../SymbolTable/Exception.js";
 import SymbolTable from "../SymbolTable/SymbolTable.js";
 import Tree from "../SymbolTable/Tree.js";
-import { type } from "../SymbolTable/Type.js";
+import {type} from "../SymbolTable/Type.js";
+import {Generator3D} from "../Generator/Generator3D.js";
+import {Value} from "../Abstract/Value.js";
+import {Primitive} from "../Expression/Primitive.js";
 
 export class String extends Function {
 
@@ -81,4 +84,10 @@ export class String extends Function {
         return node;
     }
 
+    compile(table: SymbolTable, generator: Generator3D, tree: Tree) {
+        let new_val = this.expression.value.toString();
+        let new_prim = new Primitive(new_val, type.STRING, this.row, this.column);
+        let val_ret = new_prim.compile(table, generator, tree);
+        return new Value(val_ret.value, type.STRING, false);
+    }
 }

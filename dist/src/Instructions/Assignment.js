@@ -72,8 +72,23 @@ var Assignment = /** @class */ (function (_super) {
         var new_var = table.get_table(this.get_id());
         // @ts-ignore
         table.update_table(new_var);
-        // @ts-ignore
-        generator.setStack(new_var.position, val.value, true);
+        if (val.get_type() === type.BOOL) {
+            // @ts-ignore
+            this.valueBoolean(val, new_var.position, generator);
+        }
+        else {
+            // @ts-ignore
+            generator.setStack(new_var.position, val.value);
+        }
+    };
+    Assignment.prototype.valueBoolean = function (value, temp_pos, generator) {
+        var temp_label = generator.newLabel();
+        generator.setLabel(value.true_label);
+        generator.setStack(temp_pos, "1");
+        generator.addGoTo(temp_label);
+        generator.setLabel(value.false_label);
+        generator.setStack(temp_pos, "0");
+        generator.setLabel(temp_label);
     };
     return Assignment;
 }(Instruction));

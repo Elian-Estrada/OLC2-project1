@@ -647,6 +647,14 @@ export class Generator3D {
         this.codeIn(`${res}=tan(${exp});\n`);
     }
 
+    public toInt(res: string, exp: string) {
+        this.codeIn(`${res}=(int)${exp};\n`);
+    }
+
+    public toDouble(res: string, exp: string) {
+        this.codeIn(`${res}=(double)${exp};\n`);
+    }
+
     public recoverTemps(env: SymbolTable, pos: number) {
         if ( Object.keys(this.temps_recover).length > 0 ) {
             let temp = this.addTemp();

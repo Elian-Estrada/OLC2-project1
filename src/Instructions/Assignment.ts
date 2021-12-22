@@ -82,7 +82,24 @@ export class Assignment extends Instruction{
         let new_var = table.get_table(this.get_id());
         // @ts-ignore
         table.update_table(new_var);
-        // @ts-ignore
-        generator.setStack(new_var.position, val.value, true);
+
+        if ( val.get_type() === type.BOOL ) {
+            // @ts-ignore
+            this.valueBoolean(val, new_var.position, generator);
+        } else {
+            // @ts-ignore
+            generator.setStack(new_var.position, val.value);
+        }
+    }
+
+    public valueBoolean(value: any, temp_pos: any, generator: Generator3D) {
+        let temp_label = generator.newLabel();
+        generator.setLabel(value.true_label);
+        generator.setStack(temp_pos, "1");
+        generator.addGoTo(temp_label);
+
+        generator.setLabel(value.false_label);
+        generator.setStack(temp_pos, "0");
+        generator.setLabel(temp_label);
     }
 }
