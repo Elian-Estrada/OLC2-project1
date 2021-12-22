@@ -32,7 +32,8 @@ var Sin = /** @class */ (function (_super) {
             return new Exception("Semantic", "The expression: ".concat(value, " can be only type: int|double"), this.expression.row, this.expression.column, table.get_name());
         }
         this.type = type.DOUBLE;
-        return Math.sin((value * Math.PI) / 180);
+        //return Math.sin((value * Math.PI) / 180);
+        return Math.sin(value);
     };
     return Sin;
 }(Function));

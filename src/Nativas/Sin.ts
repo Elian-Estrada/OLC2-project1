@@ -27,7 +27,8 @@ export class Sin extends Function {
         }
 
         this.type = type.DOUBLE;
-        return Math.sin((value * Math.PI) / 180);
+        //return Math.sin((value * Math.PI) / 180);
+        return Math.sin(value);
     }
 
 }

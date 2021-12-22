@@ -36,21 +36,28 @@ var Switch = /** @class */ (function (_super) {
     }
     Switch.prototype.interpret = function (tree, table) {
         if (this.list_cases != null) {
+            var res = void 0;
+            var flag_break = true;
             for (var _i = 0, _a = this.list_cases; _i < _a.length; _i++) {
                 var item = _a[_i];
                 var rel = new Relational(this.expr, item.get_value(), Relational_operator.EQUAL, this.row, this.column);
-                var res = rel.interpret(tree, table);
+                if (flag_break)
+                    res = rel.interpret(tree, table);
                 if (res instanceof Exception)
                     return res;
                 if (String(res) == "true") {
                     this.row_case = item.row;
                     this.col_case = item.column;
                     var res_interpret = this.execute_instructs(tree, table, item.get_instructions(), true);
+                    console.log(res_interpret);
                     if (res_interpret == null && !JSON.parse(String(this.flag))) {
                         return null;
                     }
                     else if (res_interpret instanceof Return) {
                         return res_interpret;
+                    }
+                    else if (res_interpret === undefined) {
+                        flag_break = false;
                     }
                 }
                 if (JSON.parse(String(this.flag))) {

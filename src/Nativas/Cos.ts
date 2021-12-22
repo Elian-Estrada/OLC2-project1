@@ -27,7 +27,8 @@ export class Cos extends Function {
         }
 
         this.type = type.DOUBLE;
-        return Math.cos((value * Math.PI) / 180);
+        //return Math.cos((value * Math.PI) / 180);
+        return Math.cos(value);
     }
 
 }

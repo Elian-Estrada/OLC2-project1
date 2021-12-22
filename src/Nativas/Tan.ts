@@ -27,7 +27,8 @@ export class Tan extends Function {
         }
 
         this.type = type.DOUBLE;
-        return Math.tan((value * Math.PI) / 180);
+        //return Math.tan((value * Math.PI) / 180);
+        return Math.tan(value);
     }
 
 }
