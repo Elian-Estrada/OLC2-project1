@@ -68,6 +68,7 @@ var Assignment = /** @class */ (function (_super) {
         return node;
     };
     Assignment.prototype.compile = function (table, generator, tree) {
+        var _this = this;
         var val = this.expression.compile(table, generator, tree);
         var new_var = table.get_table(this.get_id());
         // @ts-ignore
@@ -77,6 +78,19 @@ var Assignment = /** @class */ (function (_super) {
             this.valueBoolean(val, new_var.position, generator);
         }
         else {
+            var index_1 = -1;
+            // @ts-ignore
+            var symbols_1 = JSON.parse(localStorage.getItem("symbol"));
+            symbols_1.forEach(function (item, i) {
+                if (_this.get_id() === item._id) {
+                    index_1 = i;
+                }
+                if (index_1 !== -1) {
+                    // @ts-ignore
+                    symbols_1[index_1].size = val.size;
+                }
+            });
+            localStorage.setItem('symbol', JSON.stringify(symbols_1));
             // @ts-ignore
             generator.setStack(new_var.position, val.value);
         }

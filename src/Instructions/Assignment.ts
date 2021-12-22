@@ -87,6 +87,22 @@ export class Assignment extends Instruction{
             // @ts-ignore
             this.valueBoolean(val, new_var.position, generator);
         } else {
+
+            let index = -1;
+            // @ts-ignore
+            const symbols = JSON.parse(localStorage.getItem("symbol"));
+            symbols.forEach((item: any, i: number) => {
+                if ( this.get_id() === item._id ) {
+                    index = i;
+                }
+
+                if ( index !== -1 ) {
+                    // @ts-ignore
+                    symbols[index].size = val.size;
+                }
+            });
+            localStorage.setItem('symbol', JSON.stringify(symbols));
+
             // @ts-ignore
             generator.setStack(new_var.position, val.value);
         }
