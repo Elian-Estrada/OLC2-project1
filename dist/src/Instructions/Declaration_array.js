@@ -157,7 +157,7 @@ var Declaration_array = /** @class */ (function (_super) {
         }
         generator.addComment("----END ARRAY-----");
         var val_ret = new Value(temp, type.ARRAY, true);
-        val_ret.type_array = this.type;
+        //val_ret.type_array = this.type;
         return val_ret;
     };
     Declaration_array.prototype.get_node = function () {

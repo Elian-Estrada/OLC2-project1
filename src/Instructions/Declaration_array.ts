@@ -187,7 +187,7 @@ export class Declaration_array extends Instruction {
 
         generator.addComment("----END ARRAY-----");
         let val_ret = new Value(temp, type.ARRAY, true);
-        val_ret.type_array = this.type;
+        //val_ret.type_array = this.type;
 
         return val_ret;
     }
