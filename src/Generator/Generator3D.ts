@@ -631,6 +631,22 @@ export class Generator3D {
         this.get_freeTemp(t2);
     }
 
+    public sqrtOf(res: string, exp: string) {
+        this.codeIn(`${res}=sqrt(${exp});\n`);
+    }
+
+    public senOf(res: string, exp: string) {
+        this.codeIn(`${res}=sin(${exp});\n`);
+    }
+
+    public cosOf(res: string, exp: string) {
+        this.codeIn(`${res}=cos(${exp});\n`);
+    }
+
+    public tanOf(res: string, exp: string) {
+        this.codeIn(`${res}=tan(${exp});\n`);
+    }
+
     public recoverTemps(env: SymbolTable, pos: number) {
         if ( Object.keys(this.temps_recover).length > 0 ) {
             let temp = this.addTemp();

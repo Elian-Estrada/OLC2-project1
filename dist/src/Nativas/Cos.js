@@ -16,6 +16,7 @@ var __extends = (this && this.__extends) || (function () {
 import { Function } from "../Instructions/Function.js";
 import Exception from "../SymbolTable/Exception.js";
 import { type } from "../SymbolTable/Type.js";
+import { Value } from "../Abstract/Value.js";
 var Cos = /** @class */ (function (_super) {
     __extends(Cos, _super);
     function Cos(expression, type, name, params, instructions, row, col) {
@@ -33,6 +34,12 @@ var Cos = /** @class */ (function (_super) {
         }
         this.type = type.DOUBLE;
         return Math.cos((value * Math.PI) / 180);
+    };
+    Cos.prototype.compile = function (table, generator, tree) {
+        var exp = this.expression.compile(table, generator, tree);
+        var temp = generator.addTemp();
+        generator.cosOf(temp, exp.value);
+        return new Value(temp, this.type, false);
     };
     return Cos;
 }(Function));

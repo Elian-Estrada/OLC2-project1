@@ -511,6 +511,18 @@ var Generator3D = /** @class */ (function () {
         this.get_freeTemp(t1);
         this.get_freeTemp(t2);
     };
+    Generator3D.prototype.sqrtOf = function (res, exp) {
+        this.codeIn("".concat(res, "=sqrt(").concat(exp, ");\n"));
+    };
+    Generator3D.prototype.senOf = function (res, exp) {
+        this.codeIn("".concat(res, "=sin(").concat(exp, ");\n"));
+    };
+    Generator3D.prototype.cosOf = function (res, exp) {
+        this.codeIn("".concat(res, "=cos(").concat(exp, ");\n"));
+    };
+    Generator3D.prototype.tanOf = function (res, exp) {
+        this.codeIn("".concat(res, "=tan(").concat(exp, ");\n"));
+    };
     Generator3D.prototype.recoverTemps = function (env, pos) {
         if (Object.keys(this.temps_recover).length > 0) {
             var temp = this.addTemp();
