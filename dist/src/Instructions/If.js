@@ -125,7 +125,7 @@ var If = /** @class */ (function (_super) {
         return node;
     };
     If.prototype.compile = function (table, generator, tree) {
-        var condition = this.expr.compile(table, generator);
+        var condition = this.expr.compile(table, generator, tree);
         if (condition.type !== type.BOOL) {
             generator.addError("Condition is not a boolean value", Number(this.row), Number(this.column));
             return;

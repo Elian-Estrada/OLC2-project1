@@ -257,6 +257,7 @@ export class Call extends Instruction {
     }
 
     compile(table: SymbolTable, generator: Generator3D, tree: Tree) {
+        console.log(tree)
         let func = tree.get_function(this.name);
 
         if ( func != null ) {

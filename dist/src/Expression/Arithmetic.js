@@ -37,7 +37,7 @@ var Arithmetic = /** @class */ (function (_super) {
         return _this;
     }
     Arithmetic.prototype.compile = function (table, generator, tree) {
-        var left = this.exp1.compile(table, generator);
+        var left = this.exp1.compile(table, generator, tree);
         if (this.exp2 !== null) {
             var right = this.exp2.compile(table, generator, tree);
             var temp = generator.addTemp();

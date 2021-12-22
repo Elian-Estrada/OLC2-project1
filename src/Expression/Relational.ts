@@ -9,8 +9,8 @@ import {Value} from "../Abstract/Value.js";
 import { Access_struct } from "./Access_struct.js";
 
 export class Relational extends Instruction {
-    compile(table: SymbolTable, generator: Generator3D) {
-        let left = this.exp1.compile(table, generator);
+    compile(table: SymbolTable, generator: Generator3D, tree: Tree) {
+        let left = this.exp1.compile(table, generator, tree);
         if ( left instanceof Exception )
             return left;
 
@@ -19,7 +19,7 @@ export class Relational extends Instruction {
         let operator = this.operator;
 
         if ( left.type != type.BOOL ) {
-            right = this.exp2.compile(table, generator);
+            right = this.exp2.compile(table, generator, tree);
 
             if ( left.type == type.INT || left.type == type.DOUBLE ) {
                 switch ( right.type ) {
@@ -86,7 +86,7 @@ export class Relational extends Instruction {
             generator.addExpression(left_temp, '0', '', '');
             generator.setLabel(goto_right);
 
-            let right = this.exp2.compile(table, generator);
+            let right = this.exp2.compile(table, generator, tree);
             if ( right.get_type() != type.BOOL ) {
                 generator.addError('Relational: Operator must be boolean', Number(this.row), Number(this.column));
                 return ;

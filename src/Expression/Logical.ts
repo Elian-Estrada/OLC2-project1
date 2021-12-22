@@ -66,13 +66,13 @@ export class Logical extends Instruction{
 
     }
 
-    compile(table: SymbolTable, generator: Generator3D): any {
+    compile(table: SymbolTable, generator: Generator3D, tree: Tree): any {
         if( this.exp1.get_type() != type.BOOL ) {
             generator.addError("Variable not boolean", Number(this.row), Number(this.column));
             return;
         }
 
-        let left = this.exp1.compile(table, generator);
+        let left = this.exp1.compile(table, generator, tree);
         if ( left instanceof Exception )
             return left;
 
@@ -96,7 +96,7 @@ export class Logical extends Instruction{
             generator.addExpression(left_temp, '0', '', '');
             generator.setLabel(go_right);
 
-            let right = this.exp2.compile(table, generator);
+            let right = this.exp2.compile(table, generator, tree);
             if ( right.get_type() != type.BOOL ) {
                 generator.addError('Relational: Operator must be boolean', Number(this.row), Number(this.column));
                 return ;

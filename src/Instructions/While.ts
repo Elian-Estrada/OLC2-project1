@@ -94,7 +94,7 @@ export class While extends Instruction {
     compile(table: SymbolTable, generator: Generator3D, tree: Tree): any {
         let continue_label = generator.newLabel();
         generator.setLabel(continue_label);
-        let condition = this.expr.compile(table, generator);
+        let condition = this.expr.compile(table, generator, tree);
         // let new_env = new SymbolTable(table, "While-Env-3D");
         table.break_label = condition.false_label;
         table.continue_label = continue_label;

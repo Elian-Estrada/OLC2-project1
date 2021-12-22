@@ -62,12 +62,12 @@ var Logical = /** @class */ (function (_super) {
             }
         }
     };
-    Logical.prototype.compile = function (table, generator) {
+    Logical.prototype.compile = function (table, generator, tree) {
         if (this.exp1.get_type() != type.BOOL) {
             generator.addError("Variable not boolean", Number(this.row), Number(this.column));
             return;
         }
-        var left = this.exp1.compile(table, generator);
+        var left = this.exp1.compile(table, generator, tree);
         if (left instanceof Exception)
             return left;
         var res = new Value(null, type.BOOL, false);
@@ -84,7 +84,7 @@ var Logical = /** @class */ (function (_super) {
             generator.setLabel(left.false_label);
             generator.addExpression(left_temp, '0', '', '');
             generator.setLabel(go_right);
-            var right = this.exp2.compile(table, generator);
+            var right = this.exp2.compile(table, generator, tree);
             if (right.get_type() != type.BOOL) {
                 generator.addError('Relational: Operator must be boolean', Number(this.row), Number(this.column));
                 return;

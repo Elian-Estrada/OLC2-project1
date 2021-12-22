@@ -29,9 +29,9 @@ var StringText = /** @class */ (function (_super) {
         _this.type = null;
         return _this;
     }
-    StringText.prototype.compile = function (table, generator) {
-        var left = this.exp1.compile(table, generator);
-        var right = this.exp2.compile(table, generator);
+    StringText.prototype.compile = function (table, generator, tree) {
+        var left = this.exp1.compile(table, generator, tree);
+        var right = this.exp2.compile(table, generator, tree);
         // let temp = generator.addTemp();
         var operation = this.operator;
         if (operation === String_operator.CONCAT) {

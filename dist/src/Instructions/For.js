@@ -40,7 +40,7 @@ var For = /** @class */ (function (_super) {
         table.get_table(this.init.id[0]);
         var continue_label = generator.newLabel();
         generator.setLabel(continue_label);
-        var condition = this.condition.compile(table, generator);
+        var condition = this.condition.compile(table, generator, tree);
         generator.setLabel(condition.true_label);
         for (var _i = 0, _a = this.instructions; _i < _a.length; _i++) {
             var instructions = _a[_i];

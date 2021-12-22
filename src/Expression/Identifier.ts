@@ -58,7 +58,7 @@ export class Identifier extends Instruction {
         return String(this.value);
     }
 
-    compile(table: SymbolTable, generator: Generator3D): any {
+    compile(table: SymbolTable, generator: Generator3D, tree: Tree): any {
         let value = table.get_table(this.id);
         if ( value === null ) {
             // @ts-ignore
@@ -67,16 +67,20 @@ export class Identifier extends Instruction {
         }
 
         let temp = generator.addTemp();
-        let temp_pos = null;
+        let temp_pos;
         // @ts-ignore
-        if ( value.value != undefined ) {
+        if ( value.id != undefined ) {
             // @ts-ignore
             temp_pos = value.position;
-        } else {
-            temp_pos = generator.addTemp();
+
             // @ts-ignore
-            generator.addExpression(temp_pos, 'P', value.position-1, '+');
+            if ( value.environment !== 'Global' ) {
+                temp_pos = generator.addTemp();
+                // @ts-ignore
+                generator.addExpression(temp_pos, 'P', value.position-1, '+');
+            }
         }
+
         generator.getStack(temp, temp_pos);
 
         // @ts-ignore

@@ -231,6 +231,7 @@ var Call = /** @class */ (function (_super) {
         return this.name;
     };
     Call.prototype.compile = function (table, generator, tree) {
+        console.log(tree);
         var func = tree.get_function(this.name);
         if (func != null) {
             var param_values = [];

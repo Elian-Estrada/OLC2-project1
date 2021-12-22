@@ -31,7 +31,7 @@ var Declaration = /** @class */ (function (_super) {
         _this.expression = expression;
         return _this;
     }
-    Declaration.prototype.compile = function (table, generator) {
+    Declaration.prototype.compile = function (table, generator, tree) {
         if (this.expression == null) {
             var new_exp = void 0;
             switch (this.type) {
@@ -60,7 +60,7 @@ var Declaration = /** @class */ (function (_super) {
                     return;
             }
         }
-        var value = this.expression.compile(table, generator);
+        var value = this.expression.compile(table, generator, tree);
         var new_var = table.get_table(this.get_id()[0]);
         var new_symbol = null;
         var temp_pos = null;

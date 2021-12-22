@@ -11,7 +11,7 @@ import {type} from "../SymbolTable/Type.js";
 import {Primitive} from "../Expression/Primitive.js";
 
 export class Declaration extends Instruction {
-    compile(table: SymbolTable, generator: Generator3D) {
+    compile(table: SymbolTable, generator: Generator3D, tree: Tree) {
         if ( this.expression == null ) {
             let new_exp;
             switch (this.type) {
@@ -40,7 +40,7 @@ export class Declaration extends Instruction {
                     return;
             }
         }
-        let value = this.expression.compile(table, generator);
+        let value = this.expression.compile(table, generator, tree);
         let new_var = table.get_table(this.get_id()[0]);
         let new_symbol = null;
         let temp_pos = null;

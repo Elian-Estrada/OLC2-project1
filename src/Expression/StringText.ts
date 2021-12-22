@@ -10,9 +10,9 @@ import {Primitive} from "./Primitive.js";
 
 export class StringText extends Instruction {
 
-    compile(table: SymbolTable, generator: Generator3D) {
-        let left = this.exp1.compile(table, generator);
-        let right = this.exp2.compile(table, generator);
+    compile(table: SymbolTable, generator: Generator3D, tree: Tree) {
+        let left = this.exp1.compile(table, generator, tree);
+        let right = this.exp2.compile(table, generator, tree);
         // let temp = generator.addTemp();
         let operation = this.operator;
 

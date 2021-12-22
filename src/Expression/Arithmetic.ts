@@ -33,7 +33,7 @@ export class Arithmetic extends Instruction {
     }
 
     public compile(table: SymbolTable, generator: Generator3D, tree: Tree): any {
-        let left = this.exp1.compile(table, generator);
+        let left = this.exp1.compile(table, generator, tree);
 
         if ( this.exp2 !== null ) {
             let right = this.exp2.compile(table, generator, tree);

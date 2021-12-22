@@ -67,8 +67,8 @@ var Assignment = /** @class */ (function (_super) {
         node.add_childs_node(this.expression.get_node());
         return node;
     };
-    Assignment.prototype.compile = function (table, generator) {
-        var val = this.expression.compile(table, generator);
+    Assignment.prototype.compile = function (table, generator, tree) {
+        var val = this.expression.compile(table, generator, tree);
         var new_var = table.get_table(this.get_id());
         // @ts-ignore
         table.update_table(new_var);

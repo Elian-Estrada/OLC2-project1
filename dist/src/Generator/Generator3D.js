@@ -455,6 +455,7 @@ var Generator3D = /** @class */ (function () {
         if (Object.keys(this.temps_recover).length > 0) {
             var temp = this.addTemp();
             this.get_freeTemp(temp);
+            this.addComment("----Start Keep Temps----");
             this.addExpression(temp, 'P', env.get_size(), '+');
             for (var value in this.temps_recover) {
                 size += 1;
@@ -463,6 +464,7 @@ var Generator3D = /** @class */ (function () {
                 if (size != Object.keys(this.temps_recover).length) {
                     this.addExpression(temp, temp, '1', '+');
                 }
+                this.addComment("----End Keep Temps----");
             }
         }
         var pos = env.get_size();

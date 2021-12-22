@@ -77,8 +77,8 @@ export class Assignment extends Instruction{
         return node;
     }
     
-    compile(table: SymbolTable, generator: Generator3D): any {
-        let val = this.expression.compile(table, generator);
+    compile(table: SymbolTable, generator: Generator3D, tree: Tree): any {
+        let val = this.expression.compile(table, generator, tree);
         let new_var = table.get_table(this.get_id());
         // @ts-ignore
         table.update_table(new_var);
