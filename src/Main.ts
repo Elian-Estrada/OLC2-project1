@@ -227,6 +227,8 @@ export class Main {
             res = instruction.compile(this.global_table, generator, this.tree);
         }
 
+        // localStorage.setItem("symbol", JSON.stringify(variables));
+
         return res;
     }
 }

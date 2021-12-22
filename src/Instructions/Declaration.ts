@@ -42,11 +42,28 @@ export class Declaration extends Instruction {
         }
         let value = this.expression.compile(table, generator, tree);
         let new_var = table.get_table(this.get_id()[0]);
-        let new_symbol = null;
+        let new_symbol: string | Symbol | null = null;
         let temp_pos = null;
         if ( new_var === undefined ) {
             let in_heap = ( value.get_type() === type.STRING || value.get_type() === type.STRUCT || value.get_type() === type.ARRAY );
             new_symbol = new Symbol(this.id[0], value.get_type(), this.row, this.column, this.expression, undefined, in_heap, value.true_label, value.false_label);
+            new_symbol.size = value.size;
+
+            let index = -1;
+            // @ts-ignore
+            const symbols = JSON.parse(localStorage.getItem("symbol"));
+            symbols.forEach((item: any, i: number) => {
+                if ( this.id[0] === item._id ) {
+                    index = i;
+                }
+
+                if ( index !== -1 ) {
+                    // @ts-ignore
+                    symbols[index].size = new_symbol.size;
+                }
+            });
+            localStorage.setItem('symbol', JSON.stringify(symbols));
+
             table.set_table(new_symbol);
             temp_pos = new_symbol.position;
         } else {

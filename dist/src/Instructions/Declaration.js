@@ -32,6 +32,7 @@ var Declaration = /** @class */ (function (_super) {
         return _this;
     }
     Declaration.prototype.compile = function (table, generator, tree) {
+        var _this = this;
         if (this.expression == null) {
             var new_exp = void 0;
             switch (this.type) {
@@ -67,6 +68,20 @@ var Declaration = /** @class */ (function (_super) {
         if (new_var === undefined) {
             var in_heap = (value.get_type() === type.STRING || value.get_type() === type.STRUCT || value.get_type() === type.ARRAY);
             new_symbol = new Symbol(this.id[0], value.get_type(), this.row, this.column, this.expression, undefined, in_heap, value.true_label, value.false_label);
+            new_symbol.size = value.size;
+            var index_1 = -1;
+            // @ts-ignore
+            var symbols_1 = JSON.parse(localStorage.getItem("symbol"));
+            symbols_1.forEach(function (item, i) {
+                if (_this.id[0] === item._id) {
+                    index_1 = i;
+                }
+                if (index_1 !== -1) {
+                    // @ts-ignore
+                    symbols_1[index_1].size = new_symbol.size;
+                }
+            });
+            localStorage.setItem('symbol', JSON.stringify(symbols_1));
             table.set_table(new_symbol);
             temp_pos = new_symbol.position;
         }

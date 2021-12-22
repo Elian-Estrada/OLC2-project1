@@ -187,6 +187,7 @@ var Main = /** @class */ (function () {
             // @ts-ignore
             res = instruction.compile(this.global_table, generator, this.tree);
         }
+        // localStorage.setItem("symbol", JSON.stringify(variables));
         return res;
     };
     return Main;

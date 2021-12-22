@@ -59,7 +59,9 @@ var Primitive = /** @class */ (function (_super) {
             }
             generator.setHeap('H', -1);
             generator.nextHeap();
-            return new Value(ret_temp, type.STRING, true);
+            var ret_val = new Value(ret_temp, type.STRING, true);
+            ret_val.size = String(this.value).length;
+            return ret_val;
         }
         else if (this.type === type.BOOL) {
             var res = new Value(this.value, this.type, false);
