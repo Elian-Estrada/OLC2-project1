@@ -1,5 +1,5 @@
 // @ts-ignore
-import { grammar, errors, clean_errors } from "./grammar.js";
+import { grammar, errors, clean_errors, grammatical, clean_gramatical } from "./grammar.js";
 import Tree from "./SymbolTable/Tree.js";
 import SymbolTable from "./SymbolTable/SymbolTable.js";
 import { variables } from "./SymbolTable/SymbolTable.js";
@@ -26,6 +26,7 @@ var Main = /** @class */ (function () {
         // @ts-ignore
         var instructions;
         clean_errors();
+        clean_gramatical();
         clear_count();
         instructions = grammar.parse(bufferStream);
         // console.log(instructions)
@@ -154,12 +155,10 @@ var Main = /** @class */ (function () {
                 return e;
             }
         }
-        console.log(this.tree.get_instructions());
-        console.log(this.tree.get_global_table());
-        console.log(this.tree.get_errors());
-        console.log(this.tree.get_all_structs());
+        console.log(grammatical);
         localStorage.setItem("errors", JSON.stringify(this.tree.get_errors()));
         localStorage.setItem("symbol", JSON.stringify(variables));
+        localStorage.setItem("gramatica", JSON.stringify(grammatical));
         var init = new Cst_Node("Root");
         var inst = new Cst_Node("Instructions");
         for (var _j = 0, _k = this.tree.get_instructions(); _j < _k.length; _j++) {

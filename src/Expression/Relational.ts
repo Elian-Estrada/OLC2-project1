@@ -150,13 +150,13 @@ export class Relational extends Instruction {
         if (this.exp1 !== undefined && this.exp2 !== undefined){
 
             let left = this.exp1.interpret(tree, table);
-
+            
             if (left instanceof Exception){
                 return left;
             }
 
             let right = this.exp2.interpret(tree, table);
-
+            
             if (right instanceof Exception){
                 return right;
             }

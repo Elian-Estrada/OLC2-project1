@@ -29,6 +29,7 @@ export class Logical extends Instruction{
         let left = this.exp1.interpret(tree, table);
 
         if (left instanceof Exception){
+            return left;
         }
 
         if (this.exp2 != null){
