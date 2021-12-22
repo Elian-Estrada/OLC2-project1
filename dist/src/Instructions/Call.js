@@ -231,7 +231,7 @@ var Call = /** @class */ (function (_super) {
         return this.name;
     };
     Call.prototype.compile = function (table, generator, tree) {
-        var func = tree.get_symbol_table();
+        var func = tree.get_function(this.name);
         if (func != null) {
             var param_values = [];
             var size = generator.keepTemps(table);
@@ -245,6 +245,7 @@ var Call = /** @class */ (function (_super) {
             for (var _b = 0, param_values_1 = param_values; _b < param_values_1.length; _b++) {
                 var param = param_values_1[_b];
                 aux = aux + 1;
+                // console.log(param)
                 generator.setStack(temp, param.value);
                 if (aux != param_values.length) {
                     generator.addExpression(temp, temp, '1', '+');
@@ -256,7 +257,7 @@ var Call = /** @class */ (function (_super) {
             generator.setEnv(table.get_size());
             // @ts-ignore
             generator.recoverTemps(table, size);
-            var ret_val = new Value(temp, func.type, true);
+            var ret_val = new Value(temp, func.get_type(), true);
             if (ret_val.get_type() == type.BOOL) {
                 var temp_label = generator.newLabel();
                 var temp_label2 = generator.newLabel();

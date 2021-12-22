@@ -29,21 +29,24 @@ var Print = /** @class */ (function (_super) {
         return _this;
     }
     Print.prototype.compile = function (table, generator, tree) {
-        var res = this.expression.compile(table, generator, tree);
-        var valueShow = res.value;
-        if (res.get_type() === type.INT) {
-            generator.add_print("d", "int", valueShow);
+        for (var _i = 0, _a = this.expression; _i < _a.length; _i++) {
+            var item = _a[_i];
+            var res = item.compile(table, generator, tree);
+            var valueShow = res.value;
+            if (res.get_type() === type.INT) {
+                generator.add_print("d", "int", valueShow);
+            }
+            else if (res.get_type() === type.DOUBLE) {
+                generator.add_print("f", "double", valueShow);
+            }
+            else if (res.get_type() === type.STRING || res.get_type() === type.CHAR) {
+                this.typeString(valueShow, table, generator);
+            }
+            else if (res.get_type() === type.BOOL) {
+                this.typeBoolean(res, generator);
+            }
+            generator.add_print("c", "char", 10);
         }
-        else if (res.get_type() === type.DOUBLE) {
-            generator.add_print("f", "double", valueShow);
-        }
-        else if (res.get_type() === type.STRING || res.get_type() === type.CHAR) {
-            this.typeString(valueShow, table, generator);
-        }
-        else if (res.get_type() === type.BOOL) {
-            this.typeBoolean(res, generator);
-        }
-        generator.add_print("c", "char", 10);
     };
     Print.prototype.typeString = function (value, table, generator) {
         generator.printString();

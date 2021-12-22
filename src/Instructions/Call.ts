@@ -257,7 +257,7 @@ export class Call extends Instruction {
     }
 
     compile(table: SymbolTable, generator: Generator3D, tree: Tree) {
-        let func = tree.get_symbol_table();
+        let func = tree.get_function(this.name);
 
         if ( func != null ) {
             let param_values = [];
@@ -273,6 +273,7 @@ export class Call extends Instruction {
 
             for ( let param of param_values ) {
                 aux = aux + 1;
+                // console.log(param)
                 generator.setStack(temp, param.value);
 
                 if ( aux != param_values.length ) {
@@ -287,7 +288,7 @@ export class Call extends Instruction {
             // @ts-ignore
             generator.recoverTemps(table, size);
 
-            let ret_val = new Value(temp, func.type, true);
+            let ret_val = new Value(temp, func.get_type(), true);
             if ( ret_val.get_type() == type.BOOL ) {
                 let temp_label = generator.newLabel();
                 let temp_label2 = generator.newLabel();

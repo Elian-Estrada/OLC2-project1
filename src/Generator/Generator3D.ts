@@ -115,10 +115,11 @@ export class Generator3D {
     }
 
     public get_freeTemp(temp: any) {
-        if ( temp in this.temps_recover )
-            { // @ts-ignore
-                delete this.temps_recover[temp];
-            }
+        // @ts-ignore
+        if ( temp == this.temps_recover[`${temp}`] )
+        { // @ts-ignore
+            delete this.temps_recover[`${temp}`];
+        }
     }
 
     public add_print(type: string, data_type: string, value: any) {
@@ -461,7 +462,7 @@ export class Generator3D {
         this.count_temp += 1;               // Incrementar contador de temporales en 1
         this.temps.push(temp);              // Meter en el arreglo de temporales al nuevo Tn
         // @ts-ignore
-        this.temps_recover.temp = temp;     // Diccionario en clave Tn tendrá valor de Tn
+        this.temps_recover[`${temp}`] = temp;     // Diccionario en clave Tn tendrá valor de Tn
         return temp;                        // Retornamos temporal
     }
 
@@ -566,6 +567,7 @@ export class Generator3D {
             this.addExpression(temp, 'P', env.get_size(), '+');
             for ( let value in this.temps_recover ) {
                 size += 1;
+                // @ts-ignore
                 this.setStack(temp, value, false);
                 if ( size != Object.keys(this.temps_recover).length ) {
                     this.addExpression(temp, temp, '1', '+');
@@ -578,7 +580,7 @@ export class Generator3D {
     }
 
     public recoverTemps(env: SymbolTable, pos: number) {
-        if ( Object.keys(this.recoverTemps).length > 0 ) {
+        if ( Object.keys(this.temps_recover).length > 0 ) {
             let temp = this.addTemp();
             this.get_freeTemp(temp);
             let size = 0;

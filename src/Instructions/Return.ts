@@ -57,10 +57,11 @@ export class Return extends Instruction {
         return node;
     }
 
-    compile(table: SymbolTable, generator: Generator3D): any {
+    compile(table: SymbolTable, generator: Generator3D, tree: Tree): any {
 
         if ( this.expr != null ) {
-            let value = this.expr.compile(table, generator);
+            // console.log(this.expr)
+            let value = this.expr.compile(table, generator, tree);
 
             if ( value.type == type.BOOL ) {
                 let temp_label = generator.newLabel();
@@ -73,6 +74,7 @@ export class Return extends Instruction {
                 generator.setLabel(temp_label);
                 table.value_ret = value.value;
             } else {
+                console.log(value);
                 generator.setStack('P', value.value);
             }
 

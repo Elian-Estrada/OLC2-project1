@@ -79,8 +79,9 @@ var Generator3D = /** @class */ (function () {
         return "".concat(this.initial_header()).concat(this.natives, "\n").concat(this.funcs, "\n/*------MAIN------*/\n void main() { \n\tP = 1; H = 0;\n ").concat(this.code, "\n\t return; \n }");
     };
     Generator3D.prototype.get_freeTemp = function (temp) {
-        if (temp in this.temps_recover) { // @ts-ignore
-            delete this.temps_recover[temp];
+        // @ts-ignore
+        if (temp == this.temps_recover["".concat(temp)]) { // @ts-ignore
+            delete this.temps_recover["".concat(temp)];
         }
     };
     Generator3D.prototype.add_print = function (type, data_type, value) {
@@ -367,7 +368,7 @@ var Generator3D = /** @class */ (function () {
         this.count_temp += 1; // Incrementar contador de temporales en 1
         this.temps.push(temp); // Meter en el arreglo de temporales al nuevo Tn
         // @ts-ignore
-        this.temps_recover.temp = temp; // Diccionario en clave Tn tendrá valor de Tn
+        this.temps_recover["".concat(temp)] = temp; // Diccionario en clave Tn tendrá valor de Tn
         return temp; // Retornamos temporal
     };
     Generator3D.prototype.addAssignment = function (pointer, value) {
@@ -457,6 +458,7 @@ var Generator3D = /** @class */ (function () {
             this.addExpression(temp, 'P', env.get_size(), '+');
             for (var value in this.temps_recover) {
                 size += 1;
+                // @ts-ignore
                 this.setStack(temp, value, false);
                 if (size != Object.keys(this.temps_recover).length) {
                     this.addExpression(temp, temp, '1', '+');
@@ -468,7 +470,7 @@ var Generator3D = /** @class */ (function () {
         return pos;
     };
     Generator3D.prototype.recoverTemps = function (env, pos) {
-        if (Object.keys(this.recoverTemps).length > 0) {
+        if (Object.keys(this.temps_recover).length > 0) {
             var temp = this.addTemp();
             this.get_freeTemp(temp);
             var size = 0;

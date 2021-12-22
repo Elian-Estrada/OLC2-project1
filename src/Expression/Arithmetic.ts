@@ -32,11 +32,11 @@ export class Arithmetic extends Instruction {
         }
     }
 
-    public compile(table: SymbolTable, generator: Generator3D): any {
+    public compile(table: SymbolTable, generator: Generator3D, tree: Tree): any {
         let left = this.exp1.compile(table, generator);
 
         if ( this.exp2 !== null ) {
-            let right = this.exp2.compile(table, generator);
+            let right = this.exp2.compile(table, generator, tree);
 
             let temp = generator.addTemp();
             let operation = this.operator;
@@ -50,19 +50,21 @@ export class Arithmetic extends Instruction {
                     generator.addExpression(temp, left.value, right.value, operation);
                 }
                 let type_op = this.type;
+                /*console.log(this.type)
+                console.log(temp)*/
                 return new Value(temp, type_op, true);
             }
         } else {
             if ( this.operator === Arithmetic_operator.INC ) {
                 let new_prim = new Primitive('1', type.INT, this.row, this.column);
                 let new_symbol = new Arithmetic(this.exp1, new_prim, Arithmetic_operator.ADDITION, this.row, this.column);
-                let new_val = new_symbol.compile(table, generator);
+                let new_val = new_symbol.compile(table, generator, tree);
                 return new Value(new_val.value, type.INT, false);
             }
             else if ( this.operator === Arithmetic_operator.DEC ) {
                 let new_prim = new Primitive('1', type.INT, this.row, this.column);
                 let new_symbol = new Arithmetic(this.exp1, new_prim, Arithmetic_operator.SUBSTRACTION, this.row, this.column);
-                let new_val = new_symbol.compile(table, generator);
+                let new_val = new_symbol.compile(table, generator, tree);
                 return new Value(new_val.value, type.INT, false);
             }
             else if ( this.operator === Arithmetic_operator.SUBSTRACTION ) {

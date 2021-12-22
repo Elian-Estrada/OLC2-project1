@@ -44,6 +44,12 @@ window.addEventListener('keydown', function (e) {
         codeToAnalyze();
     }
 });
+window.addEventListener('keydown', function (e) {
+    if (e.ctrlKey && e.shiftKey && e.key == "Enter") {
+        codeToAnalyze();
+        codeToCompile();
+    }
+});
 function codeToAnalyze() {
     bufferStream = myCodeMirror.getValue();
     // console.log(bufferStream);
@@ -58,11 +64,15 @@ function codeToAnalyze() {
         console.log(error);
     }
 }
-btnCompile === null || btnCompile === void 0 ? void 0 : btnCompile.addEventListener('click', function () {
+function codeToCompile() {
     bufferStream = myCodeMirror.getValue();
     // let main = new Main();
     myCodeMirror3.setValue("");
     var res = main.compile(bufferStream);
     updateCodeMirror(res, myCodeMirror3);
     // console.log(res);
+}
+btnCompile === null || btnCompile === void 0 ? void 0 : btnCompile.addEventListener('click', function () {
+    codeToAnalyze();
+    codeToCompile();
 });

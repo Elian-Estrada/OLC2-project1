@@ -7,8 +7,8 @@ import SymbolTable from "../SymbolTable/SymbolTable.js";
 import Tree from "../SymbolTable/Tree.js";
 import { type } from "../SymbolTable/Type.js";
 import {Access_array} from "../Expression/Access_array";
-import {Primitive} from "../Expression/Primitive";
-import {Value} from "../Abstract/Value";
+import {Primitive} from "../Expression/Primitive.js";
+import {Value} from "../Abstract/Value.js";
 
 export class Declaration_array extends Instruction {
 
