@@ -14,6 +14,7 @@ var Generator3D = /** @class */ (function () {
         this.symbol_table = [];
         this.temps_recover = {};
         this.print_string = false;
+        this.power = false;
         this.upper_case = false;
         this.lower_case = false;
         this.concat_str = false;
@@ -44,6 +45,7 @@ var Generator3D = /** @class */ (function () {
         this.symbol_table = [];
         this.temps_recover = {};
         this.print_string = false;
+        this.power = false;
         this.upper_case = false;
         this.lower_case = false;
         this.concat_str = false;
@@ -470,6 +472,44 @@ var Generator3D = /** @class */ (function () {
         var pos = env.get_size();
         env.set_size(pos + size);
         return pos;
+    };
+    Generator3D.prototype.powerTo = function () {
+        if (this.power)
+            return;
+        this.power = true;
+        this.inNatives = true;
+        this.addBeginFunc('powerTo');
+        var t0 = this.addTemp();
+        this.addExpression(t0, 'P', '1', '+');
+        var t1 = this.addTemp();
+        this.getStack(t1, t0);
+        this.addExpression(t0, t0, '1', '+');
+        var t2 = this.addTemp();
+        this.getStack(t2, t0);
+        this.addExpression(t0, t1, '', '');
+        var L0 = this.newLabel();
+        var L1 = this.newLabel();
+        var L2 = this.newLabel();
+        var exit_label = this.newLabel();
+        // exp 0, ret 1 in stack
+        this.addIf(t2, '0', '==', L2);
+        this.setLabel(L0);
+        this.addIf(t2, '1', '<=', L1);
+        this.addExpression(t1, t1, t0, '*');
+        this.addExpression(t2, t2, '1', '-');
+        this.addGoTo(L0);
+        this.setLabel(L1);
+        this.setStack('P', t1);
+        this.addGoTo(exit_label);
+        // label si exp = 0
+        this.setLabel(L2);
+        this.setStack('P', 1);
+        this.setLabel(exit_label);
+        this.addEndFunc();
+        this.inNatives = false;
+        this.get_freeTemp(t0);
+        this.get_freeTemp(t1);
+        this.get_freeTemp(t2);
     };
     Generator3D.prototype.recoverTemps = function (env, pos) {
         if (Object.keys(this.temps_recover).length > 0) {

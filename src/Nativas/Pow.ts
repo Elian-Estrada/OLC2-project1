@@ -4,6 +4,8 @@ import Exception from "../SymbolTable/Exception.js";
 import SymbolTable from "../SymbolTable/SymbolTable.js";
 import Tree from "../SymbolTable/Tree.js";
 import { type } from "../SymbolTable/Type.js";
+import {Generator3D} from "../Generator/Generator3D.js";
+import {Value} from "../Abstract/Value.js";
 
 export class Pow extends Function {
 
@@ -43,4 +45,29 @@ export class Pow extends Function {
         return base ** pow;
     }
 
+    public compile(table: SymbolTable, generator: Generator3D, tree: Tree) {
+
+        let left_value = this.exp1.compile(table, generator, tree);
+        let right_value = this.exp2.compile(table, generator, tree);
+
+        generator.powerTo();
+        let param_temp = generator.addTemp();
+        generator.addExpression(param_temp, 'P', table.get_size(), '+');
+
+        // base
+        generator.addExpression(param_temp, param_temp, '1', '+');
+        generator.setStack(param_temp, left_value.value);
+
+        // exponente
+        generator.addExpression(param_temp, param_temp, '1', '+');
+        generator.setStack(param_temp, right_value.value);
+
+        generator.newEnv(table.get_size());
+        generator.callFunc('powerTo');
+        let temp = generator.addTemp();
+        generator.getStack(temp, 'P');
+        generator.setEnv(table.get_size());
+
+        return new Value(temp, type.INT, true);
+    }
 }
