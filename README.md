@@ -5,6 +5,8 @@
 # MANUAL DE USUARIO :male-technologist: 
 > ### José Daniel Velásquez Orozco
 > #### 201800722
+> ### Elian Saúl Estrada Urbina
+> #### 201806838
 
 ## Acerca de Quetzal OCL2 :information_source:
 
