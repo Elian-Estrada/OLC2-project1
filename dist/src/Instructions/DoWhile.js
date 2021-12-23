@@ -76,7 +76,19 @@ var DoWhile = /** @class */ (function (_super) {
             return new Exception("Semantic", "" + error, this.row, this.column, table.get_name());
         }
     };
-    DoWhile.prototype.compile = function (table, generator) {
+    DoWhile.prototype.compile = function (table, generator, tree) {
+        var continue_label = generator.newLabel();
+        generator.setLabel(continue_label);
+        for (var _i = 0, _a = this.instructions; _i < _a.length; _i++) {
+            var inst = _a[_i];
+            inst.compile(table, generator, tree);
+        }
+        var condition = this.expr.compile(table, generator, tree);
+        table.break_label = condition.false_label;
+        table.continue_label = continue_label;
+        generator.setLabel(condition.true_label);
+        generator.addGoTo(continue_label);
+        generator.setLabel(condition.false_label);
     };
     DoWhile.prototype.get_node = function () {
         var node = new Cst_Node("Do-While");
