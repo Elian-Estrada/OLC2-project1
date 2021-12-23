@@ -16,6 +16,7 @@ var __extends = (this && this.__extends) || (function () {
 import { Function } from "../Instructions/Function.js";
 import Exception from "../SymbolTable/Exception.js";
 import { type } from "../SymbolTable/Type.js";
+import { Cst_Node } from "../Abstract/Cst_Node.js";
 var CaracterOfPosition = /** @class */ (function (_super) {
     __extends(CaracterOfPosition, _super);
     function CaracterOfPosition(id, n, type, name, params, instructions, row, col) {
@@ -42,6 +43,16 @@ var CaracterOfPosition = /** @class */ (function (_super) {
         }
         this.type = type.CHAR;
         return id_founded.charAt(n);
+    };
+    CaracterOfPosition.prototype.get_node = function () {
+        var node = new Cst_Node("CaracterOfPosition");
+        node.add_childs_node(this.id.get_node());
+        node.add_child(".");
+        node.add_child("caracterOfPosition");
+        node.add_child("(");
+        node.add_childs_node(this.n.get_node());
+        node.add_child(")");
+        return node;
     };
     return CaracterOfPosition;
 }(Function));

@@ -28,4 +28,15 @@ export class ToUpperCase extends Function {
         this.type = type.STRING;
         return id_founded.toUpperCase();
     }
+
+    get_node(): Cst_Node {
+        let node = new Cst_Node("ToUpperCase");
+        node.add_childs_node(this.id.get_node());
+        node.add_child(".");
+        node.add_child("toUppercase");
+        node.add_child("(");
+        node.add_child(")");
+
+        return node;
+    }
 }

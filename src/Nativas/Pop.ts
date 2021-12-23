@@ -1,3 +1,4 @@
+import { Cst_Node } from "../Abstract/Cst_Node.js";
 import { Instruction } from "../Abstract/Instruction.js";
 import { Function } from "../Instructions/Function.js";
 import Exception from "../SymbolTable/Exception.js";
@@ -29,5 +30,16 @@ export class Pop extends Function {
         this.type = symbol.get_subtype();
         return symbol.get_value().pop();
 
+    }
+
+    get_node(): Cst_Node {
+        let node = new Cst_Node("Pop");
+        node.add_childs_node(this.id.get_node());
+        node.add_child(".");
+        node.add_child("pop");
+        node.add_child("(");
+        node.add_child(")");
+
+        return node;
     }
 }

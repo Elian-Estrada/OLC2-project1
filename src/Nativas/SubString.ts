@@ -63,4 +63,18 @@ export class SubString extends Function {
         this.type = type.STRING;
         return id_founded.substring(from, to);
     }
+
+    get_node(): Cst_Node {
+        let node = new Cst_Node("SubString");
+        node.add_childs_node(this.id.get_node());
+        node.add_child(".");
+        node.add_child("subString");
+        node.add_child("(");
+        node.add_childs_node(this.from.get_node());
+        node.add_child(",");
+        node.add_childs_node(this.to.get_node());
+        node.add_child(")");
+
+        return node;
+    }
 }

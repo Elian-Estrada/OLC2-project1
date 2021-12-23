@@ -1,3 +1,4 @@
+import { Cst_Node } from "../Abstract/Cst_Node.js";
 import { Instruction } from "../Abstract/Instruction.js";
 import { Function } from "../Instructions/Function.js";
 import Exception from "../SymbolTable/Exception.js";
@@ -29,7 +30,18 @@ export class Sin extends Function {
         }
 
         this.type = type.DOUBLE;
-        return Math.sin((value * Math.PI) / 180);
+        //return Math.sin((value * Math.PI) / 180);
+        return Math.sin(value);
+    }
+
+    get_node(): Cst_Node {
+        let node = new Cst_Node("Sin");
+        node.add_child("sin");
+        node.add_child("(");
+        node.add_childs_node(this.expression.get_node());
+        node.add_child(")");
+
+        return node;
     }
 
     compile(table: SymbolTable, generator: Generator3D, tree: Tree) {

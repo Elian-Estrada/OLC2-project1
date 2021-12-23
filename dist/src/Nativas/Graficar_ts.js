@@ -13,7 +13,9 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+import { Cst_Node } from "../Abstract/Cst_Node.js";
 import { Function } from "../Instructions/Function.js";
+import { type } from "../SymbolTable/Type.js";
 var count = 0;
 export var clear_count = function () {
     count = 0;
@@ -35,6 +37,14 @@ var Graficar_ts = /** @class */ (function (_super) {
         count++;
         var coun_variable = 0;
         var content = "";
+        tree.get_all_structs().forEach(function (item) {
+            coun_variable++;
+            content += "<tr>\n            <td> ".concat(count, " </td>\n            <td> ").concat(item.get_id(), " </td>\n            <td> ").concat(item.get_type(), " </td>\n            <td> ").concat(item.get_id(), " </td>\n            <td> Global </td>\n            <td>  </td>\n            <td> ").concat(item.row, " </td>\n            <td> ").concat(item.column, " </td>\n            </tr>");
+        });
+        tree.get_all_functions().forEach(function (item) {
+            coun_variable++;
+            content += "<tr>\n            <td> ".concat(count, " </td>\n            <td> ").concat(item.get_name(), " </td>\n            <td> ").concat(item.get_type() === type.VOID ? "Procedure" : "Function", " </td>\n            <td> ").concat(item.get_type(), " </td>\n            <td> Global </td>\n            <td>  </td>\n            <td> ").concat(item.row, " </td>\n            <td> ").concat(item.column, " </td>\n            </tr>");
+        });
         var current_table = table;
         while (current_table !== undefined) {
             current_table.get_table_total().forEach(function (item) {
@@ -86,6 +96,13 @@ var Graficar_ts = /** @class */ (function (_super) {
             }
             return params.slice(0, params.length - 1) + ")";
         }
+    };
+    Graficar_ts.prototype.get_node = function () {
+        var node = new Cst_Node("Graficar_ts");
+        node.add_child("graficar_ts");
+        node.add_child("(");
+        node.add_child(")");
+        return node;
     };
     return Graficar_ts;
 }(Function));

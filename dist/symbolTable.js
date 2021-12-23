@@ -4,10 +4,39 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log(content);
 
     const symbols = JSON.parse(localStorage.getItem("symbol"))
-    console.log(symbols);
+    const functions = JSON.parse(localStorage.getItem("functions"));
+    const struct = JSON.parse(localStorage.getItem("structs"));
 
     let count = 0;
     let s_cont = "";
+
+    struct.forEach(item => {
+        count++;
+        s_cont += `<tr>
+        <td> ${count} </td>
+        <td> ${item.id} </td>
+        <td> ${item.type} </td>
+        <td> ${item.id} </td>
+        <td> Global </td>
+        <td>  </td>
+        <td> ${item.row} </td>
+        <td> ${item.column} </td>
+        </tr>`;
+    });
+
+    functions.forEach(item => {
+        count++;
+        s_cont += `<tr>
+        <td> ${count} </td>
+        <td> ${item.name} </td>
+        <td> ${item.type === 'void' ? "Procedure" : "Function"} </td>
+        <td> ${item.type} </td>
+        <td> Global </td>
+        <td>  </td>
+        <td> ${item.row} </td>
+        <td> ${item.column} </td>
+        </tr>`;
+    });
 
     symbols.forEach(item => {
         

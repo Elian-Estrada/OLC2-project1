@@ -13,6 +13,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+import { Cst_Node } from "../Abstract/Cst_Node.js";
 import { Function } from "../Instructions/Function.js";
 import Exception from "../SymbolTable/Exception.js";
 import { type } from "../SymbolTable/Type.js";
@@ -61,6 +62,16 @@ var Pow = /** @class */ (function (_super) {
         generator.getStack(temp, 'P');
         generator.setEnv(table.get_size());
         return new Value(temp, type.INT, true);
+    };
+    Pow.prototype.get_node = function () {
+        var node = new Cst_Node("Pow");
+        node.add_child("pow");
+        node.add_child("(");
+        node.add_childs_node(this.exp1.get_node());
+        node.add_child(",");
+        node.add_childs_node(this.exp2.get_node());
+        node.add_child(")");
+        return node;
     };
     return Pow;
 }(Function));

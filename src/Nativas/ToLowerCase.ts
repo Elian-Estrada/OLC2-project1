@@ -28,4 +28,15 @@ export class ToLowerCase extends Function {
         this.type = type.STRING;
         return id_founded.toLowerCase();
     }
+
+    get_node(): Cst_Node {
+        let node = new Cst_Node("ToLowerCase");
+        node.add_childs_node(this.id.get_node());
+        node.add_child(".");
+        node.add_child("toLowercase");
+        node.add_child("(");
+        node.add_child(")");
+
+        return node;
+    }
 }
