@@ -2,7 +2,7 @@
 > #### Facultad de Ingeniería
 > #### Escuela de Ciencias y Sistemas
 
-# MANUAL DE USUARIO :male-technologist: 
+# MANUAL DE USUARIO 💻: 
 > ### José Daniel Velásquez Orozco
 > #### 201800722
 > ### Elian Saúl Estrada Urbina
@@ -15,7 +15,7 @@ Quetzal OCL2 es un intérprete y compilador que ejecuta y traduce instrucciones 
 Quetzal es un lenguaje de programación inspirado en C, su característica principal es la inclusión de tipos implícitos. El sistema de tipos de Quetzal realiza una formalización de los tipos de C y Java. Esto permite a los desarrolladores definir variables y funciones tipadas sin perder la esencia. Otra inclusión importante de Quetzal es la simplificación de los lenguajes C y Java para poder realizar diferentes instrucciones en menos pasos.
 
 
-## Requerimientos para la Ejecución :computer:
+## Requerimientos para la Ejecución 💻:
 
 | Browser Recomendado | Versión |
 | ------------------- | ------- |
