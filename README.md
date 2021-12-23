@@ -1,7 +1,3 @@
----
-tags: USAC
----
-
 > #### Universidad de San Carlos de Guatemala
 > #### Facultad de Ingeniería
 > #### Escuela de Ciencias y Sistemas
