@@ -139,14 +139,18 @@ var Declaration_array = /** @class */ (function (_super) {
         return this.id;
     };
     Declaration_array.prototype.compile = function (table, generator, tree) {
+        var new_symbol = null;
+        var in_heap = true;
+        new_symbol = new Symbol(this.id[0], this.type, this.row, this.column, this.expression, undefined, in_heap, '', '');
+        new_symbol.size = this.list_expression.length;
+        table.set_table(new_symbol);
         generator.addComment("-----KEEP ARRAY-----");
         var temp = generator.addTemp();
         var temp_move = generator.addTemp();
         generator.addExpression(temp, 'H', '', '');
-        generator.addExpression(temp_move, 'H', '', '');
-        generator.addExpression('H', 'H', table.get_size() + 1, '+');
-        generator.setHeap(temp_move, table.get_size());
-        generator.addExpression(temp_move, temp_move, '1', '+');
+        generator.addExpression(temp_move, temp, 1, '+');
+        generator.setHeap(temp_move, this.list_expression.length);
+        generator.addExpression('H', 'H', this.list_expression.length + 1, '+');
         for (var _i = 0, _a = this.list_expression; _i < _a.length; _i++) {
             var expr = _a[_i];
             var value = expr.compile(table, generator, tree);
@@ -155,10 +159,10 @@ var Declaration_array = /** @class */ (function (_super) {
             generator.setHeap(temp_move, value.value);
             generator.addExpression(temp_move, temp_move, '1', '+');
         }
+        generator.setStack(table.get_size(), temp);
         generator.addComment("----END ARRAY-----");
-        var val_ret = new Value(temp, type.ARRAY, true);
         //val_ret.type_array = this.type;
-        return val_ret;
+        return new Value(temp, type.ARRAY, true);
     };
     Declaration_array.prototype.get_node = function () {
         var node = new Cst_Node("Declaration Array");

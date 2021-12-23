@@ -529,6 +529,14 @@ var Generator3D = /** @class */ (function () {
     Generator3D.prototype.toDouble = function (res, exp) {
         this.codeIn("".concat(res, "=(double)").concat(exp, ";\n"));
     };
+    Generator3D.prototype.printError = function () {
+        this.add_print('c', "char", 69);
+        this.add_print('c', "char", 114);
+        this.add_print('c', "char", 114);
+        this.add_print('c', "char", 111);
+        this.add_print('c', "char", 114);
+        this.add_print('c', "char", 10);
+    };
     Generator3D.prototype.recoverTemps = function (env, pos) {
         if (Object.keys(this.temps_recover).length > 0) {
             var temp = this.addTemp();
