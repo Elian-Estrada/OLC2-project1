@@ -16,6 +16,7 @@ var __extends = (this && this.__extends) || (function () {
 import { Function } from "../Instructions/Function.js";
 import Exception from "../SymbolTable/Exception.js";
 import { type } from "../SymbolTable/Type.js";
+import { Value } from "../Abstract/Value.js";
 var Pow = /** @class */ (function (_super) {
     __extends(Pow, _super);
     function Pow(exp1, exp2, type, name, params, instructions, row, col) {
@@ -41,6 +42,25 @@ var Pow = /** @class */ (function (_super) {
         }
         this.type = this.exp1.get_type();
         return Math.pow(base, pow);
+    };
+    Pow.prototype.compile = function (table, generator, tree) {
+        var left_value = this.exp1.compile(table, generator, tree);
+        var right_value = this.exp2.compile(table, generator, tree);
+        generator.powerTo();
+        var param_temp = generator.addTemp();
+        generator.addExpression(param_temp, 'P', table.get_size(), '+');
+        // base
+        generator.addExpression(param_temp, param_temp, '1', '+');
+        generator.setStack(param_temp, left_value.value);
+        // exponente
+        generator.addExpression(param_temp, param_temp, '1', '+');
+        generator.setStack(param_temp, right_value.value);
+        generator.newEnv(table.get_size());
+        generator.callFunc('powerTo');
+        var temp = generator.addTemp();
+        generator.getStack(temp, 'P');
+        generator.setEnv(table.get_size());
+        return new Value(temp, type.INT, true);
     };
     return Pow;
 }(Function));

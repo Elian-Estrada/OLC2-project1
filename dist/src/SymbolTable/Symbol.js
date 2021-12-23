@@ -9,6 +9,7 @@ var Symbol = /** @class */ (function () {
         this._inHeap = in_heap;
         this.label_true = label_true;
         this.label_false = label_false;
+        this.size = 1;
     }
     Object.defineProperty(Symbol.prototype, "id", {
         get: function () {

@@ -16,6 +16,7 @@ var __extends = (this && this.__extends) || (function () {
 import { Function } from "../Instructions/Function.js";
 import Exception from "../SymbolTable/Exception.js";
 import { type } from "../SymbolTable/Type.js";
+import { Value } from "../Abstract/Value.js";
 var Tan = /** @class */ (function (_super) {
     __extends(Tan, _super);
     function Tan(expression, type, name, params, instructions, row, col) {
@@ -33,6 +34,12 @@ var Tan = /** @class */ (function (_super) {
         }
         this.type = type.DOUBLE;
         return Math.tan((value * Math.PI) / 180);
+    };
+    Tan.prototype.compile = function (table, generator, tree) {
+        var exp = this.expression.compile(table, generator, tree);
+        var temp = generator.addTemp();
+        generator.tanOf(temp, exp.value);
+        return new Value(temp, this.type, false);
     };
     return Tan;
 }(Function));

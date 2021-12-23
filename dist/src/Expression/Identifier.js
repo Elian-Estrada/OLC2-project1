@@ -53,7 +53,7 @@ var Identifier = /** @class */ (function (_super) {
     Identifier.prototype.toString = function () {
         return String(this.value);
     };
-    Identifier.prototype.compile = function (table, generator) {
+    Identifier.prototype.compile = function (table, generator, tree) {
         var value = table.get_table(this.id);
         if (value === null) {
             // @ts-ignore
@@ -61,16 +61,17 @@ var Identifier = /** @class */ (function (_super) {
             return;
         }
         var temp = generator.addTemp();
-        var temp_pos = null;
+        var temp_pos;
         // @ts-ignore
-        if (value.value != undefined) {
+        if (value.id != undefined) {
             // @ts-ignore
             temp_pos = value.position;
-        }
-        else {
-            temp_pos = generator.addTemp();
             // @ts-ignore
-            generator.addExpression(temp_pos, 'P', value.position - 1, '+');
+            if (value.environment !== 'Global') {
+                temp_pos = generator.addTemp();
+                // @ts-ignore
+                generator.addExpression(temp_pos, 'P', value.position - 1, '+');
+            }
         }
         generator.getStack(temp, temp_pos);
         // @ts-ignore

@@ -45,21 +45,25 @@ var Primitive = /** @class */ (function (_super) {
     Primitive.prototype.toString = function () {
         return String(this.value);
     };
-    Primitive.prototype.compile = function (table, generator) {
+    Primitive.prototype.compile = function (table, generator, tree) {
         if (this.type === type.INT || this.type === type.DOUBLE) {
             return new Value(this.value, this.type, false);
         }
         else if (this.type === type.STRING || this.type == type.CHAR) {
             var ret_temp = generator.addTemp();
             generator.addExpression(ret_temp, 'H', '', '');
+            var counter = 0;
             for (var _i = 0, _a = String(this.value); _i < _a.length; _i++) {
                 var char = _a[_i];
                 generator.setHeap('H', char.charCodeAt(0));
                 generator.nextHeap();
+                counter += 1;
             }
             generator.setHeap('H', -1);
             generator.nextHeap();
-            return new Value(ret_temp, type.STRING, true);
+            var ret_val = new Value(ret_temp, type.STRING, true);
+            ret_val.size = counter;
+            return ret_val;
         }
         else if (this.type === type.BOOL) {
             var res = new Value(this.value, this.type, false);

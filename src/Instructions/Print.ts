@@ -13,22 +13,24 @@ import { Values_array } from "../Expression/Values_array.js";
 export class Print extends Instruction {
 
     compile(table: SymbolTable, generator: Generator3D, tree: Tree) {
-        let res = this.expression.compile(table, generator, tree);
-        let valueShow = res.value;
+        for(let item of this.expression){
+            let res = item.compile(table, generator, tree);
+            let valueShow = res.value;
 
-        if ( res.get_type() === type.INT ) {
-            generator.add_print("d", "int", valueShow);
+            if ( res.get_type() === type.INT ) {
+                generator.add_print("d", "int", valueShow);
+            }
+            else if ( res.get_type() === type.DOUBLE ) {
+                generator.add_print("f", "double", valueShow);
+            }
+            else if ( res.get_type() === type.STRING || res.get_type() === type.CHAR ) {
+                this.typeString(valueShow, table, generator);
+            }
+            else if ( res.get_type() === type.BOOL ) {
+                this.typeBoolean(res, generator);
+            }
+            generator.add_print("c", "char", 10);
         }
-        else if ( res.get_type() === type.DOUBLE ) {
-            generator.add_print("f", "double", valueShow);
-        }
-        else if ( res.get_type() === type.STRING || res.get_type() === type.CHAR ) {
-            this.typeString(valueShow, table, generator);
-        }
-        else if ( res.get_type() === type.BOOL ) {
-            this.typeBoolean(res, generator);
-        }
-        generator.add_print("c", "char", 10);
     }
 
     public typeString(value: string, table: SymbolTable, generator: Generator3D) {

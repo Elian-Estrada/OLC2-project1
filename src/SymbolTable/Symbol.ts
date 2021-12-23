@@ -13,6 +13,7 @@ export default class Symbol {
     private pos: number | undefined;
     private label_true: string | undefined;
     private label_false: string | undefined;
+    public size: number;
     
     constructor(id: String, type: type, row: Number, column: Number, value: any, environment?: String, in_heap?: boolean, label_true?: string, label_false?: string) {
         this._id = id;
@@ -24,6 +25,7 @@ export default class Symbol {
         this._inHeap = in_heap;
         this.label_true = label_true;
         this.label_false = label_false;
+        this.size = 1;
     }
 
     public get id() : String {

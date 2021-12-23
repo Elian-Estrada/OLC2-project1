@@ -17,6 +17,7 @@ import { Cst_Node } from "../Abstract/Cst_Node.js";
 import { Function } from "../Instructions/Function.js";
 import Exception from "../SymbolTable/Exception.js";
 import { type } from "../SymbolTable/Type.js";
+import { Value } from "../Abstract/Value.js";
 var ToInt = /** @class */ (function (_super) {
     __extends(ToInt, _super);
     function ToInt(expression, type, name, params, instructions, row, col) {
@@ -42,6 +43,12 @@ var ToInt = /** @class */ (function (_super) {
         node.add_childs_node(this.expression.get_node());
         node.add_child(")");
         return node;
+    };
+    ToInt.prototype.compile = function (table, generator, tree) {
+        var exp = this.expression.compile(table, generator, tree);
+        var temp = generator.addTemp();
+        generator.toInt(temp, exp.value);
+        return new Value(temp, this.type, false);
     };
     return ToInt;
 }(Function));

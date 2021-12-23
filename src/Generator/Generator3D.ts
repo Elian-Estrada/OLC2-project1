@@ -17,6 +17,7 @@ export class Generator3D {
     private symbol_table: Array<any>
     private temps_recover: Object;
     private print_string: boolean;
+    private power: boolean;
     private upper_case: boolean;
     private lower_case: boolean;
     private concat_str: boolean;
@@ -41,6 +42,7 @@ export class Generator3D {
         this.symbol_table = [];
         this.temps_recover = {};
         this.print_string = false;
+        this.power = false;
         this.upper_case = false;
         this.lower_case = false;
         this.concat_str = false;
@@ -73,6 +75,7 @@ export class Generator3D {
         this.symbol_table = [];
         this.temps_recover = {};
         this.print_string = false;
+        this.power = false;
         this.upper_case = false;
         this.lower_case = false;
         this.concat_str = false;
@@ -115,10 +118,11 @@ export class Generator3D {
     }
 
     public get_freeTemp(temp: any) {
-        if ( temp in this.temps_recover )
-            { // @ts-ignore
-                delete this.temps_recover[temp];
-            }
+        // @ts-ignore
+        if ( temp == this.temps_recover[`${temp}`] )
+        { // @ts-ignore
+            delete this.temps_recover[`${temp}`];
+        }
     }
 
     public add_print(type: string, data_type: string, value: any) {
@@ -461,7 +465,7 @@ export class Generator3D {
         this.count_temp += 1;               // Incrementar contador de temporales en 1
         this.temps.push(temp);              // Meter en el arreglo de temporales al nuevo Tn
         // @ts-ignore
-        this.temps_recover.temp = temp;     // Diccionario en clave Tn tendrá valor de Tn
+        this.temps_recover[`${temp}`] = temp;     // Diccionario en clave Tn tendrá valor de Tn
         return temp;                        // Retornamos temporal
     }
 
@@ -563,13 +567,16 @@ export class Generator3D {
             let temp = this.addTemp();
             this.get_freeTemp(temp);
 
+            this.addComment("----Start Keep Temps----");
             this.addExpression(temp, 'P', env.get_size(), '+');
             for ( let value in this.temps_recover ) {
                 size += 1;
+                // @ts-ignore
                 this.setStack(temp, value, false);
                 if ( size != Object.keys(this.temps_recover).length ) {
                     this.addExpression(temp, temp, '1', '+');
                 }
+                this.addComment("----End Keep Temps----");
             }
         }
         let pos = env.get_size();
@@ -577,8 +584,79 @@ export class Generator3D {
         return pos;
     }
 
+    public powerTo() {
+        if ( this.power )
+            return;
+
+        this.power = true;
+        this.inNatives = true;
+
+        this.addBeginFunc('powerTo');
+        let t0 = this.addTemp();
+        this.addExpression(t0, 'P', '1', '+');
+        let t1 = this.addTemp();
+        this.getStack(t1, t0);
+
+        this.addExpression(t0, t0, '1', '+');
+        let t2 = this.addTemp();
+        this.getStack(t2, t0);
+        this.addExpression(t0, t1, '', '');
+
+        let L0 = this.newLabel();
+        let L1 = this.newLabel();
+        let L2 = this.newLabel();
+        let exit_label = this.newLabel();
+
+        // exp 0, ret 1 in stack
+        this.addIf(t2, '0', '==', L2);
+        this.setLabel(L0);
+
+        this.addIf(t2, '1', '<=', L1);
+        this.addExpression(t1, t1, t0, '*');
+        this.addExpression(t2, t2, '1', '-');
+        this.addGoTo(L0);
+        this.setLabel(L1);
+        this.setStack('P', t1);
+        this.addGoTo(exit_label);
+
+        // label si exp = 0
+        this.setLabel(L2);
+        this.setStack('P', 1);
+        this.setLabel(exit_label);
+
+        this.addEndFunc();
+        this.inNatives = false;
+        this.get_freeTemp(t0);
+        this.get_freeTemp(t1);
+        this.get_freeTemp(t2);
+    }
+
+    public sqrtOf(res: string, exp: string) {
+        this.codeIn(`${res}=sqrt(${exp});\n`);
+    }
+
+    public senOf(res: string, exp: string) {
+        this.codeIn(`${res}=sin(${exp});\n`);
+    }
+
+    public cosOf(res: string, exp: string) {
+        this.codeIn(`${res}=cos(${exp});\n`);
+    }
+
+    public tanOf(res: string, exp: string) {
+        this.codeIn(`${res}=tan(${exp});\n`);
+    }
+
+    public toInt(res: string, exp: string) {
+        this.codeIn(`${res}=(int)${exp};\n`);
+    }
+
+    public toDouble(res: string, exp: string) {
+        this.codeIn(`${res}=(double)${exp};\n`);
+    }
+
     public recoverTemps(env: SymbolTable, pos: number) {
-        if ( Object.keys(this.recoverTemps).length > 0 ) {
+        if ( Object.keys(this.temps_recover).length > 0 ) {
             let temp = this.addTemp();
             this.get_freeTemp(temp);
             let size = 0;

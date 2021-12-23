@@ -17,6 +17,8 @@ import { Cst_Node } from "../Abstract/Cst_Node.js";
 import { Function } from "../Instructions/Function.js";
 import Exception from "../SymbolTable/Exception.js";
 import { type } from "../SymbolTable/Type.js";
+import { Value } from "../Abstract/Value.js";
+import { Primitive } from "../Expression/Primitive.js";
 var String = /** @class */ (function (_super) {
     __extends(String, _super);
     function String(expression, type, name, params, instructions, row, col) {
@@ -72,6 +74,12 @@ var String = /** @class */ (function (_super) {
         node.add_childs_node(this.expression.get_node());
         node.add_child(")");
         return node;
+    };
+    String.prototype.compile = function (table, generator, tree) {
+        var new_val = this.expression.value.toString();
+        var new_prim = new Primitive(new_val, type.STRING, this.row, this.column);
+        var val_ret = new_prim.compile(table, generator, tree);
+        return new Value(val_ret.value, type.STRING, false);
     };
     return String;
 }(Function));

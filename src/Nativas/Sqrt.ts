@@ -4,6 +4,8 @@ import Exception from "../SymbolTable/Exception.js";
 import SymbolTable from "../SymbolTable/SymbolTable.js";
 import Tree from "../SymbolTable/Tree.js";
 import { type } from "../SymbolTable/Type.js";
+import {Generator3D} from "../Generator/Generator3D.js";
+import {Value} from "../Abstract/Value.js";
 
 export class Sqrt extends Function {
 
@@ -31,4 +33,10 @@ export class Sqrt extends Function {
         return Math.sqrt(value);
     }
 
+    compile(table: SymbolTable, generator: Generator3D, tree: Tree) {
+        let exp = this.expression.compile(table, generator, tree);
+        let temp = generator.addTemp();
+        generator.sqrtOf(temp, exp.value);
+        return new Value(temp, this.type, false);
+    }
 }

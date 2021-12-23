@@ -9,6 +9,7 @@ var Value = /** @class */ (function () {
         this.false_label = '';
         this.values_array = [];
         this.type_array = null;
+        this.size = 1;
     }
     Value.prototype.get_ValuesArray = function () {
         return this.values_array;

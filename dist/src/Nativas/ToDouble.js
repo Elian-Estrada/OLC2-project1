@@ -17,6 +17,7 @@ import { Cst_Node } from "../Abstract/Cst_Node.js";
 import { Function } from "../Instructions/Function.js";
 import Exception from "../SymbolTable/Exception.js";
 import { type } from "../SymbolTable/Type.js";
+import { Value } from "../Abstract/Value.js";
 var ToDouble = /** @class */ (function (_super) {
     __extends(ToDouble, _super);
     function ToDouble(expression, type, name, params, instructions, row, col) {
@@ -42,6 +43,12 @@ var ToDouble = /** @class */ (function (_super) {
         node.add_childs_node(this.expression.get_node());
         node.add_child(")");
         return node;
+    };
+    ToDouble.prototype.compile = function (table, generator, tree) {
+        var exp = this.expression.compile(table, generator, tree);
+        var temp = generator.addTemp();
+        generator.toDouble(temp, exp.value);
+        return new Value(temp, this.type, false);
     };
     return ToDouble;
 }(Function));

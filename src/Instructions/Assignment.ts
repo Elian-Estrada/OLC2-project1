@@ -77,12 +77,45 @@ export class Assignment extends Instruction{
         return node;
     }
     
-    compile(table: SymbolTable, generator: Generator3D): any {
-        let val = this.expression.compile(table, generator);
+    compile(table: SymbolTable, generator: Generator3D, tree: Tree): any {
+        let val = this.expression.compile(table, generator, tree);
         let new_var = table.get_table(this.get_id());
         // @ts-ignore
         table.update_table(new_var);
-        // @ts-ignore
-        generator.setStack(new_var.position, val.value, true);
+
+        if ( val.get_type() === type.BOOL ) {
+            // @ts-ignore
+            this.valueBoolean(val, new_var.position, generator);
+        } else {
+
+            let index = -1;
+            // @ts-ignore
+            const symbols = JSON.parse(localStorage.getItem("symbol"));
+            symbols.forEach((item: any, i: number) => {
+                if ( this.get_id() === item._id ) {
+                    index = i;
+                }
+
+                if ( index !== -1 ) {
+                    // @ts-ignore
+                    symbols[index].size = val.size;
+                }
+            });
+            localStorage.setItem('symbol', JSON.stringify(symbols));
+
+            // @ts-ignore
+            generator.setStack(new_var.position, val.value);
+        }
+    }
+
+    public valueBoolean(value: any, temp_pos: any, generator: Generator3D) {
+        let temp_label = generator.newLabel();
+        generator.setLabel(value.true_label);
+        generator.setStack(temp_pos, "1");
+        generator.addGoTo(temp_label);
+
+        generator.setLabel(value.false_label);
+        generator.setStack(temp_pos, "0");
+        generator.setLabel(temp_label);
     }
 }

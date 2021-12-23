@@ -30,15 +30,15 @@ var Relational = /** @class */ (function (_super) {
         _this.value = "";
         return _this;
     }
-    Relational.prototype.compile = function (table, generator) {
-        var left = this.exp1.compile(table, generator);
+    Relational.prototype.compile = function (table, generator, tree) {
+        var left = this.exp1.compile(table, generator, tree);
         if (left instanceof Exception)
             return left;
         var right = null;
         var res = new Value(null, type.BOOL, false);
         var operator = this.operator;
         if (left.type != type.BOOL) {
-            right = this.exp2.compile(table, generator);
+            right = this.exp2.compile(table, generator, tree);
             if (left.type == type.INT || left.type == type.DOUBLE) {
                 switch (right.type) {
                     case type.INT:
@@ -90,7 +90,7 @@ var Relational = /** @class */ (function (_super) {
             generator.setLabel(left.false_label);
             generator.addExpression(left_temp, '0', '', '');
             generator.setLabel(goto_right);
-            var right_1 = this.exp2.compile(table, generator);
+            var right_1 = this.exp2.compile(table, generator, tree);
             if (right_1.get_type() != type.BOOL) {
                 generator.addError('Relational: Operator must be boolean', Number(this.row), Number(this.column));
                 return;

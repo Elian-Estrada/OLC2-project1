@@ -19,13 +19,13 @@ export class For extends Instruction {
         table.get_table(this.init.id[0]);
         let continue_label = generator.newLabel();
         generator.setLabel(continue_label);
-        let condition = this.condition.compile(table, generator);
+        let condition = this.condition.compile(table, generator, tree);
         generator.setLabel(condition.true_label);
 
         for ( let instructions of this.instructions ) {
             instructions.compile(table, generator, tree);
-            this.step.compile(table, generator, tree);
         }
+        this.step.compile(table, generator, tree);
 
         generator.addGoTo(continue_label);
         generator.setLabel(condition.false_label);

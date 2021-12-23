@@ -126,7 +126,7 @@ export class If extends Instruction {
     }
     
     compile(table: SymbolTable, generator: Generator3D, tree: Tree): any {
-        let condition = this.expr.compile(table, generator);
+        let condition = this.expr.compile(table, generator, tree);
 
         if ( condition.type !== type.BOOL ) {
             generator.addError("Condition is not a boolean value", Number(this.row), Number(this.column));

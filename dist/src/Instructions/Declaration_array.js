@@ -138,7 +138,7 @@ var Declaration_array = /** @class */ (function (_super) {
     Declaration_array.prototype.get_id = function () {
         return this.id;
     };
-    Declaration_array.prototype.compile = function (table, generator) {
+    Declaration_array.prototype.compile = function (table, generator, tree) {
         generator.addComment("-----KEEP ARRAY-----");
         var temp = generator.addTemp();
         var temp_move = generator.addTemp();
@@ -149,7 +149,7 @@ var Declaration_array = /** @class */ (function (_super) {
         generator.addExpression(temp_move, temp_move, '1', '+');
         for (var _i = 0, _a = this.list_expression; _i < _a.length; _i++) {
             var expr = _a[_i];
-            var value = expr.compile(table, generator);
+            var value = expr.compile(table, generator, tree);
             if (value instanceof Primitive)
                 this.type = value.get_type();
             generator.setHeap(temp_move, value.value);

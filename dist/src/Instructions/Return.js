@@ -53,9 +53,10 @@ var Return = /** @class */ (function (_super) {
         }
         return node;
     };
-    Return.prototype.compile = function (table, generator) {
+    Return.prototype.compile = function (table, generator, tree) {
         if (this.expr != null) {
-            var value = this.expr.compile(table, generator);
+            // console.log(this.expr)
+            var value = this.expr.compile(table, generator, tree);
             if (value.type == type.BOOL) {
                 var temp_label = generator.newLabel();
                 generator.setLabel(value.true_label);
@@ -67,6 +68,7 @@ var Return = /** @class */ (function (_super) {
                 table.value_ret = value.value;
             }
             else {
+                console.log(value);
                 generator.setStack('P', value.value);
             }
             generator.addGoTo(table.return_label);

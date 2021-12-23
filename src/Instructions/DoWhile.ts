@@ -72,8 +72,20 @@ export class DoWhile extends Instruction {
         }
     }
 
-    compile(table: SymbolTable, generator: Generator3D) {
-        
+    compile(table: SymbolTable, generator: Generator3D, tree: Tree) {
+        let continue_label = generator.newLabel();
+        generator.setLabel(continue_label);
+
+        for (let inst of this.instructions ) {
+            inst.compile(table, generator, tree);
+        }
+
+        let condition = this.expr.compile(table, generator, tree);
+        table.break_label = condition.false_label;
+        table.continue_label = continue_label;
+        generator.setLabel(condition.true_label);
+        generator.addGoTo(continue_label);
+        generator.setLabel(condition.false_label);
     }
 
     get_node() {

@@ -16,6 +16,7 @@ var __extends = (this && this.__extends) || (function () {
 import { Function } from "../Instructions/Function.js";
 import Exception from "../SymbolTable/Exception.js";
 import { type } from "../SymbolTable/Type.js";
+import { Value } from "../Abstract/Value.js";
 var Sqrt = /** @class */ (function (_super) {
     __extends(Sqrt, _super);
     function Sqrt(expression, type, name, params, instructions, row, col) {
@@ -33,6 +34,12 @@ var Sqrt = /** @class */ (function (_super) {
         }
         this.type = type.DOUBLE;
         return Math.sqrt(value);
+    };
+    Sqrt.prototype.compile = function (table, generator, tree) {
+        var exp = this.expression.compile(table, generator, tree);
+        var temp = generator.addTemp();
+        generator.sqrtOf(temp, exp.value);
+        return new Value(temp, this.type, false);
     };
     return Sqrt;
 }(Function));

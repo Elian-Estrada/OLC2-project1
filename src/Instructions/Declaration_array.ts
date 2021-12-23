@@ -163,7 +163,7 @@ export class Declaration_array extends Instruction {
         return this.id;
     }
 
-    compile(table: SymbolTable, generator: Generator3D) {
+    compile(table: SymbolTable, generator: Generator3D, tree: Tree) {
         generator.addComment("-----KEEP ARRAY-----");
         let temp = generator.addTemp();
         let temp_move = generator.addTemp();
@@ -176,7 +176,7 @@ export class Declaration_array extends Instruction {
         generator.addExpression(temp_move, temp_move, '1', '+');
 
         for ( let expr of this.list_expression ) {
-            let value = expr.compile(table, generator);
+            let value = expr.compile(table, generator, tree);
 
             if ( value instanceof Primitive )
                 this.type = value.get_type();
