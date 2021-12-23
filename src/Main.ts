@@ -190,6 +190,8 @@ export class Main {
         
         localStorage.setItem("errors", JSON.stringify(this.tree.get_errors()));
         localStorage.setItem("symbol", JSON.stringify(variables));
+        localStorage.setItem("functions", JSON.stringify(this.tree.get_all_functions()));
+        localStorage.setItem("structs", JSON.stringify(this.tree.get_all_structs()));
         localStorage.setItem("gramatica", JSON.stringify(grammatical));
         
         let init = new Cst_Node("Root");

@@ -3,6 +3,7 @@ import { Instruction } from "../Abstract/Instruction.js";
 import { Function } from "../Instructions/Function.js";
 import SymbolTable from "../SymbolTable/SymbolTable.js";
 import Tree from "../SymbolTable/Tree.js";
+import { type } from "../SymbolTable/Type.js";
 
 let count = 0;
 export const clear_count = () => {
@@ -31,6 +32,34 @@ export class Graficar_ts extends Function {
         let coun_variable = 0;
 
         let content = ``;
+
+        tree.get_all_structs().forEach(item => {
+            coun_variable++;
+            content += `<tr>
+            <td> ${count} </td>
+            <td> ${item.get_id()} </td>
+            <td> ${item.get_type()} </td>
+            <td> ${item.get_id()} </td>
+            <td> Global </td>
+            <td>  </td>
+            <td> ${item.row} </td>
+            <td> ${item.column} </td>
+            </tr>`;
+        });
+
+        tree.get_all_functions().forEach(item => {
+            coun_variable++;
+            content += `<tr>
+            <td> ${count} </td>
+            <td> ${item.get_name()} </td>
+            <td> ${item.get_type() === type.VOID ? "Procedure" : "Function"} </td>
+            <td> ${item.get_type()} </td>
+            <td> Global </td>
+            <td>  </td>
+            <td> ${item.row} </td>
+            <td> ${item.column} </td>
+            </tr>`;
+        });
 
         let current_table = table;
 
