@@ -35,4 +35,15 @@ export class Length extends Function {
         this.type = type.INT;
         return id_founded.length;
     }
+
+    get_node(): Cst_Node {
+        let node = new Cst_Node("Length");
+        node.add_childs_node(this.id.get_node());
+        node.add_child(".");
+        node.add_child("length");
+        node.add_child("(");
+        node.add_child(")");
+
+        return node;
+    }
 }

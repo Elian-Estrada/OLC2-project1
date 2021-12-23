@@ -149,139 +149,139 @@ var $0 = $$.length - 1;
 switch (yystate) {
 case 1:
 
-		grammatical.push({gram: "<ini> ::= <instructions> EOF", rule: "ini.val = instructions.list"});
+		grammatical.push({gram: "&ltini&gt ::= &ltinstructions&gt EOF", rule: "ini.val = instructions.list"});
 	    return $$[$0-1];
 	
 break;
 case 2:
  
-		grammatical.push({gram: "<instructions> ::= <instructions> <instruction>", rule: "instructions.list = add(instructions1.list, instruction.val)"});
+		grammatical.push({gram: "&ltinstructions&gt ::= &ltinstructions&gt &ltinstruction&gt", rule: "instructions.list = add(instructions1.list, instruction.val)"});
 		$$[$0-1].push($$[$0]); this.$ = $$[$0-1]; 
 	
 break;
 case 3:
  
-		grammatical.push({gram: "<instructions> ::= <instruction>", rule: "instructions.list = [instruction.val]"});
+		grammatical.push({gram: "&ltinstructions&gt ::= &ltinstruction&gt", rule: "instructions.list = [instruction.val]"});
 		if($$[$0] === null) { this.$ = []; } else { this.$ = [$$[$0]]; } 
 	
 break;
 case 4:
  
-		grammatical.push({gram: "<instruction> ::= <declaration> <ptcommP>", rule: "instruction.val = declaration.val"});
+		grammatical.push({gram: "&ltinstruction&gt ::= &ltdeclaration&gt &ltptcommP&gt", rule: "instruction.val = declaration.val"});
 		this.$ = $$[$0-1]; 
 	
 break;
 case 5:
  
-		grammatical.push({gram: "<instruction> ::= <assignment> <ptcommP>", rule: "instruction.val = assignment.val"});
+		grammatical.push({gram: "&ltinstruction&gt ::= &ltassignment&gt &ltptcommP&gt", rule: "instruction.val = assignment.val"});
 		this.$ = $$[$0-1]; 
 	
 break;
 case 6:
  
-		grammatical.push({gram: "<instruction> ::= <declaration_array> <ptcommP>", rule: "instruction.val = declaration_array.val"});
+		grammatical.push({gram: "&ltinstruction&gt ::= &ltdeclaration_array&gt &ltptcommP&gt", rule: "instruction.val = declaration_array.val"});
 		this.$ = $$[$0-1]; 
 	
 break;
 case 7:
  
-		grammatical.push({gram: "<instruction> ::= <assignment_array> <ptcommP>", rule: "instruction.val = assignment_array.val"});
+		grammatical.push({gram: "&ltinstruction&gt ::= &ltassignment_array&gt &ltptcommP&gt", rule: "instruction.val = assignment_array.val"});
 		this.$ = $$[$0-1]; 
 	
 break;
 case 8:
  
-		grammatical.push({gram: "<instruction> ::= <prod_print> <ptcommP>", rule: "instruction.val = prod_print.val"});
+		grammatical.push({gram: "&ltinstruction&gt ::= &ltprod_print&gt &ltptcommP&gt", rule: "instruction.val = prod_print.val"});
 		this.$ = $$[$0-1]; 
 	
 break;
 case 9:
  
-		grammatical.push({gram: "<instruction> ::= <inc_dec> <ptcommP>", rule: "instruction.val = inc_dec.val"});
+		grammatical.push({gram: "&ltinstruction&gt ::= &ltinc_dec&gt &ltptcommP&gt", rule: "instruction.val = inc_dec.val"});
 		this.$ = $$[$0-1]; 
 	
 break;
 case 10:
  
-		grammatical.push({gram: "<instruction> ::= <prod_if>", rule: "instruction.val = prod_if.val"});
+		grammatical.push({gram: "&ltinstruction&gt ::= &ltprod_if&gt", rule: "instruction.val = prod_if.val"});
 		this.$ = $$[$0]; 
 	
 break;
 case 11:
  
-		grammatical.push({gram: "<instruction> ::= <prod_loops>", rule: "instruction.val = prod_loops.val"});
+		grammatical.push({gram: "&ltinstruction&gt ::= &ltprod_loops&gt", rule: "instruction.val = prod_loops.val"});
 		this.$ = $$[$0]; 
 	
 break;
 case 12:
  
-		grammatical.push({gram: "<instruction> ::= <prod_switch>", rule: "instruction.val = switch.val"});
+		grammatical.push({gram: "&ltinstruction&gt ::= &ltprod_switch&gt", rule: "instruction.val = switch.val"});
 		this.$ = $$[$0]; 
 	
 break;
 case 13:
  
-		grammatical.push({gram: "<instruction> ::= <transfer_prod> <ptcommP>", rule: "instruction.val = transfer_prod.val"});
+		grammatical.push({gram: "&ltinstruction&gt ::= &lttransfer_prod&gt &ltptcommP&gt", rule: "instruction.val = transfer_prod.val"});
 		this.$ = $$[$0-1]; 
 	
 break;
 case 14:
  
-		grammatical.push({gram: "<instruction> ::= <prod_ternary> <ptcommP>", rule: "instruction.val = prod_ternary.val"});
+		grammatical.push({gram: "&ltinstruction&gt ::= &ltprod_ternary&gt &ltptcommP&gt", rule: "instruction.val = prod_ternary.val"});
 		this.$ = $$[$0-1]; 
 	
 break;
 case 15:
  
-		grammatical.push({gram: "<instruction> ::= <functions>", rule: "instruction.val = functions.val"});
+		grammatical.push({gram: "&ltinstruction&gt ::= &ltfunctions&gt", rule: "instruction.val = functions.val"});
 		this.$ = $$[$0]; 
 	
 break;
 case 16:
  
-		grammatical.push({gram: "<instruction> ::= <call_function> <ptcommP>", rule: "instruction.val = call_function.val"});
+		grammatical.push({gram: "&ltinstruction&gt ::= &ltcall_function&gt &ltptcommP&gt", rule: "instruction.val = call_function.val"});
 		this.$ = $$[$0-1]; 
 	
 break;
 case 17:
  
-		grammatical.push({gram: "<instruction> ::= <struct> <ptcommP>", rule: "instruction.val = struct.val"});
+		grammatical.push({gram: "&ltinstruction&gt ::= &ltstruct&gt &ltptcommP&gt", rule: "instruction.val = struct.val"});
 		this.$ = $$[$0-1]; 
 	
 break;
 case 18:
  
-		grammatical.push({gram: "<instruction> ::= <native_strings> <ptcommP>", rule: "instruction.val = native_strings.val"});
+		grammatical.push({gram: "&ltinstruction&gt ::= &ltnative_strings&gt &ltptcommP&gt", rule: "instruction.val = native_strings.val"});
 		this.$ = $$[$0-1]; 
 	
 break;
 case 19:
  
-		grammatical.push({gram: "<instruction> ::= <native_function> <ptcommP>", rule: "instruction.val = native_function.val"});
+		grammatical.push({gram: "&ltinstruction&gt ::= &ltnative_function&gt &ltptcommP&gt", rule: "instruction.val = native_function.val"});
 		this.$ = $$[$0-1]; 
 	
 break;
 case 20:
  
-		grammatical.push({gram: "<instruction> ::= <native_array_push> <ptcommP>", rule: "instruction.val = native_array_push.val"});
+		grammatical.push({gram: "&ltinstruction&gt ::= &ltnative_array_push&gt &ltptcommP&gt", rule: "instruction.val = native_array_push.val"});
 		this.$ = $$[$0-1]; 
 	
 break;
 case 21:
  
-		grammatical.push({gram: "<instruction> ::= <native_array_pop> <ptcommP>", rule: "instruction.val = native_array_pop.val"});
+		grammatical.push({gram: "&ltinstruction&gt ::= &ltnative_array_pop&gt &ltptcommP&gt", rule: "instruction.val = native_array_pop.val"});
 		this.$ = $$[$0-1]; 
 	
 break;
 case 22:
  
-		grammatical.push({gram: "<instruction> ::= <native_ts> <ptcommP>", rule: "instruction.val = native_ts.val"});
+		grammatical.push({gram: "&ltinstruction&gt ::= &ltnative_ts&gt &ltptcommP&gt", rule: "instruction.val = native_ts.val"});
 		this.$ = $$[$0-1]; 
 	
 break;
 case 23:
  
-		grammatical.push({gram: "<instruction> ::= <assignment_struct> <ptcommP>", rule: "instruction.val = assignment_struct.val"});
+		grammatical.push({gram: "&ltinstruction&gt ::= &ltassignment_struct&gt &ltptcommP&gt", rule: "instruction.val = assignment_struct.val"});
 		this.$ = $$[$0-1]; 
 	
 break;
@@ -293,837 +293,837 @@ case 24:
 break;
 case 25:
 
-		grammatical.push({gram: "<ptcommP> ::= ';'", rule: "ptcommP.val = ;"});
+		grammatical.push({gram: "&ltptcommP&gt ::= ';'", rule: "ptcommP.val = ;"});
 		this.$ = $$[$0];
 	
 break;
 case 26:
  
-		grammatical.push({gram: "<declaration> ::= <type> identifier '=' <expression>", rule: "declaration.val = new Declaration(type.val, identifier.lexval, expression.val)"});
+		grammatical.push({gram: "&ltdeclaration&gt ::= &lttype&gt identifier '=' &ltexpression&gt", rule: "declaration.val = new Declaration(type.val, identifier.lexval, expression.val)"});
 		this.$ = new Declaration([$$[$0-2]], $$[$0-3], _$[$0-3].first_line, _$[$0-3].first_column, $$[$0]); 
 	
 break;
 case 27:
  
-		grammatical.push({gram: "<declaration> ::= <type> <list_id>", rule: "declaration.val = new Declaration(type.val, list_id.list)"});
+		grammatical.push({gram: "&ltdeclaration&gt ::= &lttype&gt &ltlist_id&gt", rule: "declaration.val = new Declaration(type.val, list_id.list)"});
 		this.$ = new Declaration($$[$0], $$[$0-1], this._$.first_line, this._$.first_column); 
 	
 break;
 case 28:
  
-		grammatical.push({gram: "<declaration> ::= identifier identifier '=' <expression>", rule: "declaration.val = new Declaration(identifier1.lexval, identifier2.lexval, expression.val)"});
+		grammatical.push({gram: "&ltdeclaration&gt ::= identifier identifier '=' &ltexpression&gt", rule: "declaration.val = new Declaration(identifier1.lexval, identifier2.lexval, expression.val)"});
 		this.$ = new Declaration([$$[$0-2], $$[$0-3]], type.STRUCT, this._$.first_line, this._$.first_column, $$[$0]); 
 	
 break;
 case 29:
  
-		grammatical.push({gram: "<list_id> ::= <list_id> ',' identifier", rule: "list_id.list = add(list_id1.list, identifier.lexval)"});
+		grammatical.push({gram: "&ltlist_id&gt ::= &ltlist_id&gt ',' identifier", rule: "list_id.list = add(list_id1.list, identifier.lexval)"});
 		this.$ = $$[$0-2]; this.$.push($$[$0]); 
 	
 break;
 case 30:
  
-		grammatical.push({gram: "<list_id> ::= identifier", rule: "list_id.list = [identifier.lexval]"});
+		grammatical.push({gram: "&ltlist_id&gt ::= identifier", rule: "list_id.list = [identifier.lexval]"});
 		this.$ = []; this.$.push($$[$0]); 
 	
 break;
 case 31:
  
-		grammatical.push({gram: "<assignment> ::= identifier '=' <expression>", rule: "assignment.val = new Assignmt(identifier.lexval, expression.val)"});
+		grammatical.push({gram: "&ltassignment&gt ::= identifier '=' &ltexpression&gt", rule: "assignment.val = new Assignmt(identifier.lexval, expression.val)"});
 		this.$ = new Assignment($$[$0-2], $$[$0], this._$.first_line, this._$.first_column); 
 	
 break;
 case 32:
  
-		grammatical.push({gram: "<assignment> ::= identifier '=' <values_array>", rule: "assignment.val = new Assignmt(identifier.lexval, values_array.list)"});
+		grammatical.push({gram: "&ltassignment&gt ::= identifier '=' &ltvalues_array&gt", rule: "assignment.val = new Assignmt(identifier.lexval, values_array.list)"});
 		this.$ = new Assignment($$[$0-2], new Values_array($$[$0], this._$.first_line, this._$.first_column), this._$.first_line, this._$.first_column); 
 	
 break;
 case 33:
  
-		grammatical.push({gram: "<declaration_array> ::= <type> '[' ']' identifier '=' <values_array>", rule: "declaration_array.val = new Declaration_array(type.val, identifier1.lexval, values_array.list)"});
+		grammatical.push({gram: "&ltdeclaration_array&gt ::= &lttype&gt '[' ']' identifier '=' &ltvalues_array&gt", rule: "declaration_array.val = new Declaration_array(type.val, identifier1.lexval, values_array.list)"});
 		this.$ = new Declaration_array($$[$0-2], $$[$0-5], null, $$[$0], this._$.first_line, this._$.first_column); 
 	
 break;
 case 34:
  
-		grammatical.push({gram: "<declaration_array> ::= <type> '[' ']' identifier '=' identifier", rule: "declaration_array.val = new Declaration_array(type.val, identifier1.lexval, identifier2.lexval)"});
+		grammatical.push({gram: "&ltdeclaration_array&gt ::= &lttype&gt '[' ']' identifier '=' identifier", rule: "declaration_array.val = new Declaration_array(type.val, identifier1.lexval, identifier2.lexval)"});
 		this.$ = new Declaration_array($$[$0-2], $$[$0-5], new Identifier($$[$0], this._$.first_line, this._$.first_column), [], this._$.first_line, this._$.first_column); 
 	
 break;
 case 35:
  
-		grammatical.push({gram: "<declaration_array> ::= <type> '[' ']' identifier '=' '#' identifier", rule: "declaration_array.val = new Declaration_array(type.val, identifier1.lexval, identifier2.lexval)"});
+		grammatical.push({gram: "&ltdeclaration_array&gt ::= &lttype&gt '[' ']' identifier '=' '#' identifier", rule: "declaration_array.val = new Declaration_array(type.val, identifier1.lexval, identifier2.lexval)"});
 		this.$ = new Declaration_array($$[$0-3], $$[$0-6], new Identifier($$[$0], this._$.first_line, this._$.first_column), [], this._$.first_line, this._$.first_column, false); 
 	
 break;
 case 36:
  
-		grammatical.push({gram: "<values_array> ::= '[' <list_values_array> ']'", rule: "values_array.list = list_values_array.list"});
+		grammatical.push({gram: "&ltvalues_array&gt ::= '[' &ltlist_values_array&gt ']'", rule: "values_array.list = list_values_array.list"});
 		this.$ = $$[$0-1]; 
 	
 break;
 case 37:
  
-		grammatical.push({gram: "<values_array> ::= '[' ']'", rule: "values_array.list = []"});
+		grammatical.push({gram: "&ltvalues_array&gt ::= '[' ']'", rule: "values_array.list = []"});
 		this.$ = []; 
 	
 break;
 case 38:
  
-		grammatical.push({gram: "<list_values_array> ::= <list_values_array> ',' <values>", rule: "list_values_array.list = add(list_values_array1.list, values.val)"});
+		grammatical.push({gram: "&ltlist_values_array&gt ::= &ltlist_values_array&gt ',' &ltvalues&gt", rule: "list_values_array.list = add(list_values_array1.list, values.val)"});
 		$$[$0-2].push($$[$0]); this.$ = $$[$0-2];
 	
 break;
 case 39:
  
-		grammatical.push({gram: "<list_values_array> ::= <values>", rule: "list_values_array.list = [values.val]"});
+		grammatical.push({gram: "&ltlist_values_array&gt ::= &ltvalues&gt", rule: "list_values_array.list = [values.val]"});
 		this.$ = [$$[$0]]; 
 	
 break;
 case 40:
  
-		grammatical.push({gram: "<values> ::= <expression>", rule: "values.val = expression.val"});
+		grammatical.push({gram: "&ltvalues&gt ::= &ltexpression&gt", rule: "values.val = expression.val"});
 		this.$ = $$[$0]; 
 	
 break;
 case 41:
  
-		grammatical.push({gram: "<values> ::= <values_array>", rule: "values.val = values_array.list"});
+		grammatical.push({gram: "&ltvalues&gt ::= &ltvalues_array&gt", rule: "values.val = values_array.list"});
 		this.$ = $$[$0]; 
 	
 break;
 case 42:
  
-		grammatical.push({gram: "<assignment_array> ::= identifier <list_brackets> '=' <expression>", rule: "assignment_array.val = new accessArra(identifier.lexval, list_bracktes.list, expression.val)"});
+		grammatical.push({gram: "&ltassignment_array&gt ::= identifier &ltlist_brackets&gt '=' &ltexpression&gt", rule: "assignment_array.val = new accessArra(identifier.lexval, list_bracktes.list, expression.val)"});
 		this.$ = new Access_array(new Identifier($$[$0-3], this._$.first_line, this._$.first_column), $$[$0-2], $$[$0], this._$.first_line, this._$.first_column); 
 	
 break;
 case 43:
  
-		grammatical.push({gram: "<list_brackets> ::= <list_brackets> <brackets>", rule: "list_brackets.list = add(list_brackets1.list, brackets.val)"});
+		grammatical.push({gram: "&ltlist_brackets&gt ::= &ltlist_brackets&gt &ltbrackets&gt", rule: "list_brackets.list = add(list_brackets1.list, brackets.val)"});
 		$$[$0-1].push($$[$0]); this.$ = $$[$0-1]; 
 	
 break;
 case 44:
  
-		grammatical.push({gram: "<list_brackets> ::= <brackets>", rule: "list_brackets.list = [brackets.val]"});
+		grammatical.push({gram: "&ltlist_brackets&gt ::= &ltbrackets&gt", rule: "list_brackets.list = [brackets.val]"});
 		this.$ = [$$[$0]]; 
 	
 break;
 case 45:
  
-		grammatical.push({gram: "<brackets> ::= '[' <expression> ']'", rule: "bracktes.val = expression.val"});
+		grammatical.push({gram: "&ltbrackets&gt ::= '[' &ltexpression&gt ']'", rule: "bracktes.val = expression.val"});
 		this.$ = $$[$0-1]; 
 	
 break;
 case 46:
 
-		grammatical.push({gram: "<range> ::= identifier '[' <expression_range> ':' <expression_range> ']'", rule: "range.val = new Range(identifier.lexval, expression_range1.val, expression_range2.val)"});
+		grammatical.push({gram: "&ltrange&gt ::= identifier '[' &ltexpression_range&gt ':' &ltexpression_range&gt ']'", rule: "range.val = new Range(identifier.lexval, expression_range1.val, expression_range2.val)"});
 		this.$ = new Range(new Identifier($$[$0-5], this._$.first_line, this._$.first_column), $$[$0-3], $$[$0-1], this._$.first_line, this._$.first_column);
 	
 break;
 case 47:
  
-		grammatical.push({gram: "<expression_range> ::= <expression>", rule: "expression_range.val = expression.val"});
+		grammatical.push({gram: "&ltexpression_range&gt ::= &ltexpression&gt", rule: "expression_range.val = expression.val"});
 		this.$ = $$[$0] 
 	
 break;
 case 48:
  
-		grammatical.push({gram: "<expression_range> ::= 'begin'", rule: "expression_range.val = begin"});
+		grammatical.push({gram: "&ltexpression_range&gt ::= 'begin'", rule: "expression_range.val = begin"});
 		this.$ = $$[$0] 
 	
 break;
 case 49:
  
-		grammatical.push({gram: "<expression_range> ::= 'end'", rule: "expression_range.val = end"});
+		grammatical.push({gram: "&ltexpression_range&gt ::= 'end'", rule: "expression_range.val = end"});
 		this.$ = $$[$0] 
 	
 break;
 case 50:
 
-		grammatical.push({gram: "<prod_print> ::= 'print' '(' <list_values_array> ')'", rule: "prod_print.val = new Print(list_values_array.list)"});
+		grammatical.push({gram: "&ltprod_print&gt ::= 'print' '(' &ltlist_values_array&gt ')'", rule: "prod_print.val = new Print(list_values_array.list)"});
         this.$ = new Print($$[$0-1], _$[$0-3].first_line, _$[$0-3].first_column, false);
     
 break;
 case 51:
  
-		grammatical.push({gram: "<prod_print> ::= 'println' '(' <list_values_array> ')'", rule: "prod_print.val = new Print(list_values_array.list)"});	
+		grammatical.push({gram: "&ltprod_print&gt ::= 'println' '(' &ltlist_values_array&gt ')'", rule: "prod_print.val = new Print(list_values_array.list)"});	
 		this.$ = new Print($$[$0-1], _$[$0-3].first_line, _$[$0-3].first_column); 
 	
 break;
 case 52:
  
-		grammatical.push({gram: "<inc_dec> ::= identifier '++'", rule: "inc_dec.val = identifier.lexval ++"});
+		grammatical.push({gram: "&ltinc_dec&gt ::= identifier '++'", rule: "inc_dec.val = identifier.lexval ++"});
 		this.$ = new Inc_Dec(new Arithmetic(new Identifier($$[$0-1], this._$.first_line, this._$.first_column), null, Arithmetic_operator.INC, this._$.first_line, this._$.first_column), this._$.first_line, this._$.first_column); 
 	
 break;
 case 53:
  
-		grammatical.push({gram: "<inc_dec> ::= identifier '--'", rule: "inc_dec.val = identifier.lexval --"});
+		grammatical.push({gram: "&ltinc_dec&gt ::= identifier '--'", rule: "inc_dec.val = identifier.lexval --"});
 		this.$ = new Inc_Dec(new Arithmetic(new Identifier($$[$0-1], this._$.first_line, this._$.first_column), null, Arithmetic_operator.DEC, this._$.first_line, this._$.first_column), this._$.first_line, this._$.first_column); 
 	
 break;
 case 54:
 
-		grammatical.push({gram: "<prod_if> ::= 'if' '(' <expression> ')' '{' <instructions> '}'", rule: "prod_if.val = new If(expression.val, instrucctions1.list)"});
+		grammatical.push({gram: "&ltprod_if&gt ::= 'if' '(' &ltexpression&gt ')' '{' &ltinstructions&gt '}'", rule: "prod_if.val = new If(expression.val, instrucctions1.list)"});
         this.$ = new If($$[$0-4], $$[$0-1], null, null, _$[$0-6].first_line, _$[$0-6].first_column);
     
 break;
 case 55:
 
-		grammatical.push({gram: "<prod_if> ::= 'if' '(' <expression> ')' '{' <instructions> '}' 'else' '{' <instructions> '}'", rule: "prod_if.val = new If(expression.val, instrucctions1.list, instructions2.list)"});
+		grammatical.push({gram: "&ltprod_if&gt ::= 'if' '(' &ltexpression&gt ')' '{' &ltinstructions&gt '}' 'else' '{' &ltinstructions&gt '}'", rule: "prod_if.val = new If(expression.val, instrucctions1.list, instructions2.list)"});
         this.$ = new If($$[$0-8], $$[$0-5], $$[$0-1], null, _$[$0-10].first_line, _$[$0-10].first_column);
     
 break;
 case 56:
 
-		grammatical.push({gram: "<prod_if> ::= 'if' '(' <expression> ')' '{' <instructions> '}' 'else' <prod_if>", rule: "prod_if.val = new If(expression.val, instrucctions1.list, prod_if1.val)"});
+		grammatical.push({gram: "&ltprod_if&gt ::= 'if' '(' &ltexpression&gt ')' '{' &ltinstructions&gt '}' 'else' &ltprod_if&gt", rule: "prod_if.val = new If(expression.val, instrucctions1.list, prod_if1.val)"});
         this.$ = new If($$[$0-6], $$[$0-3], null, $$[$0], _$[$0-8].first_line, _$[$0-8].first_column);
     
 break;
 case 57:
 
-		grammatical.push({gram: "<prod_if> ::= 'if' '(' <expression> ')' <instruction> ", rule: "prod_if.val = new If(expression.val, instrucction.list)"});
+		grammatical.push({gram: "&ltprod_if&gt ::= 'if' '(' &ltexpression&gt ')' &ltinstruction&gt ", rule: "prod_if.val = new If(expression.val, instrucction.list)"});
         this.$ = new If($$[$0-2], [$$[$0]], null, null, _$[$0-4].first_line, _$[$0-4].first_column);
     
 break;
 case 58:
  
-		grammatical.push({gram: "<prod_loops> ::= <prod_while>", rule: "prod_loops.val = prod_while.val"});
+		grammatical.push({gram: "&ltprod_loops&gt ::= &ltprod_while&gt", rule: "prod_loops.val = prod_while.val"});
 		this.$ = $$[$0]; 
 	
 break;
 case 59:
  
-		grammatical.push({gram: "<prod_loops> ::= <for_prod>", rule: "prod_loops.val = for_prod.val"});
+		grammatical.push({gram: "&ltprod_loops&gt ::= &ltfor_prod&gt", rule: "prod_loops.val = for_prod.val"});
 		this.$ = $$[$0]; 
 	
 break;
 case 60:
  
-		grammatical.push({gram: "<prod_loops> ::= <do_prod>", rule: "prod_loops.val = do_prod.val"});
+		grammatical.push({gram: "&ltprod_loops&gt ::= &ltdo_prod&gt", rule: "prod_loops.val = do_prod.val"});
 		this.$ = $$[$0]; 
 	
 break;
 case 61:
 
-		grammatical.push({gram: "<prod_while> ::= 'while' '(' <expression> ')' '{' <instructions '}'", rule: "prod_while.val = new While(expression.val, instructions.list)"});
+		grammatical.push({gram: "&ltprod_while&gt ::= 'while' '(' &ltexpression&gt ')' '{' &ltinstructions '}'", rule: "prod_while.val = new While(expression.val, instructions.list)"});
         this.$ = new While($$[$0-4], $$[$0-1], _$[$0-6].first_line, _$[$0-6].first_column);
     
 break;
 case 62:
 
-		grammatical.push({gram: "<do_prod> ::= 'do' '{' <instructions> '}' 'while' '(' <expression> ')' <ptcommP>", rule: "do_prod.val = new Do(instructions.list, expression.val)"});
+		grammatical.push({gram: "&ltdo_prod&gt ::= 'do' '{' &ltinstructions&gt '}' 'while' '(' &ltexpression&gt ')' &ltptcommP&gt", rule: "do_prod.val = new Do(instructions.list, expression.val)"});
         this.$ = new DoWhile($$[$0-2], $$[$0-6], _$[$0-8].first_line, _$[$0-8].first_column);
     
 break;
 case 63:
 
-		grammatical.push({gram: "<prod_switch> ::= 'switch' '(' <expression> ')' '{' <prod_default> '}'", rule: "prod_switch.val = new Switch(expression.val, prod_default.list)"});
+		grammatical.push({gram: "&ltprod_switch&gt ::= 'switch' '(' &ltexpression&gt ')' '{' &ltprod_default&gt '}'", rule: "prod_switch.val = new Switch(expression.val, prod_default.list)"});
         this.$ = new Switch($$[$0-4], null, $$[$0-1], _$[$0-6].first_line, _$[$0-6].first_column);
     
 break;
 case 64:
 
-		grammatical.push({gram: "<prod_switch> ::= 'switch' '(' <expression> ')' '{' <list_cases> '}'", rule: "prod_switch.val = new Switch(expression.val, list_cases.list)"});
+		grammatical.push({gram: "&ltprod_switch&gt ::= 'switch' '(' &ltexpression&gt ')' '{' &ltlist_cases&gt '}'", rule: "prod_switch.val = new Switch(expression.val, list_cases.list)"});
             this.$ = new Switch($$[$0-4], $$[$0-1], null, _$[$0-6].first_line, _$[$0-6].first_column);
     
 break;
 case 65:
 
-		grammatical.push({gram: "<prod_switch> ::= 'switch' '(' <expression> ')' '{' <list_cases> <prod_default> '}'", rule: "prod_switch.val = new Switch(expression.val, list_cases.list, prod_default.list)"});
+		grammatical.push({gram: "&ltprod_switch&gt ::= 'switch' '(' &ltexpression&gt ')' '{' &ltlist_cases&gt &ltprod_default&gt '}'", rule: "prod_switch.val = new Switch(expression.val, list_cases.list, prod_default.list)"});
             this.$ = new Switch($$[$0-5], $$[$0-2], $$[$0-1], _$[$0-7].first_line, _$[$0-7].first_column);
     
 break;
 case 66:
  
-		grammatical.push({gram: "<prod_default> ::= 'default' ':' <instructions>", rule: "prod_default.list = instructions.list"});
+		grammatical.push({gram: "&ltprod_default&gt ::= 'default' ':' &ltinstructions&gt", rule: "prod_default.list = instructions.list"});
 		this.$ = $$[$0]; 
 	
 break;
 case 67:
  
-		grammatical.push({gram: "<list_cases> ::= <list_cases> <case>", rule: "list_cases.list = add(list_cases1.list, case.val)"});
+		grammatical.push({gram: "&ltlist_cases&gt ::= &ltlist_cases&gt &ltcase&gt", rule: "list_cases.list = add(list_cases1.list, case.val)"});
 		($$[$0] != null) ? $$[$0-1].push($$[$0]) : null; this.$ = $$[$0-1]; 
 	
 break;
 case 68:
  
-		grammatical.push({gram: "<list_cases> ::= <case>", rule: "list_case.list = [case.val]"});
+		grammatical.push({gram: "&ltlist_cases&gt ::= &ltcase&gt", rule: "list_case.list = [case.val]"});
 		this.$ = ($$[$0] == null) ? [] : [$$[$0]] 
 	
 break;
 case 69:
 
-		grammatical.push({gram: "<case> ::= 'case' <expression> ':' <instructions>", rule: "case.val = new Case(expression.val, insturctions.list)"});
+		grammatical.push({gram: "&ltcase&gt ::= 'case' &ltexpression&gt ':' &ltinstructions&gt", rule: "case.val = new Case(expression.val, insturctions.list)"});
         this.$ = new Case($$[$0-2], $$[$0], _$[$0-3].first_line, _$[$0-3].first_column);
     
 break;
 case 70:
 
-		grammatical.push({gram: "<transfer_prod> ::= 'break'", rule: "transfer_prod.val = new Break()"}); 
+		grammatical.push({gram: "&lttransfer_prod&gt ::= 'break'", rule: "transfer_prod.val = new Break()"}); 
 		this.$ = new Break(_$[$0].first_line, _$[$0].first_column); 
 	
 break;
 case 71:
 
-		grammatical.push({gram: "<transfer_prod> 'return'::= ", rule: "transfer_prod.val = new Return(expression.val)"}); 
+		grammatical.push({gram: "&lttransfer_prod&gt 'return'::= ", rule: "transfer_prod.val = new Return(expression.val)"}); 
 		this.$ = new Return($$[$0], _$[$0-1].first_line, _$[$0-1].first_column); 
 	
 break;
 case 72:
 
-		grammatical.push({gram: "<transfer_prod> ::= 'return'", rule: "transfer_prod.val = new Return()"}); 
+		grammatical.push({gram: "&lttransfer_prod&gt ::= 'return'", rule: "transfer_prod.val = new Return()"}); 
 		this.$ = new Return(null, _$[$0].first_line, _$[$0].first_column); 
 	
 break;
 case 73:
 
-		grammatical.push({gram: "<transfer_prod> ::= 'continue'", rule: "transfer_prod.val = new Continue();"}); 
+		grammatical.push({gram: "&lttransfer_prod&gt ::= 'continue'", rule: "transfer_prod.val = new Continue();"}); 
 		this.$ = new Continue(_$[$0].first_line, _$[$0].first_column); 
 	
 break;
 case 74:
  
-		grammatical.push({gram: "<for_prod> ::= <for_it>", rule: "for_prod.val = for_it.val"});
+		grammatical.push({gram: "&ltfor_prod&gt ::= &ltfor_it&gt", rule: "for_prod.val = for_it.val"});
 		this.$ = $$[$0]; 
 	
 break;
 case 75:
  
-		grammatical.push({gram: "<for_prod> ::= <for_in>", rule: "for_prod.val = for_in.val"});
+		grammatical.push({gram: "&ltfor_prod&gt ::= &ltfor_in&gt", rule: "for_prod.val = for_in.val"});
 		this.$ = $$[$0]; 
 	
 break;
 case 76:
 
-		grammatical.push({gram: "<for_it> ::= 'for' '(' <for_init> ';' <expression> ';' <for_step> ')' '{' <instructions> '}'",
+		grammatical.push({gram: "&ltfor_it&gt ::= 'for' '(' &ltfor_init&gt ';' &ltexpression&gt ';' &ltfor_step&gt ')' '{' &ltinstructions&gt '}'",
 		rule: "fro_it.val = new For(for_init.val, expression.val, for_step.val, instructions.list)"});
         this.$ = new For($$[$0-8], $$[$0-6], $$[$0-4], $$[$0-1], _$[$0-10].first_line, _$[$0-10].first_column);
     
 break;
 case 77:
 
-		grammatical.push({gram: "<for_in> ::= 'for' identifier 'in' <expression> '{' <instructions> '}'", rule: "for_in.val = new Forin(identifier.lexval, expression.val, instructions.list)"});
+		grammatical.push({gram: "&ltfor_in&gt ::= 'for' identifier 'in' &ltexpression&gt '{' &ltinstructions&gt '}'", rule: "for_in.val = new Forin(identifier.lexval, expression.val, instructions.list)"});
         this.$ = new ForIn($$[$0-5], $$[$0-3], $$[$0-1], _$[$0-6].first_line, _$[$0-6].first_column);
     
 break;
 case 78:
 
-		grammatical.push({gram: "<for_in> ::= 'for' identifier 'in' <values_array> '{' <instructions> '}'", rule: "for_in.val = new Forin(identifier.lexval, values_array.list, instructions.list)"});
+		grammatical.push({gram: "&ltfor_in&gt ::= 'for' identifier 'in' &ltvalues_array&gt '{' &ltinstructions&gt '}'", rule: "for_in.val = new Forin(identifier.lexval, values_array.list, instructions.list)"});
 		this.$ = new ForIn($$[$0-5], new Values_array($$[$0-3], this._$.first_line, this._$.first_column), $$[$0-1], this._$.first_line, this._$.first_column);
 	
 break;
 case 79:
  
-		grammatical.push({gram: "<for_init> ::= <declaration>", rule: "for_init.val = declaration.val"});
+		grammatical.push({gram: "&ltfor_init&gt ::= &ltdeclaration&gt", rule: "for_init.val = declaration.val"});
 		this.$ = $$[$0]; 
 	
 break;
 case 80:
  
-		grammatical.push({gram: "<for_init> ::= <assignment>", rule: "for_init.val = assignment.val"});
+		grammatical.push({gram: "&ltfor_init&gt ::= &ltassignment&gt", rule: "for_init.val = assignment.val"});
 		this.$ = $$[$0]; 
 	
 break;
 case 81:
  
-		grammatical.push({gram: "<for_step> ::= <inc_dec>", rule: "for_step.val = inc_dec.val"});
+		grammatical.push({gram: "&ltfor_step&gt ::= &ltinc_dec&gt", rule: "for_step.val = inc_dec.val"});
 		this.$ = $$[$0]; 
 	
 break;
 case 82:
  
-		grammatical.push({gram: "<for_step> ::= <assignment>", rule: "for_step.val = assignment.val"});
+		grammatical.push({gram: "&ltfor_step&gt ::= &ltassignment&gt", rule: "for_step.val = assignment.val"});
 		this.$ = $$[$0]; 
 	
 break;
 case 83:
 
-		grammatical.push({gram: "<prod_ternary> ::= '(' <expression> ')' '?' <expression> ':' <expression>", rule: "prod_ternary.val = new Ternary(expression1.val, expression2.val, expression3.val)"});
+		grammatical.push({gram: "&ltprod_ternary&gt ::= '(' &ltexpression&gt ')' '?' &ltexpression&gt ':' &ltexpression&gt", rule: "prod_ternary.val = new Ternary(expression1.val, expression2.val, expression3.val)"});
         this.$ = new Ternary($$[$0-5], $$[$0-2], $$[$0], _$[$0-6].first_line, _$[$0-6].first_column);
     
 break;
 case 84:
  
-		grammatical.push({gram: "<functions> ::= <functions_main>", rule: "functions.val = functions_main.val"});
+		grammatical.push({gram: "&ltfunctions&gt ::= &ltfunctions_main&gt", rule: "functions.val = functions_main.val"});
 		this.$ = $$[$0]; 
 	
 break;
 case 85:
  
-		grammatical.push({gram: "<functions> ::= <functions_general>", rule: "functions.val = functions_general.val"});
+		grammatical.push({gram: "&ltfunctions&gt ::= &ltfunctions_general&gt", rule: "functions.val = functions_general.val"});
 		this.$ = $$[$0]; 
 	
 break;
 case 86:
 
-		grammatical.push({gram: "<function_main> ::= 'void' 'main' '(' ')' '{' <instructions> '}'", rule: "function_main.val = new Main(instructions.list)"});
+		grammatical.push({gram: "&ltfunction_main&gt ::= 'void' 'main' '(' ')' '{' &ltinstructions&gt '}'", rule: "function_main.val = new Main(instructions.list)"});
         this.$ = new MainInstruction($$[$0-1], _$[$0-6].first_line, _$[$0-6].first_column);
     
 break;
 case 87:
 
-		grammatical.push({gram: "<function_general> ::= <type> identifier '(' ')' '{' <instructions> '}'", rule: "function_general.val = new Function(type.val, identifier.lexvla, instructins.list)"});
+		grammatical.push({gram: "&ltfunction_general&gt ::= &lttype&gt identifier '(' ')' '{' &ltinstructions&gt '}'", rule: "function_general.val = new Function(type.val, identifier.lexvla, instructins.list)"});
         this.$ = new Function($$[$0-6], $$[$0-5], [], $$[$0-1], _$[$0-6].first_line, _$[$0-6].first_column);
     
 break;
 case 88:
 
-		grammatical.push({gram: "<function_general> ::= <type> identifier '(' <list_params> ')' '{' <instructions> '}'", rule: "function_general.val = new Function(type.val, identifier.lexvla, list_params.list, instructins.list)"});
+		grammatical.push({gram: "&ltfunction_general&gt ::= &lttype&gt identifier '(' &ltlist_params&gt ')' '{' &ltinstructions&gt '}'", rule: "function_general.val = new Function(type.val, identifier.lexvla, list_params.list, instructins.list)"});
         this.$ = new Function($$[$0-7], $$[$0-6], $$[$0-4], $$[$0-1], _$[$0-7].first_line, _$[$0-7].first_column);
     
 break;
 case 89:
 
-		grammatical.push({gram: "<function_general> ::= identifier identifier '(' ')' '{' <instructions> '}'", rule: "function_general.val = new Function(identifier1.val, identifier2.val, instruccions.list)"});
+		grammatical.push({gram: "&ltfunction_general&gt ::= identifier identifier '(' ')' '{' &ltinstructions&gt '}'", rule: "function_general.val = new Function(identifier1.val, identifier2.val, instruccions.list)"});
 		this.$ = new Function($$[$0-6], $$[$0-5], [], $$[$0], this._$.first_line, this._$.first_column);
 	
 break;
 case 90:
 
-		grammatical.push({gram: "<function_general> ::= identifier identifier '(' <list_params> ')' '{' <instructions> '}'", rule: "function_general.val = new Function(identifier1.val, identifier2.val, list_params.list, instructions.list)"});
+		grammatical.push({gram: "&ltfunction_general&gt ::= identifier identifier '(' &ltlist_params&gt ')' '{' &ltinstructions&gt '}'", rule: "function_general.val = new Function(identifier1.val, identifier2.val, list_params.list, instructions.list)"});
 		this.$ = new Function($$[$0-7], $$[$0-6], $$[$0-4], $$[$0-1], this._$.first_line, this._$.first_column);
 	
 break;
 case 91:
 
-		grammatical.push({gram: "<list_params> ::= <list_params> ',' <params>", rule: "list_params.list = add(list_params1.list, params.val)"});
+		grammatical.push({gram: "&ltlist_params&gt ::= &ltlist_params&gt ',' &ltparams&gt", rule: "list_params.list = add(list_params1.list, params.val)"});
         $$[$0-2].push($$[$0]);
         this.$ = $$[$0-2];
     
 break;
 case 92:
  
-		grammatical.push({gram: "<list_params> ::= <params>", rule: "list_params.list = [params.val]"});
+		grammatical.push({gram: "&ltlist_params&gt ::= &ltparams&gt", rule: "list_params.list = [params.val]"});
 		this.$ = [$$[$0]]; 
 	
 break;
 case 93:
 
-		grammatical.puhs({gram: "<call_function> ::= identifier '(' ')'", rule: "call_function.val = new Call(identifier.lexvla)"});
+		grammatical.puhs({gram: "&ltcall_function&gt ::= identifier '(' ')'", rule: "call_function.val = new Call(identifier.lexvla)"});
         this.$ = new Call($$[$0-2], [], _$[$0-2].first_line, _$[$0-2].first_column);
     
 break;
 case 94:
 
-		grammatical.push({gram: "<call_function> ::= identifier '(' <list_params_call> ')'", rule: "call_function.val = new Call(identifier.lexval, list_params_call.list)"});
+		grammatical.push({gram: "&ltcall_function&gt ::= identifier '(' &ltlist_params_call&gt ')'", rule: "call_function.val = new Call(identifier.lexval, list_params_call.list)"});
         this.$ = new Call($$[$0-3], $$[$0-1], _$[$0-3].first_line, _$[$0-3].first_column);
     
 break;
 case 95:
 
-		grammatical.push({gram: "<list_params_call> ::= <list_params_call> ',' <params_call>", rule: "list_params_call.list = add(list_params_call1.list, params_call.val)"});
+		grammatical.push({gram: "&ltlist_params_call&gt ::= &ltlist_params_call&gt ',' &ltparams_call&gt", rule: "list_params_call.list = add(list_params_call1.list, params_call.val)"});
         $$[$0-2].push($$[$0]);
         this.$ = $$[$0-2];
     
 break;
 case 96:
  
-		grammatical.push({gram: "<list_params_call> ::= <prams_call>", rule: "list_params_call.list = [prarams_call.val]"});
+		grammatical.push({gram: "&ltlist_params_call&gt ::= &ltprams_call&gt", rule: "list_params_call.list = [prarams_call.val]"});
 		this.$ = [$$[$0]]; 
 	
 break;
 case 97:
  
-		grammatical.push({gram: "<params_call> ::= <expression>", rule: "params_call.val = expression.val"});
+		grammatical.push({gram: "&ltparams_call&gt ::= &ltexpression&gt", rule: "params_call.val = expression.val"});
 		this.$ = $$[$0]; 
 	
 break;
 case 98:
  
-		grammatical.push({gram: "<params_call> ::= <values_array>", rule: "params_call.val = values_array.list"});
+		grammatical.push({gram: "&ltparams_call&gt ::= &ltvalues_array&gt", rule: "params_call.val = values_array.list"});
 		this.$ = $$[$0]; 
 	
 break;
 case 99:
 
-		grammatical.push({gram: "<params> ::= <type> identifier", rule: "prarams.val = new Param(type.val, identifier.lexval)"});
+		grammatical.push({gram: "&ltparams&gt ::= &lttype&gt identifier", rule: "prarams.val = new Param(type.val, identifier.lexval)"});
         this.$ = { type: $$[$0-1], name: $$[$0], row: this._$.first_line, column: this._$.first_column };
     
 break;
 case 100:
  
-		grammatical.push({gram: "<params> ::= <type> '[' ']' identifier", rule: "params.val = new Param(type.val, identifier.lexval"});
+		grammatical.push({gram: "&ltparams&gt ::= &lttype&gt '[' ']' identifier", rule: "params.val = new Param(type.val, identifier.lexval"});
 		this.$ = { type: type.ARRAY, sub_type: $$[$0-3], name: $$[$0], row: this._$.first_line, column: this._$.first_column }; 
 	
 break;
 case 101:
  
-		grammatical.push({gram: "<params> ::= identifier identifier", rule: "params.val = new Param(identifier.val, identifier.val)"});
+		grammatical.push({gram: "&ltparams&gt ::= identifier identifier", rule: "params.val = new Param(identifier.val, identifier.val)"});
 		this.$ = { type: type.STRUCT, struct: $$[$0-1], name: $$[$0], row: this._$.first_line, column: this._$.first_column}; 
 	
 break;
 case 102:
  
-		grammatical.push({gram: "<struct> ::= 'struct' identifier, '{' <attribute_list> '}'", rule: "struct.val = new Struct(identifier.val, attribute_list.list)"});
+		grammatical.push({gram: "&ltstruct&gt ::= 'struct' identifier, '{' &ltattribute_list&gt '}'", rule: "struct.val = new Struct(identifier.val, attribute_list.list)"});
 		this.$ = new Struct($$[$0-3], $$[$0-1], this._$.first_line, this._$.first_column); 
 	
 break;
 case 103:
  
-		grammatical.push({gram: "<attribute_list> ::= <attribute_list> ',' <attribute>", rule: "attribute_list.list = add(attributes_list.list, attribute.val)"});
+		grammatical.push({gram: "&ltattribute_list&gt ::= &ltattribute_list&gt ',' &ltattribute&gt", rule: "attribute_list.list = add(attributes_list.list, attribute.val)"});
 		$$[$0-2].push($$[$0]); this.$ = $$[$0-2]; 
 	
 break;
 case 104:
  
-		grammatical.push({gram: "<attribute_list> ::= <attribute>", rule: "attribute_list.list = [attribute.val]"});
+		grammatical.push({gram: "&ltattribute_list&gt ::= &ltattribute&gt", rule: "attribute_list.list = [attribute.val]"});
 		this.$ = [$$[$0]]; 
 	
 break;
 case 105:
  
-		grammatical.push({gram: "<attribute> ::= <type> identifier", rule: "attribute.val = new Attribute(type.val, identifier.lexval)"});
+		grammatical.push({gram: "&ltattribute&gt ::= &lttype&gt identifier", rule: "attribute.val = new Attribute(type.val, identifier.lexval)"});
 		this.$ = { "type": $$[$0-1], "id": $$[$0], "value": "null", "row": this._$.first_line, "column": this._$.first_column }; 
 	
 break;
 case 106:
  
-		grammatical.push({gram: "<attribute> ::= identifier identifier", rule: "attribute.val = new Attribute(identifier.lexval, identifier.lexval)"});
+		grammatical.push({gram: "&ltattribute&gt ::= identifier identifier", rule: "attribute.val = new Attribute(identifier.lexval, identifier.lexval)"});
 		this.$ = { "type": type.STRUCT, "struct": $$[$0-1], "id": $$[$0], "value": "null", "row": this._$.first_line, "column": this._$.first_column}; 
 	
 break;
 case 107:
  
-		grammatical.push({gram: "<attribute> ::= <type> '[' ']' identifier", rule: "attribute.val = new Attribute(type.val, identifier.lexval)"});
+		grammatical.push({gram: "&ltattribute&gt ::= &lttype&gt '[' ']' identifier", rule: "attribute.val = new Attribute(type.val, identifier.lexval)"});
 		this.$ = { "type": type.ARRAY, "sub_type": $$[$0-3], "id": $$[$0], "value": [], "row": this._$.first_line, "column": this._$.first_column}; 
 	
 break;
 case 108:
  
-		grammatical.push({gram: "<access_struct> ::= <list_attributes>", rule: "access_struct.val = new accessStruct(list_attributes.list)"});
+		grammatical.push({gram: "&ltaccess_struct&gt ::= &ltlist_attributes&gt", rule: "access_struct.val = new accessStruct(list_attributes.list)"});
 		this.$ = new Access_struct($$[$0], null, null, this._$.first_line, this._$.first_column); 
 	
 break;
 case 109:
  
-		grammatical.push({gram: "<access_struct> ::= <list_attributes> <list_brackets>", rule: "access_struct.val = new accessStruct(list_attributes.list, list_brackets.list)"});
+		grammatical.push({gram: "&ltaccess_struct&gt ::= &ltlist_attributes&gt &ltlist_brackets&gt", rule: "access_struct.val = new accessStruct(list_attributes.list, list_brackets.list)"});
 		this.$ = new Access_struct($$[$0-1], null, $$[$0], this._$.first_line, this._$.first_column); 
 	
 break;
 case 110:
  
-		grammatical.push({gram: "<assginment_struct> ::= <list_attributes> '=' <expression>", rule: "assignment_struct.val = new accessStruct(list_attributes.list, expression.val)"});
+		grammatical.push({gram: "&ltassginment_struct&gt ::= &ltlist_attributes&gt '=' &ltexpression&gt", rule: "assignment_struct.val = new accessStruct(list_attributes.list, expression.val)"});
 		this.$ = new Access_struct($$[$0-2], $$[$0], null, this._$.first_line, this._$.first_column); 
 	
 break;
 case 111:
  
-		grammatical.push({gram: "<assignment_struct> ::= <list_attributes> <list_brackets> '=' <expression>", rule: "assignment_struct.val = new accessStruct(list_attributes.list, list_brackets.list, expression.val)"});
+		grammatical.push({gram: "&ltassignment_struct&gt ::= &ltlist_attributes&gt &ltlist_brackets&gt '=' &ltexpression&gt", rule: "assignment_struct.val = new accessStruct(list_attributes.list, list_brackets.list, expression.val)"});
 		this.$ = new Access_struct($$[$0-3], $$[$0], $$[$0-2], this._$.first_line, this._$.first_column); 
 	
 break;
 case 112:
- grammatical.push({gram: "<list_attributes> ::= <list_attributes> '.' identifier", rule: "list_attributes.list = add(list_attributes.list, identifier.lexval)"}); $$[$0-2].push($$[$0]); this.$ = $$[$0-2]; 
+ grammatical.push({gram: "&ltlist_attributes&gt ::= &ltlist_attributes&gt '.' identifier", rule: "list_attributes.list = add(list_attributes.list, identifier.lexval)"}); $$[$0-2].push($$[$0]); this.$ = $$[$0-2]; 
 break;
 case 113:
- grammatical.push({gram: "<list_attributes> ::= identifier '.' identifier", rule: "list_attributes.list = [iditenfier.lexval, identifier.lexval]"}); this.$ = [$$[$0-2], $$[$0]]; 
+ grammatical.push({gram: "&ltlist_attributes&gt ::= identifier '.' identifier", rule: "list_attributes.list = [iditenfier.lexval, identifier.lexval]"}); this.$ = [$$[$0-2], $$[$0]]; 
 break;
 case 114:
- grammatical.push({gram: "<type> ::= 'int'", rule: "type.val = 'int'"}); this.$ = type.INT; 
+ grammatical.push({gram: "&lttype&gt ::= 'int'", rule: "type.val = 'int'"}); this.$ = type.INT; 
 break;
 case 115:
- grammatical.push({gram: "<type> ::= 'double'", rule: "type.val = 'double'"}); this.$ = type.DOUBLE; 
+ grammatical.push({gram: "&lttype&gt ::= 'double'", rule: "type.val = 'double'"}); this.$ = type.DOUBLE; 
 break;
 case 116:
- grammatical.push({gram: "<type> ::= 'boolean'", rule: "type.val = 'boolean'"}); this.$ = type.BOOL; 
+ grammatical.push({gram: "&lttype&gt ::= 'boolean'", rule: "type.val = 'boolean'"}); this.$ = type.BOOL; 
 break;
 case 117:
- grammatical.push({gram: "<type> ::= 'char'", rule: "type.val = 'char'"}); this.$ = type.CHAR; 
+ grammatical.push({gram: "&lttype&gt ::= 'char'", rule: "type.val = 'char'"}); this.$ = type.CHAR; 
 break;
 case 118:
- grammatical.push({gram: "<type> ::= 'String'", rule: "type.val = 'String'"}); this.$ = type.STRING; 
+ grammatical.push({gram: "&lttype&gt ::= 'String'", rule: "type.val = 'String'"}); this.$ = type.STRING; 
 break;
 case 119:
- grammatical.push({gram: "<type> ::= 'void'", rule: "type.val = 'void'"}); this.$ = type.VOID; 
+ grammatical.push({gram: "&lttype&gt ::= 'void'", rule: "type.val = 'void'"}); this.$ = type.VOID; 
 break;
 case 120:
 
-		grammatical.push({gram: "<native_string> ::= identifier '.' 'length' '(' ')'", rule: "native_string.val = new Length(identifier.lexval)"});
+		grammatical.push({gram: "&ltnative_string&gt ::= identifier '.' 'length' '(' ')'", rule: "native_string.val = new Length(identifier.lexval)"});
         this.$ = new Length(new Identifier($$[$0-4], _$[$0-4].first_line, _$[$0-4].first_column), null, "length", [], [], _$[$0-4].first_line, _$[$0-4].first_column);
     
 break;
 case 121:
 
-		grammatical.push({gram: "<native_string> ::= string '.' 'length' '(' ')'", rule: "native_string.val = new Length(string.lexval)"});
+		grammatical.push({gram: "&ltnative_string&gt ::= string '.' 'length' '(' ')'", rule: "native_string.val = new Length(string.lexval)"});
 		this.$ = new Length(new Primitive($$[$0-4], type.STRING, this._$.first_line, this._$.first_column), null, "length", [], [], this._$.first_line, this._$.first_column);
 	
 break;
 case 122:
 
-		grammatical.push({gram: "<native_string> ::= <values_array> '.' 'length' '(' ')'", rule: "native_string.val = new Length(values_array.list)"});
+		grammatical.push({gram: "&ltnative_string&gt ::= &ltvalues_array&gt '.' 'length' '(' ')'", rule: "native_string.val = new Length(values_array.list)"});
 		this.$ = new Length(new Values_array($$[$0-4], this._$.first_line, this._$.first_column), null, "length", [], [], this._$.first_line, this._$.first_column);
 	
 break;
 case 123:
 
-		grammatical.push({gram: "<native_string> ::= identifier <list_brackets> '.' 'length' '(' ')'", rule: "native_string.val = new Length(identifier.lexval, list_brackets.list)"});
+		grammatical.push({gram: "&ltnative_string&gt ::= identifier &ltlist_brackets&gt '.' 'length' '(' ')'", rule: "native_string.val = new Length(identifier.lexval, list_brackets.list)"});
 		this.$ = new Length(new Access_array(new Identifier($$[$0-5], this._$.first_line, this._$.first_column), $$[$0-4], null, this._$.first_line, this._$.first_column), null, "length", [], [], this._$.first_line, this._$.first_column);
 	
 break;
 case 124:
 
-		grammatical.push({gram: "<native_string> ::= identifier '.' 'toUppercase' '(' ')'", rule: "native_string.val = new toUpperCase(identifier.lexval)"});
+		grammatical.push({gram: "&ltnative_string&gt ::= identifier '.' 'toUppercase' '(' ')'", rule: "native_string.val = new toUpperCase(identifier.lexval)"});
         this.$ = new ToUpperCase(new Identifier($$[$0-4], _$[$0-4].first_line, _$[$0-4].first_column), null, "ToUpperCase", [], [], _$[$0-4].first_line, _$[$0-4].first_column);
     
 break;
 case 125:
 
-		grammatical.push({gram: "<native_string> ::= string '.' 'toUppercase' '(' ')'", rule: "native_string.val = new toUpperCase(string.lexval)"});
+		grammatical.push({gram: "&ltnative_string&gt ::= string '.' 'toUppercase' '(' ')'", rule: "native_string.val = new toUpperCase(string.lexval)"});
 		this.$ = new ToUpperCase(new Primitive($$[$0-4], type.STRING, this._$.first_line, this._$.first_column), null, "ToUpperCase", [], [], this._$.first_line, this._$.first_column);
 	
 break;
 case 126:
 
-		grammatical.push({gram: "<native_string> ::= identifier '.' 'toLowercase' '(' ')'", rule: "native_string.val = new toLowerCase(identifier.lexval)"});
+		grammatical.push({gram: "&ltnative_string&gt ::= identifier '.' 'toLowercase' '(' ')'", rule: "native_string.val = new toLowerCase(identifier.lexval)"});
         this.$ = new ToLowerCase(new Identifier($$[$0-4], _$[$0-4].first_line, _$[$0-4].first_column), null, "ToLowerCase", [], [], _$[$0-4].first_line, _$[$0-4].first_column);
     
 break;
 case 127:
 
-		grammatical.push({gram: "<native_string> ::= string '.' 'toLowercase' '(' ')'", rule: "native_string.val = new toLowerCase(string.lexval)"});
+		grammatical.push({gram: "&ltnative_string&gt ::= string '.' 'toLowercase' '(' ')'", rule: "native_string.val = new toLowerCase(string.lexval)"});
 		this.$ = new ToLowerCase(new Primitive($$[$0-4], type.STRING, this._$.first_line, this._$.first_column), null, "ToLowerCase", [], [], this._$.first_line, this._$.first_column);
 	
 break;
 case 128:
 
-		grammatical.push({gram: "<native_string> ::= identifier '.' 'caracterOfPosition' '(' <expression> ')'", rule: "native_string.val = new caracterOfPosition(identifier.lexval, expression.val)"});
+		grammatical.push({gram: "&ltnative_string&gt ::= identifier '.' 'caracterOfPosition' '(' &ltexpression&gt ')'", rule: "native_string.val = new caracterOfPosition(identifier.lexval, expression.val)"});
         this.$ = new CaracterOfPosition(new Identifier($$[$0-5], _$[$0-5].first_line, _$[$0-5].first_column), $$[$0-1], null, "CharacterOfPosition", [], [], _$[$0-5].first_line, _$[$0-5].first_column);
     
 break;
 case 129:
 
-		grammatical.push({gram: "<native_string> ::= string '.' 'caracterOfPosition' '(' <expression> ')'", rule: "native_string.val = new caracterOfPosition(string.lexval, expression.val)"});
+		grammatical.push({gram: "&ltnative_string&gt ::= string '.' 'caracterOfPosition' '(' &ltexpression&gt ')'", rule: "native_string.val = new caracterOfPosition(string.lexval, expression.val)"});
 		this.$ = new CaracterOfPosition(new Primitive($$[$0-5], type.STRING, this._$.first_line, this._$.first_column), $$[$0-1], "CharacterOfPosition", [], [], this._$.first_line, this._$.first_column);
 	
 break;
 case 130:
 
-		grammatical.push({gram: "<native_string> ::= identifier '.' 'subString' '(' <expression> ',' <expression> ')'", rule: "native_string.val = new subString(identifier.lexval, expressoin1.val, expression2.val)"});
+		grammatical.push({gram: "&ltnative_string&gt ::= identifier '.' 'subString' '(' &ltexpression&gt ',' &ltexpression&gt ')'", rule: "native_string.val = new subString(identifier.lexval, expressoin1.val, expression2.val)"});
         this.$ = new SubString(new Identifier($$[$0-7], _$[$0-7].first_line, _$[$0-7].first_column), $$[$0-3], $$[$0-1], null, "substring", [], [], _$[$0-7].first_line, _$[$0-7].first_column)
     
 break;
 case 131:
 
-		grammatical.push({gram: "<native_strings> ::= string '.' 'subString' '(' <expression> ',' <expression> ')'", rule: "native_string.val = new subString(string.lexval, expression1.val, expression2.val)"});
+		grammatical.push({gram: "&ltnative_strings&gt ::= string '.' 'subString' '(' &ltexpression&gt ',' &ltexpression&gt ')'", rule: "native_string.val = new subString(string.lexval, expression1.val, expression2.val)"});
 		this.$ = new SubString(new Primitive($$[$0-7], type.STRING, this._$.first_line, this._$.first_column), $$[$0-3], $$[$0-1], null, "substring", [], [], this._$.first_line, this._$.first_column);
 	
 break;
 case 132:
 
-		grammatical.push({gram: "<native_function> ::= <type> '.' 'parse' '(' <expression> ')'", rule: "native_function.val = new parse(type.val, expression.val)"});
+		grammatical.push({gram: "&ltnative_function&gt ::= &lttype&gt '.' 'parse' '(' &ltexpression&gt ')'", rule: "native_function.val = new parse(type.val, expression.val)"});
         this.$ = new Parse($$[$0-5], $$[$0-1], _$[$0-5].first_line, _$[$0-5].first_column);
     
 break;
 case 133:
 
-		grammatical.push({gram: "<native_parse> ::= 'toInt' '(' <expression> ')'", rule: "native_parse.val = new toInt(expression.val)"});
+		grammatical.push({gram: "&ltnative_parse&gt ::= 'toInt' '(' &ltexpression&gt ')'", rule: "native_parse.val = new toInt(expression.val)"});
 		this.$ = new ToInt($$[$0-1], null, "toInt", [], [], this._$.first_line, this._$.first_column);
 	
 break;
 case 134:
 
-		grammatical.push({gram: "<native_parse> ::= 'toDouble' '(' <expression> ')'", rule: "native_parse.val = new toDouble(expression.val)"});
+		grammatical.push({gram: "&ltnative_parse&gt ::= 'toDouble' '(' &ltexpression&gt ')'", rule: "native_parse.val = new toDouble(expression.val)"});
 		this.$ = new ToDouble($$[$0-1], null, "toDouble", [], [], this._$.first_line, this._$.first_column);
 	
 break;
 case 135:
 
-		grammatical.push({gram: "<native_parse> ::= 'string' '(' <expression> ')'", rule: "native_parse.val = new string(expression.val)"});
+		grammatical.push({gram: "&ltnative_parse&gt ::= 'string' '(' &ltexpression&gt ')'", rule: "native_parse.val = new string(expression.val)"});
 		this.$ = new String($$[$0-1], null, "string", [], [], this._$.first_line, this._$.first_column);
 	
 break;
 case 136:
 
-		grammatical.push({gram: "<native_parse> ::= 'string' '(' <values_array> ')'", rule: "native_parse.val = new string(values_array.list)"});
+		grammatical.push({gram: "&ltnative_parse&gt ::= 'string' '(' &ltvalues_array&gt ')'", rule: "native_parse.val = new string(values_array.list)"});
 		this.$ = new String(new Values_array($$[$0-1], this._$.first_line, this._$.first_column), null, "string", [], [], this._$.first_line, this._$.first_column);
 	
 break;
 case 137:
 
-		grammatical.push({gram: "<native_type> ::= 'typeof' '(' <expression> ')'", rule: "native_type.val = new typeof(expression.val)"});
+		grammatical.push({gram: "&ltnative_type&gt ::= 'typeof' '(' &ltexpression&gt ')'", rule: "native_type.val = new typeof(expression.val)"});
 		this.$ = new TypeOf($$[$0-1], null, "typeof", [], [], this._$.first_line, this._$.first_column);
 	
 break;
 case 138:
 
-		grammatical.push({gram: "<native_type> ::= 'typeof' '(' <values_array> ')'", rule: "native_type.val = new typeof(values_array.list)"});
+		grammatical.push({gram: "&ltnative_type&gt ::= 'typeof' '(' &ltvalues_array&gt ')'", rule: "native_type.val = new typeof(values_array.list)"});
 		this.$ = new TypeOf(new Values_array($$[$0-1], this._$.first_line, this._$.first_column), null, "typeof", [], [], this._$.first_line, this._$.first_column);
 	
 break;
 case 139:
 
-		grammatical.push({gram: "<native_arithmetic> ::= 'pow' '(' <expression> ',' <expression> ')'", rule: "native_arithmetic.val = new pow(expression1.val, expression2.val)"});
+		grammatical.push({gram: "&ltnative_arithmetic&gt ::= 'pow' '(' &ltexpression&gt ',' &ltexpression&gt ')'", rule: "native_arithmetic.val = new pow(expression1.val, expression2.val)"});
 		this.$ = new Pow($$[$0-3], $$[$0-1], null, "pow", [], [], this._$.first_line, this._$.first_column);
 	
 break;
 case 140:
 
-		grammatical.push({gram: "<native_arithmetic> ::= 'sin' '(' <expression> ')'", rule: "native_arithmetic.val = new sin(expression.val)"});
+		grammatical.push({gram: "&ltnative_arithmetic&gt ::= 'sin' '(' &ltexpression&gt ')'", rule: "native_arithmetic.val = new sin(expression.val)"});
 		this.$ = new Sin($$[$0-1], null, "sin", [], [], this._$.first_line, this._$.first_column);
 	
 break;
 case 141:
 
-		grammatical.push({gram: "<native_arithmetic> ::= 'cos' '(' <expression> ')'", rule: "native_arithmetic.val = new cos(expression.val)"});
+		grammatical.push({gram: "&ltnative_arithmetic&gt ::= 'cos' '(' &ltexpression&gt ')'", rule: "native_arithmetic.val = new cos(expression.val)"});
 		this.$ = new Cos($$[$0-1], null, "cos", [], [], this._$.first_line, this._$.first_column);
 	
 break;
 case 142:
 
-		grammatical.push({gram: "<native_arithmetic> ::= 'tan' '(' <expression> ')'", rule: "native_arithmetic.val = new tan(expression.val)"});
+		grammatical.push({gram: "&ltnative_arithmetic&gt ::= 'tan' '(' &ltexpression&gt ')'", rule: "native_arithmetic.val = new tan(expression.val)"});
 		this.$ = new Tan($$[$0-1], null, "tan", [], [], this._$.first_line, this._$.first_column);
 	
 break;
 case 143:
 
-		grammatical.push({gram: "<native_arithmetic> ::= 'sqrt' '(' <expression> ')'", rule: "native_arithmetic.val = new sqrt(expression.val)"});
+		grammatical.push({gram: "&ltnative_arithmetic&gt ::= 'sqrt' '(' &ltexpression&gt ')'", rule: "native_arithmetic.val = new sqrt(expression.val)"});
 		this.$ = new Sqrt($$[$0-1], null, "sqrt", [], [], this._$.first_line, this._$.first_column);
 	
 break;
 case 144:
 
-		grammatical.push({gram: "<native_array_push> ::= identifier '.' 'push' '(' <expression> ')'", rule: "native_array_push.val = new push(identifier.lexval, expression.val)"});
+		grammatical.push({gram: "&ltnative_array_push&gt ::= identifier '.' 'push' '(' &ltexpression&gt ')'", rule: "native_array_push.val = new push(identifier.lexval, expression.val)"});
 		this.$ = new Push(new Identifier($$[$0-5], this._$.first_line, this._$.first_column), $$[$0-1], null, "push", [], [], this._$.first_line, this._$.first_column);
 	
 break;
 case 145:
 
-		grammatical.push({gram: "<native_array_pop> ::= identifier '.' 'pop' '(' ')'", rule: "native_array_pop.val = new pop(identifier.lexval)"});
+		grammatical.push({gram: "&ltnative_array_pop&gt ::= identifier '.' 'pop' '(' ')'", rule: "native_array_pop.val = new pop(identifier.lexval)"});
 		this.$ = new Pop(new Identifier($$[$0-4], this._$.first_line, this._$.first_column), null, "pop", [], [], this._$.first_line, this._$.first_column);
 	
 break;
 case 146:
 
-		grammatical.push({gram: "<native_ts> ::= 'graficar_ts' '(' ')'", rule: "native_ts.val = new graficaTs()"});
+		grammatical.push({gram: "&ltnative_ts&gt ::= 'graficar_ts' '(' ')'", rule: "native_ts.val = new graficaTs()"});
 		this.$ = new Graficar_ts(null, "graficar_ts", [], [], this._$.first_line, this._$.first_column);
 	
 break;
 case 147:
- grammatical.push({gram: "<expression> ::= '-' <expressoin>", rule: "expression.val = - expression1.val"}); this.$ = new Arithmetic($$[$0], null, Arithmetic_operator.SUBSTRACTION, _$[$0-1].first_line, _$[$0-1].first_column); 
+ grammatical.push({gram: "&ltexpression&gt ::= '-' &ltexpressoin&gt", rule: "expression.val = - expression1.val"}); this.$ = new Arithmetic($$[$0], null, Arithmetic_operator.SUBSTRACTION, _$[$0-1].first_line, _$[$0-1].first_column); 
 break;
 case 148:
- grammatical.push({gram: "<expression> ::= <expression> '+' <expression>", rule: "expression.val = expression1.val + expression2.val"}); this.$ = new Arithmetic($$[$0-2], $$[$0], Arithmetic_operator.ADDITION, _$[$0-2].first_line, _$[$0-2].first_column); 
+ grammatical.push({gram: "&ltexpression&gt ::= &ltexpression&gt '+' &ltexpression&gt", rule: "expression.val = expression1.val + expression2.val"}); this.$ = new Arithmetic($$[$0-2], $$[$0], Arithmetic_operator.ADDITION, _$[$0-2].first_line, _$[$0-2].first_column); 
 break;
 case 149:
- grammatical.push({gram: "<expression> ::= <expression> '-' <expression>", rule: "expression.val = expression1.val - expression2.val"}); this.$ = new Arithmetic($$[$0-2], $$[$0], Arithmetic_operator.SUBSTRACTION, _$[$0-2].first_line, _$[$0-2].first_column); 
+ grammatical.push({gram: "&ltexpression&gt ::= &ltexpression&gt '-' &ltexpression&gt", rule: "expression.val = expression1.val - expression2.val"}); this.$ = new Arithmetic($$[$0-2], $$[$0], Arithmetic_operator.SUBSTRACTION, _$[$0-2].first_line, _$[$0-2].first_column); 
 break;
 case 150:
- grammatical.push({gram: "<expression> ::= <expression> '*' <expression>", rule: "expression.val = expression1.val * expression2.val"}); this.$ = new Arithmetic($$[$0-2], $$[$0], Arithmetic_operator.MULTIPLICATION, _$[$0-2].first_line, _$[$0-2].first_column); 
+ grammatical.push({gram: "&ltexpression&gt ::= &ltexpression&gt '*' &ltexpression&gt", rule: "expression.val = expression1.val * expression2.val"}); this.$ = new Arithmetic($$[$0-2], $$[$0], Arithmetic_operator.MULTIPLICATION, _$[$0-2].first_line, _$[$0-2].first_column); 
 break;
 case 151:
- grammatical.push({gram: "<expression> ::= <expression> '/' <expression>", rule: "expression.val = expression1.val / expression2.val"}); this.$ = new Arithmetic($$[$0-2], $$[$0], Arithmetic_operator.DIVISION, _$[$0-2].first_line, _$[$0-2].first_column); 
+ grammatical.push({gram: "&ltexpression&gt ::= &ltexpression&gt '/' &ltexpression&gt", rule: "expression.val = expression1.val / expression2.val"}); this.$ = new Arithmetic($$[$0-2], $$[$0], Arithmetic_operator.DIVISION, _$[$0-2].first_line, _$[$0-2].first_column); 
 break;
 case 152:
- grammatical.push({gram: "<expression> ::= <expression> '%' <expression>", rule: "expression.val = expression1.val % expression2.val"}); this.$ = new Arithmetic($$[$0-2], $$[$0], Arithmetic_operator.MODULS, _$[$0-2].first_line, _$[$0-2].first_column); 
+ grammatical.push({gram: "&ltexpression&gt ::= &ltexpression&gt '%' &ltexpression&gt", rule: "expression.val = expression1.val % expression2.val"}); this.$ = new Arithmetic($$[$0-2], $$[$0], Arithmetic_operator.MODULS, _$[$0-2].first_line, _$[$0-2].first_column); 
 break;
 case 153:
- grammatical.push({gram: "<expression> ::= <expression> '++'", rule: "expression.val = new Inc(expression.val, ++)"}); this.$ = new Arithmetic($$[$0-1], null, Arithmetic_operator.INC, _$[$0-1].first_line, _$[$0-1].first_column); 
+ grammatical.push({gram: "&ltexpression&gt ::= &ltexpression&gt '++'", rule: "expression.val = new Inc(expression.val, ++)"}); this.$ = new Arithmetic($$[$0-1], null, Arithmetic_operator.INC, _$[$0-1].first_line, _$[$0-1].first_column); 
 break;
 case 154:
- grammatical.push({gram: "<expression> ::= <expression> '--'", rule: "expression.val = new Dec(expression.val, --)"}); this.$ = new Arithmetic($$[$0-1], null, Arithmetic_operator.DEC, _$[$0-1].first_line, _$[$0-1].first_column); 
+ grammatical.push({gram: "&ltexpression&gt ::= &ltexpression&gt '--'", rule: "expression.val = new Dec(expression.val, --)"}); this.$ = new Arithmetic($$[$0-1], null, Arithmetic_operator.DEC, _$[$0-1].first_line, _$[$0-1].first_column); 
 break;
 case 155:
- grammatical.push({gram: "<expression> ::= <expression> '==' <expression>", rule: "expression.val = expression1.val == expression2.val"}); this.$ = new Relational($$[$0-2], $$[$0], Relational_operator.EQUAL, _$[$0-2].first_line, _$[$0-2].first_column); 
+ grammatical.push({gram: "&ltexpression&gt ::= &ltexpression&gt '==' &ltexpression&gt", rule: "expression.val = expression1.val == expression2.val"}); this.$ = new Relational($$[$0-2], $$[$0], Relational_operator.EQUAL, _$[$0-2].first_line, _$[$0-2].first_column); 
 break;
 case 156:
- grammatical.push({gram: "<expression> ::= <expression> '!=' <expression>", rule: "expression.val = expression1.val != expression2.val"}); this.$ = new Relational($$[$0-2], $$[$0], Relational_operator.UNEQUAL, _$[$0-2].first_line, _$[$0-2].first_column); 
+ grammatical.push({gram: "&ltexpression&gt ::= &ltexpression&gt '!=' &ltexpression&gt", rule: "expression.val = expression1.val != expression2.val"}); this.$ = new Relational($$[$0-2], $$[$0], Relational_operator.UNEQUAL, _$[$0-2].first_line, _$[$0-2].first_column); 
 break;
 case 157:
- grammatical.push({gram: "<expression> ::= <expression> '<=' <expression>", rule: "expression.val = expression1.val <= expression2.val"}); this.$ = new Relational($$[$0-2], $$[$0], Relational_operator.LESSEQUAL, _$[$0-2].first_line, _$[$0-2].first_column); 
+ grammatical.push({gram: "&ltexpression&gt ::= &ltexpression&gt '&lt=' &ltexpression&gt", rule: "expression.val = expression1.val &lt= expression2.val"}); this.$ = new Relational($$[$0-2], $$[$0], Relational_operator.LESSEQUAL, _$[$0-2].first_line, _$[$0-2].first_column); 
 break;
 case 158:
- grammatical.push({gram: "<expression> ::= <expression> '>=' <expression>", rule: "expression.val = expression1.val >= expression2.val"}); this.$ = new Relational($$[$0-2], $$[$0], Relational_operator.GREATEREQUAL, _$[$0-2].first_line, _$[$0-2].first_column); 
+ grammatical.push({gram: "&ltexpression&gt ::= &ltexpression&gt '&gt=' &ltexpression&gt", rule: "expression.val = expression1.val &gt= expression2.val"}); this.$ = new Relational($$[$0-2], $$[$0], Relational_operator.GREATEREQUAL, _$[$0-2].first_line, _$[$0-2].first_column); 
 break;
 case 159:
- grammatical.push({gram: "<expression> ::= <expression> '<' <expression>", rule: "expression.val = expression1.val < expression2.val"}); this.$ = new Relational($$[$0-2], $$[$0], Relational_operator.LESS, _$[$0-2].first_line, _$[$0-2].first_column); 
+ grammatical.push({gram: "&ltexpression&gt ::= &ltexpression&gt '&lt' &ltexpression&gt", rule: "expression.val = expression1.val &lt expression2.val"}); this.$ = new Relational($$[$0-2], $$[$0], Relational_operator.LESS, _$[$0-2].first_line, _$[$0-2].first_column); 
 break;
 case 160:
- grammatical.push({gram: "<expression> ::= <expression> '>' <expression>", rule: "expression.val = expression1.val > expression2.val"}); this.$ = new Relational($$[$0-2], $$[$0], Relational_operator.GREATER, _$[$0-2].first_line, _$[$0-2].first_column); 
+ grammatical.push({gram: "&ltexpression&gt ::= &ltexpression&gt '&gt' &ltexpression&gt", rule: "expression.val = expression1.val &gt expression2.val"}); this.$ = new Relational($$[$0-2], $$[$0], Relational_operator.GREATER, _$[$0-2].first_line, _$[$0-2].first_column); 
 break;
 case 161:
- grammatical.push({gram: "<expression> ::= <expression> '&' <expression>", rule: "expression.val = expression1.val & expression2.val"}); this.$ = new StringText($$[$0-2], $$[$0], String_operator.CONCAT, _$[$0-2].first_line, _$[$0-2].first_column); 
+ grammatical.push({gram: "&ltexpression&gt ::= &ltexpression&gt '&' &ltexpression&gt", rule: "expression.val = expression1.val & expression2.val"}); this.$ = new StringText($$[$0-2], $$[$0], String_operator.CONCAT, _$[$0-2].first_line, _$[$0-2].first_column); 
 break;
 case 162:
- grammatical.push({gram: "<expression> ::= <expression> '^' <expression>", rule: "expression.val = expression1.val ^ expression2.val"}); this.$ = new StringText($$[$0-2], $$[$0], String_operator.REPETITION, _$[$0-2].first_line, _$[$0-2].first_column); 
+ grammatical.push({gram: "&ltexpression&gt ::= &ltexpression&gt '^' &ltexpression&gt", rule: "expression.val = expression1.val ^ expression2.val"}); this.$ = new StringText($$[$0-2], $$[$0], String_operator.REPETITION, _$[$0-2].first_line, _$[$0-2].first_column); 
 break;
 case 163:
- grammatical.push({gram: "<expression> ::= <expression> '&&' <expression>", rule: "expression.val = expression1.val && expression2.val"}); this.$ = new Logical($$[$0-2], $$[$0], Logical_operator.AND, _$[$0-2].first_line, _$[$0-2].first_column); 
+ grammatical.push({gram: "&ltexpression&gt ::= &ltexpression&gt '&&' &ltexpression&gt", rule: "expression.val = expression1.val && expression2.val"}); this.$ = new Logical($$[$0-2], $$[$0], Logical_operator.AND, _$[$0-2].first_line, _$[$0-2].first_column); 
 break;
 case 164:
- grammatical.push({gram: "<expression> ::= <expression> '||' <expression>", rule: "expression.val = expression1.val || expression2.val"}); this.$ = new Logical($$[$0-2], $$[$0], Logical_operator.OR, _$[$0-2].first_line, _$[$0-2].first_column); 
+ grammatical.push({gram: "&ltexpression&gt ::= &ltexpression&gt '||' &ltexpression&gt", rule: "expression.val = expression1.val || expression2.val"}); this.$ = new Logical($$[$0-2], $$[$0], Logical_operator.OR, _$[$0-2].first_line, _$[$0-2].first_column); 
 break;
 case 165:
- grammatical.push({gram: "<expression> ::= '!' <expression>", rule: "expression.val = !expression1.val"}); this.$ = new Logical($$[$0], null, Logical_operator.NOT, _$[$0-1].first_line, _$[$0-1].first_column); 
+ grammatical.push({gram: "&ltexpression&gt ::= '!' &ltexpression&gt", rule: "expression.val = !expression1.val"}); this.$ = new Logical($$[$0], null, Logical_operator.NOT, _$[$0-1].first_line, _$[$0-1].first_column); 
 break;
 case 166:
- grammatical.push({gram: "<expression> ::= integer", rule: "expression.val = integer.lexval"}); this.$ = new Primitive($$[$0], type.INT, _$[$0].first_line, _$[$0].first_column); 
+ grammatical.push({gram: "&ltexpression&gt ::= integer", rule: "expression.val = integer.lexval"}); this.$ = new Primitive($$[$0], type.INT, _$[$0].first_line, _$[$0].first_column); 
 break;
 case 167:
- grammatical.push({gram: "<expression> ::= double", rule: "expression.val = double.lexval"}); this.$ = new Primitive($$[$0], type.DOUBLE, _$[$0].first_line, _$[$0].first_column) 
+ grammatical.push({gram: "&ltexpression&gt ::= double", rule: "expression.val = double.lexval"}); this.$ = new Primitive($$[$0], type.DOUBLE, _$[$0].first_line, _$[$0].first_column) 
 break;
 case 168:
- grammatical.push({gram: "<expression> ::= string", rule: "expression.val = string.lexval"}); this.$ = new Primitive($$[$0], type.STRING, _$[$0].first_line, _$[$0].first_column); 
+ grammatical.push({gram: "&ltexpression&gt ::= string", rule: "expression.val = string.lexval"}); this.$ = new Primitive($$[$0], type.STRING, _$[$0].first_line, _$[$0].first_column); 
 break;
 case 169:
- grammatical.push({gram: "<expression> ::= char", rule: "expression.val = char.lexval"}); this.$ = new Primitive($$[$0], type.CHAR, _$[$0].first_line, _$[$0].first_column); 
+ grammatical.push({gram: "&ltexpression&gt ::= char", rule: "expression.val = char.lexval"}); this.$ = new Primitive($$[$0], type.CHAR, _$[$0].first_line, _$[$0].first_column); 
 break;
 case 170:
- grammatical.push({gram: "<expression> ::= <boolean>", rule: "expression.val = boolean.val"}); this.$ = new Primitive($$[$0], type.BOOL, _$[$0].first_line, _$[$0].first_column); 
+ grammatical.push({gram: "&ltexpression&gt ::= &ltboolean&gt", rule: "expression.val = boolean.val"}); this.$ = new Primitive($$[$0], type.BOOL, _$[$0].first_line, _$[$0].first_column); 
 break;
 case 171:
- grammatical.push({gram: "<expression> ::= 'void'", rule: "expression.val = 'void'"}); this.$ = new Primitive($$[$0], type.VOID, _$[$0].first_line, _$[$0].first_column); 
+ grammatical.push({gram: "&ltexpression&gt ::= 'void'", rule: "expression.val = 'void'"}); this.$ = new Primitive($$[$0], type.VOID, _$[$0].first_line, _$[$0].first_column); 
 break;
 case 172:
- grammatical.push({gram: "<expression> ::= 'null'", rule: "expression.val = 'null'"}); this.$ = new Primitive($$[$0], type.NULL, _$[$0].first_line, _$[$0].first_column); 
+ grammatical.push({gram: "&ltexpression&gt ::= 'null'", rule: "expression.val = 'null'"}); this.$ = new Primitive($$[$0], type.NULL, _$[$0].first_line, _$[$0].first_column); 
 break;
 case 173:
- grammatical.push({gram: "<expression> ::= identifier <list_brackets>", rule: "expression.val = new access_array(identifier.lexval, list_brackets.list)"}); this.$ = new Access_array(new Identifier($$[$0-1], this._$.first_line, this._$.first_column), $$[$0], null, this._$.first_line, this._$.first_column); 
+ grammatical.push({gram: "&ltexpression&gt ::= identifier &ltlist_brackets&gt", rule: "expression.val = new access_array(identifier.lexval, list_brackets.list)"}); this.$ = new Access_array(new Identifier($$[$0-1], this._$.first_line, this._$.first_column), $$[$0], null, this._$.first_line, this._$.first_column); 
 break;
 case 174:
- grammatical.push({gram: "<expression> ::= identifier", rule: "expression.val = identifier.lexval"}); this.$ = new Identifier($$[$0], _$[$0].first_line, _$[$0].first_column); 
+ grammatical.push({gram: "&ltexpression&gt ::= identifier", rule: "expression.val = identifier.lexval"}); this.$ = new Identifier($$[$0], _$[$0].first_line, _$[$0].first_column); 
 break;
 case 175:
- grammatical.push({gram: "<expression> ::= '(' <expresssion> ')'", rule: "expression.val = expression1.val"}); this.$ = $$[$0-1]; 
+ grammatical.push({gram: "&ltexpression&gt ::= '(' &ltexpresssion&gt ')'", rule: "expression.val = expression1.val"}); this.$ = $$[$0-1]; 
 break;
 case 176:
- grammatical.push({gram: "<expression> ::= <prod_ternary>", rule: "expression.val = prod_ternary.val"}); this.$ = $$[$0]; 
+ grammatical.push({gram: "&ltexpression&gt ::= &ltprod_ternary&gt", rule: "expression.val = prod_ternary.val"}); this.$ = $$[$0]; 
 break;
 case 177:
- grammatical.push({gram: "<expression> ::= <call_function>", rule: "expression.val = call_function.val"}); this.$ = $$[$0]; 
+ grammatical.push({gram: "&ltexpression&gt ::= &ltcall_function&gt", rule: "expression.val = call_function.val"}); this.$ = $$[$0]; 
 break;
 case 178:
- grammatical.push({gram: "<expression> ::= <native_strings>", rule: "expression.val = native_strings.val"}); this.$ = $$[$0]; 
+ grammatical.push({gram: "&ltexpression&gt ::= &ltnative_strings&gt", rule: "expression.val = native_strings.val"}); this.$ = $$[$0]; 
 break;
 case 179:
- grammatical.push({gram: "<expression> ::= <native_function>", rule: "expression.val = native_function.val"}); this.$ = $$[$0]; 
+ grammatical.push({gram: "&ltexpression&gt ::= &ltnative_function&gt", rule: "expression.val = native_function.val"}); this.$ = $$[$0]; 
 break;
 case 180:
- grammatical.push({gram: "<expression> ::= <native_parse>", rule: "expression.val = native_parse.val"}); this.$ = $$[$0]; 
+ grammatical.push({gram: "&ltexpression&gt ::= &ltnative_parse&gt", rule: "expression.val = native_parse.val"}); this.$ = $$[$0]; 
 break;
 case 181:
- grammatical.push({gram: "<expression> ::= <native_arithmetic>", rule: "expression.val = native_arithmetic.val"}); this.$ = $$[$0]; 
+ grammatical.push({gram: "&ltexpression&gt ::= &ltnative_arithmetic&gt", rule: "expression.val = native_arithmetic.val"}); this.$ = $$[$0]; 
 break;
 case 182:
- grammatical.push({gram: "<expression> ::= <native_type>", rule: "expression.val = native_type.val"}); this.$ = $$[$0]; 
+ grammatical.push({gram: "&ltexpression&gt ::= &ltnative_type&gt", rule: "expression.val = native_type.val"}); this.$ = $$[$0]; 
 break;
 case 183:
- grammatical.push({gram: "<expression> ::= <native_array_pop>", rule: "expression.val = native_array_pop.val"}); this.$ = $$[$0]; 
+ grammatical.push({gram: "&ltexpression&gt ::= &ltnative_array_pop&gt", rule: "expression.val = native_array_pop.val"}); this.$ = $$[$0]; 
 break;
 case 184:
- grammatical.push({gram: "<expression> ::= <access_struct>", rule: "expression.val = access_struct.val"}); this.$ = $$[$0]; 
+ grammatical.push({gram: "&ltexpression&gt ::= &ltaccess_struct&gt", rule: "expression.val = access_struct.val"}); this.$ = $$[$0]; 
 break;
 case 185:
- grammatical.push({gram: "<expression> ::= <range>", rule: "expression.val = range.val"}); this.$ = $$[$0]; 
+ grammatical.push({gram: "&ltexpression&gt ::= &ltrange&gt", rule: "expression.val = range.val"}); this.$ = $$[$0]; 
 break;
 case 186:
- grammatical.push({gram: "<boolean> ::= 'true'", rule: "boolean.val = 'true'"}); this.$ = $$[$0]
+ grammatical.push({gram: "&ltboolean&gt ::= 'true'", rule: "boolean.val = 'true'"}); this.$ = $$[$0]
 break;
 case 187:
- grammatical.push({gram: "<boolean> ::= 'false'", rule: "boolean.val = 'false'"}); this.$ = $$[$0]
+ grammatical.push({gram: "&ltboolean&gt ::= 'false'", rule: "boolean.val = 'false'"}); this.$ = $$[$0]
 break;
 }
 },

@@ -44,4 +44,16 @@ export class CaracterOfPosition extends Function {
         this.type = type.CHAR;
         return id_founded.charAt(n);
     }
+
+    get_node(): Cst_Node {
+        let node = new Cst_Node("CaracterOfPosition");
+        node.add_childs_node(this.id.get_node());
+        node.add_child(".");
+        node.add_child("caracterOfPosition");
+        node.add_child("(");
+        node.add_childs_node(this.n.get_node());
+        node.add_child(")");
+
+        return node;
+    }
 }

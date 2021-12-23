@@ -13,6 +13,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+import { Cst_Node } from "../Abstract/Cst_Node.js";
 import { Function } from "../Instructions/Function.js";
 var count = 0;
 export var clear_count = function () {
@@ -86,6 +87,13 @@ var Graficar_ts = /** @class */ (function (_super) {
             }
             return params.slice(0, params.length - 1) + ")";
         }
+    };
+    Graficar_ts.prototype.get_node = function () {
+        var node = new Cst_Node("Graficar_ts");
+        node.add_child("graficar_ts");
+        node.add_child("(");
+        node.add_child(")");
+        return node;
     };
     return Graficar_ts;
 }(Function));

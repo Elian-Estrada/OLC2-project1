@@ -1,3 +1,4 @@
+import { Cst_Node } from "../Abstract/Cst_Node.js";
 import { Instruction } from "../Abstract/Instruction.js";
 import { Function } from "../Instructions/Function.js";
 import Exception from "../SymbolTable/Exception.js";
@@ -29,6 +30,16 @@ export class Sqrt extends Function {
 
         this.type = type.DOUBLE;
         return Math.sqrt(value);
+    }
+
+    get_node(): Cst_Node {
+        let node = new Cst_Node("Sqrt");
+        node.add_child("sqrt");
+        node.add_child("(");
+        node.add_childs_node(this.expression.get_node());
+        node.add_child(")");
+
+        return node;
     }
 
 }

@@ -13,6 +13,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+import { Cst_Node } from "../Abstract/Cst_Node.js";
 import { Access_struct } from "../Expression/Access_struct.js";
 import { Function } from "../Instructions/Function.js";
 import Exception from "../SymbolTable/Exception.js";
@@ -42,6 +43,14 @@ var TypeOf = /** @class */ (function (_super) {
         }
         this.type = type.STRING;
         return value;
+    };
+    TypeOf.prototype.get_node = function () {
+        var node = new Cst_Node("TypeOf");
+        node.add_child("typeof");
+        node.add_child("(");
+        node.add_childs_node(this.expression.get_node());
+        node.add_child(")");
+        return node;
     };
     return TypeOf;
 }(Function));

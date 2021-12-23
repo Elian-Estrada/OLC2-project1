@@ -16,6 +16,7 @@ var __extends = (this && this.__extends) || (function () {
 import { Function } from "../Instructions/Function.js";
 import Exception from "../SymbolTable/Exception.js";
 import { type } from "../SymbolTable/Type.js";
+import { Cst_Node } from "../Abstract/Cst_Node.js";
 var SubString = /** @class */ (function (_super) {
     __extends(SubString, _super);
     function SubString(id, from, to, type, name, params, instructions, row, col) {
@@ -55,6 +56,18 @@ var SubString = /** @class */ (function (_super) {
         }
         this.type = type.STRING;
         return id_founded.substring(from, to);
+    };
+    SubString.prototype.get_node = function () {
+        var node = new Cst_Node("SubString");
+        node.add_childs_node(this.id.get_node());
+        node.add_child(".");
+        node.add_child("subString");
+        node.add_child("(");
+        node.add_childs_node(this.from.get_node());
+        node.add_child(",");
+        node.add_childs_node(this.to.get_node());
+        node.add_child(")");
+        return node;
     };
     return SubString;
 }(Function));

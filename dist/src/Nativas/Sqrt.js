@@ -13,6 +13,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+import { Cst_Node } from "../Abstract/Cst_Node.js";
 import { Function } from "../Instructions/Function.js";
 import Exception from "../SymbolTable/Exception.js";
 import { type } from "../SymbolTable/Type.js";
@@ -33,6 +34,14 @@ var Sqrt = /** @class */ (function (_super) {
         }
         this.type = type.DOUBLE;
         return Math.sqrt(value);
+    };
+    Sqrt.prototype.get_node = function () {
+        var node = new Cst_Node("Sqrt");
+        node.add_child("sqrt");
+        node.add_child("(");
+        node.add_childs_node(this.expression.get_node());
+        node.add_child(")");
+        return node;
     };
     return Sqrt;
 }(Function));

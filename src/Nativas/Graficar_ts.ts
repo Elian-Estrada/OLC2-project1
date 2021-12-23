@@ -1,3 +1,4 @@
+import { Cst_Node } from "../Abstract/Cst_Node.js";
 import { Instruction } from "../Abstract/Instruction.js";
 import { Function } from "../Instructions/Function.js";
 import SymbolTable from "../SymbolTable/SymbolTable.js";
@@ -141,5 +142,14 @@ export class Graficar_ts extends Function {
     
         }
     
+    }
+
+    get_node(): Cst_Node {
+        let node = new Cst_Node("Graficar_ts");
+        node.add_child("graficar_ts");
+        node.add_child("(");
+        node.add_child(")");
+
+        return node;
     }
 }

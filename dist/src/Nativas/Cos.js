@@ -13,6 +13,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+import { Cst_Node } from "../Abstract/Cst_Node.js";
 import { Function } from "../Instructions/Function.js";
 import Exception from "../SymbolTable/Exception.js";
 import { type } from "../SymbolTable/Type.js";
@@ -34,6 +35,14 @@ var Cos = /** @class */ (function (_super) {
         this.type = type.DOUBLE;
         //return Math.cos((value * Math.PI) / 180);
         return Math.cos(value);
+    };
+    Cos.prototype.get_node = function () {
+        var node = new Cst_Node("Cos");
+        node.add_child("cos");
+        node.add_child("(");
+        node.add_childs_node(this.expression.get_node());
+        node.add_child(")");
+        return node;
     };
     return Cos;
 }(Function));

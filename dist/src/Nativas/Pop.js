@@ -13,6 +13,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+import { Cst_Node } from "../Abstract/Cst_Node.js";
 import { Function } from "../Instructions/Function.js";
 import Exception from "../SymbolTable/Exception.js";
 import { type } from "../SymbolTable/Type.js";
@@ -33,6 +34,15 @@ var Pop = /** @class */ (function (_super) {
         }
         this.type = symbol.get_subtype();
         return symbol.get_value().pop();
+    };
+    Pop.prototype.get_node = function () {
+        var node = new Cst_Node("Pop");
+        node.add_childs_node(this.id.get_node());
+        node.add_child(".");
+        node.add_child("pop");
+        node.add_child("(");
+        node.add_child(")");
+        return node;
     };
     return Pop;
 }(Function));

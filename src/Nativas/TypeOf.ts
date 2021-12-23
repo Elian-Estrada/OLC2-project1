@@ -1,3 +1,4 @@
+import { Cst_Node } from "../Abstract/Cst_Node.js";
 import { Instruction } from "../Abstract/Instruction.js";
 import { Access_struct } from "../Expression/Access_struct.js";
 import { Function } from "../Instructions/Function.js";
@@ -39,6 +40,16 @@ export class TypeOf extends Function {
 
         return value;
 
+    }
+
+    get_node(): Cst_Node {
+        let node = new Cst_Node("TypeOf");
+        node.add_child("typeof");
+        node.add_child("(");
+        node.add_childs_node(this.expression.get_node());
+        node.add_child(")");
+
+        return node;
     }
 
 }

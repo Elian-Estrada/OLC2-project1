@@ -16,6 +16,7 @@ var __extends = (this && this.__extends) || (function () {
 import { Function } from "../Instructions/Function.js";
 import Exception from "../SymbolTable/Exception.js";
 import { type } from "../SymbolTable/Type.js";
+import { Cst_Node } from "../Abstract/Cst_Node.js";
 var Length = /** @class */ (function (_super) {
     __extends(Length, _super);
     function Length(id, type_fun, name, params, instructions, row, col) {
@@ -35,6 +36,15 @@ var Length = /** @class */ (function (_super) {
         }
         this.type = type.INT;
         return id_founded.length;
+    };
+    Length.prototype.get_node = function () {
+        var node = new Cst_Node("Length");
+        node.add_childs_node(this.id.get_node());
+        node.add_child(".");
+        node.add_child("length");
+        node.add_child("(");
+        node.add_child(")");
+        return node;
     };
     return Length;
 }(Function));
