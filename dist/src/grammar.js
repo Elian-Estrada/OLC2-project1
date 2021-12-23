@@ -703,7 +703,7 @@ case 92:
 break;
 case 93:
 
-		grammatical.puhs({gram: "&ltcall_function&gt ::= identifier '(' ')'", rule: "call_function.val = new Call(identifier.lexvla)"});
+		grammatical.push({gram: "&ltcall_function&gt ::= identifier '(' ')'", rule: "call_function.val = new Call(identifier.lexvla)"});
         this.$ = new Call($$[$0-2], [], _$[$0-2].first_line, _$[$0-2].first_column);
     
 break;

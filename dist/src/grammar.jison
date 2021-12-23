@@ -743,7 +743,7 @@ list_params
 
 call_function
     : IDENTIFIER PARLEFT PARRIGHT {
-		grammatical.puhs({gram: "&ltcall_function&gt ::= identifier '(' ')'", rule: "call_function.val = new Call(identifier.lexvla)"});
+		grammatical.push({gram: "&ltcall_function&gt ::= identifier '(' ')'", rule: "call_function.val = new Call(identifier.lexvla)"});
         $$ = new Call($1, [], @1.first_line, @1.first_column);
     }
     | IDENTIFIER PARLEFT list_params_call PARRIGHT {

@@ -211,8 +211,13 @@ export class Declaration extends Instruction {
 
     get_node() {
         let node = new Cst_Node("Declaration");
-        node.add_child(this.type);
-        node.add_child(this.id);
+        if (this.type === type.STRUCT){
+            node.add_child(this.id[1]);
+            node.add_child(this.id[0]);
+        } else {
+            node.add_child(this.type);
+            node.add_child(this.id);
+        }
         if (this.expression !== null) {
             node.add_child("=");
             node.add_childs_node(this.expression.get_node());
