@@ -21,6 +21,7 @@ import { Return } from "./Return.js";
 import { Continue } from "./Continue.js";
 import { type } from "../SymbolTable/Type.js";
 import { Cst_Node } from "../Abstract/Cst_Node.js";
+import Symbol from "../SymbolTable/Symbol.js";
 var Function = /** @class */ (function (_super) {
     __extends(Function, _super);
     function Function(type, name, params, instructions, row, col) {
@@ -40,43 +41,42 @@ var Function = /** @class */ (function (_super) {
         for (var _b = 0, _c = this.instructions; _b < _c.length; _b++) {
             var instruction = _c[_b];
             var value = instruction.interpret(tree, new_table);
-            if (value === "void")
+            if (value === "void") {
                 return;
+            }
             if (value instanceof Exception) {
                 tree.get_errors().push(value);
                 tree.update_console(value.toString());
             }
             var error = null;
             if (value instanceof Break) {
-                error = new Exception("Semantic", "Instruction Break out of loop", instruction.row, instruction.column);
+                error = new Exception("Semantic", "Instruction Break out of loop", instruction.row, instruction.column, new_table.get_name());
                 tree.get_errors().push(error);
                 // tree.get_update(error);
             }
             if (value instanceof Continue) {
-                // console.log("Hola")
-                error = new Exception("Semantic", "Instruction Continue out of loop", instruction.row, instruction.column);
+                error = new Exception("Semantic", "Instruction Continue out of loop", instruction.row, instruction.column, new_table.get_name());
                 tree.get_errors().push(error);
             }
             if (value instanceof Return) {
-                if (this.type == type.VOID) {
-                    // console.log("Hola")
-                    return new Exception("Semantic", "Function should not return anything", instruction.row, instruction.column);
+                if (this.type == type.VOID && value.get_result() !== null) {
+                    return new Exception("Semantic", "Function should not return anything", instruction.row, instruction.column, new_table.get_name());
                 }
-                if (value.get_type() === type.STRUCT) {
+                if (value.get_type() === type.STRUCT && value.get_result() !== "null") {
                     if (value.get_result().get_id() !== this.type) {
-                        return new Exception("Semantic", "Function doesn't return same data type", instruction.row, instruction.column);
+                        return new Exception("Semantic", "Function doesn't return same data type", instruction.row, instruction.column, new_table.get_name());
                     }
                 }
-                else {
+                else if (value.get_result() !== "null") {
                     if (this.type != value.get_type()) {
-                        return new Exception("Semantic", "Function doesn't return same data type", instruction.row, instruction.column);
+                        return new Exception("Semantic", "Function doesn't return same data type", instruction.row, instruction.column, new_table.get_name());
                     }
                 }
                 return value.get_result();
             }
         }
         if (this.type !== type.VOID) {
-            return new Exception("Semantic", "Function of type: ".concat(this.type, " expected one Return"), this.instructions[this.instructions.length - 1].row, this.instructions[this.instructions.length - 1].column);
+            return new Exception("Semantic", "Function of type: ".concat(this.type, " expected one Return"), this.instructions[this.instructions.length - 1].row, this.instructions[this.instructions.length - 1].column, new_table.get_name());
         }
         return null;
     };
@@ -89,7 +89,29 @@ var Function = /** @class */ (function (_super) {
     Function.prototype.get_params = function () {
         return this.params;
     };
-    Function.prototype.compile = function (table, generator) {
+    Function.prototype.compile = function (table, generator, tree) {
+        var new_env = new SymbolTable(table, this.name);
+        new_env.type = this.type;
+        var return_label = generator.newLabel();
+        new_env.return_label = return_label;
+        new_env.set_size(1);
+        for (var _i = 0, _a = this.params; _i < _a.length; _i++) {
+            var param = _a[_i];
+            var in_heap = (param.type == type.STRING || param.type == type.STRUCT);
+            var new_symbol = new Symbol(param.name, param.type, this.row, this.column, param.value, "", in_heap);
+            new_env.set_table(new_symbol);
+        }
+        generator.freeAllTemps();
+        generator.addBeginFunc(this.name, this.type);
+        for (var _b = 0, _c = this.instructions; _b < _c.length; _b++) {
+            var i = _c[_b];
+            i.compile(new_env, generator, tree);
+        }
+        if (this.type != null)
+            generator.setLabel(return_label);
+        generator.addEndFunc();
+        generator.freeAllTemps();
+        tree.set_symbol_table(new_env);
     };
     Function.prototype.get_node = function () {
         var node = new Cst_Node("Function");

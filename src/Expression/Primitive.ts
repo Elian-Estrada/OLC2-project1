@@ -29,6 +29,10 @@ export class Primitive extends Instruction {
         return this.type;
     }
 
+    set_type(type: type){
+        this.type = type;
+    }
+
     get_node() {
         let node = new Cst_Node("Primitive");
         node.add_child(this.value);
@@ -39,8 +43,7 @@ export class Primitive extends Instruction {
         return String(this.value);
     }
 
-    compile(table: SymbolTable, generator: Generator3D): any {
-        generator.addComment("----PRIMITIVE----");
+    compile(table: SymbolTable, generator: Generator3D, tree: Tree): any {
         if ( this.type === type.INT || this.type === type.DOUBLE ) {
             return new Value(this.value, this.type, false);
         }
@@ -48,15 +51,19 @@ export class Primitive extends Instruction {
             let ret_temp = generator.addTemp();
             generator.addExpression(ret_temp, 'H', '', '');
 
+            let counter = 0;
             for ( let char of String(this.value) ) {
                 generator.setHeap('H', char.charCodeAt(0));
                 generator.nextHeap();
+                counter += 1;
             }
 
             generator.setHeap('H', -1);
             generator.nextHeap();
 
-            return new Value(ret_temp, type.STRING, true);
+            let ret_val = new Value(ret_temp, type.STRING, true);
+            ret_val.size = counter;
+            return ret_val;
         }
         else if ( this.type === type.BOOL ) {
             let res = new Value(this.value, this.type, false);

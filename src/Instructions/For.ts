@@ -11,14 +11,24 @@ import { Cst_Node } from "../Abstract/Cst_Node.js";
 import { Generator3D } from "../Generator/Generator3D.js";
 
 export class For extends Instruction {
-    compile(table: SymbolTable, generator: Generator3D) {
+    compile(table: SymbolTable, generator: Generator3D, tree: Tree) {
         generator.addComment("----FOR CYCLE----");
 
-        let value = this.condition.compile(table, generator);
+        this.init.compile(table, generator, tree);
+        // @ts-ignore
+        table.get_table(this.init.id[0]);
+        let continue_label = generator.newLabel();
+        generator.setLabel(continue_label);
+        let condition = this.condition.compile(table, generator, tree);
+        generator.setLabel(condition.true_label);
 
-        if ( value.type == type.STRING ) {
-            let variable = this
+        for ( let instructions of this.instructions ) {
+            instructions.compile(table, generator, tree);
         }
+        this.step.compile(table, generator, tree);
+
+        generator.addGoTo(continue_label);
+        generator.setLabel(condition.false_label);
     }
 
     private init: Instruction;
@@ -108,7 +118,7 @@ export class For extends Instruction {
                             break;
                         }
                     } else {
-                        return new Exception("Semantic", `Expect a Boolean type expression`, this.row, this.column);
+                        return new Exception("Semantic", `Expect a Boolean type expression`, this.row, this.column, new_table === null ? table.get_name() : new_table?.get_name());
                     }
                     this.counter += 1;
                 }
@@ -118,11 +128,11 @@ export class For extends Instruction {
                 }
 
             } catch (error) {
-                return new Exception("Semantic", "" + error, this.row, this.column);
+                return new Exception("Semantic", "" + error, this.row, this.column, table.get_name());
             }
 
         } else {
-            return new Exception("Semantic", "Expression Expected", this.row, this.column);
+            return new Exception("Semantic", "Expression Expected", this.row, this.column, table.get_name());
         }
     }
 

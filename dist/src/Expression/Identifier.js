@@ -30,7 +30,7 @@ var Identifier = /** @class */ (function (_super) {
     Identifier.prototype.interpret = function (tree, table) {
         var symbol = table.get_table(this.id);
         if (symbol == undefined) {
-            return new Exception("Semantic", "The id: ".concat(this.id, " doesn't exist in current context"), this.row, this.column);
+            return new Exception("Semantic", "The id: ".concat(this.id, " doesn't exist in current context"), this.row, this.column, table.get_name());
         }
         this.type = symbol.type;
         this.value = symbol.value;
@@ -53,8 +53,7 @@ var Identifier = /** @class */ (function (_super) {
     Identifier.prototype.toString = function () {
         return String(this.value);
     };
-    Identifier.prototype.compile = function (table, generator) {
-        generator.addComment("----IDENTIFIER----");
+    Identifier.prototype.compile = function (table, generator, tree) {
         var value = table.get_table(this.id);
         if (value === null) {
             // @ts-ignore
@@ -62,8 +61,18 @@ var Identifier = /** @class */ (function (_super) {
             return;
         }
         var temp = generator.addTemp();
+        var temp_pos;
         // @ts-ignore
-        var temp_pos = value.position;
+        if (value.id != undefined) {
+            // @ts-ignore
+            temp_pos = value.position;
+            // @ts-ignore
+            if (value.environment !== 'Global') {
+                temp_pos = generator.addTemp();
+                // @ts-ignore
+                generator.addExpression(temp_pos, 'P', value.position - 1, '+');
+            }
+        }
         generator.getStack(temp, temp_pos);
         // @ts-ignore
         if (value.type !== type.BOOL) {

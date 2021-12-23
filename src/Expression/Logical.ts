@@ -29,6 +29,7 @@ export class Logical extends Instruction{
         let left = this.exp1.interpret(tree, table);
 
         if (left instanceof Exception){
+            return left;
         }
 
         if (this.exp2 != null){
@@ -52,7 +53,7 @@ export class Logical extends Instruction{
                 }
 
             } else {
-                return new Exception("Semantic", "This operators only work whit type boolean", this.row, this.column);
+                return new Exception("Semantic", "This operators only work whit type boolean", this.row, this.column, table.get_name());
             }
 
         } else {
@@ -60,20 +61,19 @@ export class Logical extends Instruction{
                 this.value = String(! JSON.parse(left)).toLowerCase();
                 return this.value;
             } else {
-                return new Exception("Semantic", `The type: ${this.exp1.get_type()} does not work whit operator: ${this.operator}`, this.row, this.column);
+                return new Exception("Semantic", `The type: ${this.exp1.get_type()} does not work whit operator: ${this.operator}`, this.row, this.column, table.get_name());
             }
         }
 
     }
 
-    compile(table: SymbolTable, generator: Generator3D): any {
-        generator.addComment("----LOGICAL EXPRESSION----");
+    compile(table: SymbolTable, generator: Generator3D, tree: Tree): any {
         if( this.exp1.get_type() != type.BOOL ) {
             generator.addError("Variable not boolean", Number(this.row), Number(this.column));
             return;
         }
 
-        let left = this.exp1.compile(table, generator);
+        let left = this.exp1.compile(table, generator, tree);
         if ( left instanceof Exception )
             return left;
 
@@ -97,7 +97,7 @@ export class Logical extends Instruction{
             generator.addExpression(left_temp, '0', '', '');
             generator.setLabel(go_right);
 
-            let right = this.exp2.compile(table, generator);
+            let right = this.exp2.compile(table, generator, tree);
             if ( right.get_type() != type.BOOL ) {
                 generator.addError('Relational: Operator must be boolean', Number(this.row), Number(this.column));
                 return ;

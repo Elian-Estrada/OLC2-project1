@@ -33,10 +33,10 @@ var Access_struct = /** @class */ (function (_super) {
     Access_struct.prototype.interpret = function (tree, table) {
         var struct = table.get_table(this.list_ids[0]);
         if (struct === undefined) {
-            return new Exception("Semantic", "The variable: ".concat(this.list_ids[0], " doesn't in the current context"), this.row, this.column);
+            return new Exception("Semantic", "The variable: ".concat(this.list_ids[0], " doesn't in the current context"), this.row, this.column, table.get_name());
         }
         if (struct.type !== type.STRUCT) {
-            return new Exception("Semantic", "The variable: ".concat(struct.id, " isn't struct"), struct.row, struct.column);
+            return new Exception("Semantic", "The variable: ".concat(struct.id, " isn't struct"), struct.row, struct.column, table.get_name());
         }
         var exp = null;
         if (this.expression !== null) {
@@ -102,14 +102,14 @@ var Access_struct = /** @class */ (function (_super) {
                         return result;
                     }
                     else if (item.type !== type.ARRAY && this.positions !== null) {
-                        return new Exception("Semantic", "The attribute: ".concat(item.id, " isn't ").concat(type.ARRAY), item.row, item.column);
+                        return new Exception("Semantic", "The attribute: ".concat(item.id, " isn't ").concat(type.ARRAY), item.row, item.column, table.get_name());
                     }
                     if (this.expression instanceof Call) {
                         if (exp.id == item.struct) {
                             item.value = exp;
                             return null;
                         }
-                        return new Exception("Semantic", "The attribute: ".concat(item.id, " isn't ").concat(exp.id), item.row, item.column);
+                        return new Exception("Semantic", "The attribute: ".concat(item.id, " isn't ").concat(exp.id), item.row, item.column, table.get_name());
                     }
                     if (exp !== null && this.expression.get_type() === item.type) {
                         if (this.expression.get_type() === item.type && !(this.expression instanceof Access_struct)) {
@@ -121,7 +121,7 @@ var Access_struct = /** @class */ (function (_super) {
                             item.value = exp.get_value();
                             return null;
                         }
-                        return new Exception("Semantic", "The type: ".concat(this.expression.get_type(), " cannot assignment at attribute of type: ").concat(item.type), this.expression.row, this.expression.column);
+                        return new Exception("Semantic", "The type: ".concat(this.expression.get_type(), " cannot assignment at attribute of type: ").concat(item.type), this.expression.row, this.expression.column, table.get_name());
                     }
                     this.type = item.type;
                     if (item.type === type.STRUCT) {
@@ -133,7 +133,7 @@ var Access_struct = /** @class */ (function (_super) {
                     return item.value;
                 }
             }
-            return new Exception("Semantic", "The attribute: ".concat(ids[0], " doesn't exist"), this.row, this.column);
+            return new Exception("Semantic", "The attribute: ".concat(ids[0], " doesn't exist"), this.row, this.column, table.get_name());
         }
     };
     Access_struct.prototype.get_values = function (positions, array, value, type_array, tree, table) {
@@ -144,13 +144,13 @@ var Access_struct = /** @class */ (function (_super) {
                     return pos;
                 }
                 if (positions[0].get_type() !== type.INT) {
-                    return new Exception("Semantic", "The index of array cannot be of type: ".concat(positions[0].get_type(), " expected type: ").concat(type.INT), positions[0].row, positions[0].column);
+                    return new Exception("Semantic", "The index of array cannot be of type: ".concat(positions[0].get_type(), " expected type: ").concat(type.INT), positions[0].row, positions[0].column, table.get_name());
                 }
                 return this.get_values(positions.slice(1), array[positions[0]], value, type_array, tree, table);
             }
             if (positions.length === 1 && array[positions[0]] !== undefined) {
                 if (this.expression.get_type() !== type_array) {
-                    return new Exception("Semantic", "The type: ".concat(this.expression.get_type(), " cannot be assignated at array of type: ").concat(type_array), this.expression.row, this.expression.column);
+                    return new Exception("Semantic", "The type: ".concat(this.expression.get_type(), " cannot be assignated at array of type: ").concat(type_array), this.expression.row, this.expression.column, table.get_name());
                 }
                 switch (this.expression.get_type()) {
                     case type.INT:
@@ -170,11 +170,11 @@ var Access_struct = /** @class */ (function (_super) {
                 return this.get_values(positions.slice(1), array[positions[0]], value, type_array, tree, table);
             }
             else {
-                return new Exception("Semantic", "The index out of range", this.positions[this.positions.length - 1].row, this.positions[this.positions.length - 1].column);
+                return new Exception("Semantic", "The index out of range", this.positions[this.positions.length - 1].row, this.positions[this.positions.length - 1].column, table.get_name());
             }
         }
         if (array === undefined) {
-            return new Exception("Semantic", "The index out of range", this.positions[this.positions.length - 1].row, this.positions[this.positions.length - 1].column);
+            return new Exception("Semantic", "The index out of range", this.positions[this.positions.length - 1].row, this.positions[this.positions.length - 1].column, table.get_name());
         }
         return array;
     };

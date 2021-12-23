@@ -16,6 +16,7 @@ var __extends = (this && this.__extends) || (function () {
 import { Function } from "../Instructions/Function.js";
 import Exception from "../SymbolTable/Exception.js";
 import { type } from "../SymbolTable/Type.js";
+import { Cst_Node } from "../Abstract/Cst_Node.js";
 var SubString = /** @class */ (function (_super) {
     __extends(SubString, _super);
     function SubString(id, from, to, type, name, params, instructions, row, col) {
@@ -28,11 +29,45 @@ var SubString = /** @class */ (function (_super) {
     SubString.prototype.interpret = function (tree, table) {
         var id_founded = this.id.interpret(tree, table);
         if (id_founded === null)
-            return new Exception("Semantic", "Identifier not found in the current context", this.row, this.column);
+            return new Exception("Semantic", "Identifier not found in the current context", this.row, this.column, table.get_name());
         if (this.id.get_type() !== type.STRING)
-            return new Exception("Semantic", "The type ".concat(id_founded.type, " not valid for Length"), this.row, this.column);
+            return new Exception("Semantic", "The type ".concat(id_founded.type, " not valid for Length"), this.row, this.column, table.get_name());
+        var from = this.from.interpret(tree, table);
+        if (from instanceof Exception) {
+            return from;
+        }
+        if (this.from.get_type() !== type.INT) {
+            return new Exception("Semantic", "The expression can be only of type: int", this.from.row, this.from.column, table.get_name());
+        }
+        if (from > id_founded.length || from < 0) {
+            return new Exception("Semantic", "The index: ".concat(from, " out of range"), this.from.row, this.from.column, table.get_name());
+        }
+        var to = this.to.interpret(tree, table);
+        if (to instanceof Exception) {
+            return to;
+        }
+        if (this.to.get_type() !== type.INT) {
+            return new Exception("Semantic", "The expression can be only of type: int", this.to.row, this.to.column, table.get_name());
+        }
+        // @ts-ignore
+        to = parseInt(to) + 1;
+        if (to > id_founded.length) {
+            return new Exception("Semantic", "The index: ".concat(to - 1, " out of range"), this.row, this.column, table.get_name());
+        }
         this.type = type.STRING;
-        return id_founded.substring(this.from, this.to);
+        return id_founded.substring(from, to);
+    };
+    SubString.prototype.get_node = function () {
+        var node = new Cst_Node("SubString");
+        node.add_childs_node(this.id.get_node());
+        node.add_child(".");
+        node.add_child("subString");
+        node.add_child("(");
+        node.add_childs_node(this.from.get_node());
+        node.add_child(",");
+        node.add_childs_node(this.to.get_node());
+        node.add_child(")");
+        return node;
     };
     return SubString;
 }(Function));

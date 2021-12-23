@@ -9,6 +9,7 @@ import { Struct } from "./Struct.js";
 import { Cst_Node } from "../Abstract/Cst_Node.js";
 import { Generator3D } from "../Generator/Generator3D.js";
 import { Access_struct } from "../Expression/Access_struct.js";
+import {Value} from "../Abstract/Value.js";
 
 export class Call extends Instruction {
 
@@ -37,11 +38,11 @@ export class Call extends Instruction {
                     let count = 0;
                     let table_res = null;
                     for ( let expression of this.params ) {
-
+                        
                         if (expression instanceof Array){
                             let param = ob_function.get_params()[count];
                             if(param.type !== type.ARRAY){
-                                return new Exception("Semantic", `The type: ${type.ARRAY} is different at parameter of type: ${param.type}`, param.row, param.column);
+                                return new Exception("Semantic", `The type: ${type.ARRAY} is different at parameter of type: ${param.type}`, param.row, param.column, new_table.get_name());
                             }
 
                             let array = new Declaration_array(param.name, param.sub_type, null, expression, param.row, param.column);
@@ -58,7 +59,6 @@ export class Call extends Instruction {
                         }
 
                         let val_expression = expression.interpret(tree, table);
-                        
                         if ( val_expression instanceof Exception )
                             return val_expression;
 
@@ -80,7 +80,7 @@ export class Call extends Instruction {
                                 let type_func = ob_function.get_params()[count].sub_type;
 
                                 if ( type_func !== val_expression.get_subtype() )
-                                    return new Exception("Semantic", `The type: ${val_expression.get_type()} is different to param type: ${type_func}`, ob_function.get_params()[count].row, ob_function.get_params()[count].column);
+                                    return new Exception("Semantic", `The type: ${val_expression.get_type()} is different to param type: ${type_func}`, ob_function.get_params()[count].row, ob_function.get_params()[count].column, new_table.get_name());
                             }
 
                             let name_func = String( ob_function.get_params()[count].name );
@@ -91,7 +91,7 @@ export class Call extends Instruction {
                                 return table_res;
                         }
                         else {
-                            return new Exception("Semantic", `The type: ${expression.get_type()} is different to param type: ${ob_function.get_params()[count].type}`, this.row, this.column);
+                            return new Exception("Semantic", `The type: ${expression.get_type()} is different to param type: ${ob_function.get_params()[count].type}`, this.row, this.column, new_table.get_name());
                         }
 
                         count += 1;
@@ -120,7 +120,7 @@ export class Call extends Instruction {
                 }
 
                 if (struct.get_attributes().length !== this.params.length){
-                    return new Exception("Semantic", `${struct.get_attributes().length} parameters were expected and ${this.params.length} came`, this.row, this.column);
+                    return new Exception("Semantic", `${struct.get_attributes().length} parameters were expected and ${this.params.length} came`, this.row, this.column, table.get_name());
                 }
 
                 let result:any = this.params.forEach((item, i) => {
@@ -137,7 +137,7 @@ export class Call extends Instruction {
                             }
                         } else {
 
-                            let error = new Exception("Semantic", `The attribute: ${struct?.get_attributes()[i].id} isn't an array.`, this.row, this.column);
+                            let error = new Exception("Semantic", `The attribute: ${struct?.get_attributes()[i].id} isn't an array.`, this.row, this.column, table.get_name());
                             tree.get_errors().push(error);
                             tree.update_console(error.toString());
                         }
@@ -156,7 +156,7 @@ export class Call extends Instruction {
 
                                 let result;
                                 if (struct.get_attributes()[i].sub_type !== value.get_subtype()){
-                                    result = new Exception("Semantic", `The type: ${value.get_subtype()} cannot assignet at array of type: ${struct.get_attributes()[i].sub_type}`, item.row, item.column);
+                                    result = new Exception("Semantic", `The type: ${value.get_subtype()} cannot assignet at array of type: ${struct.get_attributes()[i].sub_type}`, item.row, item.column, table.get_name());
                                 }
 
                                 if (result instanceof Exception){
@@ -169,21 +169,21 @@ export class Call extends Instruction {
                                 
                             } else {
 
-                                let error = new Exception("Semantic", `The attribute: ${struct?.get_attributes()[i].id} isn't an array.`, this.row, this.column);
+                                let error = new Exception("Semantic", `The attribute: ${struct?.get_attributes()[i].id} isn't an array.`, this.row, this.column, table.get_name());
                                 tree.get_errors().push(error);
                                 tree.update_console(error.toString());
                             }
                         } else {
 
                             if (struct.get_attributes()[i].type !== item.get_type() && struct.get_attributes()[i].type !== type.STRUCT){
-                                let error = new Exception("Semantic", `The type: ${item.get_type()} cannot assignet at attribute of type: ${struct.get_attributes()[i].type}`, item.row, item.column)
+                                let error = new Exception("Semantic", `The type: ${item.get_type()} cannot assignet at attribute of type: ${struct.get_attributes()[i].type}`, item.row, item.column, table.get_name())
                                 tree.get_errors().push(error);
                                 tree.update_console(error.toString());
                                 return;
                             } else if (struct.get_attributes()[i].type === type.STRUCT) {
                                 
                                 if (item.type !== type.NULL && struct.get_attributes()[i].struct !== value.get_id()){
-                                    let error = new Exception("Semantic", `The type: ${value.get_id()} cannot assignet at attribute of type: ${struct.get_attributes()[i].struct}`, item.row, item.column)
+                                    let error = new Exception("Semantic", `The type: ${value.get_id()} cannot assignet at attribute of type: ${struct.get_attributes()[i].struct}`, item.row, item.column, table.get_name())
                                     tree.get_errors().push(error);
                                     tree.update_console(error.toString());
                                     return;
@@ -203,7 +203,7 @@ export class Call extends Instruction {
                 return this.value;
 
             }else {
-                return new Exception("Semantic", `The function ${this.name} doesn't exists`, this.row, this.column);
+                return new Exception("Semantic", `The function ${this.name} doesn't exists`, this.row, this.column, table.get_name());
             }
         } catch (error){
             console.log(error);
@@ -230,7 +230,7 @@ export class Call extends Instruction {
             let value = list_expression.interpret(tree, table);
 
             if (type_array !== list_expression.get_type()){
-                return new Exception("Semantic", `The type: ${list_expression.get_type()} cannot assignet at array of type: ${type_array}`, list_expression.row, list_expression.column);
+                return new Exception("Semantic", `The type: ${list_expression.get_type()} cannot assignet at array of type: ${type_array}`, list_expression.row, list_expression.column, table.get_name());
             }
 
             switch(list_expression.get_type()){
@@ -256,8 +256,51 @@ export class Call extends Instruction {
         return this.name;
     }
 
-    compile(table: SymbolTable, generator: Generator3D) {
-        
+    compile(table: SymbolTable, generator: Generator3D, tree: Tree) {
+        console.log(tree)
+        let func = tree.get_function(this.name);
+
+        if ( func != null ) {
+            let param_values = [];
+            let size = generator.keepTemps(table);
+
+            for ( let param of this.params ) {
+                param_values.push(param.compile(table, generator, tree));
+            }
+
+            let temp = generator.addTemp();
+            generator.addExpression(temp, 'P', table.get_size() + 1, '+');
+            let aux = 0;
+
+            for ( let param of param_values ) {
+                aux = aux + 1;
+                // console.log(param)
+                generator.setStack(temp, param.value);
+
+                if ( aux != param_values.length ) {
+                    generator.addExpression(temp, temp, '1', '+');
+                }
+            }
+
+            generator.newEnv(table.get_size());
+            generator.callFunc(func.get_name());
+            generator.getStack(temp, 'P');
+            generator.setEnv(table.get_size());
+            // @ts-ignore
+            generator.recoverTemps(table, size);
+
+            let ret_val = new Value(temp, func.get_type(), true);
+            if ( ret_val.get_type() == type.BOOL ) {
+                let temp_label = generator.newLabel();
+                let temp_label2 = generator.newLabel();
+                generator.addIf(temp, 1, '==', temp_label);
+                generator.addGoTo(temp_label2);
+                ret_val.true_label = temp_label;
+                ret_val.false_label = temp_label2;
+            }
+
+            return ret_val;
+        }
     }
 
     get_node() {

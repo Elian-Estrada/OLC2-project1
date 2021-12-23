@@ -2,6 +2,7 @@ import { Cst_Node } from "../Abstract/Cst_Node.js";
 import { Instruction } from "../Abstract/Instruction.js";
 import { Access_struct } from "../Expression/Access_struct.js";
 import { Identifier } from "../Expression/Identifier.js";
+import { Values_array } from "../Expression/Values_array.js";
 import { Generator3D } from "../Generator/Generator3D.js";
 import Exception from "../SymbolTable/Exception.js";
 import Symbol from "../SymbolTable/Symbol.js";
@@ -23,6 +24,8 @@ export class Assignment extends Instruction{
     interpret(tree: Tree, table: SymbolTable){
 
         let value = this.expression.interpret(tree, table);
+        console.log(value);
+        
 
         if (value instanceof Exception){
             return value;
@@ -44,7 +47,7 @@ export class Assignment extends Instruction{
             //value = value.get_value().value;
             value = value.get_value();
         }
-        
+
         let new_symbol = new Symbol(this.id, this.expression.get_type(), this.row, this.column, value);
         let result = table.update_table(new_symbol);
 
@@ -74,16 +77,45 @@ export class Assignment extends Instruction{
         return node;
     }
     
-    compile(table: SymbolTable, generator: Generator3D): any {
-        /*generator.addComment("------START COMPILE VALUE OF VAR------");
-        let value = this.expression.compile(table, generator);
-        generator.addComment("------END COMPILE VALUE OF VAR------");
+    compile(table: SymbolTable, generator: Generator3D, tree: Tree): any {
+        let val = this.expression.compile(table, generator, tree);
+        let new_var = table.get_table(this.get_id());
+        // @ts-ignore
+        table.update_table(new_var);
 
-        let new_var = table.get_table(this.get_id()[0]);
-        if ( new_var === null ) {
-            let in_heap = ( this.expression.get_type() === type.STRING || this.expression.get_type() === type.STRUCT || this.expression.get_type() === type.ARRAY );
-            let new_symbol = new Symbol(this.id[0], this.expression.get_type(), this.row, this.column, this.expression, undefined, in_heap);
-            table.set_table(new_symbol);
-        }*/
+        if ( val.get_type() === type.BOOL ) {
+            // @ts-ignore
+            this.valueBoolean(val, new_var.position, generator);
+        } else {
+
+            let index = -1;
+            // @ts-ignore
+            const symbols = JSON.parse(localStorage.getItem("symbol"));
+            symbols.forEach((item: any, i: number) => {
+                if ( this.get_id() === item._id ) {
+                    index = i;
+                }
+
+                if ( index !== -1 ) {
+                    // @ts-ignore
+                    symbols[index].size = val.size;
+                }
+            });
+            localStorage.setItem('symbol', JSON.stringify(symbols));
+
+            // @ts-ignore
+            generator.setStack(new_var.position, val.value);
+        }
+    }
+
+    public valueBoolean(value: any, temp_pos: any, generator: Generator3D) {
+        let temp_label = generator.newLabel();
+        generator.setLabel(value.true_label);
+        generator.setStack(temp_pos, "1");
+        generator.addGoTo(temp_label);
+
+        generator.setLabel(value.false_label);
+        generator.setStack(temp_pos, "0");
+        generator.setLabel(temp_label);
     }
 }

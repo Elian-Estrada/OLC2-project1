@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Symbol Table Report</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+</head>
+<body style="background-color: #080303c2; color:white">
+    <div class="container">
+        <div class="container">
+            <div style="text-align: center" class="card grey darken-3 z-depth-4">
+                <h3 style="color: white; padding: 3%;">Symbol Table Report</h3>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col l12">
+                <table class="card striped responsive-table card grey darken-4">
+                    <thead>
+                        <tr>
+                            <th>No. </th>
+                            <th> Identifier </th>
+                            <th> Type </th>
+                            <th> Sub Type </th>
+                            <th> Environment </th>
+                            <th> Value </th>
+                            <th> Row </th>
+                            <th> Column </th>
+                        </tr>
+                    </thead>
+                    <tbody id="symbols">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <script src="./symbolTable.js"></script>
+</body>
+</html>

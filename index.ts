@@ -5,6 +5,7 @@ let btnCompile: HTMLElement | null = document.getElementById('btnCompile');
 let bufferStream: string;
 
 let myCodeMirror: any;
+let main: Main;
 
 // @ts-ignore
 myCodeMirror = CodeMirror.fromTextArea(
@@ -62,10 +63,17 @@ window.addEventListener('keydown', (e) => {
     }
 })
 
+window.addEventListener('keydown', (e) => {
+    if ( e.ctrlKey && e.shiftKey && e.key == "Enter" ) {
+        codeToAnalyze();
+        codeToCompile();
+    }
+});
+
 function codeToAnalyze() {
     bufferStream = myCodeMirror.getValue();
     // console.log(bufferStream);
-    let main = new Main();
+    main = new Main();
     myCodeMirror2.setValue("");
     // @ts-ignore
     let res: string = main.lexicalAnalysis(bufferStream);
@@ -77,11 +85,16 @@ function codeToAnalyze() {
     }
 }
 
-btnCompile?.addEventListener('click', () => {
+function codeToCompile() {
     bufferStream = myCodeMirror.getValue();
-    let main = new Main();
+    // let main = new Main();
     myCodeMirror3.setValue("");
     let res: string = main.compile(bufferStream);
     updateCodeMirror(res, myCodeMirror3);
     // console.log(res);
-})
+}
+
+btnCompile?.addEventListener('click', () => {
+    codeToAnalyze();
+    codeToCompile();
+});

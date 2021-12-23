@@ -33,12 +33,22 @@ var For = /** @class */ (function (_super) {
         _this.counter = 0;
         return _this;
     }
-    For.prototype.compile = function (table, generator) {
+    For.prototype.compile = function (table, generator, tree) {
         generator.addComment("----FOR CYCLE----");
-        var value = this.condition.compile(table, generator);
-        if (value.type == type.STRING) {
-            var variable = this;
+        this.init.compile(table, generator, tree);
+        // @ts-ignore
+        table.get_table(this.init.id[0]);
+        var continue_label = generator.newLabel();
+        generator.setLabel(continue_label);
+        var condition = this.condition.compile(table, generator, tree);
+        generator.setLabel(condition.true_label);
+        for (var _i = 0, _a = this.instructions; _i < _a.length; _i++) {
+            var instructions = _a[_i];
+            instructions.compile(table, generator, tree);
         }
+        this.step.compile(table, generator, tree);
+        generator.addGoTo(continue_label);
+        generator.setLabel(condition.false_label);
     };
     For.prototype.interpret = function (tree, table) {
         if (!(typeof null in (this.init))
@@ -101,7 +111,7 @@ var For = /** @class */ (function (_super) {
                         }
                     }
                     else {
-                        return new Exception("Semantic", "Expect a Boolean type expression", this.row, this.column);
+                        return new Exception("Semantic", "Expect a Boolean type expression", this.row, this.column, new_table === null ? table.get_name() : new_table === null || new_table === void 0 ? void 0 : new_table.get_name());
                     }
                     this.counter += 1;
                 }
@@ -110,11 +120,11 @@ var For = /** @class */ (function (_super) {
                 }
             }
             catch (error) {
-                return new Exception("Semantic", "" + error, this.row, this.column);
+                return new Exception("Semantic", "" + error, this.row, this.column, table.get_name());
             }
         }
         else {
-            return new Exception("Semantic", "Expression Expected", this.row, this.column);
+            return new Exception("Semantic", "Expression Expected", this.row, this.column, table.get_name());
         }
     };
     For.prototype.get_node = function () {

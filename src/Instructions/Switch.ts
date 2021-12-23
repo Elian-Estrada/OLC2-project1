@@ -32,9 +32,12 @@ export class Switch extends Instruction {
 
     interpret(tree: Tree, table: SymbolTable) {
         if ( this.list_cases != null ) {
+            let res;
+            let flag_break = true;
             for ( let item of this.list_cases ) {
                 let rel = new Relational(this.expr, item.get_value(), Relational_operator.EQUAL, this.row, this.column);
-                let res = rel.interpret(tree, table);
+                if (flag_break)
+                    res = rel.interpret(tree, table);
 
                 if ( res instanceof Exception )
                     return res;
@@ -44,11 +47,14 @@ export class Switch extends Instruction {
                     this.col_case = item.column;
 
                     let res_interpret = this.execute_instructs(tree, table, item.get_instructions(), true);
-
+                    console.log(res_interpret);
+                    
                     if ( res_interpret == null && !JSON.parse(String(this.flag)) ) {
                         return null;
                     } else if ( res_interpret instanceof Return ) {
                         return res_interpret;
+                    } else if (res_interpret === undefined){
+                        flag_break = false;
                     }
                 }
 
@@ -94,8 +100,8 @@ export class Switch extends Instruction {
         }
     }
 
-    compile(table: SymbolTable, generator: Generator3D) {
-        
+    compile(table: SymbolTable, generator: Generator3D, tree: Tree) {
+        let condition = this.expr.compile(table, generator, tree);
     }
 
     get_node() {

@@ -41,17 +41,33 @@ var ForIn = /** @class */ (function (_super) {
             if (value_iterable instanceof Exception) {
                 return value_iterable;
             }
-            if (this.secondExp.get_type() == type.STRING) {
+            if (this.secondExp.get_type() == type.STRING || this.secondExp.get_type() === type.ARRAY) {
                 var new_table = new SymbolTable(table, "ForIn-".concat(this.row, "-").concat(this.column));
                 /* Hacer nueva declaration */
                 // @ts-ignore
-                var new_var = new Declaration([this.firsExp.toString()], type.STRING, this.row, this.column, null);
+                var new_var = void 0;
+                switch (this.secondExp.get_type()) {
+                    case type.STRING:
+                        // @ts-ignore
+                        new_var = new Declaration([this.firsExp.toString()], this.secondExp.get_type(), this.row, this.column, null);
+                        break;
+                    case type.ARRAY:
+                        // @ts-ignore
+                        new_var = new Declaration([this.firsExp.toString()], value_iterable.get_subtype(), this.row, this.column, null);
+                        value_iterable = value_iterable.get_value();
+                        //new_var = new Declaration_array(this.firsExp.toString(), value_iterable.get_subtype(), null, [], this.secondExp.row, this.secondExp.column);
+                        break;
+                    default:
+                        return new Exception("Semantic", "The instruction For-in only accept on string or array", this.secondExp.row, this.secondExp.column, new_table.get_name());
+                }
+                // @ts-ignore
                 var res_dec = new_var.interpret(tree, new_table);
                 if (res_dec instanceof Exception)
                     return res_dec;
                 for (var _i = 0, value_iterable_1 = value_iterable; _i < value_iterable_1.length; _i++) {
                     var item_dec = value_iterable_1[_i];
-                    var new_symbol = new Symbol(new_var.get_id()[0], type.STRING, this.row, this.column, item_dec);
+                    // @ts-ignore
+                    var new_symbol = new Symbol(new_var.get_id()[0], new_var.get_type(), this.row, this.column, item_dec);
                     var res_new_table = new_table.update_table(new_symbol);
                     if (res_new_table instanceof Exception)
                         return res_new_table;
@@ -84,7 +100,7 @@ var ForIn = /** @class */ (function (_super) {
         var node = new Cst_Node("For-In");
         node.add_child("for");
         node.add_child("(");
-        node.add_childs_node(this.firsExp.get_node());
+        node.add_child(this.firsExp.toString());
         node.add_child("in");
         node.add_childs_node(this.secondExp.get_node());
         node.add_child(")");

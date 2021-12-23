@@ -18,6 +18,7 @@ import { type } from "../SymbolTable/Type.js";
 import Exception from "../SymbolTable/Exception.js";
 import { Call } from "./Call.js";
 import { Cst_Node } from "../Abstract/Cst_Node.js";
+import { Values_array } from "../Expression/Values_array.js";
 var Print = /** @class */ (function (_super) {
     __extends(Print, _super);
     function Print(expression, row, col, flag) {
@@ -27,28 +28,30 @@ var Print = /** @class */ (function (_super) {
         _this.flag = flag;
         return _this;
     }
-    Print.prototype.compile = function (table, generator) {
-        generator.addComment("----PRINT----");
-        var res = this.expression.compile(table, generator);
-        var valueShow = res.value;
-        if (res.get_type() === type.INT) {
-            generator.add_print("d", "int", valueShow);
+    Print.prototype.compile = function (table, generator, tree) {
+        for (var _i = 0, _a = this.expression; _i < _a.length; _i++) {
+            var item = _a[_i];
+            var res = item.compile(table, generator, tree);
+            var valueShow = res.value;
+            if (res.get_type() === type.INT) {
+                generator.add_print("d", "int", valueShow);
+            }
+            else if (res.get_type() === type.DOUBLE) {
+                generator.add_print("f", "double", valueShow);
+            }
+            else if (res.get_type() === type.STRING || res.get_type() === type.CHAR) {
+                this.typeString(valueShow, table, generator);
+            }
+            else if (res.get_type() === type.BOOL) {
+                this.typeBoolean(res, generator);
+            }
+            generator.add_print("c", "char", 10);
         }
-        else if (res.get_type() === type.DOUBLE) {
-            generator.add_print("f", "double", valueShow);
-        }
-        else if (res.get_type() === type.STRING || res.get_type() === type.CHAR) {
-            this.typeString(valueShow, table, generator);
-        }
-        else if (res.get_type() === type.BOOL) {
-            this.typeBoolean(res, generator);
-        }
-        generator.add_print("c", "char", 10);
     };
     Print.prototype.typeString = function (value, table, generator) {
         generator.printString();
         var paramTemp1 = generator.addTemp();
-        generator.addAssignment(paramTemp1, "H");
+        // generator.addAssignment(paramTemp1, "H");
         var paramTemp2 = generator.addTemp();
         generator.addExpression(paramTemp2, 'P', table.get_size(), '+'); // T5 = P + 1;
         generator.addExpression(paramTemp2, paramTemp2, '1', '+');
@@ -70,39 +73,50 @@ var Print = /** @class */ (function (_super) {
         generator.setLabel(exit_label);
     };
     Print.prototype.interpret = function (tree, table) {
-        if (this.expression instanceof Call) {
-            // console.log(this.expression)
-            // @ts-ignore
-            // console.log(this.expression.type)
-            // @ts-ignore
-            if (this.expression.type === type.VOID) {
-                return new Exception("Semantic", "Error 'void' type not allowed here", this.row, this.column);
+        for (var _i = 0, _a = this.expression; _i < _a.length; _i++) {
+            var item = _a[_i];
+            if (item instanceof Array) {
+                //@ts-ignore
+                item = new Values_array(item, this.row, this.column);
             }
-        }
-        var value = this.expression.interpret(tree, table);
-        if (value instanceof Exception)
-            return value;
-        /*if ( value === null )
-            return new Exception("Semantic", "Error 'void' type not allowed here", this.row, this.column);*/
-        if (this.expression.get_type() == type.ARRAY) {
-            value = JSON.stringify(value.get_value());
-        }
-        else if (this.expression.get_type() === type.STRUCT && value !== "null") {
-            if ( /*this.expression.get_value().value*/this.expression.get_value() === "null") {
-                //value = `${/*this.expression.get_value().struct*/}(null)`;
-                value = "null";
+            if ( /*this.expression*/item instanceof Call) {
+                // console.log(this.expression)
+                // @ts-ignore
+                // console.log(this.expression.type)
+                // @ts-ignore
+                if ( /*this.expression.type*/item.type === type.VOID) {
+                    return new Exception("Semantic", "Error 'void' type not allowed here", this.row, this.column, table.get_name());
+                }
             }
-            else {
-                value = this.print_struct(this.expression.get_value());
+            var value = /*this.expression*/ item.interpret(tree, table);
+            if (value instanceof Exception)
+                return value;
+            /*if ( value === null )
+                return new Exception("Semantic", "Error 'void' type not allowed here", this.row, this.column);*/
+            if ( /*this.expression*/item.get_type() == type.ARRAY) {
+                value = JSON.stringify(value.get_value());
             }
+            else if (value instanceof Array) {
+                value = JSON.stringify(value);
+            }
+            else if ( /*this.expression*/item.get_type() === type.STRUCT && value !== "null") {
+                if ( /*this.expression.get_value().value*/ /*this.expression*/item.get_value() === "null") {
+                    //value = `${/*this.expression.get_value().struct*/}(null)`;
+                    value = "null";
+                }
+                else {
+                    value = this.print_struct(/*this.expression*/ item.get_value());
+                }
+            }
+            else if (value.type === type.STRUCT) {
+                value = this.print_struct(value);
+            }
+            else if ( /*this.expression*/item.get_type() == type.NULL) {
+                return new Exception("Semantic", "Null Pointer Exception", this.row, this.column, table.get_name());
+            }
+            tree.update_console("".concat(value), false);
         }
-        else if (value.type === type.STRUCT) {
-            value = this.print_struct(value);
-        }
-        else if (this.expression.get_type() == type.NULL) {
-            return new Exception("Semantic", "Null Pointer Exception", this.row, this.column);
-        }
-        tree.update_console("".concat(value), this.flag);
+        tree.update_console("", this.flag);
     };
     Print.prototype.print_struct = function (struct) {
         if (struct.value === "null") {
@@ -139,7 +153,14 @@ var Print = /** @class */ (function (_super) {
             node.add_child("print");
         }
         node.add_child("(");
-        node.add_childs_node(this.expression.get_node());
+        for (var _i = 0, _a = this.expression; _i < _a.length; _i++) {
+            var item = _a[_i];
+            if (item instanceof Array) {
+                //@ts-ignore
+                item = new Values_array(item, this.row, this.column);
+            }
+            node.add_childs_node(/*this.expression*/ item.get_node());
+        }
         node.add_child(")");
         return node;
     };

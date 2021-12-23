@@ -30,6 +30,7 @@ var Assignment = /** @class */ (function (_super) {
     }
     Assignment.prototype.interpret = function (tree, table) {
         var value = this.expression.interpret(tree, table);
+        console.log(value);
         if (value instanceof Exception) {
             return value;
         }
@@ -66,17 +67,42 @@ var Assignment = /** @class */ (function (_super) {
         node.add_childs_node(this.expression.get_node());
         return node;
     };
-    Assignment.prototype.compile = function (table, generator) {
-        /*generator.addComment("------START COMPILE VALUE OF VAR------");
-        let value = this.expression.compile(table, generator);
-        generator.addComment("------END COMPILE VALUE OF VAR------");
-
-        let new_var = table.get_table(this.get_id()[0]);
-        if ( new_var === null ) {
-            let in_heap = ( this.expression.get_type() === type.STRING || this.expression.get_type() === type.STRUCT || this.expression.get_type() === type.ARRAY );
-            let new_symbol = new Symbol(this.id[0], this.expression.get_type(), this.row, this.column, this.expression, undefined, in_heap);
-            table.set_table(new_symbol);
-        }*/
+    Assignment.prototype.compile = function (table, generator, tree) {
+        var _this = this;
+        var val = this.expression.compile(table, generator, tree);
+        var new_var = table.get_table(this.get_id());
+        // @ts-ignore
+        table.update_table(new_var);
+        if (val.get_type() === type.BOOL) {
+            // @ts-ignore
+            this.valueBoolean(val, new_var.position, generator);
+        }
+        else {
+            var index_1 = -1;
+            // @ts-ignore
+            var symbols_1 = JSON.parse(localStorage.getItem("symbol"));
+            symbols_1.forEach(function (item, i) {
+                if (_this.get_id() === item._id) {
+                    index_1 = i;
+                }
+                if (index_1 !== -1) {
+                    // @ts-ignore
+                    symbols_1[index_1].size = val.size;
+                }
+            });
+            localStorage.setItem('symbol', JSON.stringify(symbols_1));
+            // @ts-ignore
+            generator.setStack(new_var.position, val.value);
+        }
+    };
+    Assignment.prototype.valueBoolean = function (value, temp_pos, generator) {
+        var temp_label = generator.newLabel();
+        generator.setLabel(value.true_label);
+        generator.setStack(temp_pos, "1");
+        generator.addGoTo(temp_label);
+        generator.setLabel(value.false_label);
+        generator.setStack(temp_pos, "0");
+        generator.setLabel(temp_label);
     };
     return Assignment;
 }(Instruction));

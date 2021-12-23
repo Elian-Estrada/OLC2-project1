@@ -26,7 +26,7 @@ export class Identifier extends Instruction {
         
 
         if (symbol == undefined){
-            return new Exception("Semantic", `The id: ${this.id} doesn't exist in current context`, this.row, this.column);
+            return new Exception("Semantic", `The id: ${this.id} doesn't exist in current context`, this.row, this.column, table.get_name());
         }
 
         this.type = symbol.type;
@@ -58,8 +58,7 @@ export class Identifier extends Instruction {
         return String(this.value);
     }
 
-    compile(table: SymbolTable, generator: Generator3D): any {
-        generator.addComment("----IDENTIFIER----");
+    compile(table: SymbolTable, generator: Generator3D, tree: Tree): any {
         let value = table.get_table(this.id);
         if ( value === null ) {
             // @ts-ignore
@@ -68,8 +67,20 @@ export class Identifier extends Instruction {
         }
 
         let temp = generator.addTemp();
+        let temp_pos;
         // @ts-ignore
-        let temp_pos = value.position;
+        if ( value.id != undefined ) {
+            // @ts-ignore
+            temp_pos = value.position;
+
+            // @ts-ignore
+            if ( value.environment !== 'Global' ) {
+                temp_pos = generator.addTemp();
+                // @ts-ignore
+                generator.addExpression(temp_pos, 'P', value.position-1, '+');
+            }
+        }
+
         generator.getStack(temp, temp_pos);
 
         // @ts-ignore

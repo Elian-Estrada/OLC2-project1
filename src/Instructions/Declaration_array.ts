@@ -6,6 +6,9 @@ import Symbol from "../SymbolTable/Symbol.js";
 import SymbolTable from "../SymbolTable/SymbolTable.js";
 import Tree from "../SymbolTable/Tree.js";
 import { type } from "../SymbolTable/Type.js";
+import {Access_array} from "../Expression/Access_array";
+import {Primitive} from "../Expression/Primitive.js";
+import {Value} from "../Abstract/Value.js";
 
 export class Declaration_array extends Instruction {
 
@@ -54,12 +57,12 @@ export class Declaration_array extends Instruction {
             }
 
             if (!(array instanceof Declaration_array)){
-                return new Exception("Semantic", `Assignated only arrays`, this.row, this.column);
+                return new Exception("Semantic", `Assignated only arrays`, this.row, this.column, table.get_name());
             }
             
             if (this.type_array !== array.get_subtype()){
                 
-                return new Exception("Semantic", `The type: ${array.get_subtype()} cannot assignated to array of type: ${this.type_array}`, this.row, this.column);
+                return new Exception("Semantic", `The type: ${array.get_subtype()} cannot assignated to array of type: ${this.type_array}`, this.row, this.column, table.get_name());
             }
 
             let value;
@@ -122,7 +125,7 @@ export class Declaration_array extends Instruction {
             let value = list_expression.interpret(tree, table);
 
             if (this.type_array !== list_expression.get_type()){
-                return new Exception("Semantic", `The type: ${list_expression.get_type()} cannot assignet at array of type: ${this.type_array}`, list_expression.row, list_expression.column);
+                return new Exception("Semantic", `The type: ${list_expression.get_type()} cannot assignet at array of type: ${this.type_array}`, list_expression.row, list_expression.column, table.get_name());
             }
 
             switch(list_expression.get_type()){
@@ -160,8 +163,33 @@ export class Declaration_array extends Instruction {
         return this.id;
     }
 
-    compile(table: SymbolTable, generator: Generator3D) {
-        
+    compile(table: SymbolTable, generator: Generator3D, tree: Tree) {
+        generator.addComment("-----KEEP ARRAY-----");
+        let temp = generator.addTemp();
+        let temp_move = generator.addTemp();
+
+        generator.addExpression(temp, 'H', '', '');
+        generator.addExpression(temp_move, 'H', '', '');
+        generator.addExpression('H', 'H', table.get_size() + 1, '+');
+        generator.setHeap(temp_move, table.get_size());
+
+        generator.addExpression(temp_move, temp_move, '1', '+');
+
+        for ( let expr of this.list_expression ) {
+            let value = expr.compile(table, generator, tree);
+
+            if ( value instanceof Primitive )
+                this.type = value.get_type();
+
+            generator.setHeap(temp_move, value.value);
+            generator.addExpression(temp_move, temp_move, '1', '+');
+        }
+
+        generator.addComment("----END ARRAY-----");
+        let val_ret = new Value(temp, type.ARRAY, true);
+        //val_ret.type_array = this.type;
+
+        return val_ret;
     }
 
     get_node() {

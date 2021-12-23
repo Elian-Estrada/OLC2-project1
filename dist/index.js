@@ -3,6 +3,7 @@ var btnAnalyze = document.getElementById('btnAnalyze');
 var btnCompile = document.getElementById('btnCompile');
 var bufferStream;
 var myCodeMirror;
+var main;
 // @ts-ignore
 myCodeMirror = CodeMirror.fromTextArea(document.getElementById("code"), {
     lineNumbers: true,
@@ -43,10 +44,16 @@ window.addEventListener('keydown', function (e) {
         codeToAnalyze();
     }
 });
+window.addEventListener('keydown', function (e) {
+    if (e.ctrlKey && e.shiftKey && e.key == "Enter") {
+        codeToAnalyze();
+        codeToCompile();
+    }
+});
 function codeToAnalyze() {
     bufferStream = myCodeMirror.getValue();
     // console.log(bufferStream);
-    var main = new Main();
+    main = new Main();
     myCodeMirror2.setValue("");
     // @ts-ignore
     var res = main.lexicalAnalysis(bufferStream);
@@ -57,11 +64,15 @@ function codeToAnalyze() {
         console.log(error);
     }
 }
-btnCompile === null || btnCompile === void 0 ? void 0 : btnCompile.addEventListener('click', function () {
+function codeToCompile() {
     bufferStream = myCodeMirror.getValue();
-    var main = new Main();
+    // let main = new Main();
     myCodeMirror3.setValue("");
     var res = main.compile(bufferStream);
     updateCodeMirror(res, myCodeMirror3);
     // console.log(res);
+}
+btnCompile === null || btnCompile === void 0 ? void 0 : btnCompile.addEventListener('click', function () {
+    codeToAnalyze();
+    codeToCompile();
 });

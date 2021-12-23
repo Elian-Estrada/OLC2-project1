@@ -49,7 +49,7 @@ var Struct = /** @class */ (function (_super) {
                 case type.STRUCT:
                     var exist = tree.get_struct(item.struct);
                     if (exist === null) {
-                        return new Exception("Semantic", "The Struct: ".concat(item.struct, " doesn't exist"), item.row, item.column);
+                        return new Exception("Semantic", "The Struct: ".concat(item.struct, " doesn't exist"), item.row, item.column, table.get_name());
                     }
                     item.value = "null";
                     break;

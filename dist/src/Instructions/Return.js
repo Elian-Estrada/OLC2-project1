@@ -16,6 +16,7 @@ var __extends = (this && this.__extends) || (function () {
 import { Instruction } from "../Abstract/Instruction.js";
 import Exception from "../SymbolTable/Exception.js";
 import { Cst_Node } from "../Abstract/Cst_Node.js";
+import { type } from "../SymbolTable/Type.js";
 var Return = /** @class */ (function (_super) {
     __extends(Return, _super);
     function Return(expr, row, col) {
@@ -26,8 +27,12 @@ var Return = /** @class */ (function (_super) {
         return _this;
     }
     Return.prototype.interpret = function (tree, table) {
-        if (this.expr == null)
-            return "void";
+        if (this.expr == null) {
+            //return "void";
+            this.type = type.VOID;
+            this.result = null;
+            return this;
+        }
         var value = this.expr.interpret(tree, table);
         if (value instanceof Exception)
             return value;
@@ -48,9 +53,28 @@ var Return = /** @class */ (function (_super) {
         }
         return node;
     };
-    Return.prototype.compile = function (table, generator) {
-        generator.addComment("----RETURN----");
-        return;
+    Return.prototype.compile = function (table, generator, tree) {
+        if (this.expr != null) {
+            // console.log(this.expr)
+            var value = this.expr.compile(table, generator, tree);
+            if (value.type == type.BOOL) {
+                var temp_label = generator.newLabel();
+                generator.setLabel(value.true_label);
+                generator.setStack('P', '1');
+                generator.addGoTo(temp_label);
+                generator.setLabel(value.false_label);
+                generator.setStack('P', '0');
+                generator.setLabel(temp_label);
+                table.value_ret = value.value;
+            }
+            else {
+                console.log(value);
+                generator.setStack('P', value.value);
+            }
+            generator.addGoTo(table.return_label);
+        }
+        else
+            return;
     };
     return Return;
 }(Instruction));

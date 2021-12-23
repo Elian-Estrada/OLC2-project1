@@ -55,7 +55,7 @@ export class While extends Instruction {
                         break;
                     }
                 } else {
-                    return new Exception("Semantic", `Expect a Boolean type expression. Not ${this.expr.get_type().name}`, this.row, this.column);
+                    return new Exception("Semantic", `Expect a Boolean type expression. Not ${this.expr.get_type().name}`, this.row, this.column, table.get_name());
                 }
 
                 this.counter += 1;
@@ -66,7 +66,7 @@ export class While extends Instruction {
             }
 
         } catch (error) {
-            return new Exception("Semantic", "" + error, this.row, this.column);
+            return new Exception("Semantic", "" + error, this.row, this.column, table.get_name());
         }
     }
 
@@ -91,11 +91,10 @@ export class While extends Instruction {
         return node;
     }
     
-    compile(table: SymbolTable, generator: Generator3D): any {
-        generator.addComment("----WHILE----");
+    compile(table: SymbolTable, generator: Generator3D, tree: Tree): any {
         let continue_label = generator.newLabel();
         generator.setLabel(continue_label);
-        let condition = this.expr.compile(table, generator);
+        let condition = this.expr.compile(table, generator, tree);
         // let new_env = new SymbolTable(table, "While-Env-3D");
         table.break_label = condition.false_label;
         table.continue_label = continue_label;
@@ -103,7 +102,7 @@ export class While extends Instruction {
         generator.setLabel(condition.true_label);
 
         for (let inst of this.instructions ) {
-            inst.compile(table, generator);
+            inst.compile(table, generator, tree);
         }
         generator.addGoTo(continue_label);
         generator.setLabel(condition.false_label);

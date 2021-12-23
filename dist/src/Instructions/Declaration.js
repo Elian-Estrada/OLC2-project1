@@ -20,6 +20,7 @@ import { Identifier } from "../Expression/Identifier.js";
 import Exception from "../SymbolTable/Exception.js";
 import Symbol from "../SymbolTable/Symbol.js";
 import { type } from "../SymbolTable/Type.js";
+import { Primitive } from "../Expression/Primitive.js";
 var Declaration = /** @class */ (function (_super) {
     __extends(Declaration, _super);
     function Declaration(id, type, row, column, expression) {
@@ -30,24 +31,68 @@ var Declaration = /** @class */ (function (_super) {
         _this.expression = expression;
         return _this;
     }
-    Declaration.prototype.compile = function (table, generator) {
-        generator.addComment("----DECLARATION----");
-        var value = this.expression.compile(table, generator);
+    Declaration.prototype.compile = function (table, generator, tree) {
+        var _this = this;
+        if (this.expression == null) {
+            var new_exp = void 0;
+            switch (this.type) {
+                case type.INT:
+                    new_exp = new Primitive('0', type.INT, this.row, this.column);
+                    this.expression = new_exp;
+                    break;
+                case type.DOUBLE:
+                    new_exp = new Primitive('0.0', type.DOUBLE, this.row, this.column);
+                    this.expression = new_exp;
+                    break;
+                case type.STRING:
+                    new_exp = new Primitive('', type.STRING, this.row, this.column);
+                    this.expression = new_exp;
+                    break;
+                case type.CHAR:
+                    new_exp = new Primitive('', type.CHAR, this.row, this.column);
+                    this.expression = new_exp;
+                    break;
+                case type.BOOL:
+                    new_exp = new Primitive('true', type.STRING, this.row, this.column);
+                    this.expression = new_exp;
+                    break;
+                default:
+                    generator.addError("Iterator must be integer", Number(this.row), Number(this.column));
+                    return;
+            }
+        }
+        var value = this.expression.compile(table, generator, tree);
         var new_var = table.get_table(this.get_id()[0]);
         var new_symbol = null;
+        var temp_pos = null;
         if (new_var === undefined) {
             var in_heap = (value.get_type() === type.STRING || value.get_type() === type.STRUCT || value.get_type() === type.ARRAY);
             new_symbol = new Symbol(this.id[0], value.get_type(), this.row, this.column, this.expression, undefined, in_heap, value.true_label, value.false_label);
+            new_symbol.size = value.size;
+            var index_1 = -1;
+            // @ts-ignore
+            var symbols_1 = JSON.parse(localStorage.getItem("symbol"));
+            symbols_1.forEach(function (item, i) {
+                if (_this.id[0] === item._id) {
+                    index_1 = i;
+                }
+                if (index_1 !== -1) {
+                    // @ts-ignore
+                    symbols_1[index_1].size = new_symbol.size;
+                }
+            });
+            localStorage.setItem('symbol', JSON.stringify(symbols_1));
             table.set_table(new_symbol);
+            temp_pos = new_symbol.position;
         }
-        // @ts-ignore
-        var temp_pos = new_symbol.position;
+        else {
+            temp_pos = new_var.position;
+        }
         if (value.get_type() === type.BOOL) {
             this.valueBoolean(value, temp_pos, generator);
         }
         else
-            (value.get_type() === type.INT || value.get_type() === type.DOUBLE);
-        generator.setStack(temp_pos, value.value);
+            generator.setStack(temp_pos, value.value);
     };
     Declaration.prototype.valueBoolean = function (value, temp_pos, generator) {
         var temp_label = generator.newLabel();
@@ -68,12 +113,12 @@ var Declaration = /** @class */ (function (_super) {
             }
             if (this.expression instanceof Identifier && this.expression.get_type() === type.STRUCT) {
                 if (this.expression.get_value().get_id() !== this.id[1]) {
-                    return new Exception("Semantic", "The type: ".concat(value.id, " cannot be assignment to variable of type: ").concat(this.id[1]), this.expression.row, this.expression.column);
+                    return new Exception("Semantic", "The type: ".concat(value.id, " cannot be assignment to variable of type: ").concat(this.id[1]), this.expression.row, this.expression.column, table.get_name());
                 }
             }
             if (this.expression.get_type() === type.STRUCT && this.expression instanceof Access_struct) {
                 if ( /*value.get_value().struct*/value.get_value() !== "null" && value.get_value().id !== this.id[1]) {
-                    return new Exception("Semantic", "The type: ".concat(value.get_value().get_id(), " cannot be assignment to variable of type: ").concat(this.id[1]), this.expression.row, this.expression.column);
+                    return new Exception("Semantic", "The type: ".concat(value.get_value().get_id(), " cannot be assignment to variable of type: ").concat(this.id[1]), this.expression.row, this.expression.column, table.get_name());
                 }
                 else if (value.get_value() === "null") {
                     value = { id: this.id[1], value: "null" };
@@ -86,7 +131,7 @@ var Declaration = /** @class */ (function (_super) {
                 !(this.expression instanceof Identifier || this.expression instanceof Access_struct)) {
                 var struct = this.id[1];
                 if (struct !== this.expression.get_id()) {
-                    return new Exception("Semantic", "The type: ".concat(this.expression.get_id(), " cannot be assignment to variable of type: ").concat(struct), this.expression.row, this.expression.column);
+                    return new Exception("Semantic", "The type: ".concat(this.expression.get_id(), " cannot be assignment to variable of type: ").concat(struct), this.expression.row, this.expression.column, table.get_name());
                 }
             }
             else if (this.expression.get_type() !== this.id[1]) {
@@ -95,8 +140,15 @@ var Declaration = /** @class */ (function (_super) {
                     value = { id: this.id[1], value: "null" };
                 }
                 else {
+                    console.log(this.expression);
+                    if ((this.expression.get_type() === type.DOUBLE || this.expression.get_type() === type.INT)
+                        && (this.type === type.DOUBLE)) {
+                        console.log(this.expression);
+                        this.expression.set_type(this.type);
+                        value = String(parseFloat(value));
+                    }
                     if (this.expression.get_type() !== this.type) {
-                        return new Exception("Semantic", "The type: ".concat(this.expression.get_type(), " cannot be assignment to variable of type: ").concat(this.type), this.expression.row, this.expression.column);
+                        return new Exception("Semantic", "The type: ".concat(this.expression.get_type(), " cannot be assignment to variable of type: ").concat(this.type), this.expression.row, this.expression.column, table.get_name());
                     }
                 }
             }
@@ -123,7 +175,6 @@ var Declaration = /** @class */ (function (_super) {
                     break;
             }
         }
-        var errors = [];
         var result;
         if (this.type !== type.STRUCT) {
             for (var _i = 0, _a = this.id; _i < _a.length; _i++) {
@@ -131,7 +182,8 @@ var Declaration = /** @class */ (function (_super) {
                 symbol = new Symbol(item, this.type, this.row, this.column, value);
                 result = table.set_table(symbol);
                 if (result instanceof Exception) {
-                    errors.push(result);
+                    tree.get_errors().push(result);
+                    tree.update_console(result.toString());
                 }
             }
         }
@@ -142,9 +194,6 @@ var Declaration = /** @class */ (function (_super) {
                 return result;
             }
         }
-        if (errors.length !== 0) {
-            return errors;
-        }
         return null;
     };
     Declaration.prototype.get_id = function () {
@@ -153,10 +202,19 @@ var Declaration = /** @class */ (function (_super) {
     Declaration.prototype.get_value = function () {
         return this.expression;
     };
+    Declaration.prototype.get_type = function () {
+        return this.type;
+    };
     Declaration.prototype.get_node = function () {
         var node = new Cst_Node("Declaration");
-        node.add_child(this.type);
-        node.add_child(this.id);
+        if (this.type === type.STRUCT) {
+            node.add_child(this.id[1]);
+            node.add_child(this.id[0]);
+        }
+        else {
+            node.add_child(this.type);
+            node.add_child(this.id);
+        }
         if (this.expression !== null) {
             node.add_child("=");
             node.add_childs_node(this.expression.get_node());

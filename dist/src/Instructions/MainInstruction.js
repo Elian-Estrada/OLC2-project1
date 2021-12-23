@@ -20,6 +20,15 @@ import { Function } from "./Function.js";
 import { Continue } from "./Continue.js";
 import { Break } from "./Break.js";
 import { Cst_Node } from "../Abstract/Cst_Node.js";
+import { Push } from "../Nativas/Push.js";
+import { Pop } from "../Nativas/Pop.js";
+import { ToUpperCase } from "../Nativas/ToUpperCase.js";
+import { ToLowerCase } from "../Nativas/ToLowerCase.js";
+import { Length } from "../Nativas/Length.js";
+import { CaracterOfPosition } from "../Nativas/CaracterOfPosition.js";
+import { SubString } from "../Nativas/SubString.js";
+import { Parse } from "../Nativas/Parse.js";
+import { Graficar_ts } from "../Nativas/Graficar_ts.js";
 var MainInstruction = /** @class */ (function (_super) {
     __extends(MainInstruction, _super);
     function MainInstruction(instructions, row, col) {
@@ -32,8 +41,17 @@ var MainInstruction = /** @class */ (function (_super) {
         tree.set_symbol_table(new_table);
         for (var _i = 0, _a = this.instructions; _i < _a.length; _i++) {
             var item = _a[_i];
-            if (item instanceof Function) {
-                var error = new Exception("Semantic", "The instruction func don't be into of method main", item.row, item.column);
+            if (item instanceof Function
+                && !(item instanceof Push)
+                && !(item instanceof Pop)
+                && !(item instanceof ToUpperCase)
+                && !(item instanceof ToLowerCase)
+                && !(item instanceof Length)
+                && !(item instanceof CaracterOfPosition)
+                && !(item instanceof SubString)
+                && !(item instanceof Parse)
+                && !(item instanceof Graficar_ts)) {
+                var error = new Exception("Semantic", "The instruction func don't be into of method main", item.row, item.column, new_table.get_name());
                 tree.get_errors().push(error);
                 tree.update_console(error.toString());
             }
@@ -48,18 +66,18 @@ var MainInstruction = /** @class */ (function (_super) {
                 tree.update_console(instruction.toString());
             }
             if (instruction instanceof Break) {
-                var error = new Exception("Semantic", "The instruction Break is loop instruction", item.row, item.column);
+                var error = new Exception("Semantic", "The instruction Break is loop instruction", item.row, item.column, new_table.get_name());
                 tree.get_errors().push(error);
                 tree.update_console(error.toString());
             }
             if (instruction instanceof Continue) {
-                var error = new Exception("Semantic", "The instruction Continue is loop instruction", item.row, item.column);
+                var error = new Exception("Semantic", "The instruction Continue is loop instruction", item.row, item.column, new_table.get_name());
                 tree.get_errors().push(error);
                 tree.update_console(error.toString());
             }
         }
     };
-    MainInstruction.prototype.compile = function (table, generator) {
+    MainInstruction.prototype.compile = function (table, generator, tree) {
         /*let generator_aux = new Generator3D();
         let generator = generator_aux.get_instance();*/
         generator.addComment("----COMPILE----");
@@ -71,7 +89,7 @@ var MainInstruction = /** @class */ (function (_super) {
                     generator.add_print("c", "char", 10);
                 }
                 else {
-                    item.compile(table, generator);
+                    item.compile(table, generator, tree);
                 }
             }
         }

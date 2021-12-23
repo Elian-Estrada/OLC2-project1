@@ -29,6 +29,8 @@ import { Instruction } from "../Abstract/Instruction.js";
 import Exception from "../SymbolTable/Exception.js";
 import Symbol from "../SymbolTable/Symbol.js";
 import { type } from "../SymbolTable/Type.js";
+import { Primitive } from "../Expression/Primitive.js";
+import { Value } from "../Abstract/Value.js";
 var Declaration_array = /** @class */ (function (_super) {
     __extends(Declaration_array, _super);
     function Declaration_array(id, type_array, expression, list_extpression, row, column, flag) {
@@ -59,10 +61,10 @@ var Declaration_array = /** @class */ (function (_super) {
                 return array;
             }
             if (!(array instanceof Declaration_array)) {
-                return new Exception("Semantic", "Assignated only arrays", this.row, this.column);
+                return new Exception("Semantic", "Assignated only arrays", this.row, this.column, table.get_name());
             }
             if (this.type_array !== array.get_subtype()) {
-                return new Exception("Semantic", "The type: ".concat(array.get_subtype(), " cannot assignated to array of type: ").concat(this.type_array), this.row, this.column);
+                return new Exception("Semantic", "The type: ".concat(array.get_subtype(), " cannot assignated to array of type: ").concat(this.type_array), this.row, this.column, table.get_name());
             }
             var value = void 0;
             if (this.flag) {
@@ -106,7 +108,7 @@ var Declaration_array = /** @class */ (function (_super) {
         else {
             var value = list_expression.interpret(tree, table);
             if (this.type_array !== list_expression.get_type()) {
-                return new Exception("Semantic", "The type: ".concat(list_expression.get_type(), " cannot assignet at array of type: ").concat(this.type_array), list_expression.row, list_expression.column);
+                return new Exception("Semantic", "The type: ".concat(list_expression.get_type(), " cannot assignet at array of type: ").concat(this.type_array), list_expression.row, list_expression.column, table.get_name());
             }
             switch (list_expression.get_type()) {
                 case type.INT:
@@ -136,7 +138,27 @@ var Declaration_array = /** @class */ (function (_super) {
     Declaration_array.prototype.get_id = function () {
         return this.id;
     };
-    Declaration_array.prototype.compile = function (table, generator) {
+    Declaration_array.prototype.compile = function (table, generator, tree) {
+        generator.addComment("-----KEEP ARRAY-----");
+        var temp = generator.addTemp();
+        var temp_move = generator.addTemp();
+        generator.addExpression(temp, 'H', '', '');
+        generator.addExpression(temp_move, 'H', '', '');
+        generator.addExpression('H', 'H', table.get_size() + 1, '+');
+        generator.setHeap(temp_move, table.get_size());
+        generator.addExpression(temp_move, temp_move, '1', '+');
+        for (var _i = 0, _a = this.list_expression; _i < _a.length; _i++) {
+            var expr = _a[_i];
+            var value = expr.compile(table, generator, tree);
+            if (value instanceof Primitive)
+                this.type = value.get_type();
+            generator.setHeap(temp_move, value.value);
+            generator.addExpression(temp_move, temp_move, '1', '+');
+        }
+        generator.addComment("----END ARRAY-----");
+        var val_ret = new Value(temp, type.ARRAY, true);
+        //val_ret.type_array = this.type;
+        return val_ret;
     };
     Declaration_array.prototype.get_node = function () {
         var node = new Cst_Node("Declaration Array");

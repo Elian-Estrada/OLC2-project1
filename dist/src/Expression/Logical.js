@@ -32,6 +32,7 @@ var Logical = /** @class */ (function (_super) {
     Logical.prototype.interpret = function (tree, table) {
         var left = this.exp1.interpret(tree, table);
         if (left instanceof Exception) {
+            return left;
         }
         if (this.exp2 != null) {
             var right = this.exp2.interpret(tree, table);
@@ -49,7 +50,7 @@ var Logical = /** @class */ (function (_super) {
                 }
             }
             else {
-                return new Exception("Semantic", "This operators only work whit type boolean", this.row, this.column);
+                return new Exception("Semantic", "This operators only work whit type boolean", this.row, this.column, table.get_name());
             }
         }
         else {
@@ -58,17 +59,16 @@ var Logical = /** @class */ (function (_super) {
                 return this.value;
             }
             else {
-                return new Exception("Semantic", "The type: ".concat(this.exp1.get_type(), " does not work whit operator: ").concat(this.operator), this.row, this.column);
+                return new Exception("Semantic", "The type: ".concat(this.exp1.get_type(), " does not work whit operator: ").concat(this.operator), this.row, this.column, table.get_name());
             }
         }
     };
-    Logical.prototype.compile = function (table, generator) {
-        generator.addComment("----LOGICAL EXPRESSION----");
+    Logical.prototype.compile = function (table, generator, tree) {
         if (this.exp1.get_type() != type.BOOL) {
             generator.addError("Variable not boolean", Number(this.row), Number(this.column));
             return;
         }
-        var left = this.exp1.compile(table, generator);
+        var left = this.exp1.compile(table, generator, tree);
         if (left instanceof Exception)
             return left;
         var res = new Value(null, type.BOOL, false);
@@ -85,7 +85,7 @@ var Logical = /** @class */ (function (_super) {
             generator.setLabel(left.false_label);
             generator.addExpression(left_temp, '0', '', '');
             generator.setLabel(go_right);
-            var right = this.exp2.compile(table, generator);
+            var right = this.exp2.compile(table, generator, tree);
             if (right.get_type() != type.BOOL) {
                 generator.addError('Relational: Operator must be boolean', Number(this.row), Number(this.column));
                 return;

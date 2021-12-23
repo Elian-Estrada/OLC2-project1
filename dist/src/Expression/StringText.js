@@ -18,6 +18,7 @@ import Exception from "../SymbolTable/Exception.js";
 import { String_operator, type } from "../SymbolTable/Type.js";
 import { Cst_Node } from "../Abstract/Cst_Node.js";
 import { Value } from "../Abstract/Value.js";
+import { Primitive } from "./Primitive.js";
 var StringText = /** @class */ (function (_super) {
     __extends(StringText, _super);
     function StringText(exp1, exp2, operator, row, col) {
@@ -25,18 +26,17 @@ var StringText = /** @class */ (function (_super) {
         _this.operator = operator;
         _this.exp1 = exp1;
         _this.exp2 = exp2;
+        // @ts-ignore
         _this.value = "";
         _this.type = null;
         return _this;
     }
-    StringText.prototype.compile = function (table, generator) {
-        generator.addComment("----STRING EXPRESSION----");
-        var left = this.exp1.compile(table, generator);
-        var right = this.exp2.compile(table, generator);
-        var temp = generator.addTemp();
+    StringText.prototype.compile = function (table, generator, tree) {
         var operation = this.operator;
         if (operation === String_operator.CONCAT) {
             if (this.exp1.get_type() === type.STRING && this.exp2.get_type() === type.STRING) {
+                var left = this.exp1.compile(table, generator, tree);
+                var right = this.exp2.compile(table, generator, tree);
                 generator.concatString();
                 var paramTemp = generator.addTemp();
                 generator.addExpression(paramTemp, 'P', table.get_size(), '+');
@@ -48,18 +48,25 @@ var StringText = /** @class */ (function (_super) {
                 generator.setStack(paramTemp, right.value);
                 generator.newEnv(table.get_size());
                 generator.callFunc('concatString');
-                var temp_1 = generator.addTemp();
-                generator.getStack(temp_1, 'P');
+                var temp = generator.addTemp();
+                generator.getStack(temp, 'P');
                 generator.setEnv(table.get_size());
-                return new Value(temp_1, type.STRING, true);
+                var ret_val = new Value(temp, type.STRING, true);
+                ret_val.size = left.size + right.size;
+                return ret_val;
             }
             else {
-                generator.addExpression(temp, left.value, right.value, "+");
-                var type_ret = type.STRING;
-                return new Value(temp, type_ret, true);
+                var new_val = this.exp1.toString() + this.exp2.value.toString();
+                var new_prim = new Primitive(new_val, type.STRING, this.row, this.column);
+                var exp = new_prim.compile(table, generator, tree);
+                var ret_val = new Value(exp.value, type.STRING, true);
+                ret_val.size = exp.size;
+                return ret_val;
             }
         }
         else if (operation === String_operator.REPETITION) {
+            var left = this.exp1.compile(table, generator, tree);
+            var right = this.exp2.compile(table, generator, tree);
             generator.repString();
             var param_temp = generator.addTemp();
             generator.addExpression(param_temp, 'P', table.get_size(), '+');
@@ -69,10 +76,12 @@ var StringText = /** @class */ (function (_super) {
             generator.setStack(param_temp, right.value);
             generator.newEnv(table.get_size());
             generator.callFunc('repetitionStr');
-            var temp_2 = generator.addTemp();
-            generator.getStack(temp_2, 'P');
+            var temp = generator.addTemp();
+            generator.getStack(temp, 'P');
             generator.setEnv(table.get_size());
-            return new Value(temp_2, type.STRING, true);
+            var ret_val = new Value(temp, type.STRING, true);
+            ret_val.size = parseInt(left.size) * parseInt(right.value);
+            return ret_val;
         }
     };
     StringText.prototype.interpret = function (tree, table) {
@@ -97,7 +106,7 @@ var StringText = /** @class */ (function (_super) {
                                 this.value = left.toString() + right.toString();
                             }
                             else
-                                return new Exception("Semantic", "The type: ".concat(this.exp1.get_type(), " \n cannot be concatenated whit type: ").concat(this.exp2.get_type()), this.row, this.column);
+                                return new Exception("Semantic", "The type: ".concat(this.exp1.get_type(), " \n cannot be concatenated whit type: ").concat(this.exp2.get_type()), this.row, this.column, table.get_name());
                             break;
                     }
                     if (this.exp1.get_type() == type.STRING) {
@@ -113,7 +122,7 @@ var StringText = /** @class */ (function (_super) {
                                 this.value = left.toString() + right.toString();
                                 break;
                             default:
-                                return new Exception("Semantic", "The type ".concat(this.exp2.get_type().toString(), " cannot be operated with type: STRING"), this.row, this.column);
+                                return new Exception("Semantic", "The type ".concat(this.exp2.get_type().toString(), " cannot be operated with type: STRING"), this.row, this.column, table.get_name());
                         }
                     }
                     break;
@@ -123,7 +132,7 @@ var StringText = /** @class */ (function (_super) {
                         this.value = left.repeat(right);
                     }
                     else {
-                        return new Exception("Semantic", "This operation cannot be performed", this.row, this.column);
+                        return new Exception("Semantic", "This operation cannot be performed", this.row, this.column, table.get_name());
                     }
                     break;
             }
@@ -133,10 +142,13 @@ var StringText = /** @class */ (function (_super) {
     StringText.prototype.operation = function (op1, op2, op) {
         switch (op) {
             case String_operator.CONCAT:
+                // @ts-ignore
                 return String(op1 + op2);
             case String_operator.REPETITION:
+                // @ts-ignore
                 return String(op1.repeat(op2));
             default:
+                // @ts-ignore
                 return "";
         }
     };
@@ -151,6 +163,7 @@ var StringText = /** @class */ (function (_super) {
         return node;
     };
     StringText.prototype.toString = function () {
+        // @ts-ignore
         return String(this.value);
     };
     return StringText;

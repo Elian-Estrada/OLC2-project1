@@ -31,7 +31,6 @@ var Continue = /** @class */ (function (_super) {
             generator.addError('Continue transfer statement is not into a cycle', Number(this.row), Number(this.column));
             return;
         }
-        generator.addComment("----CONTINUE----");
         generator.addGoTo(table.continue_label);
     };
     return Continue;

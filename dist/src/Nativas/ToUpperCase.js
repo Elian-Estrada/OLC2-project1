@@ -16,6 +16,7 @@ var __extends = (this && this.__extends) || (function () {
 import { Function } from "../Instructions/Function.js";
 import Exception from "../SymbolTable/Exception.js";
 import { type } from "../SymbolTable/Type.js";
+import { Cst_Node } from "../Abstract/Cst_Node.js";
 var ToUpperCase = /** @class */ (function (_super) {
     __extends(ToUpperCase, _super);
     function ToUpperCase(id, type, name, params, instructions, row, col) {
@@ -26,11 +27,20 @@ var ToUpperCase = /** @class */ (function (_super) {
     ToUpperCase.prototype.interpret = function (tree, table) {
         var id_founded = this.id.interpret(tree, table);
         if (id_founded === null)
-            return new Exception("Semantic", "Identifier not found in the current context", this.row, this.column);
+            return new Exception("Semantic", "Identifier not found in the current context", this.row, this.column, table.get_name());
         if (this.id.get_type() !== type.STRING)
-            return new Exception("Semantic", "The type ".concat(id_founded.type, " not valid for Length"), this.row, this.column);
+            return new Exception("Semantic", "The type ".concat(id_founded.type, " not valid for Length"), this.row, this.column, table.get_name());
         this.type = type.STRING;
         return id_founded.toUpperCase();
+    };
+    ToUpperCase.prototype.get_node = function () {
+        var node = new Cst_Node("ToUpperCase");
+        node.add_childs_node(this.id.get_node());
+        node.add_child(".");
+        node.add_child("toUppercase");
+        node.add_child("(");
+        node.add_child(")");
+        return node;
     };
     return ToUpperCase;
 }(Function));

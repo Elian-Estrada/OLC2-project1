@@ -36,7 +36,7 @@ export class Access_array extends Instruction {
         }
 
         if (array.get_type() !== type.ARRAY){
-            return new Exception("Semantic", `The variable: ${array.get_id()} isn't an Array`, array.row, array.column);
+            return new Exception("Semantic", `The variable: ${array.get_id()} isn't an Array`, array.row, array.column, table.get_name());
         }
 
 
@@ -85,7 +85,7 @@ export class Access_array extends Instruction {
                 }
 
                 if (positions[0].get_type() !== type.INT){
-                    return new Exception("Semantic", `The index of array cannot be of type: ${positions[0].get_type()} expected type: ${type.INT}`, positions[0].row, positions[0].column);
+                    return new Exception("Semantic", `The index of array cannot be of type: ${positions[0].get_type()} expected type: ${type.INT}`, positions[0].row, positions[0].column, table.get_name());
                 }
 
                 return this.get_values(positions.slice(1), array[pos], value, type_array, tree, table);
@@ -94,7 +94,7 @@ export class Access_array extends Instruction {
             if (positions.length === 1 && array[pos] !== undefined){
 
                 if (this.expression.get_type() !== type_array){
-                    return new Exception("Semantic", `The type: ${this.expression.get_type()} cannot be assignated at array of type: ${type_array}`, this.expression.row, this.expression.column);
+                    return new Exception("Semantic", `The type: ${this.expression.get_type()} cannot be assignated at array of type: ${type_array}`, this.expression.row, this.expression.column, table.get_name());
                 }
 
                 switch(this.expression.get_type()){
@@ -116,13 +116,13 @@ export class Access_array extends Instruction {
             } else if (positions.length !== 1){
                 return this.get_values(positions.slice(1), array[pos], value, type_array, tree, table);
             } else {
-                return new Exception("Semantic", "The index out of range", this.positions[this.positions.length - 1].row, this.positions[this.positions.length - 1].column);    
+                return new Exception("Semantic", "The index out of range", this.positions[this.positions.length - 1].row, this.positions[this.positions.length - 1].column, table.get_name());    
             }
 
         }
 
         if (array === undefined){
-            return new Exception("Semantic", "The index out of range", this.positions[this.positions.length - 1].row, this.positions[this.positions.length - 1].column);
+            return new Exception("Semantic", "The index out of range", this.positions[this.positions.length - 1].row, this.positions[this.positions.length - 1].column, table.get_name());
         }
 
         return array;
@@ -143,7 +143,9 @@ export class Access_array extends Instruction {
     }
 
     compile(table: SymbolTable, generator: Generator3D) {
-        
+        generator.addComment("-----ARRAY-----");
+        let temp = generator.addTemp();
+        let temp_move = generator.addTemp();
     }
 
     get_node() {

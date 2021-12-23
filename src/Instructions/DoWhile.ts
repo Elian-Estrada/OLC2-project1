@@ -58,7 +58,7 @@ export class DoWhile extends Instruction {
                         break;
                     }
                 } else {
-                    return new Exception("Semantic", `Expect a Boolean type expression. Not ${this.expr.get_type().name}`, this.row, this.column);
+                    return new Exception("Semantic", `Expect a Boolean type expression. Not ${this.expr.get_type().name}`, this.row, this.column, table.get_name());
                 }
                 this.counter += 1;
             }
@@ -68,12 +68,24 @@ export class DoWhile extends Instruction {
             }
 
         } catch (error) {
-            return new Exception("Semantic", "" + error, this.row, this.column);
+            return new Exception("Semantic", "" + error, this.row, this.column, table.get_name());
         }
     }
 
-    compile(table: SymbolTable, generator: Generator3D) {
-        
+    compile(table: SymbolTable, generator: Generator3D, tree: Tree) {
+        let continue_label = generator.newLabel();
+        generator.setLabel(continue_label);
+
+        for (let inst of this.instructions ) {
+            inst.compile(table, generator, tree);
+        }
+
+        let condition = this.expr.compile(table, generator, tree);
+        table.break_label = condition.false_label;
+        table.continue_label = continue_label;
+        generator.setLabel(condition.true_label);
+        generator.addGoTo(continue_label);
+        generator.setLabel(condition.false_label);
     }
 
     get_node() {
