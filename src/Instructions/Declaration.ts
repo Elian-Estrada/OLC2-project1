@@ -45,7 +45,7 @@ export class Declaration extends Instruction {
         let new_symbol: string | Symbol | null = null;
         let temp_pos = null;
         if ( new_var === undefined ) {
-            let in_heap = ( value.get_type() === type.STRING || value.get_type() === type.STRUCT || value.get_type() === type.ARRAY );
+            let in_heap = ( value.get_type() === type.STRING || value.get_type() === type.STRUCT );
             new_symbol = new Symbol(this.id[0], value.get_type(), this.row, this.column, this.expression, undefined, in_heap, value.true_label, value.false_label);
             new_symbol.size = value.size;
 

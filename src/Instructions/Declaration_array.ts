@@ -1,12 +1,11 @@
-import { Cst_Node } from "../Abstract/Cst_Node.js";
-import { Instruction } from "../Abstract/Instruction.js";
-import { Generator3D } from "../Generator/Generator3D.js";
+import {Cst_Node} from "../Abstract/Cst_Node.js";
+import {Instruction} from "../Abstract/Instruction.js";
+import {Generator3D} from "../Generator/Generator3D.js";
 import Exception from "../SymbolTable/Exception.js";
 import Symbol from "../SymbolTable/Symbol.js";
 import SymbolTable from "../SymbolTable/SymbolTable.js";
 import Tree from "../SymbolTable/Tree.js";
-import { type } from "../SymbolTable/Type.js";
-import {Access_array} from "../Expression/Access_array";
+import {type} from "../SymbolTable/Type.js";
 import {Primitive} from "../Expression/Primitive.js";
 import {Value} from "../Abstract/Value.js";
 
@@ -164,16 +163,21 @@ export class Declaration_array extends Instruction {
     }
 
     compile(table: SymbolTable, generator: Generator3D, tree: Tree) {
+        let new_symbol: string | Symbol | null = null;
+        let in_heap = true;
+        new_symbol = new Symbol(this.id[0], this.type, this.row, this.column, this.expression, undefined, in_heap, '', '');
+        new_symbol.size = this.list_expression.length;
+        table.set_table(new_symbol);
+
         generator.addComment("-----KEEP ARRAY-----");
         let temp = generator.addTemp();
         let temp_move = generator.addTemp();
 
         generator.addExpression(temp, 'H', '', '');
-        generator.addExpression(temp_move, 'H', '', '');
-        generator.addExpression('H', 'H', table.get_size() + 1, '+');
-        generator.setHeap(temp_move, table.get_size());
+        generator.addExpression(temp_move, temp, 1, '+');
+        generator.setHeap(temp_move, this.list_expression.length);
 
-        generator.addExpression(temp_move, temp_move, '1', '+');
+        generator.addExpression('H', 'H', this.list_expression.length+1, '+');
 
         for ( let expr of this.list_expression ) {
             let value = expr.compile(table, generator, tree);
@@ -185,11 +189,11 @@ export class Declaration_array extends Instruction {
             generator.addExpression(temp_move, temp_move, '1', '+');
         }
 
+        generator.setStack(table.get_size(), temp);
         generator.addComment("----END ARRAY-----");
-        let val_ret = new Value(temp, type.ARRAY, true);
         //val_ret.type_array = this.type;
 
-        return val_ret;
+        return new Value(temp, type.ARRAY, true);
     }
 
     get_node() {
