@@ -1,12 +1,8 @@
----
-tags: USAC
----
-
 > #### Universidad de San Carlos de Guatemala
 > #### Facultad de Ingeniería
 > #### Escuela de Ciencias y Sistemas
 
-# MANUAL TÉCNICO :male-technologist: 
+# MANUAL TÉCNICO :computer: 
 > ### José Daniel Velásquez Orozco
 > #### 201800722
 > ### Elian Saúl Estrada Urbina
