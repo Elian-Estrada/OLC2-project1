@@ -18,7 +18,7 @@ myCodeMirror = CodeMirror.fromTextArea(
     }
 )
 
-myCodeMirror.setValue("void main(){\n\n  return;\n}");
+myCodeMirror.setValue("void main(){\n  return;\n}");
 
 // @ts-ignore
 let myCodeMirror2 = CodeMirror.fromTextArea(
@@ -69,7 +69,12 @@ function codeToAnalyze() {
     myCodeMirror2.setValue("");
     // @ts-ignore
     let res: string = main.lexicalAnalysis(bufferStream);
-    updateCodeMirror(res, myCodeMirror2);
+    try {
+        updateCodeMirror(res, myCodeMirror2);
+    } catch (error) {
+        console.log(error);
+        
+    }
 }
 
 btnCompile?.addEventListener('click', () => {
