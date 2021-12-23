@@ -24,8 +24,8 @@ export class For extends Instruction {
 
         for ( let instructions of this.instructions ) {
             instructions.compile(table, generator, tree);
-            this.step.compile(table, generator, tree);
         }
+        this.step.compile(table, generator, tree);
 
         generator.addGoTo(continue_label);
         generator.setLabel(condition.false_label);

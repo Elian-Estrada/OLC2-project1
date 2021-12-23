@@ -51,16 +51,18 @@ export class Primitive extends Instruction {
             let ret_temp = generator.addTemp();
             generator.addExpression(ret_temp, 'H', '', '');
 
+            let counter = 0;
             for ( let char of String(this.value) ) {
                 generator.setHeap('H', char.charCodeAt(0));
                 generator.nextHeap();
+                counter += 1;
             }
 
             generator.setHeap('H', -1);
             generator.nextHeap();
 
             let ret_val = new Value(ret_temp, type.STRING, true);
-            ret_val.size = String(this.value).length;
+            ret_val.size = counter;
             return ret_val;
         }
         else if ( this.type === type.BOOL ) {

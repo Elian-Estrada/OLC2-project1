@@ -45,8 +45,8 @@ var For = /** @class */ (function (_super) {
         for (var _i = 0, _a = this.instructions; _i < _a.length; _i++) {
             var instructions = _a[_i];
             instructions.compile(table, generator, tree);
-            this.step.compile(table, generator, tree);
         }
+        this.step.compile(table, generator, tree);
         generator.addGoTo(continue_label);
         generator.setLabel(condition.false_label);
     };

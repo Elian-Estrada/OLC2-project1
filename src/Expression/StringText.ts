@@ -36,57 +36,17 @@ export class StringText extends Instruction {
                 generator.getStack(temp, 'P');
                 generator.setEnv(table.get_size());
 
-                return new Value(temp, type.STRING, true);
+                let ret_val = new Value(temp, type.STRING, true);
+                ret_val.size = left.size + right.size;
+                return ret_val;
             }
-            else if ( this.exp1.get_type() === type.BOOL || this.exp2.get_type() === type.BOOL ) {
+            else {
                 let new_val = this.exp1.toString() + this.exp2.value.toString();
                 let new_prim = new Primitive(new_val, type.STRING, this.row, this.column);
                 let exp = new_prim.compile(table, generator, tree);
-                return new Value(exp.value, type.STRING, true);
-            }
-            else {
-                let left = this.exp1.compile(table, generator, tree);
-                let right = this.exp2.compile(table, generator, tree);
-                generator.NumberToString();
-                generator.concatString();
-                let paramTemp = generator.addTemp();
-                generator.addExpression(paramTemp, 'P', table.get_size(), '+');        // t11 = P + 0
-                generator.addExpression(paramTemp, paramTemp, '1', '+');             // t11 = t11 + 1
-
-                if ( this.exp2.get_type() !== type.STRING ) {
-                    generator.setStack(paramTemp, right.value);                                  // stack[t11]=4
-                } else {
-                    generator.setStack(paramTemp, left.value);                                   // stack[t11]=4
-                }
-
-                generator.addExpression('P', 'P', table.get_size(), '+');         // P = P + 0
-                generator.callFunc('toString');                                              // toString()
-                let paramTemp2 = generator.addTemp();
-                generator.getStack(paramTemp2, 'P');                                        // t12 = stack[P]
-                generator.addExpression('P', 'P', table.get_size(), '-');         // P = P - 0
-
-                let new_temp = generator.addTemp();
-                generator.addExpression(new_temp, 'P', table.get_size(), '+');
-                generator.addExpression(new_temp, new_temp, '1', '+');
-
-                if ( this.exp2.get_type() !== type.STRING ) {
-                    generator.setStack(new_temp, left.value);
-                    generator.addExpression(new_temp, new_temp, '1', '+');
-                    generator.setStack(new_temp, paramTemp2);
-                } else {
-                    generator.setStack(new_temp, paramTemp2);
-                    generator.addExpression(new_temp, new_temp, '1', '+');
-                    generator.setStack(new_temp, right.value);
-                }
-
-                generator.addExpression('P', 'P', table.get_size(), '+');
-                generator.callFunc('concatString');
-
-                let new_temp2 = generator.addTemp();
-                generator.getStack(new_temp2, 'P');
-                generator.addExpression('P', 'P', table.get_size(), '-');
-
-                return new Value(new_temp2, type.STRING, true);
+                let ret_val = new Value(exp.value, type.STRING, true);
+                ret_val.size = exp.size;
+                return ret_val;
             }
         }
         else if ( operation === String_operator.REPETITION ) {
@@ -109,7 +69,10 @@ export class StringText extends Instruction {
             generator.getStack(temp, 'P');
             generator.setEnv(table.get_size());
 
-            return new Value(temp, type.STRING, true);
+            let ret_val = new Value(temp, type.STRING, true);
+            ret_val.size = parseInt(left.size) * parseInt(right.value);
+
+            return ret_val;
         }
     }
 
