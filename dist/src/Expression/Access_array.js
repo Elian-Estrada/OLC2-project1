@@ -17,6 +17,7 @@ import { Cst_Node } from "../Abstract/Cst_Node.js";
 import { Instruction } from "../Abstract/Instruction.js";
 import Exception from "../SymbolTable/Exception.js";
 import { type } from "../SymbolTable/Type.js";
+import { Value } from "../Abstract/Value.js";
 var Access_array = /** @class */ (function (_super) {
     __extends(Access_array, _super);
     function Access_array(id, positions, expression, row, column) {
@@ -115,10 +116,71 @@ var Access_array = /** @class */ (function (_super) {
     Access_array.prototype.get_subtype = function () {
         return this.sub_type;
     };
-    Access_array.prototype.compile = function (table, generator) {
-        generator.addComment("-----ARRAY-----");
-        var temp = generator.addTemp();
+    Access_array.prototype.compile = function (table, generator, tree) {
+        var value = table.get_table(this.id.get_id());
         var temp_move = generator.addTemp();
+        var temp_result = generator.addTemp();
+        var val_ret = new Value(null, null, false);
+        var exit_label = generator.newLabel();
+        var init_size = generator.addTemp();
+        var aux_index = generator.addTemp();
+        // @ts-ignore
+        var temp_pos = String(value.position);
+        // @ts-ignore
+        if (value.environment !== 'Global') {
+            temp_pos = generator.addTemp();
+            // @ts-ignore
+            generator.addExpression(temp_pos, 'P', value.position, '+');
+        }
+        generator.getStack(temp_move, temp_pos);
+        generator.addExpression(temp_move, temp_move, '1', '+');
+        if (this.values.length === 1) {
+            var index_val = this.positions[0].compile(table, generator, tree);
+            var temp_aux = temp_move;
+            generator.addExpression(temp_aux, temp_aux, this.getIndex(generator, index_val), '+');
+            generator.getHeap(temp_result, temp_move);
+            // @ts-ignore
+            return new Value(temp_result, type.INT, true);
+        }
+        else {
+            var temp_aux = generator.addTemp();
+            var index_val = this.positions[0].compile(table, generator, tree);
+            temp_aux = temp_move;
+            temp_move = generator.addTemp();
+            generator.getHeap(temp_move, temp_aux);
+            generator.addExpression(temp_move, temp_move, '1', '+');
+            generator.addExpression(temp_move, temp_move, this.getIndex(generator, index_val), '+');
+            generator.getHeap(temp_result, temp_move);
+            generator.setLabel(exit_label);
+            return new Value(temp_result, type.INT, true);
+        }
+    };
+    Access_array.prototype.getIndex = function (generator, index) {
+        var new_val;
+        if (index.is_temp) {
+            new_val = index.value;
+            generator.addExpression(new_val, index.value, '1', '-');
+        }
+        else {
+            new_val = index.value - 1;
+        }
+        return new_val;
+    };
+    Access_array.prototype.verifyError = function (generator, index, uppLim, tem_res, exit_label) {
+        var label_error = generator.newLabel();
+        var label_continue = generator.newLabel();
+        var temp_size = generator.addTemp();
+        var temp_index = generator.addTemp();
+        generator.addExpression(temp_index, index, '', '');
+        generator.getHeap(temp_size, uppLim);
+        generator.addIf(temp_index, '1', '<', label_error);
+        generator.addIf(temp_index, temp_size, '>', label_error);
+        generator.addGoTo(label_continue);
+        generator.setLabel(label_error);
+        generator.printError();
+        generator.addExpression(tem_res, '-1', '', '');
+        generator.addGoTo(exit_label);
+        generator.setLabel(label_continue);
     };
     Access_array.prototype.get_node = function () {
         var node = new Cst_Node("Access Array");

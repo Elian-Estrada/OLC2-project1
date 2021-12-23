@@ -655,6 +655,15 @@ export class Generator3D {
         this.codeIn(`${res}=(double)${exp};\n`);
     }
 
+    public printError() {
+        this.add_print('c', "char", 69);
+        this.add_print('c', "char", 114);
+        this.add_print('c', "char", 114);
+        this.add_print('c', "char", 111);
+        this.add_print('c', "char", 114);
+        this.add_print('c', "char", 10);
+    }
+
     public recoverTemps(env: SymbolTable, pos: number) {
         if ( Object.keys(this.temps_recover).length > 0 ) {
             let temp = this.addTemp();

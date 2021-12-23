@@ -3,7 +3,7 @@ export class Value {
 
     public value: any;
     private type: any;
-    private is_temp: boolean;
+    public is_temp: boolean;
     private aux_type: string;
     public true_label: string;
     public false_label: string;

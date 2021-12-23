@@ -66,7 +66,7 @@ var Declaration = /** @class */ (function (_super) {
         var new_symbol = null;
         var temp_pos = null;
         if (new_var === undefined) {
-            var in_heap = (value.get_type() === type.STRING || value.get_type() === type.STRUCT || value.get_type() === type.ARRAY);
+            var in_heap = (value.get_type() === type.STRING || value.get_type() === type.STRUCT);
             new_symbol = new Symbol(this.id[0], value.get_type(), this.row, this.column, this.expression, undefined, in_heap, value.true_label, value.false_label);
             new_symbol.size = value.size;
             var index_1 = -1;
